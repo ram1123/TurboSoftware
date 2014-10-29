@@ -1,0 +1,3 @@
+LC1=$(sed -n '/Loading the trees.../{n;n;n;n;n;p}' /home/user/beamdata/Run0107_Muon_10k_HVscan_700pt4uA_699pt8uA_700pt6uA_T17_T20_T17_Lat19/Run0107_Muon_10k_HVscan_700pt4uA_699pt8uA_700pt6uA_T17_T20_T17_Lat19.log | awk '{print $1}')
+LC2=$(sed -n '/Loading the trees.../{n;n;n;n;p}' /home/user/beamdata/Run0107_Muon_10k_HVscan_700pt4uA_699pt8uA_700pt6uA_T17_T20_T17_Lat19/Run0107_Muon_10k_HVscan_700pt4uA_699pt8uA_700pt6uA_T17_T20_T17_Lat19.log | awk '{print $1}')
+LC3=$(sed -n '/Loading the trees.../{n;n;n;p}' /home/user/beamdata/Run0107_Muon_10k_HVscan_700pt4uA_699pt8uA_700pt6uA_T17_T20_T17_Lat19/Run0107_Muon_10k_HVscan_700pt4uA_699pt8uA_700pt6uA_T17_T20_T17_Lat19.log | awk '{print $1}')

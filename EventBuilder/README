@@ -1,0 +1,132 @@
+#################################################################################
+########		HOW TO RUN	        			#########
+#################################################################################
+
+./RunTurbo.sh -h     
+
+THIS IS THE HELP COMMAND.
+THIS WILL GIVE SUGGEST YOU THE VARIOUS OPTIONS TO PUT INSTEAD OF -h IN ABOVE COMMAND
+TO GET THE VARIOUS DESIRED RESULT.
+
+#################################################################################
+########		RD51 ENVIRONMENT        			#########
+#################################################################################
+
+Usage:
+source rd51_SetEnvironment.sh
+
+THIS IS VERY IMPORTANT AND HAS TO BE LOADED WHEN YOU START
+
+#################################################################################
+########		EVENT BUILDER README    			#########
+#################################################################################
+
+Usage:		
+
+./shrd51_EventBuilderVFAT.sh DirectoryWithDataFileIn NumberOfEvents(100k if omitted)
+
+Example(NumberOfEvents):	
+./shrd51_EventBuilderVFAT.sh Data 10000
+
+Example(100K Ev-Default):	
+./shrd51_EventBuilderVFAT.sh Data
+
+-------------------------------
+Setting File
+-------------------------------
+
+Change the setting file "Setting_EventBuilderVFAT.conf" according to what you need.
+In the file the following informationa are stored:
+
+-DetectorConfigFile			
+-DetectorOffsetAndFlipFile	
+-VFATConfigFile			
+-Verbose     			
+-LoaderSettingsPrintOut     	
+-DetectorInfoPrintOut       	
+-VFATInfoPrintOut           	
+
+-ChipIdVerbose              	
+-EfficiencyEstimatorPrintOut	
+-BeampProfiledataPrintOut 	
+
+
+
+#################################################################################
+########		TRACK FINDER README				#########
+#################################################################################
+
+Usage:          
+./rd51_TrackFinder.sh DirectoryWithBuildedROOTFileIn
+
+Example:       
+./sh.rd51_TrackFinder Data
+
+-------------------------------
+Setting File
+-------------------------------
+
+Change the setting file "Setting_TrackFinder.conf" according to what you need.
+In the file the following informationa are stored:
+
+-TrackerOffseFile	
+-RecoGeo2d_Verbose	
+-RecoGeo2d_TrackVerbose	
+-RecoGeo2d_OffsetVerbose
+
+
+
+#################################################################################
+########		ANALYZER README    				#########
+#################################################################################
+-------------------------------
+Script 1. shrd51_RunAnalyzer.sh
+-------------------------------
+Usage:
+./shrd51_RunAnalyzer.sh DirectoryWithRecoAndTrackersFile(CRC&RECO-CRC) RunNumber
+
+Example:
+./shrd51_RunAnalyzer.sh Data 0061
+
+The output file from CRC-xxx and RECO-CRC-xxx will be AN-CRC-xxx
+
+-------------------------------
+Script 2. shrd51_Analyzer.sh
+-------------------------------
+Usage:
+./shrd51_Analyzer.sh InputRecoFile InputTrackerFile OutputAnalyzerFile
+
+Example:
+./shrd51_Analyzer.sh ../Data/CRC.root ../Data/RECO-CRC.root ../Data/AN-CRC.root
+
+
+
+-------------------------------
+Setting File
+-------------------------------
+
+Change the setting file "Setting_Analyzer.conf" according to what you need.
+In the file the following informationa are stored:
+
+-OffsetFile		
+-Verbose				
+-EffCalculatorVerbose	
+-EnableCoverage		
+-Cut_Verbose             	
+-Cut_Chi2Value             
+-Cut_ResidualValue         
+-Cut_NumberOfTracks        
+-Cut_SingleXYTrackRequest  
+-EfficiencyRadiusScan       
+-EfficiencyRadiusMin        
+-EfficiencyRadiusMax        
+-EfficiencyRadiusStep       
+
+The efficiency radius used for the analysis (Eff, CLS,... plots) is written in the offset file.
+If "EfficiencyRadiusScan" is enabled, an efficency radius scan will be saved in the root file.
+
+To Update the Classes Calss_Reco, Class_Tracker:
+./shrd51_ClassMaker_RecoTracker.sh FileFromEventBuilder.root FileFromTrackFinder.root
+
+
+
