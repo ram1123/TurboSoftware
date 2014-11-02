@@ -1,8 +1,8 @@
 //////////////////////////////////////////////////////////
 // This class has been automatically generated on
-// Wed Oct 29 19:34:50 2014 by ROOT version 5.34/20
+// Sun Nov  2 09:54:31 2014 by ROOT version 5.34/20
 // from TTree rd51tbgeo/RD51 test beam geometry
-// found on file: /afs/cern.ch/user/r/rasharma/work/TurboSoftware/EventBuilder/OutPutData/Run1119_Muon_10k_MSPL1_Sync_HVScan_550pt2_550pt2_550pt1_T20_T20_T20_Lat24/CRC-Run1119_Muon_10k_MSPL1_Sync_HVScan_550pt2_550pt2_550pt1_T20_T20_T20_Lat24-141013_202816-0.root
+// found on file: /afs/cern.ch/user/r/rasharma/work/TurboSoftware/EventBuilder/OutPutData/Run1120_Muon_10k_MSPL1_Sync_HVScan_550pt2_550pt2_550pt1_T20_T20_T20_Lat25/CRC-Run1120_Muon_10k_MSPL1_Sync_HVScan_550pt2_550pt2_550pt1_T20_T20_T20_Lat25-141013_203356-0.root
 //////////////////////////////////////////////////////////
 
 #ifndef Class_Reco_h
@@ -16,12 +16,12 @@
 #include <TClonesArray.h>
 
 // Fixed size dimensions of array or collections stored in the TTree if any.
-   const Int_t kMaxg1xcl = 5;
-   const Int_t kMaxg1ycl = 8;
-   const Int_t kMaxg2xcl = 16;
-   const Int_t kMaxg2ycl = 8;
-   const Int_t kMaxg3xcl = 8;
-   const Int_t kMaxg3ycl = 6;
+   const Int_t kMaxg1xcl = 8;
+   const Int_t kMaxg1ycl = 6;
+   const Int_t kMaxg2xcl = 20;
+   const Int_t kMaxg2ycl = 6;
+   const Int_t kMaxg3xcl = 10;
+   const Int_t kMaxg3ycl = 11;
    const Int_t kMaxg4xcl = 1;
    const Int_t kMaxg4ycl = 1;
    const Int_t kMaxgCMSLGcl = 1;
@@ -37,12 +37,12 @@
    const Int_t kMaxgCTLTopMiddlexcl = 1;
    const Int_t kMaxgCTLTopRightxcl = 1;
    const Int_t kMaxgCTLTopRightycl = 1;
-   const Int_t kMaxsCMSNS2LC1 = 2;
-   const Int_t kMaxsCMSNS2LC1_R = 1;
+   const Int_t kMaxsCMSNS2LC1 = 1;
+   const Int_t kMaxsCMSNS2LC1_R = 2;
    const Int_t kMaxsCMSNS2LC2 = 1;
-   const Int_t kMaxsCMSNS2LC2_R = 16;
+   const Int_t kMaxsCMSNS2LC2_R = 17;
    const Int_t kMaxsCMSNS2LC2_L = 1;
-   const Int_t kMaxsCMSNS2LC3 = 3;
+   const Int_t kMaxsCMSNS2LC3 = 2;
 
 class Class_Reco {
 public :
@@ -834,9 +834,9 @@ Class_Reco::Class_Reco(TTree *tree) : fChain(0)
 // if parameter tree is not specified (or zero), connect the file
 // used to generate this class and read the Tree.
    if (tree == 0) {
-      TFile *f = (TFile*)gROOT->GetListOfFiles()->FindObject("/afs/cern.ch/user/r/rasharma/work/TurboSoftware/EventBuilder/OutPutData/Run1119_Muon_10k_MSPL1_Sync_HVScan_550pt2_550pt2_550pt1_T20_T20_T20_Lat24/CRC-Run1119_Muon_10k_MSPL1_Sync_HVScan_550pt2_550pt2_550pt1_T20_T20_T20_Lat24-141013_202816-0.root");
+      TFile *f = (TFile*)gROOT->GetListOfFiles()->FindObject("/afs/cern.ch/user/r/rasharma/work/TurboSoftware/EventBuilder/OutPutData/Run1120_Muon_10k_MSPL1_Sync_HVScan_550pt2_550pt2_550pt1_T20_T20_T20_Lat25/CRC-Run1120_Muon_10k_MSPL1_Sync_HVScan_550pt2_550pt2_550pt1_T20_T20_T20_Lat25-141013_203356-0.root");
       if (!f || !f->IsOpen()) {
-         f = new TFile("/afs/cern.ch/user/r/rasharma/work/TurboSoftware/EventBuilder/OutPutData/Run1119_Muon_10k_MSPL1_Sync_HVScan_550pt2_550pt2_550pt1_T20_T20_T20_Lat24/CRC-Run1119_Muon_10k_MSPL1_Sync_HVScan_550pt2_550pt2_550pt1_T20_T20_T20_Lat24-141013_202816-0.root");
+         f = new TFile("/afs/cern.ch/user/r/rasharma/work/TurboSoftware/EventBuilder/OutPutData/Run1120_Muon_10k_MSPL1_Sync_HVScan_550pt2_550pt2_550pt1_T20_T20_T20_Lat25/CRC-Run1120_Muon_10k_MSPL1_Sync_HVScan_550pt2_550pt2_550pt1_T20_T20_T20_Lat25-141013_203356-0.root");
       }
       f->GetObject("rd51tbgeo",tree);
 

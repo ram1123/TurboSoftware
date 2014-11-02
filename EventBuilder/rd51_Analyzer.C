@@ -1,12 +1,9 @@
 #define rd51_Analyzer_cxx
 
 #include "rd51_Analyzer.h"
-#include "Class_Tracker.C"
 
 rd51_Analyzer::rd51_Analyzer(TString rd51reco_filename, TString rd51tracker_filename, TString rd51analyzer_filename)
 {
-
-int CheckCout = 1;
     // Loading Settings....
     LoadSettings();
     
@@ -17,35 +14,26 @@ int CheckCout = 1;
     HistoDefine(rd51analyzer_Verbose);
     
     
+    cout << "Loading the trees...." << endl;
     // Loading Reco Tree......          
     TFile *rd51reco_file = new TFile(rd51reco_filename);
     if (rd51reco_file && rd51analyzer_Verbose) cout << "Loading: " << rd51reco_filename << endl; 
-
     rd51reco_tree = (TTree*)rd51reco_file->Get("rd51tbgeo");
-    if (rd51reco_tree && rd51analyzer_Verbose) {cout << "Getting the rd51tbgeo tree" << endl; rd51reco_tree->ls();} 
-    
+    if (rd51reco_tree && rd51analyzer_Verbose)
+    {cout << "Getting the rd51tbgeo tree" << endl; rd51reco_tree->ls();} 
     rd51reco = new Class_Reco(rd51reco_tree);
     if (rd51reco && rd51analyzer_Verbose) cout << "Creating the Reco Class\n" << endl; 
-    if (!rd51tracker) { std::cout << "rd51tracker == 0 -> WTF?" << std::endl; exit(1); } 
-
     
     // Loading Tracker Tree......       
     TFile *rd51tracker_file = new TFile(rd51tracker_filename);
     if (rd51tracker_file && rd51analyzer_Verbose) cout << "Loading: " << rd51tracker_filename << endl; 
-
     rd51tracker_tree = (TTree*)rd51tracker_file->Get("trackertree");
-    if (rd51tracker_tree && rd51analyzer_Verbose) {cout << "Getting the trakertree tree" << endl; rd51tracker_tree->ls();} 
-
-
-    #ifndef rd51tracker
-    #define rd51tracker
+    if (rd51tracker_tree && rd51analyzer_Verbose) 
+    {cout << "Getting the trakertree tree" << endl; rd51tracker_tree->ls();} 
     rd51tracker = new Class_Tracker(rd51tracker_tree);
-    #endif
     if (rd51tracker && rd51analyzer_Verbose) cout << "Creating the Tracker Class\n" << endl; 
     
     // Add Tracker as Friend to Reco Tree
-    
-    if ( CheckCout ) printf ( "Add Tracker as Friend to Reco Tree\n" );
     rd51reco_tree->AddFriend(rd51tracker_tree);
     
     // Creating the output file.....
@@ -66,8 +54,6 @@ int CheckCout = 1;
     Int_t rd51reco_nentries = (Int_t)rd51reco_tree->GetEntries();
     
 
-    if ( CheckCout ) cout<<"rd51reco_nentries = "<<rd51reco_nentries<<endl;
-
     Int_t rd51tracker_nentries = (Int_t)rd51tracker_tree->GetEntries();
     
     
@@ -81,17 +67,9 @@ int CheckCout = 1;
         // Get the Entry "i"
         rd51reco_tree->GetEntry(i);
         // Selecting the Entries... 
-    	cout<<"i = "<<i<<"\trd51analyzer_Cut_Verbose = "<<rd51analyzer_Cut_Verbose<<endl;
-
-// cout<<"trackx_ = "<<trackx_<<endl;
-   if (!rd51tracker) { std::cout << "rd51tracker == 0 -> WTF?" << std::endl; exit(1); } 
-    	if ( CheckCout ) cout<<"#######################Going to enter loop"<<endl;
-   cout<<"trackx_ test = "<<rd51tracker->trackx_<<endl;
-   cout<<"ramkrishnalllllllllllllllllllllllllllll"<<endl;
         if (ProcessTheEntry(i,rd51analyzer_Cut_Verbose))
         {
             
-	    if ( CheckCout ) cout<<"#######################entered11"<<endl;
             // Processing..........................................................................
             Calc_sCMSNS2LC1_Eff(rd51analyzer_Verbose && rd51analyzer_EffCalculatorVerbose);
             Calc_sCMSNS2LC2_Eff(rd51analyzer_Verbose && rd51analyzer_EffCalculatorVerbose);
@@ -99,10 +77,10 @@ int CheckCout = 1;
             // End of Processing...................................................................
             
             NumberOfProcessedEntries+=1;
+        
         }
         else
         {
-	    if ( CheckCout ) cout<<"#######################ELSE"<<endl;
             if (rd51analyzer_EffCalculatorVerbose==1 && rd51analyzer_Verbose==1) 
                 cout 	<< "Not Processed Events: Number Of Found XTracks: " 
                 << rd51tracker->trackx_ 
@@ -111,7 +89,6 @@ int CheckCout = 1;
         }
     }
     	
-    if ( CheckCout ) cout<<"#######################"<<endl;
     
     // Efficiency Radius Scan Processing and "Graphing"
     if (rd51analyzer_EfficiencyRadiusScan) ProcessEfficiencyRadiusScan(rd51analyzer_Verbose);
@@ -507,25 +484,15 @@ bool rd51_Analyzer::ProcessTheEntry(int processedentry, int verbose)
     bool cut_SingleXYTrack=0;
     // Selection of the events based on the tracks properties
     
-    cout<<"processedentry = "<<processedentry<<"\tverbose = "<<verbose<<endl;
     //Single Track on X&Y
-   if (!rd51tracker) { std::cout << "rd51tracker == 0 -> WTF?" << std::endl; exit(1); } 
-   cout<<"ramkrishnalllllllllllllllllllllllllllll"<<endl;
-   //cout<<"trackx_ = "<<trackx_<<endl;
-   cout<<"trackx_ test = "<<rd51tracker->trackx_<<endl;
-   cout<<"ramkrishnalllllllllllllllllllllllllllll"<<endl;
-
     cut_NumberOfTracks= 	
 	(rd51tracker->trackx_<=rd51analyzer_Cut_NumberOfTracks &&
      rd51tracker->tracky_<=rd51analyzer_Cut_NumberOfTracks);
-     cout<<"cut_NumberOfTracks= "<<cut_NumberOfTracks<<endl;
     cut_SingleXYTrack= 
 	( !rd51analyzer_Cut_SingleXYTrackRequest || (rd51tracker->trackx_==1 && rd51tracker->tracky_==1) );
     
-    cout<<"Ramkrishna-11"<<endl;
     if (cut_NumberOfTracks && cut_SingleXYTrack)
     {
-    cout<<"Ramkrishna00"<<endl;
         cut_Chi2= 	
 		((rd51tracker->trackx_chi2)[0]<=rd51analyzer_Cut_Chi2Value &&
 	 	 (rd51tracker->tracky_chi2)[0]<=rd51analyzer_Cut_Chi2Value);
@@ -534,7 +501,6 @@ bool rd51_Analyzer::ProcessTheEntry(int processedentry, int verbose)
 	 	 (rd51tracker->residualy)[0]<=rd51analyzer_Cut_ResidualValue);
         // Final Selection
         processit = (cut_Chi2 && cut_Residuals);
-    cout<<"Ramkrishna11"<<endl;
     }
     
     if (verbose && !processit)
@@ -546,7 +512,6 @@ bool rd51_Analyzer::ProcessTheEntry(int processedentry, int verbose)
 		<<"Residuals["		<<cut_Residuals		<<"]\t" 
 		<<endl; 
     }
-    cout<<"Ramkrishna22"<<endl;
     
     return processit;
 }
