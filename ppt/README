@@ -11,3 +11,5 @@ How To USE:
 	   
 	   This script will automatically ask you the initial and final run numbers.
 	   and give  you the ppt with name ppt_R<#InitialRunNumber>_R<#FinalRunNumber>.pdf
+
+	4. You can change the file BeamProfile.C as per your need. Or you can put some other macro that give us plots but for that you need to make few changes. I will later describe how to make that changes or I will try to make it more user friendly so that  we don't need to change much.
