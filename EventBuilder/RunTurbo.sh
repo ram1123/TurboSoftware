@@ -48,6 +48,7 @@
 	# Should be changed by user according to their path
 	PathOfInputData=/afs/cern.ch/work/p/pbarria/public/TB_H2_OCT_2014/beamdata
 	
+	JustTextFile=0
 	# Some Default values
 	IRunNo=1120
 	FRunNo=1120
@@ -258,7 +259,8 @@ function helptext
 			${tab} email provided by you.
 
 	-i		This option will ask you and if you need text file from input
-			${tab}directory or not?
+			${tab}directory or not? By default it takes input form the Output
+			${tab}directory in EventBuilder Directory.
 	
 -EOF-
 }
