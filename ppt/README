@@ -1,0 +1,13 @@
+How To USE:
+
+	1. Main script is GetPlots.sh
+
+	2. To know the various options for the script do
+		./GetPlots.sh -h
+	   This will tell you the various option and what it does.
+
+	3. To get the profile plots and x positions for various run do
+		./GetPlots.sh -r
+	   
+	   This script will automatically ask you the initial and final run numbers.
+	   and give  you the ppt with name ppt_R<#InitialRunNumber>_R<#FinalRunNumber>.pdf
