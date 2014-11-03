@@ -35,7 +35,9 @@
 #
 #	10/26/2014	File created based on the old script runfull_v9.sh
 #	10/27/2014	Added option -e in the script and some default values.
-#
+#	11/02/2014	added option -t in the script 
+#			But need to add one more option inside this form which
+#			path it will take in log files. !!!!!!!!!!!!!!!
 #	-------------------------------------------------------------------
 
 
@@ -233,21 +235,30 @@ function helptext
 	Options:
 
 	-h, --help	Display this help message and exit.
+
 	-r              This option ask you to enter the two numbers: 	
 			${tab}1. First  : Initial Run Number
 			${tab}2. Second : Final Run Number
+
 	-l		This option ask you to enter the two numbers:
 			${tab}1. First : Initial Latency 
 			${tab}2. Second : Final Latency
+
 	-f		This option ask you to enter the Input Data directory path.
 			${tab} We can also set the default path at line number 47 in 
 			${tab} this script.
+
 	-e		This option will ask you which process you want to run.
 			${tab} Want to run full Turbo or only one out of 3 steps.
+			${tab} or want to get only Efficiency text file.
 			${tab}Also, this will ask, whether you want to delete the 
 			${tab}existing root files or not.
+
 	-m		This option will mail yout the Efficiency txt file on the 
 			${tab} email provided by you.
+
+	-i		This option will ask you and if you need text file from input
+			${tab}directory or not?
 	
 -EOF-
 }
@@ -304,7 +315,7 @@ if [ "$1" = "--help" ]; then
 	graceful_exit
 fi
 
-while getopts ":hrlfem" opt; do
+while getopts ":hrlfemi" opt; do
 	case $opt in
 		r )	echo -n "Initial Run Number (IRunNo) = " 
 			read IRunNo
@@ -320,12 +331,13 @@ while getopts ":hrlfem" opt; do
 			if [ "$ILat" -gt "$FLat" ]; then 
 				error_exit "Initial Latency should be Less then or equal to Final Latency"
 			fi;;
-		f)	echo -n "Enter the Path of Data File : "
+		f )	echo -n "Enter the Path of Data File : "
 			read PathOfInputData;;
-		e)	echo "To run full TURBO software Enter 0"
+		e )	echo "To run full TURBO software Enter 0"
 			echo "To run Only EventBuilder Enter 1"
 			echo "To run Only TrackFinder Enter 2"
-			echo -n "To run Only Analyzer Enter 3 : "
+			echo "To run Only Analyzer Enter 3  "
+			echo -n "For only text file enter anything else : "
 			read run	
 			if [ "$run" == 0 -o "$run" == 1 ]; then
 				if ask_yes_no "If Root File Exists in Output Directory. Want to Delete them??? [y/n] "; then
@@ -336,6 +348,15 @@ while getopts ":hrlfem" opt; do
 			echo -n "Please enter your Email-Id : "
 			read email
 			mail=1;;
+		i )	echo "Want only Efficiency text files from Inputpath???"
+			echo "enter 0 for NO,"
+			echo -n "Enter 1  for YES : " 
+			read JustTextFile
+			if [ "$JustTextFile" == 0 -o "$JustTextFile" == 1 ]; then
+				echo "Fine."
+			else 
+				error_exit "Enter  only 0 or 1"
+			fi;;
 		h )	helptext
 			graceful_exit ;;
 		* )	usage
@@ -395,6 +416,7 @@ do
 		exit 1
 	fi	
 	CheckOutPutDir
+    if [ "$JustTextFile" == 0 ]; then
 	if [ "$run" == 0 -o "$run" == 1 ]; then
 		if [ "$DeleteRootFile" == 1 ]; then
 			echo -e "\n\n\tls  ${PathOfOutPutData}/$(basename $f)/*.root\n\n"
@@ -423,6 +445,16 @@ do
 	LC2_Err=$(sed -n '/Loading the trees.../{n;n;n;n;p;  }' $PathOfOutPutData/$(basename $f)/Run${temp}_Analyzer.log | awk '{print $2}')
 	LC3_Err=$(sed -n '/Loading the trees.../{n;n;n;p;    }' $PathOfOutPutData/$(basename $f)/Run${temp}_Analyzer.log | awk '{print $2}')  
 
+    fi
+ 
+    if [ "$JustTextFile" == 1 ]; then
+        LC1=$(sed -n '/Loading the trees.../{n;n;n;n;n;p}' $f/$(basename $f).log | awk '{print $1}')
+        LC2=$(sed -n '/Loading the trees.../{n;n;n;n;p}' $f/$(basename $f).log | awk '{print $1}')
+        LC3=$(sed -n '/Loading the trees.../{n;n;n;p}' $f/$(basename $f).log | awk '{print substr($1,5)}')  
+        LC1_Err=$(sed -n '/Loading the trees.../{n;n;n;n;n;p}' $f/$(basename $f).log | awk '{print $2}')
+        LC2_Err=$(sed -n '/Loading the trees.../{n;n;n;n;p}' $f/$(basename $f).log | awk '{print $2}')
+        LC3_Err=$(sed -n '/Loading the trees.../{n;n;n;p}' $f/$(basename $f).log | awk '{print $2}') 
+    fi
 	echo -e "$(basename $f)\t\t $LC1+/-$LC1_Err \t $LC2+/-$LC2_Err \t $LC3+/-$LC3_Err" >> EfficiencyData_R${IRunNo}_R${FRunNo}.txt
 	RunCounter=$[$RunCounter+1]
   done
