@@ -1,0 +1,51 @@
+
+ROOT 5.34 from afs: 
+
+RD51 Environment settings:
+RD51MainDirectory=/afs/cern.ch/user/r/rasharma/work/TurboSoftware/EventBuilder
+PATH=/cvmfs/cms.cern.ch/crab/CRAB_2_11_1/python:/cvmfs/cms.cern.ch/crab/CRAB_2_11_1/external/DLSAPI/bin:/afs/cern.ch/cms/caf/scripts:/afs/cern.ch/cms/common:/afs/cern.ch/cms/bin:/afs/cern.ch/group/zh/bin:/afs/cern.ch/user/r/rasharma/scripts:/afs/cern.ch/cms/caf/scripts:/cvmfs/cms.cern.ch/common:/cvmfs/cms.cern.ch/bin:/usr/sue/bin:/usr/lib64/qt-3.3/bin:/usr/kerberos/sbin:/usr/kerberos/bin:/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin:/afs/cern.ch/user/r/rasharma/bin:/afs/cern.ch/user/r/rasharma/work/TurboSoftware/EventBuilder:/afs/cern.ch/user/r/rasharma/work/TurboSoftware/EventBuilder/Mapping:/afs/cern.ch/user/r/rasharma/work/TurboSoftware/EventBuilder/Clustering:/afs/cern.ch/user/r/rasharma/work/TurboSoftware/EventBuilder/Loaders:/afs/cern.ch/user/r/rasharma/work/TurboSoftware/EventBuilder/Utilities
+LD_LIBRARY_PATH=:/afs/cern.ch/user/r/rasharma/work/TurboSoftware/EventBuilder:/afs/cern.ch/user/r/rasharma/work/TurboSoftware/EventBuilder/Mapping:/afs/cern.ch/user/r/rasharma/work/TurboSoftware/EventBuilder/Clustering:/afs/cern.ch/user/r/rasharma/work/TurboSoftware/EventBuilder/Loaders:/afs/cern.ch/user/r/rasharma/work/TurboSoftware/EventBuilder/Utilities
+
+
+/afs/cern.ch/user/r/rasharma/work/TurboSoftware/EventBuilder/OutPutData/Run1118_Muon_10k_MSPL1_Sync_HVScan_550pt2_550pt2_550pt1_T20_T20_T20_Lat23/CRC-Run1118_Muon_10k_MSPL1_Sync_HVScan_550pt2_550pt2_550pt1_T20_T20_T20_Lat23-141013_202232-0.root
+
+
+
+
+
+--------------------------------------------------------------------------------------------------------
+
+Event Builder File: CRC-Run1118_Muon_10k_MSPL1_Sync_HVScan_550pt2_550pt2_550pt1_T20_T20_T20_Lat23-141013_202232-0.root
+Track Finder File: RECO-CRC-Run1118_Muon_10k_MSPL1_Sync_HVScan_550pt2_550pt2_550pt1_T20_T20_T20_Lat23-141013_202232-0.root
+ANALYSIS File: AN-CRC-Run1118_Muon_10k_MSPL1_Sync_HVScan_550pt2_550pt2_550pt1_T20_T20_T20_Lat23-141013_202232-0.root
+
+--------------------------------------------------------------------------------------------------------
+
+
+Updating the Reco and Tracker Classes...
+
+ROOT 5.34 from afs: 
+
+RD51 Environment settings:
+RD51MainDirectory=/afs/cern.ch/user/r/rasharma/work/TurboSoftware/EventBuilder
+PATH=/cvmfs/cms.cern.ch/crab/CRAB_2_11_1/python:/cvmfs/cms.cern.ch/crab/CRAB_2_11_1/external/DLSAPI/bin:/afs/cern.ch/cms/caf/scripts:/afs/cern.ch/cms/common:/afs/cern.ch/cms/bin:/afs/cern.ch/group/zh/bin:/afs/cern.ch/user/r/rasharma/scripts:/afs/cern.ch/cms/caf/scripts:/cvmfs/cms.cern.ch/common:/cvmfs/cms.cern.ch/bin:/usr/sue/bin:/usr/lib64/qt-3.3/bin:/usr/kerberos/sbin:/usr/kerberos/bin:/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin:/afs/cern.ch/user/r/rasharma/bin:/afs/cern.ch/user/r/rasharma/work/TurboSoftware/EventBuilder:/afs/cern.ch/user/r/rasharma/work/TurboSoftware/EventBuilder/Mapping:/afs/cern.ch/user/r/rasharma/work/TurboSoftware/EventBuilder/Clustering:/afs/cern.ch/user/r/rasharma/work/TurboSoftware/EventBuilder/Loaders:/afs/cern.ch/user/r/rasharma/work/TurboSoftware/EventBuilder/Utilities:/afs/cern.ch/user/r/rasharma/work/TurboSoftware/EventBuilder:/afs/cern.ch/user/r/rasharma/work/TurboSoftware/EventBuilder/Mapping:/afs/cern.ch/user/r/rasharma/work/TurboSoftware/EventBuilder/Clustering:/afs/cern.ch/user/r/rasharma/work/TurboSoftware/EventBuilder/Loaders:/afs/cern.ch/user/r/rasharma/work/TurboSoftware/EventBuilder/Utilities
+LD_LIBRARY_PATH=:/afs/cern.ch/user/r/rasharma/work/TurboSoftware/EventBuilder:/afs/cern.ch/user/r/rasharma/work/TurboSoftware/EventBuilder/Mapping:/afs/cern.ch/user/r/rasharma/work/TurboSoftware/EventBuilder/Clustering:/afs/cern.ch/user/r/rasharma/work/TurboSoftware/EventBuilder/Loaders:/afs/cern.ch/user/r/rasharma/work/TurboSoftware/EventBuilder/Utilities:/afs/cern.ch/user/r/rasharma/work/TurboSoftware/EventBuilder:/afs/cern.ch/user/r/rasharma/work/TurboSoftware/EventBuilder/Mapping:/afs/cern.ch/user/r/rasharma/work/TurboSoftware/EventBuilder/Clustering:/afs/cern.ch/user/r/rasharma/work/TurboSoftware/EventBuilder/Loaders:/afs/cern.ch/user/r/rasharma/work/TurboSoftware/EventBuilder/Utilities
+removed `Class_Reco.C'
+removed `Class_Reco_C.d'
+removed `Class_Reco_C.so'
+removed `Class_Reco.h'
+
+ Beginning new ROOT session
+ CMSSW environment has not been setup --  FWLite libraries will not be loaded
+
+
+Processing ClassMaker_RecoTracker.cpp("/afs/cern.ch/user/r/rasharma/work/TurboSoftware/EventBuilder/OutPutData/Run1118_Muon_10k_MSPL1_Sync_HVScan_550pt2_550pt2_550pt1_T20_T20_T20_Lat23/CRC-Run1118_Muon_10k_MSPL1_Sync_HVScan_550pt2_550pt2_550pt1_T20_T20_T20_Lat23-141013_202232-0.root","/afs/cern.ch/user/r/rasharma/work/TurboSoftware/EventBuilder/OutPutData/Run1118_Muon_10k_MSPL1_Sync_HVScan_550pt2_550pt2_550pt1_T20_T20_T20_Lat23/RECO-CRC-Run1118_Muon_10k_MSPL1_Sync_HVScan_550pt2_550pt2_550pt1_T20_T20_T20_Lat23-141013_202232-0.root")...
+
+
+
+
+ Beginning new ROOT session
+ CMSSW environment has not been setup --  FWLite libraries will not be loaded
+
+
+Processing rd51_Analyzer_Launcher.cpp("/afs/cern.ch/user/r/rasharma/work/TurboSoftware/EventBuilder/OutPutData/Run1118_Muon_10k_MSPL1_Sync_HVScan_550pt2_550pt2_550pt1_T20_T20_T20_Lat23/CRC-Run1118_Muon_10k_MSPL1_Sync_HVScan_550pt2_550pt2_550pt1_T20_T20_T20_Lat23-141013_202232-0.root","/afs/cern.ch/user/r/rasharma/work/TurboSoftware/EventBuilder/OutPutData/Run1118_Muon_10k_MSPL1_Sync_HVScan_550pt2_550pt2_550pt1_T20_T20_T20_Lat23/RECO-CRC-Run1118_Muon_10k_MSPL1_Sync_HVScan_550pt2_550pt2_550pt1_T20_T20_T20_Lat23-141013_202232-0.root","/afs/cern.ch/user/r/rasharma/work/TurboSoftware/EventBuilder/OutPutData/Run1118_Muon_10k_MSPL1_Sync_HVScan_550pt2_550pt2_550pt1_T20_T20_T20_Lat23/AN-CRC-Run1118_Muon_10k_MSPL1_Sync_HVScan_550pt2_550pt2_550pt1_T20_T20_T20_Lat23-141013_202232-0.root")...
