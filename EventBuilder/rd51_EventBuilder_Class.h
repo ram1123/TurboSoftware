@@ -1,8 +1,8 @@
 //////////////////////////////////////////////////////////
 // This class has been automatically generated on
-// Mon Nov  3 12:42:00 2014 by ROOT version 5.34/20
+// Tue Nov  4 11:53:10 2014 by ROOT version 5.34/20
 // from TTree rd51tbgeo/RD51 test beam geometry
-// found on file: /afs/cern.ch/user/r/rasharma/work/TurboSoftware/EventBuilder/OutPutData/Run1120_Muon_10k_MSPL1_Sync_HVScan_550pt2_550pt2_550pt1_T20_T20_T20_Lat25/CRC-Run1120_Muon_10k_MSPL1_Sync_HVScan_550pt2_550pt2_550pt1_T20_T20_T20_Lat25-141013_203356-0.root
+// found on file: /afs/cern.ch/user/r/rasharma/work/TurboSoftware/EventBuilder/OutPutData/Run0039_Muon_30k_HVScan_685pt4uA_685pt4uA_603pt6uA_T10_T10_T10_Lat23/CRC-Run0039_Muon_30k_HVScan_685pt4uA_685pt4uA_603pt6uA_T10_T10_T10_Lat23-141008_054446-0.root
 //////////////////////////////////////////////////////////
 
 #ifndef rd51_EventBuilder_Class_h
@@ -19,12 +19,12 @@
 #include "/afs/cern.ch/work/r/rasharma/TurboSoftware/EventBuilder/./Clustering/GeoDataArray_T.hpp"
 
 // Fixed size dimensions of array or collections stored in the TTree if any.
-   const Int_t kMaxg1xcl = 8;
-   const Int_t kMaxg1ycl = 6;
-   const Int_t kMaxg2xcl = 20;
-   const Int_t kMaxg2ycl = 6;
-   const Int_t kMaxg3xcl = 10;
-   const Int_t kMaxg3ycl = 11;
+   const Int_t kMaxg1xcl = 13;
+   const Int_t kMaxg1ycl = 15;
+   const Int_t kMaxg2xcl = 12;
+   const Int_t kMaxg2ycl = 19;
+   const Int_t kMaxg3xcl = 39;
+   const Int_t kMaxg3ycl = 25;
    const Int_t kMaxg4xcl = 1;
    const Int_t kMaxg4ycl = 1;
    const Int_t kMaxgCMSLGcl = 1;
@@ -40,12 +40,9 @@
    const Int_t kMaxgCTLTopMiddlexcl = 1;
    const Int_t kMaxgCTLTopRightxcl = 1;
    const Int_t kMaxgCTLTopRightycl = 1;
-   const Int_t kMaxsCMSNS2LC1 = 1;
-   const Int_t kMaxsCMSNS2LC1_R = 2;
-   const Int_t kMaxsCMSNS2LC2 = 1;
-   const Int_t kMaxsCMSNS2LC2_R = 17;
-   const Int_t kMaxsCMSNS2LC2_L = 1;
-   const Int_t kMaxsCMSNS2LC3 = 2;
+   const Int_t kMaxsCMSNS2LC1 = 26;
+   const Int_t kMaxsCMSNS2LC2 = 14;
+   const Int_t kMaxsCMSNS2LC3 = 9;
 
 class rd51_EventBuilder_Class : public TSelector {
 public :
@@ -365,20 +362,6 @@ public :
    Float_t         sCMSNS2LC1_geoposZ[kMaxsCMSNS2LC1];   //[sCMSNS2LC1_]
    Float_t         sCMSNS2LC1_geoposR[kMaxsCMSNS2LC1];   //[sCMSNS2LC1_]
    Float_t         sCMSNS2LC1_geoposPhi[kMaxsCMSNS2LC1];   //[sCMSNS2LC1_]
-   Int_t           sCMSNS2LC1_R_;
-   Int_t           sCMSNS2LC1_R_ngeoch[kMaxsCMSNS2LC1_R];   //[sCMSNS2LC1_R_]
-   Int_t          *sCMSNS2LC1_R_geoch[kMaxsCMSNS2LC1_R];   //[sCMSNS2LC1_R_ngeoch]
-   Float_t        *sCMSNS2LC1_R_geoX[kMaxsCMSNS2LC1_R];   //[sCMSNS2LC1_R_ngeoch]
-   Float_t        *sCMSNS2LC1_R_geoY[kMaxsCMSNS2LC1_R];   //[sCMSNS2LC1_R_ngeoch]
-   Float_t        *sCMSNS2LC1_R_geoZ[kMaxsCMSNS2LC1_R];   //[sCMSNS2LC1_R_ngeoch]
-   Float_t        *sCMSNS2LC1_R_geoR[kMaxsCMSNS2LC1_R];   //[sCMSNS2LC1_R_ngeoch]
-   Float_t        *sCMSNS2LC1_R_geoPhi[kMaxsCMSNS2LC1_R];   //[sCMSNS2LC1_R_ngeoch]
-   Float_t         sCMSNS2LC1_R_geoposch[kMaxsCMSNS2LC1_R];   //[sCMSNS2LC1_R_]
-   Float_t         sCMSNS2LC1_R_geoposX[kMaxsCMSNS2LC1_R];   //[sCMSNS2LC1_R_]
-   Float_t         sCMSNS2LC1_R_geoposY[kMaxsCMSNS2LC1_R];   //[sCMSNS2LC1_R_]
-   Float_t         sCMSNS2LC1_R_geoposZ[kMaxsCMSNS2LC1_R];   //[sCMSNS2LC1_R_]
-   Float_t         sCMSNS2LC1_R_geoposR[kMaxsCMSNS2LC1_R];   //[sCMSNS2LC1_R_]
-   Float_t         sCMSNS2LC1_R_geoposPhi[kMaxsCMSNS2LC1_R];   //[sCMSNS2LC1_R_]
    Int_t           sCMSNS2LC2_;
    Int_t           sCMSNS2LC2_ngeoch[kMaxsCMSNS2LC2];   //[sCMSNS2LC2_]
    Int_t          *sCMSNS2LC2_geoch[kMaxsCMSNS2LC2];   //[sCMSNS2LC2_ngeoch]
@@ -393,34 +376,6 @@ public :
    Float_t         sCMSNS2LC2_geoposZ[kMaxsCMSNS2LC2];   //[sCMSNS2LC2_]
    Float_t         sCMSNS2LC2_geoposR[kMaxsCMSNS2LC2];   //[sCMSNS2LC2_]
    Float_t         sCMSNS2LC2_geoposPhi[kMaxsCMSNS2LC2];   //[sCMSNS2LC2_]
-   Int_t           sCMSNS2LC2_R_;
-   Int_t           sCMSNS2LC2_R_ngeoch[kMaxsCMSNS2LC2_R];   //[sCMSNS2LC2_R_]
-   Int_t          *sCMSNS2LC2_R_geoch[kMaxsCMSNS2LC2_R];   //[sCMSNS2LC2_R_ngeoch]
-   Float_t        *sCMSNS2LC2_R_geoX[kMaxsCMSNS2LC2_R];   //[sCMSNS2LC2_R_ngeoch]
-   Float_t        *sCMSNS2LC2_R_geoY[kMaxsCMSNS2LC2_R];   //[sCMSNS2LC2_R_ngeoch]
-   Float_t        *sCMSNS2LC2_R_geoZ[kMaxsCMSNS2LC2_R];   //[sCMSNS2LC2_R_ngeoch]
-   Float_t        *sCMSNS2LC2_R_geoR[kMaxsCMSNS2LC2_R];   //[sCMSNS2LC2_R_ngeoch]
-   Float_t        *sCMSNS2LC2_R_geoPhi[kMaxsCMSNS2LC2_R];   //[sCMSNS2LC2_R_ngeoch]
-   Float_t         sCMSNS2LC2_R_geoposch[kMaxsCMSNS2LC2_R];   //[sCMSNS2LC2_R_]
-   Float_t         sCMSNS2LC2_R_geoposX[kMaxsCMSNS2LC2_R];   //[sCMSNS2LC2_R_]
-   Float_t         sCMSNS2LC2_R_geoposY[kMaxsCMSNS2LC2_R];   //[sCMSNS2LC2_R_]
-   Float_t         sCMSNS2LC2_R_geoposZ[kMaxsCMSNS2LC2_R];   //[sCMSNS2LC2_R_]
-   Float_t         sCMSNS2LC2_R_geoposR[kMaxsCMSNS2LC2_R];   //[sCMSNS2LC2_R_]
-   Float_t         sCMSNS2LC2_R_geoposPhi[kMaxsCMSNS2LC2_R];   //[sCMSNS2LC2_R_]
-   Int_t           sCMSNS2LC2_L_;
-   Int_t           sCMSNS2LC2_L_ngeoch[kMaxsCMSNS2LC2_L];   //[sCMSNS2LC2_L_]
-   Int_t          *sCMSNS2LC2_L_geoch[kMaxsCMSNS2LC2_L];   //[sCMSNS2LC2_L_ngeoch]
-   Float_t        *sCMSNS2LC2_L_geoX[kMaxsCMSNS2LC2_L];   //[sCMSNS2LC2_L_ngeoch]
-   Float_t        *sCMSNS2LC2_L_geoY[kMaxsCMSNS2LC2_L];   //[sCMSNS2LC2_L_ngeoch]
-   Float_t        *sCMSNS2LC2_L_geoZ[kMaxsCMSNS2LC2_L];   //[sCMSNS2LC2_L_ngeoch]
-   Float_t        *sCMSNS2LC2_L_geoR[kMaxsCMSNS2LC2_L];   //[sCMSNS2LC2_L_ngeoch]
-   Float_t        *sCMSNS2LC2_L_geoPhi[kMaxsCMSNS2LC2_L];   //[sCMSNS2LC2_L_ngeoch]
-   Float_t         sCMSNS2LC2_L_geoposch[kMaxsCMSNS2LC2_L];   //[sCMSNS2LC2_L_]
-   Float_t         sCMSNS2LC2_L_geoposX[kMaxsCMSNS2LC2_L];   //[sCMSNS2LC2_L_]
-   Float_t         sCMSNS2LC2_L_geoposY[kMaxsCMSNS2LC2_L];   //[sCMSNS2LC2_L_]
-   Float_t         sCMSNS2LC2_L_geoposZ[kMaxsCMSNS2LC2_L];   //[sCMSNS2LC2_L_]
-   Float_t         sCMSNS2LC2_L_geoposR[kMaxsCMSNS2LC2_L];   //[sCMSNS2LC2_L_]
-   Float_t         sCMSNS2LC2_L_geoposPhi[kMaxsCMSNS2LC2_L];   //[sCMSNS2LC2_L_]
    Int_t           sCMSNS2LC3_;
    Int_t           sCMSNS2LC3_ngeoch[kMaxsCMSNS2LC3];   //[sCMSNS2LC3_]
    Int_t          *sCMSNS2LC3_geoch[kMaxsCMSNS2LC3];   //[sCMSNS2LC3_ngeoch]
@@ -746,20 +701,6 @@ public :
    TBranch        *b_sCMSNS2LC1_geoposZ;   //!
    TBranch        *b_sCMSNS2LC1_geoposR;   //!
    TBranch        *b_sCMSNS2LC1_geoposPhi;   //!
-   TBranch        *b_sCMSNS2LC1_R_;   //!
-   TBranch        *b_sCMSNS2LC1_R_ngeoch;   //!
-   TBranch        *b_sCMSNS2LC1_R_geoch;   //!
-   TBranch        *b_sCMSNS2LC1_R_geoX;   //!
-   TBranch        *b_sCMSNS2LC1_R_geoY;   //!
-   TBranch        *b_sCMSNS2LC1_R_geoZ;   //!
-   TBranch        *b_sCMSNS2LC1_R_geoR;   //!
-   TBranch        *b_sCMSNS2LC1_R_geoPhi;   //!
-   TBranch        *b_sCMSNS2LC1_R_geoposch;   //!
-   TBranch        *b_sCMSNS2LC1_R_geoposX;   //!
-   TBranch        *b_sCMSNS2LC1_R_geoposY;   //!
-   TBranch        *b_sCMSNS2LC1_R_geoposZ;   //!
-   TBranch        *b_sCMSNS2LC1_R_geoposR;   //!
-   TBranch        *b_sCMSNS2LC1_R_geoposPhi;   //!
    TBranch        *b_sCMSNS2LC2_;   //!
    TBranch        *b_sCMSNS2LC2_ngeoch;   //!
    TBranch        *b_sCMSNS2LC2_geoch;   //!
@@ -774,34 +715,6 @@ public :
    TBranch        *b_sCMSNS2LC2_geoposZ;   //!
    TBranch        *b_sCMSNS2LC2_geoposR;   //!
    TBranch        *b_sCMSNS2LC2_geoposPhi;   //!
-   TBranch        *b_sCMSNS2LC2_R_;   //!
-   TBranch        *b_sCMSNS2LC2_R_ngeoch;   //!
-   TBranch        *b_sCMSNS2LC2_R_geoch;   //!
-   TBranch        *b_sCMSNS2LC2_R_geoX;   //!
-   TBranch        *b_sCMSNS2LC2_R_geoY;   //!
-   TBranch        *b_sCMSNS2LC2_R_geoZ;   //!
-   TBranch        *b_sCMSNS2LC2_R_geoR;   //!
-   TBranch        *b_sCMSNS2LC2_R_geoPhi;   //!
-   TBranch        *b_sCMSNS2LC2_R_geoposch;   //!
-   TBranch        *b_sCMSNS2LC2_R_geoposX;   //!
-   TBranch        *b_sCMSNS2LC2_R_geoposY;   //!
-   TBranch        *b_sCMSNS2LC2_R_geoposZ;   //!
-   TBranch        *b_sCMSNS2LC2_R_geoposR;   //!
-   TBranch        *b_sCMSNS2LC2_R_geoposPhi;   //!
-   TBranch        *b_sCMSNS2LC2_L_;   //!
-   TBranch        *b_sCMSNS2LC2_L_ngeoch;   //!
-   TBranch        *b_sCMSNS2LC2_L_geoch;   //!
-   TBranch        *b_sCMSNS2LC2_L_geoX;   //!
-   TBranch        *b_sCMSNS2LC2_L_geoY;   //!
-   TBranch        *b_sCMSNS2LC2_L_geoZ;   //!
-   TBranch        *b_sCMSNS2LC2_L_geoR;   //!
-   TBranch        *b_sCMSNS2LC2_L_geoPhi;   //!
-   TBranch        *b_sCMSNS2LC2_L_geoposch;   //!
-   TBranch        *b_sCMSNS2LC2_L_geoposX;   //!
-   TBranch        *b_sCMSNS2LC2_L_geoposY;   //!
-   TBranch        *b_sCMSNS2LC2_L_geoposZ;   //!
-   TBranch        *b_sCMSNS2LC2_L_geoposR;   //!
-   TBranch        *b_sCMSNS2LC2_L_geoposPhi;   //!
    TBranch        *b_sCMSNS2LC3_;   //!
    TBranch        *b_sCMSNS2LC3_ngeoch;   //!
    TBranch        *b_sCMSNS2LC3_geoch;   //!
@@ -982,30 +895,12 @@ void rd51_EventBuilder_Class::Init(TTree *tree)
    for(int i=0; i<kMaxsCMSNS2LC1; ++i) sCMSNS2LC1_geoZ[i] = 0;
    for(int i=0; i<kMaxsCMSNS2LC1; ++i) sCMSNS2LC1_geoR[i] = 0;
    for(int i=0; i<kMaxsCMSNS2LC1; ++i) sCMSNS2LC1_geoPhi[i] = 0;
-   for(int i=0; i<kMaxsCMSNS2LC1_R; ++i) sCMSNS2LC1_R_geoch[i] = 0;
-   for(int i=0; i<kMaxsCMSNS2LC1_R; ++i) sCMSNS2LC1_R_geoX[i] = 0;
-   for(int i=0; i<kMaxsCMSNS2LC1_R; ++i) sCMSNS2LC1_R_geoY[i] = 0;
-   for(int i=0; i<kMaxsCMSNS2LC1_R; ++i) sCMSNS2LC1_R_geoZ[i] = 0;
-   for(int i=0; i<kMaxsCMSNS2LC1_R; ++i) sCMSNS2LC1_R_geoR[i] = 0;
-   for(int i=0; i<kMaxsCMSNS2LC1_R; ++i) sCMSNS2LC1_R_geoPhi[i] = 0;
    for(int i=0; i<kMaxsCMSNS2LC2; ++i) sCMSNS2LC2_geoch[i] = 0;
    for(int i=0; i<kMaxsCMSNS2LC2; ++i) sCMSNS2LC2_geoX[i] = 0;
    for(int i=0; i<kMaxsCMSNS2LC2; ++i) sCMSNS2LC2_geoY[i] = 0;
    for(int i=0; i<kMaxsCMSNS2LC2; ++i) sCMSNS2LC2_geoZ[i] = 0;
    for(int i=0; i<kMaxsCMSNS2LC2; ++i) sCMSNS2LC2_geoR[i] = 0;
    for(int i=0; i<kMaxsCMSNS2LC2; ++i) sCMSNS2LC2_geoPhi[i] = 0;
-   for(int i=0; i<kMaxsCMSNS2LC2_R; ++i) sCMSNS2LC2_R_geoch[i] = 0;
-   for(int i=0; i<kMaxsCMSNS2LC2_R; ++i) sCMSNS2LC2_R_geoX[i] = 0;
-   for(int i=0; i<kMaxsCMSNS2LC2_R; ++i) sCMSNS2LC2_R_geoY[i] = 0;
-   for(int i=0; i<kMaxsCMSNS2LC2_R; ++i) sCMSNS2LC2_R_geoZ[i] = 0;
-   for(int i=0; i<kMaxsCMSNS2LC2_R; ++i) sCMSNS2LC2_R_geoR[i] = 0;
-   for(int i=0; i<kMaxsCMSNS2LC2_R; ++i) sCMSNS2LC2_R_geoPhi[i] = 0;
-   for(int i=0; i<kMaxsCMSNS2LC2_L; ++i) sCMSNS2LC2_L_geoch[i] = 0;
-   for(int i=0; i<kMaxsCMSNS2LC2_L; ++i) sCMSNS2LC2_L_geoX[i] = 0;
-   for(int i=0; i<kMaxsCMSNS2LC2_L; ++i) sCMSNS2LC2_L_geoY[i] = 0;
-   for(int i=0; i<kMaxsCMSNS2LC2_L; ++i) sCMSNS2LC2_L_geoZ[i] = 0;
-   for(int i=0; i<kMaxsCMSNS2LC2_L; ++i) sCMSNS2LC2_L_geoR[i] = 0;
-   for(int i=0; i<kMaxsCMSNS2LC2_L; ++i) sCMSNS2LC2_L_geoPhi[i] = 0;
    for(int i=0; i<kMaxsCMSNS2LC3; ++i) sCMSNS2LC3_geoch[i] = 0;
    for(int i=0; i<kMaxsCMSNS2LC3; ++i) sCMSNS2LC3_geoX[i] = 0;
    for(int i=0; i<kMaxsCMSNS2LC3; ++i) sCMSNS2LC3_geoY[i] = 0;
@@ -1327,20 +1222,6 @@ void rd51_EventBuilder_Class::Init(TTree *tree)
    fChain->SetBranchAddress("sCMSNS2LC1.geoposZ", sCMSNS2LC1_geoposZ, &b_sCMSNS2LC1_geoposZ);
    fChain->SetBranchAddress("sCMSNS2LC1.geoposR", sCMSNS2LC1_geoposR, &b_sCMSNS2LC1_geoposR);
    fChain->SetBranchAddress("sCMSNS2LC1.geoposPhi", sCMSNS2LC1_geoposPhi, &b_sCMSNS2LC1_geoposPhi);
-   fChain->SetBranchAddress("sCMSNS2LC1_R", &sCMSNS2LC1_R_, &b_sCMSNS2LC1_R_);
-   fChain->SetBranchAddress("sCMSNS2LC1_R.ngeoch", sCMSNS2LC1_R_ngeoch, &b_sCMSNS2LC1_R_ngeoch);
-   fChain->SetBranchAddress("sCMSNS2LC1_R.geoch", sCMSNS2LC1_R_geoch, &b_sCMSNS2LC1_R_geoch);
-   fChain->SetBranchAddress("sCMSNS2LC1_R.geoX", sCMSNS2LC1_R_geoX, &b_sCMSNS2LC1_R_geoX);
-   fChain->SetBranchAddress("sCMSNS2LC1_R.geoY", sCMSNS2LC1_R_geoY, &b_sCMSNS2LC1_R_geoY);
-   fChain->SetBranchAddress("sCMSNS2LC1_R.geoZ", sCMSNS2LC1_R_geoZ, &b_sCMSNS2LC1_R_geoZ);
-   fChain->SetBranchAddress("sCMSNS2LC1_R.geoR", sCMSNS2LC1_R_geoR, &b_sCMSNS2LC1_R_geoR);
-   fChain->SetBranchAddress("sCMSNS2LC1_R.geoPhi", sCMSNS2LC1_R_geoPhi, &b_sCMSNS2LC1_R_geoPhi);
-   fChain->SetBranchAddress("sCMSNS2LC1_R.geoposch", sCMSNS2LC1_R_geoposch, &b_sCMSNS2LC1_R_geoposch);
-   fChain->SetBranchAddress("sCMSNS2LC1_R.geoposX", sCMSNS2LC1_R_geoposX, &b_sCMSNS2LC1_R_geoposX);
-   fChain->SetBranchAddress("sCMSNS2LC1_R.geoposY", sCMSNS2LC1_R_geoposY, &b_sCMSNS2LC1_R_geoposY);
-   fChain->SetBranchAddress("sCMSNS2LC1_R.geoposZ", sCMSNS2LC1_R_geoposZ, &b_sCMSNS2LC1_R_geoposZ);
-   fChain->SetBranchAddress("sCMSNS2LC1_R.geoposR", sCMSNS2LC1_R_geoposR, &b_sCMSNS2LC1_R_geoposR);
-   fChain->SetBranchAddress("sCMSNS2LC1_R.geoposPhi", sCMSNS2LC1_R_geoposPhi, &b_sCMSNS2LC1_R_geoposPhi);
    fChain->SetBranchAddress("sCMSNS2LC2", &sCMSNS2LC2_, &b_sCMSNS2LC2_);
    fChain->SetBranchAddress("sCMSNS2LC2.ngeoch", sCMSNS2LC2_ngeoch, &b_sCMSNS2LC2_ngeoch);
    fChain->SetBranchAddress("sCMSNS2LC2.geoch", sCMSNS2LC2_geoch, &b_sCMSNS2LC2_geoch);
@@ -1355,34 +1236,6 @@ void rd51_EventBuilder_Class::Init(TTree *tree)
    fChain->SetBranchAddress("sCMSNS2LC2.geoposZ", sCMSNS2LC2_geoposZ, &b_sCMSNS2LC2_geoposZ);
    fChain->SetBranchAddress("sCMSNS2LC2.geoposR", sCMSNS2LC2_geoposR, &b_sCMSNS2LC2_geoposR);
    fChain->SetBranchAddress("sCMSNS2LC2.geoposPhi", sCMSNS2LC2_geoposPhi, &b_sCMSNS2LC2_geoposPhi);
-   fChain->SetBranchAddress("sCMSNS2LC2_R", &sCMSNS2LC2_R_, &b_sCMSNS2LC2_R_);
-   fChain->SetBranchAddress("sCMSNS2LC2_R.ngeoch", sCMSNS2LC2_R_ngeoch, &b_sCMSNS2LC2_R_ngeoch);
-   fChain->SetBranchAddress("sCMSNS2LC2_R.geoch", sCMSNS2LC2_R_geoch, &b_sCMSNS2LC2_R_geoch);
-   fChain->SetBranchAddress("sCMSNS2LC2_R.geoX", sCMSNS2LC2_R_geoX, &b_sCMSNS2LC2_R_geoX);
-   fChain->SetBranchAddress("sCMSNS2LC2_R.geoY", sCMSNS2LC2_R_geoY, &b_sCMSNS2LC2_R_geoY);
-   fChain->SetBranchAddress("sCMSNS2LC2_R.geoZ", sCMSNS2LC2_R_geoZ, &b_sCMSNS2LC2_R_geoZ);
-   fChain->SetBranchAddress("sCMSNS2LC2_R.geoR", sCMSNS2LC2_R_geoR, &b_sCMSNS2LC2_R_geoR);
-   fChain->SetBranchAddress("sCMSNS2LC2_R.geoPhi", sCMSNS2LC2_R_geoPhi, &b_sCMSNS2LC2_R_geoPhi);
-   fChain->SetBranchAddress("sCMSNS2LC2_R.geoposch", sCMSNS2LC2_R_geoposch, &b_sCMSNS2LC2_R_geoposch);
-   fChain->SetBranchAddress("sCMSNS2LC2_R.geoposX", sCMSNS2LC2_R_geoposX, &b_sCMSNS2LC2_R_geoposX);
-   fChain->SetBranchAddress("sCMSNS2LC2_R.geoposY", sCMSNS2LC2_R_geoposY, &b_sCMSNS2LC2_R_geoposY);
-   fChain->SetBranchAddress("sCMSNS2LC2_R.geoposZ", sCMSNS2LC2_R_geoposZ, &b_sCMSNS2LC2_R_geoposZ);
-   fChain->SetBranchAddress("sCMSNS2LC2_R.geoposR", sCMSNS2LC2_R_geoposR, &b_sCMSNS2LC2_R_geoposR);
-   fChain->SetBranchAddress("sCMSNS2LC2_R.geoposPhi", sCMSNS2LC2_R_geoposPhi, &b_sCMSNS2LC2_R_geoposPhi);
-   fChain->SetBranchAddress("sCMSNS2LC2_L", &sCMSNS2LC2_L_, &b_sCMSNS2LC2_L_);
-   fChain->SetBranchAddress("sCMSNS2LC2_L.ngeoch", &sCMSNS2LC2_L_ngeoch, &b_sCMSNS2LC2_L_ngeoch);
-   fChain->SetBranchAddress("sCMSNS2LC2_L.geoch", &sCMSNS2LC2_L_geoch, &b_sCMSNS2LC2_L_geoch);
-   fChain->SetBranchAddress("sCMSNS2LC2_L.geoX", &sCMSNS2LC2_L_geoX, &b_sCMSNS2LC2_L_geoX);
-   fChain->SetBranchAddress("sCMSNS2LC2_L.geoY", &sCMSNS2LC2_L_geoY, &b_sCMSNS2LC2_L_geoY);
-   fChain->SetBranchAddress("sCMSNS2LC2_L.geoZ", &sCMSNS2LC2_L_geoZ, &b_sCMSNS2LC2_L_geoZ);
-   fChain->SetBranchAddress("sCMSNS2LC2_L.geoR", &sCMSNS2LC2_L_geoR, &b_sCMSNS2LC2_L_geoR);
-   fChain->SetBranchAddress("sCMSNS2LC2_L.geoPhi", &sCMSNS2LC2_L_geoPhi, &b_sCMSNS2LC2_L_geoPhi);
-   fChain->SetBranchAddress("sCMSNS2LC2_L.geoposch", &sCMSNS2LC2_L_geoposch, &b_sCMSNS2LC2_L_geoposch);
-   fChain->SetBranchAddress("sCMSNS2LC2_L.geoposX", &sCMSNS2LC2_L_geoposX, &b_sCMSNS2LC2_L_geoposX);
-   fChain->SetBranchAddress("sCMSNS2LC2_L.geoposY", &sCMSNS2LC2_L_geoposY, &b_sCMSNS2LC2_L_geoposY);
-   fChain->SetBranchAddress("sCMSNS2LC2_L.geoposZ", &sCMSNS2LC2_L_geoposZ, &b_sCMSNS2LC2_L_geoposZ);
-   fChain->SetBranchAddress("sCMSNS2LC2_L.geoposR", &sCMSNS2LC2_L_geoposR, &b_sCMSNS2LC2_L_geoposR);
-   fChain->SetBranchAddress("sCMSNS2LC2_L.geoposPhi", &sCMSNS2LC2_L_geoposPhi, &b_sCMSNS2LC2_L_geoposPhi);
    fChain->SetBranchAddress("sCMSNS2LC3", &sCMSNS2LC3_, &b_sCMSNS2LC3_);
    fChain->SetBranchAddress("sCMSNS2LC3.ngeoch", sCMSNS2LC3_ngeoch, &b_sCMSNS2LC3_ngeoch);
    fChain->SetBranchAddress("sCMSNS2LC3.geoch", sCMSNS2LC3_geoch, &b_sCMSNS2LC3_geoch);

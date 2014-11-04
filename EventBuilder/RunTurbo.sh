@@ -450,12 +450,12 @@ do
     fi
  
     if [ "$JustTextFile" == 1 ]; then
-        LC1=$(sed -n '/Loading the trees.../{n;n;n;n;n;p}' $f/$(basename $f).log | awk '{print $1}')
-        LC2=$(sed -n '/Loading the trees.../{n;n;n;n;p}' $f/$(basename $f).log | awk '{print $1}')
-        LC3=$(sed -n '/Loading the trees.../{n;n;n;p}' $f/$(basename $f).log | awk '{print substr($1,5)}')  
-        LC1_Err=$(sed -n '/Loading the trees.../{n;n;n;n;n;p}' $f/$(basename $f).log | awk '{print $2}')
-        LC2_Err=$(sed -n '/Loading the trees.../{n;n;n;n;p}' $f/$(basename $f).log | awk '{print $2}')
-        LC3_Err=$(sed -n '/Loading the trees.../{n;n;n;p}' $f/$(basename $f).log | awk '{print $2}') 
+        LC1=$(sed -n  '/Loading the trees.../{n;n;n;n;n;p}' $f/$(basename $f).log | awk '{print $1}')
+        LC2=$(sed -n  '/Loading the trees.../{n;n;n;n;p}' $f/$(basename $f).log | awk '{print $1}')
+        LC3=$(sed -n  '/Loading the trees.../{n;n;n;p}' $f/$(basename $f).log | awk '{print substr($1,5)}')  
+        LC1_Err=$(sed -n  '/Loading the trees.../{n;n;n;n;n;p}' $f/$(basename $f).log | awk '{print $2}')
+        LC2_Err=$(sed -n  '/Loading the trees.../{n;n;n;n;p}' $f/$(basename $f).log | awk '{print $2}')
+        LC3_Err=$(sed -n  '/Loading the trees.../{n;n;n;p}' $f/$(basename $f).log | awk '{print $2}') 
     fi
 	echo -e "$(basename $f)\t\t $LC1+/-$LC1_Err \t $LC2+/-$LC2_Err \t $LC3+/-$LC3_Err" >> EfficiencyData_R${IRunNo}_R${FRunNo}.txt
 	RunCounter=$[$RunCounter+1]
