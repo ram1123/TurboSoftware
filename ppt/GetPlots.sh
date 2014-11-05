@@ -30,9 +30,11 @@
 #	Constants
 #	-------------------------------------------------------------------
 
-	PathOfInputNtuple=/afs/cern.ch/work/p/pbarria/public/TB_H2_OCT_2014/beamdata
+	#PathOfInputNtuple=/afs/cern.ch/work/p/pbarria/public/TB_H2_OCT_2014/beamdata
+	PathOfInputNtuple=/afs/cern.ch/work/t/tmaersch/public/OutPutData
 
-
+	getppt=1
+	mail=0
 	PROGNAME=$(basename $0)
 	VERSION="0.0.1"
 
@@ -171,6 +173,10 @@ function helptext
 	-h, --help	Display this help message and exit.
 	-r              Asks the initial and final run number over which we need plots. If we want plots only for one run then just put initial and final run number same.
 	-p  PathOfInputNtuplesAsks the path of Ntuples.
+	-g		If you don't want to get ppt then use this option.
+	-m		This option will mail yout the Efficiency txt file on the 
+			${tab} email provided by you.
+
 
 	
 	
@@ -206,7 +212,7 @@ if [ "$1" = "--help" ]; then
 	graceful_exit
 fi
 
-while getopts ":hrp:" opt; do
+while getopts ":hrp:gm" opt; do
 	case $opt in
 		r )	echo -n "Initial Run Number (IRunNo) = " 
 			read IRunNo
@@ -217,8 +223,13 @@ while getopts ":hrp:" opt; do
 			fi;;
 		p )	echo "Asks the path of Ntuples. - argument = $OPTARG" 
 			PathOfInputNtuple=$OPTARG;;
+		g )	getppt=0;;
 		h )	helptext
 			graceful_exit ;;
+		m )	echo "The ppt file will be sent to the mail that you will provide."			
+			echo -n "Please enter Email-Id : "
+			read email
+			mail=1;;
 		* )	usage
 			clean_up
 			exit 1
@@ -235,7 +246,7 @@ done
 		echo "Directory Backup Created................."
 	fi
 	if ls *.pdf; then 
-	        mv ppt*.pdf Backup/
+	        mv *.pdf Backup/
 	fi
 	if ls *.txt; then 
 	        mv *.txt Backup/
@@ -282,11 +293,24 @@ cp test.tex ppt_R${IRunNo}_R${FRunNo}.tex	# $1 reads the 1st argument
 #	awk '{print $4}' EfficiencyData_R$1_R$2.txt >> tmp.txt
 #	sed -i "/begin{verbatim}/r tmp.txt" "ppt_R$1_R$2.tex"
 	
-pdflatex ppt_R${IRunNo}_R${FRunNo}.tex
-pdflatex ppt_R${IRunNo}_R${FRunNo}.tex
-#rm ppt_R${IRunNo}_R${FRunNo}.tex
-rm fig_*.tex  ppt_R${IRunNo}_R${FRunNo}.toc ppt_R${IRunNo}_R${FRunNo}.snm ppt_R${IRunNo}_R${FRunNo}.out ppt_R${IRunNo}_R${FRunNo}.nav ppt_R${IRunNo}_R${FRunNo}.aux ppt_R${IRunNo}_R${FRunNo}.log
-gnome-open ppt_R${IRunNo}_R${FRunNo}.pdf 
+if [ "$getppt" == "1" ]; then
+	pdflatex ppt_R${IRunNo}_R${FRunNo}.tex
+	pdflatex ppt_R${IRunNo}_R${FRunNo}.tex
+	#rm ppt_R${IRunNo}_R${FRunNo}.tex
+	rm fig_*.tex  ppt_R${IRunNo}_R${FRunNo}.toc ppt_R${IRunNo}_R${FRunNo}.snm ppt_R${IRunNo}_R${FRunNo}.out ppt_R${IRunNo}_R${FRunNo}.nav ppt_R${IRunNo}_R${FRunNo}.aux ppt_R${IRunNo}_R${FRunNo}.log
+	#gnome-open ppt_R${IRunNo}_R${FRunNo}.pdf 
+fi	
+
+
+if [ "$mail" == 1 ]; then
+cat<<EOF >message.log
+Hi $(basename $email),
+This mail is sent automatically sent from the script ${0}.
+EOF
+echo "mailing the ppt file.... "
+mail -a ppt_R${IRunNo}_R${FRunNo}.pdf  -s "ppt file from RunNumber ${IRunNo} to ${FRunNo}" $email < message.log
+echo "mail sent"
+fi	
 echo "Finished."
 graceful_exit
 
