@@ -1,2 +1,0 @@
-Run1118_Muon_10k_MSPL1_DLY40ns_HVScan_550pt2_550pt2_550pt1_T20_T20_T20_Lat23		 +/- 	 +/- 	 +/-
-Run1118_Muon_10k_MSPL1_Sync_HVScan_550pt2_550pt2_550pt1_T20_T20_T20_Lat23		 +/- 	 +/- 	 +/-

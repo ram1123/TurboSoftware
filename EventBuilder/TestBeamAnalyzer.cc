@@ -69,37 +69,6 @@ void TestBeamAnalyzer::setEffFiles(string inputFile, std::vector<string> inputFi
     return;
 } //End setEffFiles
 
-//Sets the channel map of the TDC
-void TestBeamAnalyzer::setTDCMapping(string inputFile){
-    //Variable Declaration
-    ifstream mapFile;
-    
-    string chan_idx, chan_name, line;
-    
-    mapFile.open( inputFile.c_str() );
-    
-    if (mapFile.good() ) { //Case: File Opened Successfully
-        chanMap_TDC.clear();
-    } //End Case: File Opened Successfully
-    else{ //Case: File Open Fail!!!
-        cout<<"TDC Mapping File " << inputFile << " failed to open"<<endl;
-        cout<<"Using Last Known Mapping!!!" <<endl;
-        cout<<"Note this could cause unexpected behavior/crash" <<endl;
-        
-        return;
-    } //End Case: File Open Fail!!!
-    
-    std::getline(mapFile, line); //Dummy header, go past it
-    
-    while (mapFile >> chan_idx >> chan_name ) { //Loop Over File
-        chanMap_TDC[ atoi( chan_idx.c_str() ) ] = chan_name;
-    } //End Loop Over File
-    
-    mapFile.close();
-    
-    return;
-} //End TestBeamAnalyzer::setTDCMapping()
-
 //This method scans an input string to determine the parameters of the run.
 //The string is the file name of the data
 //vec_eff is a vector of pairs where the first member of the pair is the efficiency value and the second member is the statistical uncertainty
@@ -512,90 +481,6 @@ void TestBeamAnalyzer::analyzeEffRuns(){
     return;
 } //End TestBeamAnalyzer::analyzeEffRuns()
 
-void TestBeamAnalyzer::analyzeTDCRuns(){
-    //Variable Declaration
-    ifstream masterTDCFile;
-    
-    string fileName_ROOT, fileName_Mapping;
-    string name_histo = "TDC_Ch";
-
-    //TFile *data_TDC = new TFile();
-    //TFile *data_TDC = new TFile( fileName_ROOT.c_str(), "READ","",1 );
-
-    vector<std::map<string,float> > allPeaks;
-    
-    //Open the Master File Name
-    masterTDCFile.open( fileName_TDC_Master.c_str() );
-    
-    while ( masterTDCFile>>fileName_ROOT>>fileName_Mapping ) { //Loop Over Input File
-        cout<<"Opening = " << fileName_ROOT.c_str() << endl;
-        
-        //data_TDC->Open(fileName_ROOT.c_str(),"READ","",1,0);
-        TFile *data_TDC = new TFile( fileName_ROOT.c_str(), "READ","",1 );
-        
-        cout<<"Opening = " << fileName_Mapping.c_str() << endl;
-        
-        setTDCMapping(fileName_Mapping);
-        
-        cout<<"Loading Histogram " << ( name_histo + getString(10)  ).c_str() << endl;
-        
-        TH1D *Det = new TH1D(*((TH1D*)data_TDC->Get( ( name_histo + getString(10)  ).c_str() )));
-        //TH1F *Det = new TH1F(*((TH1F*)data_TDC->Get( "TDC_Ch10" )));
-        //TH1F *Det = new TH1F( (TH1F*)data_TDC->Get( "TDC_Ch10" ));
-        
-        //data_TDC->Get( "TDC_Ch10" );
-        
-        std::map<string,float> peakInfo;
-        
-        peakInfo["Position"]    = (float) Det->GetMaximumBin();
-        peakInfo["Integral"]    = 0.;
-        peakInfo["Delta"]       = 0.;
-        
-        //Get the Maximum Peak
-        recursivePeakFinder(peakInfo, Det, true);
-        if (peakInfo["Integral"] > -1) {allPeaks.push_back(peakInfo);}
-        
-        //Get All Lower Peaks - Lower in Time
-        do {
-            //Return Members to Initial Position;
-            peakInfo["Position"] -= 20;
-            peakInfo["Integral"]  = 0.;
-            peakInfo["Delta"]     = 0.;
-            
-            recursivePeakFinder(peakInfo, Det, false);
-            if (peakInfo["Integral"] > -1) {allPeaks.push_back(peakInfo);}
-        } while( peakInfo["Integral"] > -1 );
-        
-        //Reset Starting Position to Max Peak
-        peakInfo["Position"]    = (float) Det->GetMaximumBin();
-        peakInfo["Integral"]  = 0.;
-        peakInfo["Delta"]     = 0.;
-        
-        //Get All Lower Peaks - Higher in Time
-        do {
-            //Return Members to Initial Position;
-            peakInfo["Position"] += 20;
-            peakInfo["Integral"]  = 0.;
-            peakInfo["Delta"]     = 0.;
-            
-            recursivePeakFinder(peakInfo, Det, true);
-            if (peakInfo["Integral"] > -1) {allPeaks.push_back(peakInfo);}
-        } while( peakInfo["Integral"] > -1 );
-        
-        cout<<"Pos\tInt\tDelta"<<endl;
-        for (unsigned int i=0; i<allPeaks.size(); i++) {
-            cout<<(allPeaks[i])["Position"]<<"\t"<<(allPeaks[i])["Integral"]<<"\t"<<(allPeaks[i])["Delta"]<<endl;
-        }
-        
-        //Close File - End of Loop
-        data_TDC->Close();
-        delete data_TDC;
-        cout<<"LOOP"<<endl;
-    } //End Loop Over Input File
-    
-    return;
-} //End TestBeamAnalyzer::analyzeTDCRuns()
-
 //Makers
 //------------------------------------------------------------------------------------------------------------------------------------------
 //------------------------------------------------------------------------------------------------------------------------------------------
@@ -635,7 +520,7 @@ void TestBeamAnalyzer::makeDetLog(){
 
 void TestBeamAnalyzer::makeEffHistograms(){
     //Variable Declaration
-    float paintPos_X = 1e5;
+    float paintPos_X;
     
     std::vector<std::vector<RunParam> >::iterator latIter;
     std::map<string,DetResults,cmp_str>::iterator detIter;
@@ -717,17 +602,12 @@ void TestBeamAnalyzer::makeEffHistograms(){
                 700,700);
             
             //Determine Paint Position
-            for (unsigned int i=0; i < ((*latIter).second).currScan.size(); i++) {
-                if ( ((*latIter).second).currScan[i] < paintPos_X ) { paintPos_X = ((*latIter).second).currScan[i]; }
-            }
-            //Note the commented section below doesn't work if the runs are not taken in either increasing or decreasing order
-            /*if(((*latIter).second).currScan[0] > ((*latIter).second).currScan.back()){ //Case: 0^th Member Highest Point
+            if(((*latIter).second).currScan[0] > ((*latIter).second).currScan.back()){ //Case: 0^th Member Highest Point
                 paintPos_X = ((*latIter).second).currScan.back();
             } //End Case: 0^th Member Highest Point
             else{ //Case: Last Member Highest Point
                 paintPos_X = ((*latIter).second).currScan[0];
             } //End Case: Last Member Highest Point
-            */
             
             //Set Style of Canvas
             //setCanvasStyle(((*latIter).second).canvas_DetEff_v_Curr);
@@ -768,7 +648,7 @@ void TestBeamAnalyzer::makeEffHistograms(){
 //Makes the Histograms and simultaneously writes them
 void TestBeamAnalyzer::makeEffHistograms(string input, string option){
     //Variable Declaration
-    float paintPos_X = 1e5;
+    float paintPos_X;
     
     std::vector<std::vector<RunParam> >::iterator latIter;
     std::map<string,DetResults,cmp_str>::iterator detIter;
@@ -876,17 +756,12 @@ void TestBeamAnalyzer::makeEffHistograms(string input, string option){
                 700,700);
             
             //Determine Paint Position
-            for (unsigned int i=0; i < ((*latIter).second).currScan.size(); i++) {
-                if ( ((*latIter).second).currScan[i] < paintPos_X ) { paintPos_X = ((*latIter).second).currScan[i]; }
-            }
-            //Note the commented section below doesn't work if the runs are not taken in either increasing or decreasing order
-            /*if(((*latIter).second).currScan[0] > ((*latIter).second).currScan.back()){ //Case: 0^th Member Highest Point
+            if(((*latIter).second).currScan[0] > ((*latIter).second).currScan.back()){ //Case: 0^th Member Highest Point
                 paintPos_X = ((*latIter).second).currScan.back();
             } //End Case: 0^th Member Highest Point
             else{ //Case: Last Member Highest Point
                 paintPos_X = ((*latIter).second).currScan[0];
             } //End Case: Last Member Highest Point
-            */
             
             //Set Style of Canvas
             //setCanvasStyle(((*latIter).second).canvas_DetEff_v_Curr);
@@ -1101,103 +976,6 @@ void TestBeamAnalyzer::makeEffHistograms(string input, string option){
     return;
 } //End TestBeamAnalyzer::makeEffHistograms()
 
-//Miscillaneous
-//------------------------------------------------------------------------------------------------------------------------------------------
-//------------------------------------------------------------------------------------------------------------------------------------------
-
-//Recursively Finds a Peak in histogram histo
-//The boolean "shiftRight" determines which way the code will shift if it detects a valley
-//Valley's are identified by sequences like "Y1 Y2 0 0 ... 0 0 Y3 Y4" here Y1 > Y2 > 0 and 0 < Y3 < Y4
-//peakInfo is a map (string,float) that contains:
-//  "Position" Starting Position To Look For the Peak
-//  "Integral" Integral of the Peak that is found
-//  "Delta"    How far we have moved from the ORIGINAL position (sets exit condition)
-//Notice peakInfo is passed by reference so the original input map is modified as we run
-//The initial map setup is understood to be "Position" = Starting Position; "Integral" = 0; "Delta" = 0;
-void TestBeamAnalyzer::recursivePeakFinder(std::map<string,float> &peakInfo, TH1 *histo, bool shiftRight){
-    //Variable Declaration
-    bool inPeak = true;
-    
-    int peakBinWidth = 1;
-    
-    //Debugging
-    cout<<"idx-1\tNum\tidx\tNum\tidx+1\tNum\tDelta\tIntegral"<<endl;
-    cout<< peakInfo["Position"]-1<<"\t"<<histo->GetBinContent( (int)peakInfo["Position"] - 1)<<"\t";
-    cout<< peakInfo["Position"]  <<"\t"<<histo->GetBinContent( (int)peakInfo["Position"]    )<<"\t";
-    cout<< peakInfo["Position"]+1<<"\t"<<histo->GetBinContent( (int)peakInfo["Position"] + 1)<<"\t";
-    cout<< peakInfo["Delta"]     <<"\t";
-    cout<< peakInfo["Integral"]  <<"\t"<<endl;
-    
-    //Check Exit Condition i.e. we went to far, no peak found
-    if ( abs( peakInfo["Delta"] ) > 30 ) { //Case: Exit - Peaks Not Found
-        peakInfo["Position"] = -1; //Not a valid histogram bin
-        peakInfo["Integral"] = -1; //Not a valid integral for the data that is being inputed
-
-        return;
-    } //End Case: Exit - Peaks Not Found
-    
-    if (histo->GetBinContent( (int)peakInfo["Position"] - 1) < histo->GetBinContent( (int)peakInfo["Position"] )
-        && histo->GetBinContent( (int)peakInfo["Position"] ) > histo->GetBinContent( (int)peakInfo["Position"] + 1) ) { //Case: Peak Found!
-        
-        peakInfo["Integral"] = histo->GetBinContent( (int)peakInfo["Position"] );
-        
-        while (inPeak) { //Loop Through Peak
-            if (histo->GetBinContent( (int)peakInfo["Position"] - peakBinWidth) == 0
-                && histo->GetBinContent( (int)peakInfo["Position"] + peakBinWidth ) ==0 ) { //Case: Peak Encapsulated, Stop Loop
-                inPeak = false; break;
-            } //End Case: Peak Encapsulated, Stop Loop
-            
-            //Increase Integral
-            peakInfo["Integral"]+= histo->GetBinContent( (int)peakInfo["Position"] - peakBinWidth) + histo->GetBinContent( (int)peakInfo["Position"] + peakBinWidth);
-            
-            //Widen Acceptance Zone
-            peakBinWidth++;
-        } //End Loop Through Peak
-    } //End Case: Peak Found!
-    else if ( histo->GetBinContent( (int)peakInfo["Position"] - 1) == 0
-             && histo->GetBinContent( (int)peakInfo["Position"] ) == 0
-             && histo->GetBinContent( (int)peakInfo["Position"] + 1) == 0 ) { //Case: Located in Valley, Shift by Preference
-        
-        if (shiftRight) { //Case: In Valley's Shift Right
-            peakInfo["Position"]++;
-            peakInfo["Delta"]++;
-        } //End Case: In Valley's Shift Right
-        else{ //Case: In Valley's Shift Left
-            peakInfo["Position"]--;
-            peakInfo["Delta"]--;
-        } //End Case: In Valley's Shift Left
-        
-        recursivePeakFinder(peakInfo,histo,shiftRight);
-    } //End Case: Located in Valley, Shift by Preference
-    else if ( histo->GetBinContent( (int)peakInfo["Position"] - 1) >= histo->GetBinContent( (int)peakInfo["Position"] )
-             && histo->GetBinContent( (int)peakInfo["Position"] ) >= histo->GetBinContent( (int)peakInfo["Position"] + 1) ) { //Case: Peak Offset to Left
-        
-        //Shift Position to the left, decrease delta to show we have moved
-        peakInfo["Position"]--;
-        peakInfo["Delta"]--;
-        
-        recursivePeakFinder(peakInfo,histo,shiftRight);
-    } //End Case: Peak Offset to Left
-    else if ( histo->GetBinContent( (int)peakInfo["Position"] - 1) <= histo->GetBinContent( (int)peakInfo["Position"] )
-             && histo->GetBinContent( (int)peakInfo["Position"] ) <= histo->GetBinContent( (int)peakInfo["Position"] + 1) ) { //Case: Peak Offset to Right
-        
-        //Shift Position to the right, decrease delta to show we have moved
-        peakInfo["Position"]++;
-        peakInfo["Delta"]++;
-        
-        recursivePeakFinder(peakInfo,histo,shiftRight);
-    } //End Case: Peak Offset to Left
-    
-    //Debugging
-    cout<<"idx-1\tNum\tidx\tNum\tidx+1\tNum\tDelta\tIntegral"<<endl;
-    cout<< peakInfo["Position"]-1<<"\t"<<histo->GetBinContent( (int)peakInfo["Position"] - 1)<<"\t";
-    cout<< peakInfo["Position"]  <<"\t"<<histo->GetBinContent( (int)peakInfo["Position"]    )<<"\t";
-    cout<< peakInfo["Position"]+1<<"\t"<<histo->GetBinContent( (int)peakInfo["Position"] + 1)<<"\t";
-    cout<< peakInfo["Delta"]     <<"\t";
-    cout<< peakInfo["Integral"]  <<"\t"<<endl;
-    
-    return;
-} //End TestBeamAnalyzer::recursivePeakFinder()
 
 //Write Root Files
 //------------------------------------------------------------------------------------------------------------------------------------------
