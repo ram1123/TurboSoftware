@@ -325,6 +325,9 @@ while getopts ":hrlfemi" opt; do
 			read FRunNo
 			if [ "$IRunNo" -gt "$FRunNo" ]; then 
 				error_exit "Initial Run Number should be Less then or equal to Final Run Number"
+			fi
+			if [ "$IRunNo" -gt 1586 ] || [ "$FRunNo" -gt 1586 ]; then
+				error_exit "Maximum allowed Run Number is 1586."
 			fi;;
 		l )	echo -n "Initial Latency (ILat) = "
 			read ILat
@@ -334,13 +337,21 @@ while getopts ":hrlfemi" opt; do
 				error_exit "Initial Latency should be Less then or equal to Final Latency"
 			fi;;
 		f )	echo -n "Enter the Path of Data File : "
-			read PathOfInputData;;
+			read PathOfInputData
+			if [ ! -f $PathOfInputData ]; then
+				error_exit "Path ${PathOfInputData} does not exits"
+			fi;;
 		e )	echo "To run full TURBO software Enter 0"
 			echo "To run Only EventBuilder Enter 1"
 			echo "To run Only TrackFinder Enter 2"
 			echo "To run Only Analyzer Enter 3  "
-			echo -n "For only text file enter anything else : "
+			echo -n "For only text file enter 4 : "
 			read run	
+			if [ "$run" -ge "0" ] && [ "$run" -le "4" ]; then
+				echo "Valid number...."
+			else
+				error_exit "Please enter number between 0 and 4"
+			fi
 			if [ "$run" == 0 -o "$run" == 1 ]; then
 				if ask_yes_no "If Root File Exists in Output Directory. Want to Delete them??? [y/n] "; then
 					DeleteRootFile=1
@@ -350,12 +361,19 @@ while getopts ":hrlfemi" opt; do
 			echo -n "Please enter your Email-Id : "
 			read email
 			mail=1;;
-		i )	echo "Want only Efficiency text files from Inputpath???"
+		i )	echo "Want only Efficiency text files from Different Path???"
 			echo "enter 0 for NO,"
 			echo -n "Enter 1  for YES : " 
 			read JustTextFile
 			if [ "$JustTextFile" == 0 -o "$JustTextFile" == 1 ]; then
 				echo "Fine."
+				if [ "$JustTextFile" == 1 ]; then
+					echo -n "Enter the path where the log file present : "
+					read PathOfOutPutData
+					if [ ! -f $PathOfOutPutData ]; then
+						error_exit "Path ${PathOfOutPutData} does not exits"
+					fi
+				fi
 			else 
 				error_exit "Enter  only 0 or 1"
 			fi;;
@@ -369,8 +387,12 @@ done
 
 
 ##### Main Logic #####
+if [ "$#" == "0" ]; then
+	helptext
+	error_exit "Please enter atleast one arguments from above."
+fi
 DeleteIfFileExists EfficiencyData_R${IRunNo}_R${FRunNo}.txt
-echo -e  "FileName\t\t\t\t\t\t\t\t\t GE11_IV_GIF \t\t GE11_IV \t\t GE11_V" > EfficiencyData_R${IRunNo}_R${FRunNo}.txt
+echo -e  "FileName\t\t\t\t\t\t\t\t\t GE11_IV_GIF \t GE11_IV \t\t GE11_V" > EfficiencyData_R${IRunNo}_R${FRunNo}.txt
 
 RunCounter=$IRunNo
 
@@ -414,11 +436,10 @@ do
 	if ! [[ $temp =~ $CheckInteger ]] ; then 
 		echo -e "Path Of Input Directory : ${f}"
 		echo -e "\n\n\t\t temp = ${temp} \n\n"
-		echo "error: Not able to extract Run number. " >&2; 
-		exit 1
+		error_exit "Not able of extract Run number. ${temp} is not a number."
 	fi	
-	CheckOutPutDir
     if [ "$JustTextFile" == 0 ]; then
+	CheckOutPutDir
 	if [ "$run" == 0 -o "$run" == 1 ]; then
 		if [ "$DeleteRootFile" == 1 ]; then
 			echo -e "\n\n\tls  ${PathOfOutPutData}/$(basename $f)/*.root\n\n"
@@ -450,12 +471,21 @@ do
     fi
  
     if [ "$JustTextFile" == 1 ]; then
-        LC1=$(sed -n  '/Loading the trees.../{n;n;n;n;n;p}' $f/$(basename $f).log | awk '{print $1}')
-        LC2=$(sed -n  '/Loading the trees.../{n;n;n;n;p}' $f/$(basename $f).log | awk '{print $1}')
-        LC3=$(sed -n  '/Loading the trees.../{n;n;n;p}' $f/$(basename $f).log | awk '{print substr($1,5)}')  
-        LC1_Err=$(sed -n  '/Loading the trees.../{n;n;n;n;n;p}' $f/$(basename $f).log | awk '{print $2}')
-        LC2_Err=$(sed -n  '/Loading the trees.../{n;n;n;n;p}' $f/$(basename $f).log | awk '{print $2}')
-        LC3_Err=$(sed -n  '/Loading the trees.../{n;n;n;p}' $f/$(basename $f).log | awk '{print $2}') 
+    	if [ ! -f $PathOfOutPutData/$(basename $f)/Run${temp}_Analyzer.log ]; then
+		error_exit "File $PathOfOutPutData/$(basename $f)/Run${temp}_Analyzer.log does not exits"	
+	fi
+        #LC1=$(sed -n  '/Loading the trees.../{n;n;n;n;n;p}' $f/$(basename $f).log | awk '{print $1}')
+        #LC2=$(sed -n  '/Loading the trees.../{n;n;n;n;p}' $f/$(basename $f).log | awk '{print $1}')
+        #LC3=$(sed -n  '/Loading the trees.../{n;n;n;p}' $f/$(basename $f).log | awk '{print substr($1,5)}')  
+        #LC1_Err=$(sed -n  '/Loading the trees.../{n;n;n;n;n;p}' $f/$(basename $f).log | awk '{print $2}')
+        #LC2_Err=$(sed -n  '/Loading the trees.../{n;n;n;n;p}' $f/$(basename $f).log | awk '{print $2}')
+        #LC3_Err=$(sed -n  '/Loading the trees.../{n;n;n;p}' $f/$(basename $f).log | awk '{print $2}') 
+	LC1=$(sed -n '/Loading the trees.../{n;n;n;n;n;p;}'	$PathOfOutPutData/$(basename $f)/Run${temp}_Analyzer.log | awk '{print $1}')
+	LC2=$(sed -n '/Loading the trees.../{n;n;n;n;p;  }' $PathOfOutPutData/$(basename $f)/Run${temp}_Analyzer.log | awk '{print $1}')
+	LC3=$(sed -n '/Loading the trees.../{n;n;n;p;    }' $PathOfOutPutData/$(basename $f)/Run${temp}_Analyzer.log | awk '{print substr($1,5)}')  
+	LC1_Err=$(sed -n '/Loading the trees.../{n;n;n;n;n;p;}' $PathOfOutPutData/$(basename $f)/Run${temp}_Analyzer.log | awk '{print $2}')
+	LC2_Err=$(sed -n '/Loading the trees.../{n;n;n;n;p;  }' $PathOfOutPutData/$(basename $f)/Run${temp}_Analyzer.log | awk '{print $2}')
+	LC3_Err=$(sed -n '/Loading the trees.../{n;n;n;p;    }' $PathOfOutPutData/$(basename $f)/Run${temp}_Analyzer.log | awk '{print $2}')  
     fi
 	echo -e "$(basename $f)\t\t $LC1+/-$LC1_Err \t $LC2+/-$LC2_Err \t $LC3+/-$LC3_Err" >> EfficiencyData_R${IRunNo}_R${FRunNo}.txt
 	RunCounter=$[$RunCounter+1]
