@@ -18,6 +18,7 @@ do
   do
      temp=$(echo $Dir | sed 's/.*Run//' | sed 's/.//5g')
      echo "RAMKRISHNA $temp"
+     echo "RAMKRISHNA $RunCounter"
     # sleep 5
     # if [[ (($temp -ge $1)) && (($temp -le $2))]]; then
        for RootFile in $(ls $Dir/CRC-Run*.root); do
@@ -27,7 +28,7 @@ do
   	echo -e "\n\n\tName of ROOT files:\n"
   	echo -e "\n\n\t$RootFile"
   	echo -e "\n\n\t$RecoFile"
-  	root -b -l -q 'BeamProfile.C("'$RootFile'","'$RecoFile'",'$temp')'
+  	root -b -l -q 'BeamProfile.C("'$RootFile'","'$RecoFile'",'$RunCounter')'
        done
      #fi
   done   
