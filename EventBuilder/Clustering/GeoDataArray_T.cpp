@@ -208,8 +208,8 @@ Int_t GeoDataArray::InsertChannel(Int_t RType, Float_t OffsetH, Float_t OffsetV,
 
                 else if (RType == 9)
         {
-                geoX[place]     = FlipH*GetX(RType,geochannel)+OffsetH;
-                geoY[place]     = 999;//GetY(RType,geochannel);
+                geoX[place]     = 999;//FlipH*GetX(RType,geochannel)+OffsetH;
+                geoY[place]     = FlipV*GetY(RType,geochannel)+OffsetV;
                 geoZ[place]     = 999;//GetZ(RType,geochannel);
                 geoR[place]     = 999;//GetR(RType,geochannel);
                 geoPhi[place]   = 999;//GetPhi(RType,geochannel);
