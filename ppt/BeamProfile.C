@@ -49,304 +49,192 @@ int BeamProfile(TString RootFile,TString RecoFile, Int_t name)
 	hg3BeamProfile->GetXaxis()->SetTitle("x position in mm");
 	hg3BeamProfile->GetYaxis()->SetTitle("y position in mm");
 	
-	canvas_prof->SaveAs(Form("profile_plots_for_Trackers_%d.pdf",name));
+	canvas_prof->SaveAs(Form("profile_plots_for_Trackers_%d_Rot.pdf",name));
 	canvas_prof->Clear();
 
 	delete gDirectory->FindObject("hg1BeamProfile");
 	delete gDirectory->FindObject("hg2BeamProfile");
 	delete gDirectory->FindObject("hg3BeamProfile");
 
-//	canvas_prof->Divide(3,2);
-//
-//	canvas_prof->cd(1);
-//	TH1F *g1x = new TH1F("g1x","Hit Position on tracker 1 (x)", 10, 0,100);
-//	tmpTree->Draw("g1xcl.geoposX");
-//	g1x->GetXaxis()->SetTitle("X position in mm");
-//	g1x->GetYaxis()->SetTitle("Number of Hits");
-//
-//	canvas_prof->cd(2);
-//	TH1F *g2x = new TH1F("g2x","Hit Position on tracker 2 (x)", 10, 0,100);
-//	tmpTree->Draw("g2xcl.geoposX");
-//	g2x->GetXaxis()->SetTitle("X position in mm");
-//	g2x->GetYaxis()->SetTitle("Number of Hits");
-//
-//	canvas_prof->cd(3);
-//	TH1F *g3x = new TH1F("g3x","Hit Position on tracker 3 (x)", 10, 0,100);
-//	tmpTree->Draw("g3xcl.geoposX");
-//	g3x->GetXaxis()->SetTitle("X position in mm");
-//	g3x->GetYaxis()->SetTitle("Number of Hits");
-//
-//	canvas_prof->cd(4);
-//	TH1F *g1y = new TH1F("g1y","Hit Position on tracker 1 (y)", 10, 0,100);
-//	tmpTree->Draw("g1ycl.geoposY");
-//	g1y->GetXaxis()->SetTitle("Y position in mm");
-//	g1y->GetYaxis()->SetTitle("Number of Hits");
-//
-//	canvas_prof->cd(5);
-//	TH1F *g2y = new TH1F("g2y","Hit Position on tracker 2 (y)", 10, 0,100);
-//	tmpTree->Draw("g2ycl.geoposY");
-//	g2y->GetXaxis()->SetTitle("Y position in mm");
-//	g2y->GetYaxis()->SetTitle("Number of Hits");
-//
-//	canvas_prof->cd(6);
-//	TH1F *g3y = new TH1F("g3y","Hit Position on tracker 3 (x)", 10, 0,100);
-//	tmpTree->Draw("g3ycl.geoposY");
-//	g3y->GetXaxis()->SetTitle("Y position in mm");
-//	g3y->GetYaxis()->SetTitle("Number of Hits");
-//
-//	canvas_prof->SaveAs(Form("Tracker_Hit_position_%d.pdf",name));
-//	canvas_prof->Clear();
-//
-//	delete gDirectory->FindObject("g1x");
-//	delete gDirectory->FindObject("g1y");
-//	delete gDirectory->FindObject("g2x");
-//	delete gDirectory->FindObject("g2y");
-//	delete gDirectory->FindObject("g3x");
-//	delete gDirectory->FindObject("g3y");
-//
-//	canvas_prof->Divide(2,2);
-//
-//	canvas_prof->cd(1);
-//	TH1F *LC1 = new TH1F("LC1","Hit Position on GE11_1 (x)", 10, 0,100);
-//	tmpTree->Draw("sCMSNS2LC1.geoposX");
-//	LC1->GetXaxis()->SetTitle("X position in mm");
-//	LC1->GetYaxis()->SetTitle("Number of Hits");
-//
-//	canvas_prof->cd(2);
-//	TH1F *LC2 = new TH1F("LC2","Hit Position on GE11_2 (x)", 10, 0,100);
-//	tmpTree->Draw("sCMSNS2LC2.geoposX");
-//	LC2->GetXaxis()->SetTitle("X position in mm");
-//	LC2->GetYaxis()->SetTitle("Number of Hits");
-//
-//	canvas_prof->cd(3);
-//	TH1F *LC3 = new TH1F("LC3","Hit Position on GE11_3 (x)", 10, 0,100);
-//	tmpTree->Draw("sCMSNS2LC3.geoposX");
-//	LC3->GetXaxis()->SetTitle("X position in mm");
-//	LC3->GetYaxis()->SetTitle("Number of Hits");
-//
-//	canvas_prof->SaveAs(Form("GEM_Hit_position_%d.pdf",name));
-//	canvas_prof->Clear();
-//
-//	delete gDirectory->FindObject("LC1");
-//	delete gDirectory->FindObject("LC2");
-//	delete gDirectory->FindObject("LC3");
-        
-//=========== ADDED BY PATRIZIA ================
-        
-//        canvas_prof->Divide(3,2);
-//        
-//        canvas_prof->cd(1);
-//        TH2F *h4 = new TH2F("h4","X correlation g1vsg2",100,0,100,100,0,100);
-//        tmpTree->Draw("g2xcl.geoposX:g1xcl.geoposX>>h4","trackx@.GetEntries()==1 && tracky@.GetEntries()==1 && trackx.q>0 && tracky.q>0","colz");
-//        h4->GetYaxis()->SetTitle("g2xcl.geoposX");
-//        h4->GetXaxis()->SetTitle("g1xcl.geoposX");
-//        h4->GetYaxis()->SetTitleOffset(1.3);
-//        
-//        canvas_prof->cd(2);
-//        TH2F *h5 = new TH2F("h5","X correlation g2vsg3",100,0,100,100,0,100);
-//        tmpTree->Draw("g2xcl.geoposX:g3xcl.geoposX>>h5","trackx@.GetEntries()==1 && tracky@.GetEntries()==1 && trackx.q>0 && tracky.q>0","colz"); ////X
-//        h5->GetYaxis()->SetTitle("g2xcl.geoposX");
-//        h5->GetXaxis()->SetTitle("g3xcl.geoposX");
-//        h5->GetYaxis()->SetTitleOffset(1.3);
-//        
-//        canvas_prof->cd(3);
-//        TH2F *h6 = new TH2F("h6","X correlation g1vsg3",100,0,100,100,0,100);
-//        tmpTree->Draw("g3xcl.geoposX:g1xcl.geoposX>>h6","trackx@.GetEntries()==1 && tracky@.GetEntries()==1 && trackx.q>0 && tracky.q>0","colz"); ////X
-//        h6->GetYaxis()->SetTitle("g3xcl.geoposX");
-//        h6->GetXaxis()->SetTitle("g1xcl.geoposX");
-//        h6->GetYaxis()->SetTitleOffset(1.3);
-//        
-//        canvas_prof->cd(4);
-//        TH2F *h7 = new TH2F("h7","Y correlation g1vsg2",100,0,100,100,0,100);
-//        tmpTree->Draw("g2ycl.geoposY:g1ycl.geoposY>>h7","trackx@.GetEntries()==1 && tracky@.GetEntries()==1 && trackx.q>0 && tracky.q>0","colz"); ////X
-//        h7->GetYaxis()->SetTitle("g2ycl.geoposY");
-//        h7->GetXaxis()->SetTitle("g1ycl.geoposY");
-//        h7->GetYaxis()->SetTitleOffset(1.3);
-//        
-//        canvas_prof->cd(5);
-//        TH2F *h8 = new TH2F("h8","Y correlation g2vsg3",100,0,100,100,0,100);
-//        tmpTree->Draw("g2ycl.geoposY:g3ycl.geoposY>>h8","trackx@.GetEntries()==1 && tracky@.GetEntries()==1 && trackx.q>0 && tracky.q>0","colz"); ////X
-//        h8->GetYaxis()->SetTitle("g2ycl.geoposY");
-//        h8->GetXaxis()->SetTitle("g3ycl.geoposY");
-//        h8->GetYaxis()->SetTitleOffset(1.3);
-//        
-//        canvas_prof->cd(6);
-//        TH2F *h9 = new TH2F("h9","Y correlation g1vsg3",100,0,100,100,0,100);
-//        tmpTree->Draw("g3ycl.geoposY:g1ycl.geoposY>>h9","trackx@.GetEntries()==1 && tracky@.GetEntries()==1 && trackx.q>0 && tracky.q>0","colz"); ////X
-//        h9->GetYaxis()->SetTitle("g3ycl.geoposY");
-//        h9->GetXaxis()->SetTitle("g1ycl.geoposY");
-//        h9->GetYaxis()->SetTitleOffset(1.3);
-//        
-//        canvas_prof->SaveAs(Form("Trackers_Y-Correlations_Run%d.pdf",name));
-//        canvas_prof->Clear();
-//        
-//        delete gDirectory->FindObject("h4");
-//        delete gDirectory->FindObject("h5");
-//        delete gDirectory->FindObject("h6");
-//        delete gDirectory->FindObject("h7");
-//        delete gDirectory->FindObject("h8");
-//        delete gDirectory->FindObject("h9");
-        
-        canvas_prof->Divide(3,2);
-        
-        canvas_prof->cd(1);
-        TH2F *h4 = new TH2F("h4","Fit X correlation g1vsg2",100,0,100,100,0,100);
-        tmpTree->Draw("g2xcl.geoposX:g1xcl.geoposX>>h4","trackx@.GetEntries()==1 && tracky@.GetEntries()==1 && trackx.q>0 && tracky.q>0","colz"); ////X
-        TProfile *prof2a = h4->ProfileX();
-        prof2a->Fit("pol1","","",30,90);
-        pol1->SetLineColor(2);
-        h4->GetYaxis()->SetTitle("g2xcl.geoposX");
-        h4->GetXaxis()->SetTitle("g1xcl.geoposX");
-        h4->GetYaxis()->SetTitleOffset(1.3);
-        
-        canvas_prof->cd(2);
-        TH2F *h5 = new TH2F("h5","Fit X correlation g2vsg3",100,0,100,100,0,100);
-        tmpTree->Draw("g2xcl.geoposX:g3xcl.geoposX>>h5","trackx@.GetEntries()==1 && tracky@.GetEntries()==1 && trackx.q>0 && tracky.q>0","colz"); ////X
-        TProfile *prof2b = h5->ProfileX();
-        prof2b->Fit("pol1","","",30,90);
-        pol1->SetLineColor(2);
-        h5->GetYaxis()->SetTitle("g2xcl.geoposX");
-        h5->GetXaxis()->SetTitle("g3xcl.geoposX");
-        h5->GetYaxis()->SetTitleOffset(1.3);
-        
-        canvas_prof->cd(3);
-        TH2F *h6 = new TH2F("h6","Fit X correlation g1vsg3",100,0,100,100,0,100);
-        tmpTree->Draw("g3xcl.geoposX:g1xcl.geoposX>>h6","trackx@.GetEntries()==1 && tracky@.GetEntries()==1 && trackx.q>0 && tracky.q>0","colz"); ////X
-        TProfile *prof2c = h6->ProfileX();
-        prof2c->Fit("pol1","","",30,90);
-        pol1->SetLineColor(2);
-        h6->GetYaxis()->SetTitle("g3xcl.geoposX");
-        h6->GetXaxis()->SetTitle("g1xcl.geoposX");
-        h6->GetYaxis()->SetTitleOffset(1.3);
-        
-        canvas_prof->cd(4);
-        TH2F *h7 = new TH2F("h7","Fit Y correlation g1vsg2",100,0,100,100,0,100);
-        tmpTree->Draw("g2ycl.geoposY:g1ycl.geoposY>>h7","trackx@.GetEntries()==1 && tracky@.GetEntries()==1 && trackx.q>0 && tracky.q>0","colz"); ////X
-        TProfile *prof2d = h7->ProfileX();
-        prof2d->Fit("pol1","","",30,90);
-        pol1->SetLineColor(2);
-        h7->GetYaxis()->SetTitle("g2ycl.geoposY");
-        h7->GetXaxis()->SetTitle("g1ycl.geoposY");
-        h7->GetYaxis()->SetTitleOffset(1.3);
-        
-        canvas_prof->cd(5);
-        TH2F *h8 = new TH2F("h8","Fit Y correlation g2vsg3",100,0,100,100,0,100);
-        tmpTree->Draw("g2ycl.geoposY:g3ycl.geoposY>>h8","trackx@.GetEntries()==1 && tracky@.GetEntries()==1 && trackx.q>0 && tracky.q>0","colz"); ////X
-        TProfile *prof2e = h8->ProfileX();
-        prof2e->Fit("pol1","","",30,90);
-        pol1->SetLineColor(2);
-        h8->GetYaxis()->SetTitle("g2ycl.geoposY");
-        h8->GetXaxis()->SetTitle("g3ycl.geoposY");
-        h8->GetYaxis()->SetTitleOffset(1.3);
-        
-        canvas_prof->cd(6);
-        TH2F *h9 = new TH2F("h9","Fit Y correlation g1vsg3",100,0,100,100,0,100);
-        tmpTree->Draw("g3ycl.geoposY:g1ycl.geoposY>>h9","trackx@.GetEntries()==1 && tracky@.GetEntries()==1 && trackx.q>0 && tracky.q>0","colz"); ////X
-        TProfile *prof2f = h9->ProfileX();
-        prof2f->Fit("pol1","","",30,90);
-        pol1->SetLineColor(2);
-        h9->GetYaxis()->SetTitle("g3ycl.geoposY");
-        h9->GetXaxis()->SetTitle("g1ycl.geoposY");
-        h9->GetYaxis()->SetTitleOffset(1.3);
-        
-        canvas_prof->SaveAs(Form("Fit_Trackers_XY-Correlations_Run%d.pdf",name));
-        canvas_prof->Clear();
-        
-        delete gDirectory->FindObject("h4");
-        delete gDirectory->FindObject("h5");
-        delete gDirectory->FindObject("h6");
-        delete gDirectory->FindObject("h7");
-        delete gDirectory->FindObject("h8");
-        delete gDirectory->FindObject("h9");
-        
-       
+	canvas_prof->Divide(3,2);
 
-        canvas_prof->Divide(3,2);
-        
-        canvas_prof->cd(1);
-        TH2F *h10 = new TH2F("h10","X correlation sCMSNS2LC1vsg1",100,0,100,100,0,100);
-        tmpTree->Draw("sCMSNS2LC1.geoposX:g1xcl.geoposX >>h10","trackx@.GetEntries()==1 && tracky@.GetEntries()==1 && trackx.q>0 && tracky.q>0","colz"); ////X
-        h10->GetYaxis()->SetTitle("sCMSNS2LC1.geoposX");
-        h10->GetXaxis()->SetTitle("g1xcl.geoposX");
-        h10->GetYaxis()->SetTitleOffset(1.3);
-        
-        canvas_prof->cd(2);
-        TH2F *h11 = new TH2F("h11","X correlation sCMSNS2LC2vsg1",100,0,100,100,0,100);
-        tmpTree->Draw("sCMSNS2LC2.geoposX:g1xcl.geoposX >>h11","trackx@.GetEntries()==1 && tracky@.GetEntries()==1 && trackx.q>0 && tracky.q>0","colz"); ////X
-        h11->GetYaxis()->SetTitle("sCMSNS2LC2.geoposX");
-        h11->GetXaxis()->SetTitle("g1xcl.geoposX");
-        h11->GetYaxis()->SetTitleOffset(1.3);
-        
-        canvas_prof->cd(3);
-        TH2F *h12 = new TH2F("h12","X correlation sCMSNS2LC3vsg1",100,0,100,100,0,100);
-        tmpTree->Draw("sCMSNS2LC3.geoposX:g1xcl.geoposX >>h12","trackx@.GetEntries()==1 && tracky@.GetEntries()==1 && trackx.q>0 && tracky.q>0","colz"); ////X
-        h12->GetYaxis()->SetTitle("sCMSNS2LC3.geoposX");
-        h12->GetXaxis()->SetTitle("g1xcl.geoposX");
-        h12->GetYaxis()->SetTitleOffset(1.3);
-        
-        canvas_prof->cd(4);
-        TH2F *h10a = new TH2F("h10a","X correlation sCMSNS2LC1vsg1",100,0,100,100,0,100);
-        tmpTree->Draw("sCMSNS2LC1.geoposX:g1xcl.geoposX >>h10a","trackx@.GetEntries()==1 && tracky@.GetEntries()==1 && trackx.q>0 && tracky.q>0","colz"); ////X
-        ///use a TProfile to convert the 2-d to 1-d problem
-        TProfile *prof2 = h10a->ProfileX();
-        prof2->Fit("pol1","","",0,100);
-        pol1->SetLineColor(2);
-        
-        canvas_prof->cd(5);
-        TH2F *h11a = new TH2F("h11a","X correlation sCMSNS2LC2vsg1",100,0,100,100,0,100);
-        tmpTree->Draw("sCMSNS2LC2.geoposX:g1xcl.geoposX >>h11a","trackx@.GetEntries()==1 && tracky@.GetEntries()==1 && trackx.q>0 && tracky.q>0","colz"); ////X
-        ///use a TProfile to convert the 2-d to 1-d problem
-        TProfile *prof3 = h11a->ProfileX();
-        prof3->Fit("pol1","","",0,100);
-        
-        canvas_prof->cd(6);
-        TH2F *h12a = new TH2F("h12a","X correlation sCMSNS2LC3vsg1",100,0,100,100,0,100);
-        tmpTree->Draw("sCMSNS2LC3.geoposX:g1xcl.geoposX >>h12a","trackx@.GetEntries()==1 && tracky@.GetEntries()==1 && trackx.q>0 && tracky.q>0","colz"); ////X
-        ///use a TProfile to convert the 2-d to 1-d problem
-        TProfile *prof4 = h12a->ProfileX();
-        prof4->Fit("pol1","","",0,100);
+	canvas_prof->cd(1);
+	TH1F *g1x = new TH1F("g1x","Hit Position on tracker 1 (x)", 10, 0,100);
+	tmpTree->Draw("g1xcl.geoposX");
+	g1x->GetXaxis()->SetTitle("X position in mm");
+	g1x->GetYaxis()->SetTitle("Number of Hits");
 
-        
-        canvas_prof->SaveAs(Form("GE11_Correlations_Run%d.pdf",name));
-        canvas_prof->Clear();
-        
-        delete gDirectory->FindObject("h10");
-        delete gDirectory->FindObject("h11");
-        delete gDirectory->FindObject("h12");
-	delete gDirectory->FindObject("h10a");
-        delete gDirectory->FindObject("h11a");
-        delete gDirectory->FindObject("h12a");
+	canvas_prof->cd(2);
+	TH1F *g2x = new TH1F("g2x","Hit Position on tracker 2 (x)", 10, 0,100);
+	tmpTree->Draw("g2xcl.geoposX");
+	g2x->GetXaxis()->SetTitle("X position in mm");
+	g2x->GetYaxis()->SetTitle("Number of Hits");
 
+	canvas_prof->cd(3);
+	TH1F *g3x = new TH1F("g3x","Hit Position on tracker 3 (x)", 10, 0,100);
+	tmpTree->Draw("g3xcl.geoposX");
+	g3x->GetXaxis()->SetTitle("X position in mm");
+	g3x->GetYaxis()->SetTitle("Number of Hits");
+
+	canvas_prof->cd(4);
+	TH1F *g1y = new TH1F("g1y","Hit Position on tracker 1 (y)", 10, 0,100);
+	tmpTree->Draw("g1ycl.geoposY");
+	g1y->GetXaxis()->SetTitle("Y position in mm");
+	g1y->GetYaxis()->SetTitle("Number of Hits");
+
+	canvas_prof->cd(5);
+	TH1F *g2y = new TH1F("g2y","Hit Position on tracker 2 (y)", 10, 0,100);
+	tmpTree->Draw("g2ycl.geoposY");
+	g2y->GetXaxis()->SetTitle("Y position in mm");
+	g2y->GetYaxis()->SetTitle("Number of Hits");
+
+	canvas_prof->cd(6);
+	TH1F *g3y = new TH1F("g3y","Hit Position on tracker 3 (x)", 10, 0,100);
+	tmpTree->Draw("g3ycl.geoposY");
+	g3y->GetXaxis()->SetTitle("Y position in mm");
+	g3y->GetYaxis()->SetTitle("Number of Hits");
+
+	canvas_prof->SaveAs(Form("Tracker_Hit_position_%d_Rot.pdf",name));
+	canvas_prof->Clear();
+
+	delete gDirectory->FindObject("g1x");
+	delete gDirectory->FindObject("g1y");
+	delete gDirectory->FindObject("g2x");
+	delete gDirectory->FindObject("g2y");
+	delete gDirectory->FindObject("g3x");
+	delete gDirectory->FindObject("g3y");
+
+	canvas_prof->Divide(2,2);
+
+	canvas_prof->cd(1);
+	TH1F *LC1 = new TH1F("LC1","Hit Position on GE11_1 (y)", 10, 0,100);
+	tmpTree->Draw("sCMSNS2LC1.geoposY");
+	LC1->GetXaxis()->SetTitle("Y position in mm");
+	LC1->GetYaxis()->SetTitle("Number of Hits");
+
+	canvas_prof->cd(2);
+	TH1F *LC2 = new TH1F("LC2","Hit Position on GE11_2 (y)", 10, 0,100);
+	tmpTree->Draw("sCMSNS2LC2.geoposY");
+	LC2->GetXaxis()->SetTitle("Y position in mm");
+	LC2->GetYaxis()->SetTitle("Number of Hits");
+
+	canvas_prof->cd(3);
+	TH1F *LC3 = new TH1F("LC3","Hit Position on GE11_3 (y)", 10, 0,100);
+	tmpTree->Draw("sCMSNS2LC3.geoposY");
+	LC3->GetXaxis()->SetTitle("Y position in mm");
+	LC3->GetYaxis()->SetTitle("Number of Hits");
+
+	canvas_prof->SaveAs(Form("GEM_Hit_position_%d_Rot.pdf",name));
+	canvas_prof->Clear();
+
+	delete gDirectory->FindObject("LC1");
+	delete gDirectory->FindObject("LC2");
+	delete gDirectory->FindObject("LC3");
         
-    
-        
-        
-        canvas_prof->Divide(3,1);
-        
-        canvas_prof->cd(1);
-        TH1F *h4a = new TH1F("h4a","X Offset sCMSNS2LC1 wrt g1",20,-25,15);
-        tmpTree->Draw("sCMSNS2LC1.geoposX-g1xcl.geoposX>>h4a","trackx@.GetEntries()==1 && tracky@.GetEntries()==1 && trackx.q>0 && tracky.q>0","colz"); ////X
-        h4a->Fit("gaus");
-        gaus->SetLineColor(2);
-        
-        canvas_prof->cd(2);
-        TH1F *h5a = new TH1F("h5a","X Offset sCMSNS2LC2 wrt g1",20,-25,15);
-        tmpTree->Draw("sCMSNS2LC2.geoposX-g1xcl.geoposX>>h5a","trackx@.GetEntries()==1 && tracky@.GetEntries()==1 && trackx.q>0 && tracky.q>0","colz"); ////X
-        h5a->Fit("gaus");
-        gaus->SetLineColor(2);
-        
-        canvas_prof->cd(3);
-        TH1F *h6a = new TH1F("h6a","X Offset sCMSNS2LC3 wrt g1",20,-25,15);
-        tmpTree->Draw("sCMSNS2LC3.geoposX-g1xcl.geoposX>>h6a","trackx@.GetEntries()==1 && tracky@.GetEntries()==1 && trackx.q>0 && tracky.q>0","colz"); ////X
-        h6a->Fit("gaus");
-        gaus->SetLineColor(2);
-        
-        
-        canvas_prof->SaveAs(Form("Offset_GE11_wrt_Tracker1_Run%d.pdf",name));
-        canvas_prof->Clear();
-        
-        delete gDirectory->FindObject("h4a");
-        delete gDirectory->FindObject("h5a");
-        delete gDirectory->FindObject("h6a");
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//		CORRELATION PLOTS
+//
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+const Int_t nbranch = 12;
+char *bnames[nbranch]={	"g1xcl.geoposX:g1xcl.geoposX",	"g1xcl.geoposX:g2xcl.geoposX",	"g1xcl.geoposX:g3xcl.geoposX",
+			"g1ycl.geoposY:g1ycl.geoposY",	"g1ycl.geoposY:g2ycl.geoposY",	"g1ycl.geoposY:g3ycl.geoposY",
+			"g1ycl.geoposY:sCMSNS2LC1.geoposY",	"g1ycl.geoposY:sCMSNS2LC2.geoposY",
+			"g1xcl.geoposX:sCMSNS2LC1.geoposY",	"g1xcl.geoposX:sCMSNS2LC2.geoposY",
+			"g1ycl.geoposY:sCMSNS2LC3.geoposY",	"g1xcl.geoposX:sCMSNS2LC3.geoposY"};
+
+char *fnames[nbranch] = {"g1x_geoposX_vs_g1x_geoposX",	"g1x_geoposX_vs_g2x_geoposX",	"g1x_geoposX_vs_g3x_geoposX",
+			"g1y_geoposY_vs_g1y_geoposY",	"g1y_geoposY_vs_g2y_geoposY",	"g1y_geoposY_vs_g3y_geoposY",
+			"g1y_geoposY_vs_sCMSLC1_geoposY",	"g1y_geoposY_vs_sCMSLC2_geoposY",
+			"g1x_geoposX_vs_sCMSLC1_geoposY",	"g1x_geoposX_vs_sCMSLC2_geoposY",
+			"g1y_geoposY_vs_sCMSLC3_geoposY",	"g1x_geoposX_vs_sCMSLC3_geoposY"};
+const Float_t range[4*nbranch] ={0,100,0,100,		-10,110,-10,110,		-10,110,-10,110,
+				0,100,0,100,		-10,110,-10,110,		-10,110,-10,110,
+				-10,110,-10,110,		-10,110,-10,110,
+				-10,110,-10,110,		-10,110,-10,110,
+				-10,110,-10,110,		-10,110,-10,110};
+
+TH2F * hist[nbranch];
+TProfile * hprofile[nbranch];
+TCanvas *Canvas[nbranch];
+TF1 *function[nbranch];
+
+Char_t message[80];
+vector<int> vecm,vecn; 
+Double_t fit_Low, fit_High;
+Int_t k=0;
+
+ofstream o_file;
+o_file.open("fit_detail.txt");
+
+o_file<<"NAME_OF_PROFILE_PLOT\t\t\tChi-sqr/NDF\tINTERCEPT(P0)\tINTERCEPT_ERROR\t\tSLOPE(P1)\tSLOPE_ERROR"<<endl;
+for(Int_t i=0;i<nbranch;i++){
+	k=i*4;
+	Canvas[i] = new TCanvas(Form("Canvas%d",i));
+	Canvas[i]->Divide(2,1);
+	Canvas[i]->cd(1);
+
+	hist[i] = new TH2F("H_"+TString(fnames[i]),TString(bnames[i]),100,range[k],range[k+1],100,range[k+2],range[k+3]);
+	tmpTree->Draw(TString(bnames[i])+">>H_"+TString(fnames[i]),"trackx@.GetEntries()==1 && tracky@.GetEntries()==1 && trackx.q>0 && tracky.q>0","colz");
+
+	hprofile[i] = new TProfile("P_"+TString(fnames[i]),TString(bnames[i]),100,range[k],range[k+1],range[k+2],range[k+3]);
+	tmpTree->Draw(TString(bnames[i])+">>P_"+TString(fnames[i]),"trackx@.GetEntries()==1 && tracky@.GetEntries()==1 && trackx.q>0 && tracky.q>0");
+
+	for (int m=0; m<100; m++)
+	for (int n=0; n<100; n++)
+	{
+		if (hist[i]->GetBinContent(m,n)>0) 
+		{
+			vecm.push_back(m); vecn.push_back(n);
+		}
+	}	
+	fit_Low = hist[i]->GetXaxis()->GetBinCenter(vecm.front()-1);
+	fit_High = hist[i]->GetXaxis()->GetBinCenter(vecm.back()+1);
+	vecn.clear();	vecm.clear();		// clear the vector
+
+	hprofile[i]->GetXaxis()->SetRangeUser(fit_Low,fit_High);
+//	hprofile[i]->SetMinimum(fit_Low);
+	hprofile[i]->SetStats(0);
+	hist[i]->SetStats(0);
+	hist[i]->Draw();
+
+	Canvas[i]->cd(2);
+	hprofile[i]->Draw();
+
+
+	function[i] = new TF1("f1","[0]+([1]*x)",fit_Low,fit_High);
+	//if (i==8) function[i] = new TF1("f1","expo",fit_Low,fit_High);
+
+	function[i]->SetParameters(1,1);
+
+	hprofile[i]->Fit("f1");
+	hprofile[i]->Draw();
+
+	TLegend *legend2 = new TLegend (0.3,0.9,.7,0.7,"Linear Fit");
+	TF1 *fun=hprofile[i]->GetFunction("f1");
+	cout<<"##############################################################"<<endl;
+	cout<<"chi-sqr = "<<fun->GetChisquare()<<endl;
+	cout<<"NDF = "<<fun->GetNDF()<<endl;
+	o_file<<TString(fnames[i])<<"\t\t"<<setprecision(3)<<fixed<<fun->GetChisquare()/fun->GetNDF()<<"\t\t"<<fun->GetParameter(0)<<"\t\t"<<fun->GetParError(0)<<"\t\t\t"<<fun->GetParameter(1)<<"\t\t"<<fun->GetParError(1)<<endl; 
+	cout<<"##############################################################"<<endl;
+	sprintf(message,"Total : #chi^{2}/NDF = %.2d",fun->GetChisquare()/fun->GetNDF());
+	legend2->AddEntry(fun,message);
+	sprintf(message,"p0 = %.3f #pm  %.3f",fun->GetParameter(0),fun->GetParError(0));
+	legend2->AddEntry(fun,message);
+	sprintf(message,"p1 = %.3f  #pm %.3f",fun->GetParameter(1),fun->GetParError(1));
+	legend2->AddEntry(fun,message);
+	legend2->Draw();
+
+
+
+
+//	Canvas[i]->SaveAs("Correlation_"+TString(fnames[i])+".png");
+//	Canvas[i]->SaveAs("Correlation_"+TString(fnames[i])+"_Rot.pdf");
+	Canvas[i]->SaveAs(Form("Correlation_%s_Run%d_Rot.pdf",fnames[i],name));
+
+}
+
+//o_file.close();
+	
 	}
 	}
