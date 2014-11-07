@@ -31,7 +31,10 @@ int BeamProfile(TString RootFile,TString RecoFile, Int_t name)
 	canvas_prof->Divide(2,2);
 	cout<<"###################"<<endl;
 	canvas_prof->cd(1);
-	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	//
+	//		BEAM PROFILE PLOTS
+	////////////////////////////////////////////////////////////////////////////////////////////////////
 	TH2F *hg1BeamProfile = new TH2F("hg1BeamProfile","Beam profile on Tracker 1", 10,0.,100.,10,0.,100.);
 	tmpTree->Draw("g1ycl.geoposY:g1xcl.geoposX>>hg1BeamProfile","g1ycl@.GetEntries()==1 && g1xcl@.GetEntries()==1","colz");
 	hg1BeamProfile->GetXaxis()->SetTitle("x position in mm");
@@ -56,6 +59,11 @@ int BeamProfile(TString RootFile,TString RecoFile, Int_t name)
 	delete gDirectory->FindObject("hg2BeamProfile");
 	delete gDirectory->FindObject("hg3BeamProfile");
 
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	//
+	//		Hit Position  
+	//
+	////////////////////////////////////////////////////////////////////////////////////////////////////
 	canvas_prof->Divide(3,2);
 
 	canvas_prof->cd(1);
@@ -107,21 +115,21 @@ int BeamProfile(TString RootFile,TString RecoFile, Int_t name)
 	canvas_prof->Divide(2,2);
 
 	canvas_prof->cd(1);
-	TH1F *LC1 = new TH1F("LC1","Hit Position on GE11_1 (y)", 10, 0,100);
-	tmpTree->Draw("sCMSNS2LC1.geoposY");
-	LC1->GetXaxis()->SetTitle("Y position in mm");
+	TH1F *LC1 = new TH1F("LC1","Hit Position on GE11_1 (x)", 10, 0,100);
+	tmpTree->Draw("sCMSNS2LC1.geoposX");
+	LC1->GetXaxis()->SetTitle("X position in mm");
 	LC1->GetYaxis()->SetTitle("Number of Hits");
 
 	canvas_prof->cd(2);
-	TH1F *LC2 = new TH1F("LC2","Hit Position on GE11_2 (y)", 10, 0,100);
-	tmpTree->Draw("sCMSNS2LC2.geoposY");
-	LC2->GetXaxis()->SetTitle("Y position in mm");
+	TH1F *LC2 = new TH1F("LC2","Hit Position on GE11_2 (x)", 10, 0,100);
+	tmpTree->Draw("sCMSNS2LC2.geoposX");
+	LC2->GetXaxis()->SetTitle("X position in mm");
 	LC2->GetYaxis()->SetTitle("Number of Hits");
 
 	canvas_prof->cd(3);
-	TH1F *LC3 = new TH1F("LC3","Hit Position on GE11_3 (y)", 10, 0,100);
-	tmpTree->Draw("sCMSNS2LC3.geoposY");
-	LC3->GetXaxis()->SetTitle("Y position in mm");
+	TH1F *LC3 = new TH1F("LC3","Hit Position on GE11_3 (x)", 10, 0,100);
+	tmpTree->Draw("sCMSNS2LC3.geoposX");
+	LC3->GetXaxis()->SetTitle("X position in mm");
 	LC3->GetYaxis()->SetTitle("Number of Hits");
 
 	canvas_prof->SaveAs(Form("GEM_Hit_position_%d_Rot.pdf",name));
@@ -139,15 +147,15 @@ int BeamProfile(TString RootFile,TString RecoFile, Int_t name)
 const Int_t nbranch = 12;
 char *bnames[nbranch]={	"g1xcl.geoposX:g1xcl.geoposX",	"g1xcl.geoposX:g2xcl.geoposX",	"g1xcl.geoposX:g3xcl.geoposX",
 			"g1ycl.geoposY:g1ycl.geoposY",	"g1ycl.geoposY:g2ycl.geoposY",	"g1ycl.geoposY:g3ycl.geoposY",
-			"g1ycl.geoposY:sCMSNS2LC1.geoposY",	"g1ycl.geoposY:sCMSNS2LC2.geoposY",
-			"g1xcl.geoposX:sCMSNS2LC1.geoposY",	"g1xcl.geoposX:sCMSNS2LC2.geoposY",
-			"g1ycl.geoposY:sCMSNS2LC3.geoposY",	"g1xcl.geoposX:sCMSNS2LC3.geoposY"};
+			"g1ycl.geoposY:sCMSNS2LC1.geoposX",	"g1ycl.geoposY:sCMSNS2LC2.geoposX",
+			"g1xcl.geoposX:sCMSNS2LC1.geoposX",	"g1xcl.geoposX:sCMSNS2LC2.geoposX",
+			"g1ycl.geoposY:sCMSNS2LC3.geoposX",	"g1xcl.geoposX:sCMSNS2LC3.geoposX"};
 
 char *fnames[nbranch] = {"g1x_geoposX_vs_g1x_geoposX",	"g1x_geoposX_vs_g2x_geoposX",	"g1x_geoposX_vs_g3x_geoposX",
 			"g1y_geoposY_vs_g1y_geoposY",	"g1y_geoposY_vs_g2y_geoposY",	"g1y_geoposY_vs_g3y_geoposY",
-			"g1y_geoposY_vs_sCMSLC1_geoposY",	"g1y_geoposY_vs_sCMSLC2_geoposY",
-			"g1x_geoposX_vs_sCMSLC1_geoposY",	"g1x_geoposX_vs_sCMSLC2_geoposY",
-			"g1y_geoposY_vs_sCMSLC3_geoposY",	"g1x_geoposX_vs_sCMSLC3_geoposY"};
+			"g1y_geoposY_vs_sCMSLC1_geoposX",	"g1y_geoposY_vs_sCMSLC2_geoposX",
+			"g1x_geoposX_vs_sCMSLC1_geoposX",	"g1x_geoposX_vs_sCMSLC2_geoposX",
+			"g1y_geoposY_vs_sCMSLC3_geoposX",	"g1x_geoposX_vs_sCMSLC3_geoposX"};
 const Float_t range[4*nbranch] ={0,100,0,100,		-10,110,-10,110,		-10,110,-10,110,
 				0,100,0,100,		-10,110,-10,110,		-10,110,-10,110,
 				-10,110,-10,110,		-10,110,-10,110,
@@ -234,7 +242,7 @@ for(Int_t i=0;i<nbranch;i++){
 
 }
 
-//o_file.close();
+o_file.close();
 	
 	}
 	}
