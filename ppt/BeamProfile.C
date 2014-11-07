@@ -52,7 +52,7 @@ int BeamProfile(TString RootFile,TString RecoFile, Int_t name)
 	hg3BeamProfile->GetXaxis()->SetTitle("x position in mm");
 	hg3BeamProfile->GetYaxis()->SetTitle("y position in mm");
 	
-	canvas_prof->SaveAs(Form("profile_plots_for_Trackers_%d_Rot.pdf",name));
+	canvas_prof->SaveAs(Form("profile_plots_for_Trackers_%d.pdf",name));
 	canvas_prof->Clear();
 
 	delete gDirectory->FindObject("hg1BeamProfile");
@@ -102,7 +102,7 @@ int BeamProfile(TString RootFile,TString RecoFile, Int_t name)
 	g3y->GetXaxis()->SetTitle("Y position in mm");
 	g3y->GetYaxis()->SetTitle("Number of Hits");
 
-	canvas_prof->SaveAs(Form("Tracker_Hit_position_%d_Rot.pdf",name));
+	canvas_prof->SaveAs(Form("Tracker_Hit_position_%d.pdf",name));
 	canvas_prof->Clear();
 
 	delete gDirectory->FindObject("g1x");
@@ -132,7 +132,7 @@ int BeamProfile(TString RootFile,TString RecoFile, Int_t name)
 	LC3->GetXaxis()->SetTitle("X position in mm");
 	LC3->GetYaxis()->SetTitle("Number of Hits");
 
-	canvas_prof->SaveAs(Form("GEM_Hit_position_%d_Rot.pdf",name));
+	canvas_prof->SaveAs(Form("GEM_Hit_position_%d.pdf",name));
 	canvas_prof->Clear();
 
 	delete gDirectory->FindObject("LC1");
@@ -237,8 +237,8 @@ for(Int_t i=0;i<nbranch;i++){
 
 
 //	Canvas[i]->SaveAs("Correlation_"+TString(fnames[i])+".png");
-//	Canvas[i]->SaveAs("Correlation_"+TString(fnames[i])+"_Rot.pdf");
-	Canvas[i]->SaveAs(Form("Correlation_%s_Run%d_Rot.pdf",fnames[i],name));
+//	Canvas[i]->SaveAs("Correlation_"+TString(fnames[i])+".pdf");
+	Canvas[i]->SaveAs(Form("Correlation_%s_Run%d.pdf",fnames[i],name));
 
 }
 
