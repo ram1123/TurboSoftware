@@ -1,3 +1,22 @@
+/*
+ * =====================================================================================
+ *
+ *       Filename:  BeamProfile.C
+ *
+ *    Description:  This file plots some basic plots using root files from TurboSoftware. 
+ *
+ *        Version:  1.0
+ *        Created:  Monday 10 November 2014 02:51:42  CET
+ *       Revision:  none
+ *       Compiler:  gcc
+ *
+ *         Author:  Ramkrishna Sharma (Ram), ramkrishna.sharma71@gmail.com
+ *   Organization:  University Of Delhi, Delhi, India && CERN
+ *
+ * =====================================================================================
+ */
+
+
 #include<iostream>
 #include<vector>
 #include<string>
