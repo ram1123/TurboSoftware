@@ -31,7 +31,7 @@
 #	-------------------------------------------------------------------
 
 	#PathOfInputNtuple=/afs/cern.ch/work/p/pbarria/public/TB_H2_OCT_2014/beamdata
-	PathOfInputNtuple=/afs/cern.ch/work/t/tmaersch/public/OutPutData
+	PathOfInputNtuple=/afs/cern.ch/work/t/tmaersch/public/H2Oct14_Ntuples_Pitch08
 
 	getppt=1
 	mail=0
