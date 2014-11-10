@@ -491,6 +491,7 @@ do
 	LC3_Err=$(sed -n '/Loading the trees.../{n;n;n;p;    }' $PathOfOutPutData/$(basename $f)/Run${temp}_Analyzer.log | awk '{print $2}')  
     fi
 	echo -e "$(basename $f)\t\t $LC1+/-$LC1_Err \t $LC2+/-$LC2_Err \t $LC3+/-$LC3_Err" >> EfficiencyData_R${IRunNo}_R${FRunNo}.txt
+	echo "done." | mail  -s "Run No. ${RunCounter} done." ramkrishna.sharma71@gmail.com
 	RunCounter=$[$RunCounter+1]
   done
 done
