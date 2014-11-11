@@ -1,3 +1,12 @@
+#!/bin/bash
+
+#	-------------------------------------------------------------------
+#
+#	Shell program to This script runs form the script GetPlot.sh and it runs the macro BeamProfile.C
+#
+#	Author: 2014, Ramkrishna Sharma,,, <ramkrishna.sharma71@gmail.com>.
+#
+
 RunCounter=$1
 while [ $RunCounter -le $2 ]
 do
