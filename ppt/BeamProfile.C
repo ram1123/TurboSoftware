@@ -1,3 +1,24 @@
+/*
+ * =====================================================================================
+ *
+ *       Filename:  BeamProfile.C
+ *
+ *    Description:  This macro creates plots for beamprofile, x & y offset, Hit plots 
+ *    		    for tracker and gems, space resolution for gems, correlation plots
+ *    		    for between all trackers and gems
+ *
+ *        Version:  1.0
+ *        Created:  Tuesday 11 November 2014 08:13:29  CET
+ *       Revision:  none
+ *       Compiler:  gcc
+ *
+ *         Author:  Ramkrishna Sharma (Ram), ramkrishna.sharma71@gmail.com
+ *   Organization:  University Of Delhi, Delhi, India & CERN
+ *
+ * =====================================================================================
+ */
+
+
 #include<iostream>
 #include<vector>
 #include<string>
@@ -52,7 +73,7 @@ int BeamProfile(TString RootFile,TString RecoFile, Int_t name)
 	hg3BeamProfile->GetXaxis()->SetTitle("x position in mm");
 	hg3BeamProfile->GetYaxis()->SetTitle("y position in mm");
 	
-	canvas_prof->SaveAs(Form("profile_plots_for_Trackers_%d.pdf",name));
+	canvas_prof->SaveAs(Form("profile_plots_for_Trackers_Run%d.pdf",name));
 	canvas_prof->Clear();
 
 	delete gDirectory->FindObject("hg1BeamProfile");
@@ -102,7 +123,7 @@ int BeamProfile(TString RootFile,TString RecoFile, Int_t name)
 	g3y->GetXaxis()->SetTitle("Y position in mm");
 	g3y->GetYaxis()->SetTitle("Number of Hits");
 
-	canvas_prof->SaveAs(Form("Tracker_Hit_position_%d.pdf",name));
+	canvas_prof->SaveAs(Form("Tracker_Hit_position_Run%d.pdf",name));
 	canvas_prof->Clear();
 
 	delete gDirectory->FindObject("g1x");
@@ -132,7 +153,7 @@ int BeamProfile(TString RootFile,TString RecoFile, Int_t name)
 	LC3->GetXaxis()->SetTitle("Y position in mm");
 	LC3->GetYaxis()->SetTitle("Number of Hits");
 
-	canvas_prof->SaveAs(Form("GEM_Hit_position_%d.pdf",name));
+	canvas_prof->SaveAs(Form("GEM_Hit_position_Run%d.pdf",name));
 	canvas_prof->Clear();
 
 	delete gDirectory->FindObject("LC1");
@@ -161,7 +182,70 @@ int BeamProfile(TString RootFile,TString RecoFile, Int_t name)
 	res3->GetXaxis()->SetTitle("Space Resolution in mm");
 	res3->GetYaxis()->SetTitle("Number of events");
 
-	canvas_prof->SaveAs(Form("Space_Resolution_%d.pdf",name));
+	canvas_prof->SaveAs(Form("Space_Resolution_For_Run%d.pdf",name));
+	canvas_prof->Clear();
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//		Offset Plots
+//
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	canvas_prof->Divide(2,1);
+
+	canvas_prof->cd(1);
+	TH1F *res4 = new TH1F("res4","Offset between g1x and g2x",20,-4,4);
+	tmpTree->Draw("g1xcl.geoposX-g2xcl.geoposX>>res4","trackx.q>0 && tracky.q>0");
+	res4->GetXaxis()->SetTitle("#Delta x in mm");
+	res4->GetYaxis()->SetTitle("Number of entries");
+
+	canvas_prof->cd(2);
+	TH1F *res5 = new TH1F("res5","Offset between g1x and g3x",20,-4,4);
+	tmpTree->Draw("g1xcl.geoposX-g3xcl.geoposX>>res5","trackx.q>0 && tracky.q>0");
+	res5->GetXaxis()->SetTitle("#Delta x in mm");
+	res5->GetYaxis()->SetTitle("Number of entries");
+
+	canvas_prof->SaveAs(Form("X_Offset_For_Run%d.pdf",name));
+	canvas_prof->Clear();
+
+	canvas_prof->Divide(3,2);
+
+	canvas_prof->cd(1);
+	TH1F *res6 = new TH1F("res6","Offset between g1y and g1y",20,-4,4);
+	tmpTree->Draw("g1ycl.geoposY-g1ycl.geoposY>>res6","trackx.q>0 && tracky.q>0");
+	res6->GetXaxis()->SetTitle("#Delta y in mm");
+	res6->GetYaxis()->SetTitle("Number of entries");
+
+	canvas_prof->cd(2);
+	TH1F *res7 = new TH1F("res7","Offset between g1y and g2y",20,-4,4);
+	tmpTree->Draw("g1ycl.geoposY-g2ycl.geoposY>>res7","trackx.q>0 && tracky.q>0");
+	res7->GetXaxis()->SetTitle("#Delta y in mm");
+	res7->GetYaxis()->SetTitle("Number of entries");
+
+	canvas_prof->cd(3);
+	TH1F *res8 = new TH1F("res8","Offset between g1y and g3y",20,-4,4);
+	tmpTree->Draw("g1ycl.geoposY-g3ycl.geoposY>>res8","trackx.q>0 && tracky.q>0");
+	res8->GetXaxis()->SetTitle("#Delta y in mm");
+	res8->GetYaxis()->SetTitle("Number of entries");
+
+	canvas_prof->cd(4);
+	TH1F *res9 = new TH1F("res9","Offset between g1y and LC1",20,-40,40);
+	tmpTree->Draw("g1ycl.geoposY-sCMSNS2LC1.geoposY>>res9","trackx.q>0 && tracky.q>0");
+	res9->GetXaxis()->SetTitle("#Delta y in mm");
+	res9->GetYaxis()->SetTitle("Number of entries");
+
+	canvas_prof->cd(5);
+	TH1F *res19 = new TH1F("res19","Offset between g1y and LC2",20,-40,40);
+	tmpTree->Draw("g1ycl.geoposY-sCMSNS2LC2.geoposY>>res19","trackx.q>0 && tracky.q>0");
+	res19->GetXaxis()->SetTitle("#Delta y in mm");
+	res19->GetYaxis()->SetTitle("Number of entries");
+
+	canvas_prof->cd(6);
+	TH1F *res10 = new TH1F("res10","Offset between g1y and LC3",20,-40,40);
+	tmpTree->Draw("g1ycl.geoposY-sCMSNS2LC3.geoposY>>res10","trackx.q>0 && tracky.q>0");
+	res10->GetXaxis()->SetTitle("#Delta y in mm");
+	res10->GetYaxis()->SetTitle("Number of entries");
+
+	canvas_prof->SaveAs(Form("Y_Offset_For_Run%d.pdf",name));
+	canvas_prof->Clear();
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //		CORRELATION PLOTS
 //
