@@ -31,7 +31,8 @@
 #	-------------------------------------------------------------------
 
 	#PathOfInputNtuple=/afs/cern.ch/work/p/pbarria/public/TB_H2_OCT_2014/beamdata
-	PathOfInputNtuple=/afs/cern.ch/work/t/tmaersch/public/H2Oct14_Ntuples_Pitch08
+	#PathOfInputNtuple=/afs/cern.ch/work/t/tmaersch/public/H2Oct14_Ntuples_Pitch08
+	PathOfInputNtuple=/afs/cern.ch/user/r/rasharma/work/public/test/TurboSoftware/EventBuilder/OutPutData
 
 	getppt=1
 	mail=0
@@ -171,9 +172,11 @@ function helptext
 	Options:
 
 	-h, --help	Display this help message and exit.
-	-r              Asks the initial and final run number over which we need plots. If we want plots only for one run then just put initial and final run number same.
-	-p  PathOfInputNtuplesAsks the path of Ntuples.
-	-g		If you don't want to get ppt then use this option.
+	-r              This option ask you to enter the two numbers: 	
+			${tab}1. First  : Initial Run Number
+			${tab}2. Second : Final Run Number
+	-p  		Ask you to enter the path of Ntuples
+	-g		Don't want to get ppt then use this option.
 	-m		This option will mail yout the Efficiency txt file on the 
 			${tab} email provided by you.
 
@@ -212,7 +215,7 @@ if [ "$1" = "--help" ]; then
 	graceful_exit
 fi
 
-while getopts ":hrp:gm" opt; do
+while getopts ":hrpgm" opt; do
 	case $opt in
 		r )	echo -n "Initial Run Number (IRunNo) = " 
 			read IRunNo
@@ -221,15 +224,18 @@ while getopts ":hrp:gm" opt; do
 			if [ "$IRunNo" -gt "$FRunNo" ]; then 
 				error_exit "Initial Run Number should be Less then or equal to Final Run Number"
 			fi;;
-		p )	echo "Asks the path of Ntuples. - argument = $OPTARG" 
-			PathOfInputNtuple=$OPTARG;;
-		g )	getppt=0;;
-		h )	helptext
-			graceful_exit ;;
+		p )	echo -n "Enter path of Ntuples : " 
+			read PathOfInputNtuple
+			if [ ! -f $PathOfInputNtuple ]; then
+				error_exit "Path ${PathOfInputNtuple} does not exits"
+			fi;;
 		m )	echo "The ppt file will be sent to the mail that you will provide."			
 			echo -n "Please enter Email-Id : "
 			read email
 			mail=1;;
+		g )	getppt=0;;
+		h )	helptext
+			graceful_exit ;;
 		* )	usage
 			clean_up
 			exit 1
@@ -238,6 +244,10 @@ done
 
 
 ##### Main Logic #####
+if [ "$#" == "0" ]; then
+	helptext
+	error_exit "Please enter atleast one arguments from above."
+fi
 # CREATE A BACKUP DIRECTORY IF NOT EXISTS. THEN REMOVE SOME OF UNWNATED THINGS AND KEEP SOME USEFUL THINGS IN BACKUP DIRECTORY.
 	if [ -d "Backup" ]; then
 		echo "Directory Backup Exists......."
