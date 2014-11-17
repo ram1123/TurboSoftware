@@ -36,11 +36,11 @@ Float_t GetY(Int_t ReadoutType, Int_t channel)
 	else {cout <<  "Wrong Map Type: No Type Found or Wrong Request"; return 999;}
 };
 
-Float_t GetZ(Int_t ReadoutType, Int_t channel)
-{
-	if (ReadoutType <=9 ) return 0.;
-	else {cout<<  "ReadOutType: " << ReadoutType  <<  "Wrong Map Type: No Type Found or Wrong Request"<< endl; return 999;}
-};
+//Float_t GetZ(Int_t ReadoutType, Int_t channel)
+//{
+//	if (ReadoutType <=9 ) return 0.;
+//	else {cout<<  "ReadOutType: " << ReadoutType  <<  "Wrong Map Type: No Type Found or Wrong Request"<< endl; return 999;}
+//};
 
 Float_t GetR(Int_t ReadoutType, Int_t channel)
 {

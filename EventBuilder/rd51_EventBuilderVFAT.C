@@ -332,8 +332,8 @@ int rd51_EventBuilderVFAT(
     Int_t TypeOfReadout[MaxNumbersOfDetDir];
     for (Int_t i=0; i<MaxNumbersOfDetDir; i++){TypeOfReadout[i]=(*DET[i]).ReadoutType;}
     
-    Int_t TotChannels[MaxNumbersOfDetDir];
-    for (Int_t i=0; i<MaxNumbersOfDetDir; i++){TotChannels[i]=(*DET[i]).TotChannels;}
+//    Int_t TotChannels[MaxNumbersOfDetDir];
+//    for (Int_t i=0; i<MaxNumbersOfDetDir; i++){TotChannels[i]=(*DET[i]).TotChannels;}
     
     Int_t PossibleHits[MaxNumbersOfDetDir];
     for (Int_t i=0; i<MaxNumbersOfDetDir; i++){PossibleHits[i]=(*DET[i]).PossibleHits;
@@ -1226,39 +1226,6 @@ int rd51_EventBuilderVFAT(
         }
     }	
     
-    for (Int_t i=0; i<chips_per_evt; i++)
-    {
-        if((*VFAT[i]).DetectorName == "g4")
-        {
-            TH2F *hg4BeamProfile = new TH2F("hg4BeamProfile","Beam profile on Tracker 4", 1000,-200.,200.,1000,-200.,200.);
-            tree_geo->Draw("g4ycl.geoposY:g4xcl.geoposX>>hg4BeamProfile","g4ycl@.GetEntries()==1 && g4xcl@.GetEntries()==1","Lego2");
-            hg4BeamProfile->Write();
-            
-            TH1F *hg4xoffsetwithg1 = new TH1F("hg4xoffsetwithg1","X Offset of Tracker 4 respect with Tracker 1", 500,-100.,100.);
-            tree_geo->Draw("g4xcl.geoposX-g1xcl.geoposX>>hg4xoffsetwithg1","g4xcl@.GetEntries()==1 && g1xcl@.GetEntries()==1","Lego2");
-            //hg4xoffsetwithg1->Write();
-            TH1F *hg4yoffsetwithg1 = new TH1F("hg4yoffsetwithg1","Y Offset of Tracker 4 respect with Tracker 1", 500,-100.,100.);
-            tree_geo->Draw("g4ycl.geoposY-g1ycl.geoposY>>hg4yoffsetwithg1","g4ycl@.GetEntries()==1 && g1ycl@.GetEntries()==1","Lego2");
-            //hg4yoffsetwithg1->Write();
-            if (EBV_BeampProfiledataPrintOut==1 && EBV_Verbose==0)
-            {
-                cout << " g4yBeamMean: "<< hg4BeamProfile->GetMean(2) << " g4yBeamRMS: "<< hg4BeamProfile->GetRMS(2) 
-                << " g4xBeamMean: "<< hg4BeamProfile->GetMean(1) << " g4xBeamRMS: "<< hg4BeamProfile->GetRMS(1);
-                cout << " g4-g1yoffset:"<< hg4yoffsetwithg1->GetMean() << " g4-g1yoffsetRMS:"<< hg4yoffsetwithg1->GetRMS() 
-                << " g4-g1xoffset:"<< hg4xoffsetwithg1->GetMean() << " g4-g1xoffsetRMS:"<< hg4xoffsetwithg1->GetRMS(); 
-            }
-            if (EBV_BeampProfiledataPrintOut==1 && EBV_Verbose==1)
-            {
-                printf("g4\t\t%-.3f\t\t%-.3f\t\t%-.3f\t\t%-.3f\t\t%-.3f\t\t%-.3f\t\t%-.3f\t\t%-.3f\t\t%-.0f\n",	
-                       hg4BeamProfile->GetMean(2)   ,hg4BeamProfile->GetRMS(2)  ,hg4BeamProfile->GetMean(1)  ,hg4BeamProfile->GetRMS(1),
-                       hg4yoffsetwithg1->GetMean()  ,hg4yoffsetwithg1->GetRMS() ,hg4xoffsetwithg1->GetMean() ,hg4xoffsetwithg1->GetRMS(),
-                       hg4BeamProfile->GetEntries());
-                BlueOut(".................................................................................................\n\n"); 	
-            }
-            
-            break;
-        }
-    }	
     
     
     
@@ -1441,7 +1408,6 @@ int rd51_EventBuilderVFAT(
         TCut g1SingleHit("g1SingleHit","g1ycl@.GetEntries()==1 && g1xcl@.GetEntries()==1");
         TCut g2SingleHit("g2SingleHit","g2ycl@.GetEntries()==1 && g2xcl@.GetEntries()==1");
         TCut g3SingleHit("g3SingleHit","g3ycl@.GetEntries()==1 && g3xcl@.GetEntries()==1");
-        TCut g4SingleHit("g4SingleHit","g4ycl@.GetEntries()==1 && g4xcl@.GetEntries()==1");
         
         TCut g1g2Algnd("g1g2Algnd","TMath::Abs(g1xcl.geoposX-g2xcl.geoposX)<4 && TMath::Abs(g1ycl.geoposY-g2ycl.geoposY)<4");
         TCut g1g3Algnd("g1g3Algnd","TMath::Abs(g1xcl.geoposX-g3xcl.geoposX)<4 && TMath::Abs(g1ycl.geoposY-g3ycl.geoposY)<4");
