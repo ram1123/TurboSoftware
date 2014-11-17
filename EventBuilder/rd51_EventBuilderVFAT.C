@@ -1461,10 +1461,6 @@ int rd51_EventBuilderVFAT(
         //TCut g2T2StripsAligned("g2T2Strips","TMath::Abs(g2T2Padscl.geoposR-g2T2Stripscl.geoposR)<10");
         
         
-        Float_t g1T2Pads_Eff	, g1T2Pads_EffErr  , g1T2Pads_Sample  , g1T2Pads_True		;
-        Float_t g1T2Strips_Eff	, g1T2Strips_EffErr, g1T2Strips_Sample, g1T2Strips_True		;
-        Float_t g2T2Pads_Eff	, g2T2Pads_EffErr  , g2T2Pads_Sample  , g2T2Pads_True		;
-        Float_t g2T2Strips_Eff	, g2T2Strips_EffErr, g2T2Strips_Sample, g2T2Strips_True		;
         Float_t gCTLMiddleLeft_Eff, gCTLMiddleLeft_EffErr, gCTLMiddleLeft_Sample, gCTLMiddleLeft_True;
         Float_t gCTLTopMiddle_Eff, gCTLTopMiddle_EffErr, gCTLTopMiddle_Sample, gCTLTopMiddle_True;
         Float_t gCTLBottomLeftY_Eff, gCTLBottomLeftX_EffErr, gCTLBottomLeftX_Sample, gCTLBottomLeftX_True;
@@ -1497,10 +1493,7 @@ int rd51_EventBuilderVFAT(
         gCTLBottomLeftX_EffErr	=TMath::Sqrt(gCTLBottomLeftY_Eff*(1-gCTLBottomLeftY_Eff)/(gCTLBottomLeftY_Sample));
         
         if (EBV_EfficiencyEstimatorPrintOut==1 && EBV_Verbose==0){
-            cout << "FileName	"<<	"g1T2Pads_Eff	"		<<"g1T2Pads_EffErr	"	<<"g1T2Pads_Sample	"		<<
-            "g1T2Strips_Eff	"		<<"g1T2Strips_EffErr	"	<<"g1T2Strips_Sample	"		<<
-            "g2T2Pads_Eff	"		<<"g2T2Pads_EffErr	"	<<"g2T2Pads_Sample	"		<<
-            "g2T2Strips_Eff	"		<<"g2T2Strips_EffErr	"	<<"g2T2Strips_Sample	"		<<
+            cout << "FileName	"<<	
             "gCTLMiddleLeft_Eff	"	<<"gCTLMiddleLeft_EffErr	"	<<"gCTLMiddleLeft_Sample	"	<<
             "gCTLTopMiddle_Eff	"	<<"gCTLTopMiddle_EffErr	"	<<"gCTLTopMiddle_Sample	"		<<
             "gCTLBottomLeftY_Eff	"	<<"gCTLBottomLeftX_EffErr	"	<<"gCTLBottomLeftX_Sample	"		<<
