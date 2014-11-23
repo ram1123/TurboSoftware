@@ -1413,11 +1413,11 @@ int rd51_EventBuilderVFAT(
         TCut CTLMiddleArea("CTLMiddleArea","g2xcl.geoposX>50 && g2xcl.geoposX<75 && g2ycl.geoposY>60 && g2ycl.geoposY<90");
         TCut CTLBottomLeftArea("CTLMiddleLeftArea","g2xcl.geoposX>22 && g2xcl.geoposX<44 && g2ycl.geoposY>32 && g2ycl.geoposY<54");
         
-        TCut CTLMiddleLeftg2Algnd("CTLMiddleLeftg2Algnd","TMath::Abs(gCTLMiddleLeftycl.geoposY-g2ycl.geoposY)<10");
-        TCut CTLTopMiddleg2Algnd("CTLTopMiddleg2Algnd","TMath::Abs(gCTLTopMiddlexcl.geoposX-g2xcl.geoposX)<10");
+//        TCut CTLMiddleLeftg2Algnd("CTLMiddleLeftg2Algnd","TMath::Abs(gCTLMiddleLeftycl.geoposY-g2ycl.geoposY)<10");
+//        TCut CTLTopMiddleg2Algnd("CTLTopMiddleg2Algnd","TMath::Abs(gCTLTopMiddlexcl.geoposX-g2xcl.geoposX)<10");
         
-        TCut CTLBottomLeftXg2Algnd("CTLBottomLeftXg2Algnd","TMath::Abs(gCTLBottomLeftxcl.geoposX-g2xcl.geoposX)<10");
-        TCut CTLBottomLeftYg2Algnd("CTLBottomLeftYg2Algnd","TMath::Abs(gCTLBottomLeftycl.geoposY-g2ycl.geoposY)<10");
+//        TCut CTLBottomLeftXg2Algnd("CTLBottomLeftXg2Algnd","TMath::Abs(gCTLBottomLeftxcl.geoposX-g2xcl.geoposX)<10");
+//        TCut CTLBottomLeftYg2Algnd("CTLBottomLeftYg2Algnd","TMath::Abs(gCTLBottomLeftycl.geoposY-g2ycl.geoposY)<10");
         
         //TCut g1T2StripsAligned("g1T2Strips","TMath::Abs(g1T2Padscl.geoposR-g1T2Stripscl.geoposR)<10");
         //TCut g2T2StripsAligned("g2T2Strips","TMath::Abs(g2T2Padscl.geoposR-g2T2Stripscl.geoposR)<10");
