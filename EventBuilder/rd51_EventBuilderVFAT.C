@@ -1429,52 +1429,52 @@ int rd51_EventBuilderVFAT(
         Float_t gCTLBottomLeftX_Eff, gCTLBottomLeftY_EffErr, gCTLBottomLeftY_Sample, gCTLBottomLeftY_True;
         
         
-        gCTLMiddleLeft_True	=(Float_t)(tree_geo->Project("htmp","g2ycl.geoposY:g2xcl.geoposX",g1SingleHit && g2SingleHit && g1g2Algnd && CTLMiddleArea && CTLMiddleLeftg2Algnd));
-        gCTLTopMiddle_True	=(Float_t)(tree_geo->Project("htmp","g2ycl.geoposY:g2xcl.geoposX",g1SingleHit && g2SingleHit && g1g2Algnd && CTLMiddleArea && CTLTopMiddleg2Algnd));
-        gCTLBottomLeftY_True	=(Float_t)(tree_geo->Project("htmp","g2ycl.geoposY:g2xcl.geoposX",g1SingleHit && g2SingleHit && g1g2Algnd && CTLBottomLeftArea && CTLBottomLeftXg2Algnd));
-        gCTLBottomLeftX_True	=(Float_t)(tree_geo->Project("htmp","g2ycl.geoposY:g2xcl.geoposX",g1SingleHit && g2SingleHit && g1g2Algnd && CTLBottomLeftArea && CTLBottomLeftYg2Algnd));
+//        gCTLMiddleLeft_True	=(Float_t)(tree_geo->Project("htmp","g2ycl.geoposY:g2xcl.geoposX",g1SingleHit && g2SingleHit && g1g2Algnd && CTLMiddleArea && CTLMiddleLeftg2Algnd));
+//        gCTLTopMiddle_True	=(Float_t)(tree_geo->Project("htmp","g2ycl.geoposY:g2xcl.geoposX",g1SingleHit && g2SingleHit && g1g2Algnd && CTLMiddleArea && CTLTopMiddleg2Algnd));
+//        gCTLBottomLeftY_True	=(Float_t)(tree_geo->Project("htmp","g2ycl.geoposY:g2xcl.geoposX",g1SingleHit && g2SingleHit && g1g2Algnd && CTLBottomLeftArea && CTLBottomLeftXg2Algnd));
+//        gCTLBottomLeftX_True	=(Float_t)(tree_geo->Project("htmp","g2ycl.geoposY:g2xcl.geoposX",g1SingleHit && g2SingleHit && g1g2Algnd && CTLBottomLeftArea && CTLBottomLeftYg2Algnd));
+//        
+//        
+//        
+//        gCTLMiddleLeft_Sample	=(Float_t)(tree_geo->Project("htmp","g2ycl.geoposY:g2xcl.geoposX",g1SingleHit && g2SingleHit && g1g2Algnd && CTLMiddleArea));
+//        gCTLTopMiddle_Sample	=(Float_t)(tree_geo->Project("htmp","g2ycl.geoposY:g2xcl.geoposX",g1SingleHit && g2SingleHit && g1g2Algnd && CTLMiddleArea));
+//        gCTLBottomLeftY_Sample  =(Float_t)(tree_geo->Project("htmp","g2ycl.geoposY:g2xcl.geoposX",g1SingleHit && g2SingleHit && g1g2Algnd && CTLBottomLeftArea));
+//        gCTLBottomLeftX_Sample  =(Float_t)(tree_geo->Project("htmp","g2ycl.geoposY:g2xcl.geoposX",g1SingleHit && g2SingleHit && g1g2Algnd && CTLBottomLeftArea));
+//        
+//        
+//        
+//        gCTLMiddleLeft_Eff	=gCTLMiddleLeft_True/gCTLMiddleLeft_Sample;
+//        gCTLTopMiddle_Eff	=gCTLTopMiddle_True/gCTLTopMiddle_Sample;
+//        gCTLBottomLeftY_Eff	=gCTLBottomLeftX_True/gCTLBottomLeftX_Sample;
+//        gCTLBottomLeftX_Eff	=gCTLBottomLeftY_True/gCTLBottomLeftY_Sample;
+//        
+//        
+//        gCTLMiddleLeft_EffErr	=TMath::Sqrt(gCTLMiddleLeft_Eff*(1-gCTLMiddleLeft_Eff)/gCTLMiddleLeft_Sample);
+//        gCTLTopMiddle_EffErr	=TMath::Sqrt(gCTLTopMiddle_Eff*(1-gCTLTopMiddle_Eff)/gCTLTopMiddle_Sample);
+//        gCTLBottomLeftY_EffErr	=TMath::Sqrt(gCTLBottomLeftX_Eff*(1-gCTLBottomLeftX_Eff)/(gCTLBottomLeftX_Sample));
+//        gCTLBottomLeftX_EffErr	=TMath::Sqrt(gCTLBottomLeftY_Eff*(1-gCTLBottomLeftY_Eff)/(gCTLBottomLeftY_Sample));
         
-        
-        
-        gCTLMiddleLeft_Sample	=(Float_t)(tree_geo->Project("htmp","g2ycl.geoposY:g2xcl.geoposX",g1SingleHit && g2SingleHit && g1g2Algnd && CTLMiddleArea));
-        gCTLTopMiddle_Sample	=(Float_t)(tree_geo->Project("htmp","g2ycl.geoposY:g2xcl.geoposX",g1SingleHit && g2SingleHit && g1g2Algnd && CTLMiddleArea));
-        gCTLBottomLeftY_Sample  =(Float_t)(tree_geo->Project("htmp","g2ycl.geoposY:g2xcl.geoposX",g1SingleHit && g2SingleHit && g1g2Algnd && CTLBottomLeftArea));
-        gCTLBottomLeftX_Sample  =(Float_t)(tree_geo->Project("htmp","g2ycl.geoposY:g2xcl.geoposX",g1SingleHit && g2SingleHit && g1g2Algnd && CTLBottomLeftArea));
-        
-        
-        
-        gCTLMiddleLeft_Eff	=gCTLMiddleLeft_True/gCTLMiddleLeft_Sample;
-        gCTLTopMiddle_Eff	=gCTLTopMiddle_True/gCTLTopMiddle_Sample;
-        gCTLBottomLeftY_Eff	=gCTLBottomLeftX_True/gCTLBottomLeftX_Sample;
-        gCTLBottomLeftX_Eff	=gCTLBottomLeftY_True/gCTLBottomLeftY_Sample;
-        
-        
-        gCTLMiddleLeft_EffErr	=TMath::Sqrt(gCTLMiddleLeft_Eff*(1-gCTLMiddleLeft_Eff)/gCTLMiddleLeft_Sample);
-        gCTLTopMiddle_EffErr	=TMath::Sqrt(gCTLTopMiddle_Eff*(1-gCTLTopMiddle_Eff)/gCTLTopMiddle_Sample);
-        gCTLBottomLeftY_EffErr	=TMath::Sqrt(gCTLBottomLeftX_Eff*(1-gCTLBottomLeftX_Eff)/(gCTLBottomLeftX_Sample));
-        gCTLBottomLeftX_EffErr	=TMath::Sqrt(gCTLBottomLeftY_Eff*(1-gCTLBottomLeftY_Eff)/(gCTLBottomLeftY_Sample));
-        
-        if (EBV_EfficiencyEstimatorPrintOut==1 && EBV_Verbose==0){
-            cout << "FileName	"<<	
-            "gCTLMiddleLeft_Eff	"	<<"gCTLMiddleLeft_EffErr	"	<<"gCTLMiddleLeft_Sample	"	<<
-            "gCTLTopMiddle_Eff	"	<<"gCTLTopMiddle_EffErr	"	<<"gCTLTopMiddle_Sample	"		<<
-            "gCTLBottomLeftY_Eff	"	<<"gCTLBottomLeftX_EffErr	"	<<"gCTLBottomLeftX_Sample	"		<<
-            "gCTLBottomLeftX_Eff	"	<<"gCTLBottomLeftY_EffErr	"	<<"gCTLBottomLeftY_Sample	"		<< endl;
-            cout << rawfilename <<"	"<<	            gCTLMiddleLeft_Eff	<<"	"<<gCTLMiddleLeft_EffErr	<<"	"<<gCTLMiddleLeft_Sample	<<" 	"<<
-            gCTLTopMiddle_Eff	<<"	"<<gCTLTopMiddle_EffErr		<<"	"<<gCTLTopMiddle_Sample		<<"	"<<
-            gCTLBottomLeftY_Eff	<<"	"<<gCTLBottomLeftX_EffErr	<<"	"<<gCTLBottomLeftX_Sample	<<"	"<<
-            gCTLBottomLeftX_Eff	<<"	"<<gCTLBottomLeftY_EffErr	<<"	"<<gCTLBottomLeftY_Sample	<<"	"<< endl;
-        }
-        if (EBV_EfficiencyEstimatorPrintOut==1 && EBV_Verbose==1)
-        {
-            BlueOut("\nEFFICIENCY ESTIMATION OF THE DETECTRS UNDER TEST................................................\n");
-            BlueOut("Sample\t\tEfficiency\tError\t\tDetector Name\n");
-            printf("%-.0f\t\t%-.3f\t\t%-.3f\t\tgCTLMiddleLeft\n"	,gCTLMiddleLeft_Sample	,gCTLMiddleLeft_Eff	,gCTLMiddleLeft_EffErr	);
-            printf("%-.0f\t\t%-.3f\t\t%-.3f\t\tgCTLTopMiddle\n"	,gCTLTopMiddle_Sample	,gCTLTopMiddle_Eff	,gCTLTopMiddle_EffErr	);
-            printf("%-.0f\t\t%-.3f\t\t%-.3f\t\tgCTLBottomLeftY\n"	,gCTLBottomLeftX_Sample	,gCTLBottomLeftY_Eff	,gCTLBottomLeftX_EffErr	);
-            printf("%-.0f\t\t%-.3f\t\t%-.3f\t\tgCTLBottomLeftX\n"	,gCTLBottomLeftX_Sample	,gCTLBottomLeftY_Eff	,gCTLBottomLeftX_EffErr	);
-            BlueOut("................................................................................................\n\n");
-        }
+//        if (EBV_EfficiencyEstimatorPrintOut==1 && EBV_Verbose==0){
+//            cout << "FileName	"<<	
+//            "gCTLMiddleLeft_Eff	"	<<"gCTLMiddleLeft_EffErr	"	<<"gCTLMiddleLeft_Sample	"	<<
+//            "gCTLTopMiddle_Eff	"	<<"gCTLTopMiddle_EffErr	"	<<"gCTLTopMiddle_Sample	"		<<
+//            "gCTLBottomLeftY_Eff	"	<<"gCTLBottomLeftX_EffErr	"	<<"gCTLBottomLeftX_Sample	"		<<
+//            "gCTLBottomLeftX_Eff	"	<<"gCTLBottomLeftY_EffErr	"	<<"gCTLBottomLeftY_Sample	"		<< endl;
+//            cout << rawfilename <<"	"<<	            gCTLMiddleLeft_Eff	<<"	"<<gCTLMiddleLeft_EffErr	<<"	"<<gCTLMiddleLeft_Sample	<<" 	"<<
+//            gCTLTopMiddle_Eff	<<"	"<<gCTLTopMiddle_EffErr		<<"	"<<gCTLTopMiddle_Sample		<<"	"<<
+//            gCTLBottomLeftY_Eff	<<"	"<<gCTLBottomLeftX_EffErr	<<"	"<<gCTLBottomLeftX_Sample	<<"	"<<
+//            gCTLBottomLeftX_Eff	<<"	"<<gCTLBottomLeftY_EffErr	<<"	"<<gCTLBottomLeftY_Sample	<<"	"<< endl;
+//        }
+//        if (EBV_EfficiencyEstimatorPrintOut==1 && EBV_Verbose==1)
+//        {
+//            BlueOut("\nEFFICIENCY ESTIMATION OF THE DETECTRS UNDER TEST................................................\n");
+//            BlueOut("Sample\t\tEfficiency\tError\t\tDetector Name\n");
+//            printf("%-.0f\t\t%-.3f\t\t%-.3f\t\tgCTLMiddleLeft\n"	,gCTLMiddleLeft_Sample	,gCTLMiddleLeft_Eff	,gCTLMiddleLeft_EffErr	);
+//            printf("%-.0f\t\t%-.3f\t\t%-.3f\t\tgCTLTopMiddle\n"	,gCTLTopMiddle_Sample	,gCTLTopMiddle_Eff	,gCTLTopMiddle_EffErr	);
+//            printf("%-.0f\t\t%-.3f\t\t%-.3f\t\tgCTLBottomLeftY\n"	,gCTLBottomLeftX_Sample	,gCTLBottomLeftY_Eff	,gCTLBottomLeftX_EffErr	);
+//            printf("%-.0f\t\t%-.3f\t\t%-.3f\t\tgCTLBottomLeftX\n"	,gCTLBottomLeftX_Sample	,gCTLBottomLeftY_Eff	,gCTLBottomLeftX_EffErr	);
+//            BlueOut("................................................................................................\n\n");
+//        }
         
 cout<<"#############################11"<<endl;    
     }
