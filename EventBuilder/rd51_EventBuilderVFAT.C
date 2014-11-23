@@ -253,16 +253,13 @@ int rd51_EventBuilderVFAT(
     
     Int_t chips_per_evt = VFATConf_rd51_EventBuilderVFAT->vfat_NumberOfVFATs;
     
-//cout<<"chips per evt = "<<chips_per_evt<<endl;
     //--- Inizializing the detectors
-    VFAT2* VFAT[MaxNumbersOfDetDir];
+    VFAT2* VFAT[chips_per_evt];
     for (Int_t i=0; i<chips_per_evt; i++)
     {
         VFAT[i] = new VFAT2(0XFFFF,128,0,"","",0,0,0,0);
-//cout<<"VFAT["<<i<<"] = "<<VFAT[i]<<endl;
     }
     
-//cout<<"##########################################################"<<endl;
 //VFAT->Dump();
     //--- Loading the detector configuration
     for (Int_t i=0; i<chips_per_evt; i++)
@@ -308,7 +305,6 @@ int rd51_EventBuilderVFAT(
     }
     //--- END OF VFAT CONFIGURATION ------------------------
     
-//   cout<<"Loaded the VFats"<<endl; 
     //-------------- END OF CONFIGURATION (DETECTORS AND VFATS)-----------------------------------------
     
     
@@ -809,7 +805,7 @@ int rd51_EventBuilderVFAT(
                 /////////////////////////////////////////////////////////////////////////////////////////
                 
                
-                if ( (ichip>= 0) && (chipdet[ichip]<21) ) 
+                if ( (ichip>= 0) && (chipdet[ichip]<6) ) 
                 {
                      
 //                    cout << "TRACKER and Timing   "<<"ChipId: " << ichip << " DetId: " << chipdet[ichip] << endl;
@@ -896,7 +892,7 @@ int rd51_EventBuilderVFAT(
                 //
                 /////////////////////////////////////////////////////////////////////////////////////////
                 
-	 	if ( (ichip>=0) &&  (chipdet[ichip] >= 21) )
+	 	if ( (ichip>=0) &&  (chipdet[ichip] >= 6) )
                 {
                     //cout << "CMS ChipId: " << ichip << " DetId: " << chipdet[ichip] << endl;
                     // I mark this chip as read
