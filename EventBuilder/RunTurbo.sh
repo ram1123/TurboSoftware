@@ -46,7 +46,8 @@
 #	-------------------------------------------------------------------
 	
 	# Should be changed by user according to their path
-	PathOfInputData=H4TestBeam
+	PathOfInputData=/afs/cern.ch/work/p/pbarria/public/TB_H2_OCT_2014/beamdata
+	#PathOfInputData=H4TestBeam
 	
 	JustTextFile=0
 	# Some Default values
