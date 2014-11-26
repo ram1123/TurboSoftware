@@ -30,9 +30,7 @@
 #	Constants
 #	-------------------------------------------------------------------
 
-	#PathOfInputNtuple=/afs/cern.ch/work/p/pbarria/public/TB_H2_OCT_2014/beamdata
-	#PathOfInputNtuple=/afs/cern.ch/work/t/tmaersch/public/H2Oct14_Ntuples_Pitch08
-	PathOfInputNtuple=/afs/cern.ch/user/r/rasharma/work/public/test/TurboSoftware/EventBuilder/OutPutData
+	PathOfInputNtuple=H4testBeam
 
 	getppt=1
 	mail=0
