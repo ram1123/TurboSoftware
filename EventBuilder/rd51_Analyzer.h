@@ -148,7 +148,7 @@ class rd51_Analyzer {
     TH1F *hsCMSNS2LC1_CLS_Noise          ;
     TH1F *hsCMSNS2LC1_Distance_Eff       ;
     TH1F *hsCMSNS2LC1_Distance_Noise     ;
-    TH1F *hsCMSNS2LC1_Residual_Y         ;
+    TH1F *hsCMSNS2LC1_Residual_X         ;
 
     ClassDef(rd51_Analyzer,1);
 };

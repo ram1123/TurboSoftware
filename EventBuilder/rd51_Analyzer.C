@@ -293,13 +293,13 @@ int rd51_Analyzer::Calc_sCMSNS2LC1_Eff(int verbose)
         int neff = 0;
         for (int ihit = 0; ihit <rd51reco->sCMSNS2LC1_ ; ihit++)
         {
-	   Float_t distance = TMath::Abs( rd51reco->sCMSNS2LC1_geoposY[ihit] +DUT_offsetY[0] - ProjectedY ); //Patr
+	   Float_t distance = TMath::Abs( rd51reco->sCMSNS2LC1_geoposX[ihit] +DUT_offsetX[0] - ProjectedX ); //Patr
 	     if ( distance  < DUT_effRad[0] ) //Patr
             {
                 hsCMSNS2LC1_XY_Eff->Fill(ProjectedX,ProjectedY);
                 hsCMSNS2LC1_CLS_Eff->Fill(rd51reco->sCMSNS2LC1_ngeoch[ihit]);
                 hsCMSNS2LC1_Distance_Eff->Fill(distance);
-                hsCMSNS2LC1_Residual_Y->Fill(rd51reco->sCMSNS2LC1_geoposY[ihit] + DUT_offsetY[0] - ProjectedY); //Patr
+                hsCMSNS2LC1_Residual_X->Fill(rd51reco->sCMSNS2LC1_geoposX[ihit] + DUT_offsetX[0] - ProjectedX); //Patr
                 neff++;
             }
             else
@@ -819,7 +819,7 @@ void rd51_Analyzer::HistoDelete(int verbose)
     delete hsCMSNS2LC1_CLS_Noise	;
     delete hsCMSNS2LC1_Distance_Eff	;
     delete hsCMSNS2LC1_Distance_Noise	;
-    delete hsCMSNS2LC1_Residual_Y	;
+    delete hsCMSNS2LC1_Residual_X	;
 
 }
 
@@ -880,7 +880,7 @@ void rd51_Analyzer::HistoDefine(int verbose)
     hsCMSNS2LC1_CLS_Noise	= new TH1F("hsCMSNS2LC1_CLS_Noise"	,"", 100,-0.5	,99.5			);
     hsCMSNS2LC1_Distance_Eff	= new TH1F("hsCMSNS2LC1_Distance_Eff"	,"",1000, 0.	,100.			);
     hsCMSNS2LC1_Distance_Noise	= new TH1F("hsCMSNS2LC1_Distance_Noise"	,"",1000, 0.	,100.			);
-    hsCMSNS2LC1_Residual_Y 	= new TH1F("hsCMSNS2LC1_Residual_Y"	,"",1000,-100.	,100.			);
+    hsCMSNS2LC1_Residual_X 	= new TH1F("hsCMSNS2LC1_Residual_X"	,"",1000,-100.	,100.			);
     
     hsCMSNS2LC1_Eff		->SetTitle("CMS 30x30: Efficiency"					  	);	   
     hsCMSNS2LC1_XY_Eff		->SetTitle("CMS 30x30: Tracker Hits with DUT Active"			  	);         
@@ -890,7 +890,7 @@ void rd51_Analyzer::HistoDefine(int verbose)
     hsCMSNS2LC1_CLS_Noise	->SetTitle("CMS 30x30:: Cluster Size for hits not aligned with tracks" 		);         
     hsCMSNS2LC1_Distance_Eff	->SetTitle("CMS 30x30:: Hit-Track Distance for ALIGNED hits"		  	);         
     hsCMSNS2LC1_Distance_Noise	->SetTitle("CMS 30x30:: Hit-Track Distance for NOT ALIGNED hits"	  	);         
-    hsCMSNS2LC1_Residual_Y	->SetTitle("CMS 30x30:: Y Residuals"					  	);         
+    hsCMSNS2LC1_Residual_X	->SetTitle("CMS 30x30:: X Residuals"					  	);         
 
 } 
 //-------------------------------------------------------------------------------------
