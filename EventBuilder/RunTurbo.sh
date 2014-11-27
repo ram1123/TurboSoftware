@@ -46,8 +46,8 @@
 #	-------------------------------------------------------------------
 	
 	# Should be changed by user according to their path
-	PathOfInputData=/afs/cern.ch/work/p/pbarria/public/TB_H2_OCT_2014/beamdata
-	#PathOfInputData=H4TestBeam
+	#PathOfInputData=/afs/cern.ch/work/p/pbarria/public/TB_H2_OCT_2014/beamdata
+	PathOfInputData=/home/ramkrishna
 	
 	JustTextFile=0
 	# Some Default values
@@ -326,9 +326,6 @@ while getopts ":hrlfemi" opt; do
 			read FRunNo
 			if [ "$IRunNo" -gt "$FRunNo" ]; then 
 				error_exit "Initial Run Number should be Less then or equal to Final Run Number"
-			fi
-			if [ "$IRunNo" -gt 1586 ] || [ "$FRunNo" -gt 1586 ]; then
-				error_exit "Maximum allowed Run Number is 1586."
 			fi;;
 		l )	echo -n "Initial Latency (ILat) = "
 			read ILat
