@@ -46,7 +46,8 @@
 #	-------------------------------------------------------------------
 	
 	# Should be changed by user according to their path
-	PathOfInputData=/afs/cern.ch/work/p/pbarria/public/TB_H2_OCT_2014/beamdata
+	#PathOfInputData=/afs/cern.ch/work/p/pbarria/public/TB_H2_OCT_2014/beamdata
+	PathOfInputData=/home/ramkrishna
 	
 	JustTextFile=0
 	# Some Default values
@@ -325,9 +326,6 @@ while getopts ":hrlfemi" opt; do
 			read FRunNo
 			if [ "$IRunNo" -gt "$FRunNo" ]; then 
 				error_exit "Initial Run Number should be Less then or equal to Final Run Number"
-			fi
-			if [ "$IRunNo" -gt 1586 ] || [ "$FRunNo" -gt 1586 ]; then
-				error_exit "Maximum allowed Run Number is 1586."
 			fi;;
 		l )	echo -n "Initial Latency (ILat) = "
 			read ILat
@@ -414,21 +412,18 @@ do
   fi
 
   # Copies the right configuration file for the present run
-  if [ $RunCounter -le 103 ]; then
-    cp Setting_EventBuilderVFAT_Run0103AndBelow.conf Setting_EventBuilderVFAT.conf
-  else
-  if [ $RunCounter -le 1117 ]; then
-    cp Setting_EventBuilderVFAT_Run1117AndBelow.conf Setting_EventBuilderVFAT.conf
-  else  
-    cp Setting_EventBuilderVFAT_Run1118AndUp.conf Setting_EventBuilderVFAT.conf						         
-  fi 
-  fi
+#  if [ $RunCounter -le 103 ]; then
+#    cp Setting_EventBuilderVFAT_Run0103AndBelow.conf Setting_EventBuilderVFAT.conf
+#  else
+#  if [ $RunCounter -le 1117 ]; then
+#    cp Setting_EventBuilderVFAT_Run1117AndBelow.conf Setting_EventBuilderVFAT.conf
+#  else  
+#    cp Setting_EventBuilderVFAT_Run1118AndUp.conf Setting_EventBuilderVFAT.conf						         
+#  fi 
+#  fi
   for f in $PathOfInputData/Run$file* 	# Stores path of File in variable f
   do
-  	cat Setting_EventBuilderVFAT.conf
 	echo "Data File : ${f}"
-	#./clean.sh
-	#temp=$(echo $f | awk '{print substr($RunCounter,'$WhereIsRunNumber',4)}')
 	temp=$(echo $f | sed 's/.*Run//' | sed 's/.//5g')	# This greps the number of run from the path.
 								# Here sed command removes everything till *Run. and then
 								# next sed command removes everything from 5th letter 
@@ -474,13 +469,7 @@ do
     	if [ ! -f $PathOfOutPutData/$(basename $f)/Run${temp}_Analyzer.log ]; then
 		error_exit "File $PathOfOutPutData/$(basename $f)/Run${temp}_Analyzer.log does not exits"	
 	fi
-        #LC1=$(sed -n  '/Loading the trees.../{n;n;n;n;n;p}' $f/$(basename $f).log | awk '{print $1}')
-        #LC2=$(sed -n  '/Loading the trees.../{n;n;n;n;p}' $f/$(basename $f).log | awk '{print $1}')
-        #LC3=$(sed -n  '/Loading the trees.../{n;n;n;p}' $f/$(basename $f).log | awk '{print substr($1,5)}')  
-        #LC1_Err=$(sed -n  '/Loading the trees.../{n;n;n;n;n;p}' $f/$(basename $f).log | awk '{print $2}')
-        #LC2_Err=$(sed -n  '/Loading the trees.../{n;n;n;n;p}' $f/$(basename $f).log | awk '{print $2}')
-        #LC3_Err=$(sed -n  '/Loading the trees.../{n;n;n;p}' $f/$(basename $f).log | awk '{print $2}') 
-	LC1=$(sed -n '/Loading the trees.../{n;n;n;n;n;p;}'	$PathOfOutPutData/$(basename $f)/Run${temp}_Analyzer.log | awk '{print $1}')
+        LC1=$(sed -n '/Loading the trees.../{n;n;n;n;n;p;}'	$PathOfOutPutData/$(basename $f)/Run${temp}_Analyzer.log | awk '{print $1}')
 	LC2=$(sed -n '/Loading the trees.../{n;n;n;n;p;  }' $PathOfOutPutData/$(basename $f)/Run${temp}_Analyzer.log | awk '{print $1}')
 	LC3=$(sed -n '/Loading the trees.../{n;n;n;p;    }' $PathOfOutPutData/$(basename $f)/Run${temp}_Analyzer.log | awk '{print substr($1,5)}')  
 	LC1_Err=$(sed -n '/Loading the trees.../{n;n;n;n;n;p;}' $PathOfOutPutData/$(basename $f)/Run${temp}_Analyzer.log | awk '{print $2}')

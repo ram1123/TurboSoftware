@@ -128,7 +128,7 @@ class rd51_Analyzer {
     TH1F *hsCMSNS2LC3_CLS_Noise          ;
     TH1F *hsCMSNS2LC3_Distance_Eff       ;
     TH1F *hsCMSNS2LC3_Distance_Noise     ;
-    TH1F *hsCMSNS2LC3_Residual_Y         ;
+    TH1F *hsCMSNS2LC3_Residual_X         ;
     
     TH1F *hsCMSNS2LC2_Eff                ;
     TH2F *hsCMSNS2LC2_XY_Eff             ;
@@ -138,7 +138,7 @@ class rd51_Analyzer {
     TH1F *hsCMSNS2LC2_CLS_Noise          ;
     TH1F *hsCMSNS2LC2_Distance_Eff       ;
     TH1F *hsCMSNS2LC2_Distance_Noise     ;
-    TH1F *hsCMSNS2LC2_Residual_Y         ;
+    TH1F *hsCMSNS2LC2_Residual_X         ;
     
     TH1F *hsCMSNS2LC1_Eff                ;
     TH2F *hsCMSNS2LC1_XY_Eff             ;
@@ -148,7 +148,7 @@ class rd51_Analyzer {
     TH1F *hsCMSNS2LC1_CLS_Noise          ;
     TH1F *hsCMSNS2LC1_Distance_Eff       ;
     TH1F *hsCMSNS2LC1_Distance_Noise     ;
-    TH1F *hsCMSNS2LC1_Residual_Y         ;
+    TH1F *hsCMSNS2LC1_Residual_X         ;
 
     ClassDef(rd51_Analyzer,1);
 };

@@ -253,16 +253,13 @@ int rd51_EventBuilderVFAT(
     
     Int_t chips_per_evt = VFATConf_rd51_EventBuilderVFAT->vfat_NumberOfVFATs;
     
-//cout<<"chips per evt = "<<chips_per_evt<<endl;
     //--- Inizializing the detectors
-    VFAT2* VFAT[MaxNumbersOfDetDir];
+    VFAT2* VFAT[chips_per_evt];
     for (Int_t i=0; i<chips_per_evt; i++)
     {
         VFAT[i] = new VFAT2(0XFFFF,128,0,"","",0,0,0,0);
-//cout<<"VFAT["<<i<<"] = "<<VFAT[i]<<endl;
     }
     
-//cout<<"##########################################################"<<endl;
 //VFAT->Dump();
     //--- Loading the detector configuration
     for (Int_t i=0; i<chips_per_evt; i++)
@@ -308,7 +305,6 @@ int rd51_EventBuilderVFAT(
     }
     //--- END OF VFAT CONFIGURATION ------------------------
     
-//   cout<<"Loaded the VFats"<<endl; 
     //-------------- END OF CONFIGURATION (DETECTORS AND VFATS)-----------------------------------------
     
     
@@ -332,8 +328,8 @@ int rd51_EventBuilderVFAT(
     Int_t TypeOfReadout[MaxNumbersOfDetDir];
     for (Int_t i=0; i<MaxNumbersOfDetDir; i++){TypeOfReadout[i]=(*DET[i]).ReadoutType;}
     
-    Int_t TotChannels[MaxNumbersOfDetDir];
-    for (Int_t i=0; i<MaxNumbersOfDetDir; i++){TotChannels[i]=(*DET[i]).TotChannels;}
+//    Int_t TotChannels[MaxNumbersOfDetDir];
+//    for (Int_t i=0; i<MaxNumbersOfDetDir; i++){TotChannels[i]=(*DET[i]).TotChannels;}
     
     Int_t PossibleHits[MaxNumbersOfDetDir];
     for (Int_t i=0; i<MaxNumbersOfDetDir; i++){PossibleHits[i]=(*DET[i]).PossibleHits;
@@ -809,7 +805,7 @@ int rd51_EventBuilderVFAT(
                 /////////////////////////////////////////////////////////////////////////////////////////
                 
                
-                if ( (ichip>= 0) && (chipdet[ichip]<21) ) 
+                if ( (ichip>= 0) && (chipdet[ichip]<6) ) 
                 {
                      
 //                    cout << "TRACKER and Timing   "<<"ChipId: " << ichip << " DetId: " << chipdet[ichip] << endl;
@@ -896,7 +892,7 @@ int rd51_EventBuilderVFAT(
                 //
                 /////////////////////////////////////////////////////////////////////////////////////////
                 
-	 	if ( (ichip>=0) &&  (chipdet[ichip] >= 21) )
+	 	if ( (ichip>=0) &&  (chipdet[ichip] >= 6) )
                 {
                     //cout << "CMS ChipId: " << ichip << " DetId: " << chipdet[ichip] << endl;
                     // I mark this chip as read
@@ -973,466 +969,6 @@ int rd51_EventBuilderVFAT(
                 
                 
                 
-                /////////////////////////////////////////////////////////////////////////////////////////
-                //
-                // 	    T2 Triple GEM  Pads
-                //
-                /////////////////////////////////////////////////////////////////////////////////////////
-                
-                if (ichip>= 0 && ( chipdet[ichip]== 10 || chipdet[ichip] == 11))
-                {
-                    readcheck[ichip]++;
-                    if ( EBV_ChipIdVerbose  )  cout << "Chip " << buffer.frame.fullid << " read in event "<< ievent << endl;
-                    if (readcheck[ichip] > 1) 
-                    {
-                        cout << "44 Data misalignment error on chip index "
-                        << ichip << "\nat file position " << ifile.tellg() 
-                        << "\nat Chip ID " << buffer.frame.fullid
-                        << "\nin detector " <<(*DET[chipdet[ichip]]).DetectorName
-                        << "\nT2 Pads Filling " 
-                        << "\nEvent Number: " << ievent 
-                        << endl;
-                        errorstatus = 10;
-                        break;
-                    }
-                    
-                    if (!chipinvert[ichip])
-                    {
-                        Int_t lastchanblock = channels_per_chip-16;
-                        for(Int_t offset=0; offset < 8; offset++)
-                        {
-                            // The pads start from Channels 3 of the chips. We add a  "-3" to restore the first channel to 0
-                            //
-                            //
-                            // The Pads Mapping is paricular and it can follow this formula
-                            // Detector Channel = VFATChannel%24+(4-(VFATChannel/24))*24
-                            //
-                            // To test the assignment the following code can be used
-                            //
-                            //	void PadChannelAssignment(){
-                            //    	Int_t DetectorChannel;
-                            //		Int_t VFATChannel;
-                            //	 
-                            //      	for (Int_t i=0; i<120; i++)
-                            //      	{
-                            //      	VFATChannel = i;
-                            //      	DetectorChannel = 2*(VFATChannel/120)*120+VFATChannel%24+(4-(VFATChannel/24))*24;
-                            //      	cout << "VFAT Channel: " << VFATChannel << " ;  Detector Channel: " << Detector Channel << ";" << endl;
-                            //      	}
-                            //	}
-                            //
-                            //
-                            //
-                            Int_t rightblock = lastchanblock-(offset<<4)-3+ chipoffset[ichip];
-                            if (offset != 0)
-                            {	
-                                if (buffer.frame.data[offset] & 0x8000)	
-                                {g[chipdet[ichip]]->InsertChannel(2*((rightblock+15)/120)*120+(rightblock+15)%24+(4-(rightblock+15)/24)*24);} 
-                                if (buffer.frame.data[offset] & 0x4000)	
-                                {g[chipdet[ichip]]->InsertChannel(2*((rightblock+14)/120)*120+(rightblock+14)%24+(4-(rightblock+14)/24)*24);}
-                                if (buffer.frame.data[offset] & 0x2000)	
-                                {g[chipdet[ichip]]->InsertChannel(2*((rightblock+13)/120)*120+(rightblock+13)%24+(4-(rightblock+13)/24)*24);}
-                                if (buffer.frame.data[offset] & 0x1000)	
-                                {g[chipdet[ichip]]->InsertChannel(2*((rightblock+12)/120)*120+(rightblock+12)%24+(4-(rightblock+12)/24)*24);}
-                                if (buffer.frame.data[offset] & 0x0800)	
-                                {g[chipdet[ichip]]->InsertChannel(2*((rightblock+11)/120)*120+(rightblock+11)%24+(4-(rightblock+11)/24)*24);}
-                            }                                                                                                      
-                            if (buffer.frame.data[offset] & 0x0400)	
-                            {g[chipdet[ichip]]->InsertChannel(2*((rightblock+10)/120)*120+(rightblock+10)%24+(4-(rightblock+10)/24)*24);}
-                            if (buffer.frame.data[offset] & 0x0200)	
-                            {g[chipdet[ichip]]->InsertChannel(2*((rightblock+ 9)/120)*120+(rightblock+ 9)%24+(4-(rightblock+ 9)/24)*24);}
-                            if (buffer.frame.data[offset] & 0x0100)	
-                            {g[chipdet[ichip]]->InsertChannel(2*((rightblock+ 8)/120)*120+(rightblock+ 8)%24+(4-(rightblock+ 8)/24)*24);}
-                            if (buffer.frame.data[offset] & 0x0080)	
-                            {g[chipdet[ichip]]->InsertChannel(2*((rightblock+ 7)/120)*120+(rightblock+ 7)%24+(4-(rightblock+ 7)/24)*24);}
-                            if (buffer.frame.data[offset] & 0x0040)	
-                            {g[chipdet[ichip]]->InsertChannel(2*((rightblock+ 6)/120)*120+(rightblock+ 6)%24+(4-(rightblock+ 6)/24)*24);}
-                            if (buffer.frame.data[offset] & 0x0020)	
-                            {g[chipdet[ichip]]->InsertChannel(2*((rightblock+ 5)/120)*120+(rightblock+ 5)%24+(4-(rightblock+ 5)/24)*24);}
-                            if (buffer.frame.data[offset] & 0x0010)	
-                            {g[chipdet[ichip]]->InsertChannel(2*((rightblock+ 4)/120)*120+(rightblock+ 4)%24+(4-(rightblock+ 4)/24)*24);}
-                            if (buffer.frame.data[offset] & 0x0008)	
-                            {g[chipdet[ichip]]->InsertChannel(2*((rightblock+ 3)/120)*120+(rightblock+ 3)%24+(4-(rightblock+ 3)/24)*24);}
-                            if (offset != 7)                                                                                             
-                            {                                                                                                      
-                                if (buffer.frame.data[offset] & 0x0004)	
-                                {g[chipdet[ichip]]->InsertChannel(2*((rightblock+ 2)/120)*120+(rightblock+ 2)%24+(4-(rightblock+ 2)/24)*24);} 
-                                if (buffer.frame.data[offset] & 0x0002)	
-                                {g[chipdet[ichip]]->InsertChannel(2*((rightblock+ 1)/120)*120+(rightblock+ 1)%24+(4-(rightblock+ 1)/24)*24);} 
-                                if (buffer.frame.data[offset] & 0x0001)	
-                                {g[chipdet[ichip]]->InsertChannel(2*((rightblock+ 0)/120)*120+(rightblock+ 0)%24+(4-(rightblock+ 0)/24)*24);} 
-                            }
-                        }
-                    }
-                    else
-                    {
-                        for(Int_t offset=0; offset < 8; offset++)
-                        {
-                            // The pads miss the last five channels. We add a  "-5" to restore the first channel to 0.
-                            Int_t rightblock = (offset<<4)-5+ chipoffset[ichip];
-                            if (offset != 0)
-                            {	
-                                if (buffer.frame.data[offset] & 0x8000)	
-                                {g[chipdet[ichip]]->InsertChannel(2*((rightblock+ 0)/120)*120+(rightblock+ 0)%24+(4-(rightblock+ 0)/24)*24);} 
-                                if (buffer.frame.data[offset] & 0x4000)	                                                           
-                                {g[chipdet[ichip]]->InsertChannel(2*((rightblock+ 1)/120)*120+(rightblock+ 1)%24+(4-(rightblock+ 1)/24)*24);}
-                                if (buffer.frame.data[offset] & 0x2000)	                                                           
-                                {g[chipdet[ichip]]->InsertChannel(2*((rightblock+ 2)/120)*120+(rightblock+ 2)%24+(4-(rightblock+ 2)/24)*24);}
-                                if (buffer.frame.data[offset] & 0x1000)	                                                           
-                                {g[chipdet[ichip]]->InsertChannel(2*((rightblock+ 3)/120)*120+(rightblock+ 3)%24+(4-(rightblock+ 3)/24)*24);}
-                                if (buffer.frame.data[offset] & 0x0800)	                                                           
-                                {g[chipdet[ichip]]->InsertChannel(2*((rightblock+ 4)/120)*120+(rightblock+ 4)%24+(4-(rightblock+ 4)/24)*24);}
-                            }                                                                                                      
-                            if (buffer.frame.data[offset] & 0x0400)	                                                           
-                            {g[chipdet[ichip]]->InsertChannel(2*((rightblock+ 5)/120)*120+(rightblock+ 5)%24+(4-(rightblock+ 5)/24)*24);}
-                            if (buffer.frame.data[offset] & 0x0200)	                                                           
-                            {g[chipdet[ichip]]->InsertChannel(2*((rightblock+ 6)/120)*120+(rightblock+ 6)%24+(4-(rightblock+ 6)/24)*24);}
-                            if (buffer.frame.data[offset] & 0x0100)	                                                           
-                            {g[chipdet[ichip]]->InsertChannel(2*((rightblock+ 7)/120)*120+(rightblock+ 7)%24+(4-(rightblock+ 7)/24)*24);}
-                            if (buffer.frame.data[offset] & 0x0080)	                                                           
-                            {g[chipdet[ichip]]->InsertChannel(2*((rightblock+ 8)/120)*120+(rightblock+ 8)%24+(4-(rightblock+ 8)/24)*24);}
-                            if (buffer.frame.data[offset] & 0x0040)	                                                           
-                            {g[chipdet[ichip]]->InsertChannel(2*((rightblock+ 9)/120)*120+(rightblock+ 9)%24+(4-(rightblock+ 9)/24)*24);}
-                            if (buffer.frame.data[offset] & 0x0020)	                                                           
-                            {g[chipdet[ichip]]->InsertChannel(2*((rightblock+10)/120)*120+(rightblock+10)%24+(4-(rightblock+10)/24)*24);}
-                            if (buffer.frame.data[offset] & 0x0010)	                                                           
-                            {g[chipdet[ichip]]->InsertChannel(2*((rightblock+11)/120)*120+(rightblock+11)%24+(4-(rightblock+11)/24)*24);}
-                            if (buffer.frame.data[offset] & 0x0008)	                                                           
-                            {g[chipdet[ichip]]->InsertChannel(2*((rightblock+12)/120)*120+(rightblock+12)%24+(4-(rightblock+12)/24)*24);}
-                            if (offset != 7)                                                                                             
-                            {                                                                                                      
-                                if (buffer.frame.data[offset] & 0x0004)	                                                           
-                                {g[chipdet[ichip]]->InsertChannel(2*((rightblock+13)/120)*120+(rightblock+13)%24+(4-(rightblock+13)/24)*24);} 
-                                if (buffer.frame.data[offset] & 0x0002)	                                                           
-                                {g[chipdet[ichip]]->InsertChannel(2*((rightblock+14)/120)*120+(rightblock+14)%24+(4-(rightblock+14)/24)*24);} 
-                                if (buffer.frame.data[offset] & 0x0001)	                                                           
-                                {g[chipdet[ichip]]->InsertChannel(2*((rightblock+15)/120)*120+(rightblock+15)%24+(4-(rightblock+15)/24)*24);} 
-                            }
-                        }
-                    }
-                } 
-                /////////////////////////////////////////////////////////////////////////////////////////
-                //
-                // 	    T2 Triple GEM  Pads
-                //
-                /////////////////////////////////////////////////////////////////////////////////////////
-                
-                
-                
-                
-                /////////////////////////////////////////////////////////////////////////////////////////
-                //
-                // 	    T2 Triple GEM  Strips
-                //
-                /////////////////////////////////////////////////////////////////////////////////////////
-                
-                if (ichip>= 0 && ( chipdet[ichip]== 12 || chipdet[ichip] == 13))
-                {
-                    readcheck[ichip]++;
-                    if ( EBV_ChipIdVerbose  )  cout << "Chip " << buffer.frame.fullid << " read in event "<< ievent << endl;
-                    if (readcheck[ichip] > 1) 
-                    {
-                        cout << "55 Data misalignment error on chip index "
-                        << ichip << "\nat file position " << ifile.tellg() 
-                        << "\nat Chip ID " << buffer.frame.fullid
-                        << "\nin detector " <<(*DET[chipdet[ichip]]).DetectorName
-                        << "\nT2 Strips Filling " 
-                        << "\nEvent Number: " << ievent 
-                        << endl;
-                        errorstatus = 10;
-                        break;
-                    }
-                    
-                    if (!chipinvert[ichip])
-                    {
-                        Int_t lastchanblock = channels_per_chip-16;
-                        for(Int_t offset=0; offset < 8; offset++)
-                        {
-                            Int_t rightblock = lastchanblock-(offset<<4);
-                            if (buffer.frame.data[offset] & 0x8000) {g[chipdet[ichip]]->InsertChannel((rightblock+15+ chipoffset[ichip]));} 
-                            if (buffer.frame.data[offset] & 0x4000) {g[chipdet[ichip]]->InsertChannel((rightblock+14+ chipoffset[ichip]));}
-                            if (buffer.frame.data[offset] & 0x2000) {g[chipdet[ichip]]->InsertChannel((rightblock+13+ chipoffset[ichip]));}
-                            if (buffer.frame.data[offset] & 0x1000) {g[chipdet[ichip]]->InsertChannel((rightblock+12+ chipoffset[ichip]));}
-                            if (buffer.frame.data[offset] & 0x0800) {g[chipdet[ichip]]->InsertChannel((rightblock+11+ chipoffset[ichip]));}
-                            if (buffer.frame.data[offset] & 0x0400) {g[chipdet[ichip]]->InsertChannel((rightblock+10+ chipoffset[ichip]));}
-                            if (buffer.frame.data[offset] & 0x0200) {g[chipdet[ichip]]->InsertChannel((rightblock+ 9+ chipoffset[ichip]));}
-                            if (buffer.frame.data[offset] & 0x0100) {g[chipdet[ichip]]->InsertChannel((rightblock+ 8+ chipoffset[ichip]));}
-                            if (buffer.frame.data[offset] & 0x0080) {g[chipdet[ichip]]->InsertChannel((rightblock+ 7+ chipoffset[ichip]));}
-                            if (buffer.frame.data[offset] & 0x0040) {g[chipdet[ichip]]->InsertChannel((rightblock+ 6+ chipoffset[ichip]));}
-                            if (buffer.frame.data[offset] & 0x0020) {g[chipdet[ichip]]->InsertChannel((rightblock+ 5+ chipoffset[ichip]));}
-                            if (buffer.frame.data[offset] & 0x0010) {g[chipdet[ichip]]->InsertChannel((rightblock+ 4+ chipoffset[ichip]));}
-                            if (buffer.frame.data[offset] & 0x0008) {g[chipdet[ichip]]->InsertChannel((rightblock+ 3+ chipoffset[ichip]));}
-                            if (buffer.frame.data[offset] & 0x0004) {g[chipdet[ichip]]->InsertChannel((rightblock+ 2+ chipoffset[ichip]));}
-                            if (buffer.frame.data[offset] & 0x0002) {g[chipdet[ichip]]->InsertChannel((rightblock+ 1+ chipoffset[ichip]));}
-                            if (buffer.frame.data[offset] & 0x0001) {g[chipdet[ichip]]->InsertChannel((rightblock+ 0+ chipoffset[ichip]));}
-                        }
-                    }
-                    else
-                    {
-                        for(Int_t offset=0; offset < 8; offset++)
-                        {
-                            Int_t rightblock = offset<<4;
-                            if (buffer.frame.data[offset] & 0x8000) {g[chipdet[ichip]]->InsertChannel((rightblock+ 0+ chipoffset[ichip]));} 
-                            if (buffer.frame.data[offset] & 0x4000) {g[chipdet[ichip]]->InsertChannel((rightblock+ 1+ chipoffset[ichip]));}
-                            if (buffer.frame.data[offset] & 0x2000) {g[chipdet[ichip]]->InsertChannel((rightblock+ 2+ chipoffset[ichip]));}
-                            if (buffer.frame.data[offset] & 0x1000) {g[chipdet[ichip]]->InsertChannel((rightblock+ 3+ chipoffset[ichip]));}
-                            if (buffer.frame.data[offset] & 0x0800) {g[chipdet[ichip]]->InsertChannel((rightblock+ 4+ chipoffset[ichip]));}
-                            if (buffer.frame.data[offset] & 0x0400) {g[chipdet[ichip]]->InsertChannel((rightblock+ 5+ chipoffset[ichip]));}
-                            if (buffer.frame.data[offset] & 0x0200) {g[chipdet[ichip]]->InsertChannel((rightblock+ 6+ chipoffset[ichip]));}
-                            if (buffer.frame.data[offset] & 0x0100) {g[chipdet[ichip]]->InsertChannel((rightblock+ 7+ chipoffset[ichip]));}
-                            if (buffer.frame.data[offset] & 0x0080) {g[chipdet[ichip]]->InsertChannel((rightblock+ 8+ chipoffset[ichip]));}
-                            if (buffer.frame.data[offset] & 0x0040) {g[chipdet[ichip]]->InsertChannel((rightblock+ 9+ chipoffset[ichip]));}
-                            if (buffer.frame.data[offset] & 0x0020) {g[chipdet[ichip]]->InsertChannel((rightblock+10+ chipoffset[ichip]));}
-                            if (buffer.frame.data[offset] & 0x0010) {g[chipdet[ichip]]->InsertChannel((rightblock+11+ chipoffset[ichip]));}
-                            if (buffer.frame.data[offset] & 0x0008) {g[chipdet[ichip]]->InsertChannel((rightblock+12+ chipoffset[ichip]));}
-                            if (buffer.frame.data[offset] & 0x0004) {g[chipdet[ichip]]->InsertChannel((rightblock+13+ chipoffset[ichip]));}
-                            if (buffer.frame.data[offset] & 0x0002) {g[chipdet[ichip]]->InsertChannel((rightblock+14+ chipoffset[ichip]));}
-                            if (buffer.frame.data[offset] & 0x0001) {g[chipdet[ichip]]->InsertChannel((rightblock+15+ chipoffset[ichip]));}
-                            
-                        }
-                    }
-                } 
-                /////////////////////////////////////////////////////////////////////////////////////////
-                //
-                // 	    T2 Triple GEM  Strips
-                //
-                /////////////////////////////////////////////////////////////////////////////////////////
-                
-                
-                
-                
-                /////////////////////////////////////////////////////////////////////////////////////////
-                //
-                //          Cross Talk Less XY BottomLeft  
-                //
-                /////////////////////////////////////////////////////////////////////////////////////////
-                //--- CTL --- 
-                //  DET[14] = new Detector("gCTLBottomLeftxcl"	, 0, 1/*-1*/, 1/*-1*/,  256,  256, 3,  0, 1, 256/10);
-                //  DET[15] = new Detector("gCTLBottomLeftycl"	, 1, 1/*-1*/, 1/*-1*/,  256,  256, 3,  0, 1, 256/10);
-                //--- CTL Detector (0,0) = Bottom-Left
-                //---
-                //---[127-1]->[000-063] CTL BottomLeft: Odd  :X-Coordinate	,VFAT Channel 1?-> Xch Detector 63, 		channel 127 -> Xch Detector 0
-                //---[128-2]->[192-255] CTL BottomLeft: Even :Y-Coordinate	,VFAT Channel 2?-> Ych Detector 255, 		channel 128 -> Ych Detector 255-64+1=192
-                //---  
-                //--- the first two odd and the first two even channels are not connected. I've to skip them therefore.
-                //--- I will have to change also the other sectors but I don't know how they are now. I will change therefore only this one.
-                //--- The correct mapping will be therefore:
-                //
-                //---[127-5]->[000-063] CTL BottomLeft: Odd  :X-Coordinate	,VFAT Channel 5?-> Xch Detector 61, 		channel 127 -> Xch Detector 0
-                //---[128-6]->[192-255] CTL BottomLeft: Even :Y-Coordinate	,VFAT Channel 6?-> Ych Detector 253, 		channel 128 -> Ych Detector 253-62+1=192
-                
-                
-                if (ichip>= 0 && chipdet[ichip]==14) 
-                {
-                    //cout << "ChipId: " << ichip << " DetId: " << chipdet[ichip] << endl;
-                    // I mark this chip as read
-                    readcheck[ichip]++;
-                    if ( EBV_ChipIdVerbose  )  cout << "Chip " << buffer.frame.fullid << " read in event "<< ievent << endl;
-                    if (readcheck[ichip] > 1) 
-                    {
-                        cout << "66 Data misalignment error on chip index "
-                        << ichip << "\nat file position " << ifile.tellg() 
-                        << "\nat Chip ID " << buffer.frame.fullid
-                        << "\nin detector " <<(*DET[chipdet[ichip]]).DetectorName
-                        << "\nCTL BottomLeft Filling" 
-                        << "\nEvent Number: " << ievent 
-                        << endl;
-                        errorstatus = 10;
-                        break;
-                    }
-                    Int_t CTLBottomLeftYoffset = 0;
-                    Int_t CTLBottomLeftXoffset = 0;
-                    //--- The channels in the xy chips of the crosstalkless start from 4 and at 127. In total we have therefore 124 channels and not 128.
-                    //--- I will assume therefore 62 channels per coordinate.
-                    //--- The first and the last pins of the connector should be connected to ground.
-                    //--- The first pin (looking the connector from the top) is on the top-right.
-                    //--- In the actual mapping I've used ch1 as the first real channel and it has been sent to ch0 (in fact to the first channel, that is not
-                    //--- necessarly 0) of the detector.
-                    //--- The first filled channel of the chip is 4: panasonic0->gnd, panasonic1->0(expected real, sent to X), panasonic2->1,...panasonic5->4(first real channel)
-                    
-                    
-                    Int_t lastchanblock = channels_per_chip/2-8;
-                    for(Int_t offset=0; offset < 8; offset++)
-                    {
-                        Int_t rightblockx = lastchanblock-(offset<<3);// In the CTL we have 64 channels per coordinate. I've therefore to multiply for "8" 
-                        Int_t rightblocky = offset<<3;// In the CTL we have 64 channels per coordinate. I've therefore to multiply for "8" 
-                        //---[128-6]->[061-000]
-                        if (buffer.frame.data[offset] & 0x8000) g[chipdet[ichip]]->InsertChannel(rightblockx+7 	+ CTLBottomLeftXoffset);
-                        if (buffer.frame.data[offset] & 0x2000) g[chipdet[ichip]]->InsertChannel(rightblockx+6 	+ CTLBottomLeftXoffset);
-                        if (buffer.frame.data[offset] & 0x0800) g[chipdet[ichip]]->InsertChannel(rightblockx+5	+ CTLBottomLeftXoffset);
-                        if (buffer.frame.data[offset] & 0x0200) g[chipdet[ichip]]->InsertChannel(rightblockx+4 	+ CTLBottomLeftXoffset);
-                        if (buffer.frame.data[offset] & 0x0080) g[chipdet[ichip]]->InsertChannel(rightblockx+3 	+ CTLBottomLeftXoffset);
-                        if (buffer.frame.data[offset] & 0x0020) g[chipdet[ichip]]->InsertChannel(rightblockx+2 	+ CTLBottomLeftXoffset);
-                        if (offset != 7)
-                        {
-                            if (buffer.frame.data[offset] & 0x0008) g[chipdet[ichip]]->InsertChannel(rightblockx+1 	+ CTLBottomLeftXoffset);
-                            if (buffer.frame.data[offset] & 0x0002) g[chipdet[ichip]]->InsertChannel(rightblockx+0 	+ CTLBottomLeftXoffset);
-                        }
-                        //---[127-5]->[000-061]
-                        if (buffer.frame.data[offset] & 0x4000) g[chipdet[ichip]+1]->InsertChannel(rightblocky+0 	+ CTLBottomLeftYoffset);
-                        if (buffer.frame.data[offset] & 0x1000) g[chipdet[ichip]+1]->InsertChannel(rightblocky+1 	+ CTLBottomLeftYoffset);
-                        if (buffer.frame.data[offset] & 0x0400) g[chipdet[ichip]+1]->InsertChannel(rightblocky+2 	+ CTLBottomLeftYoffset);
-                        if (buffer.frame.data[offset] & 0x0100) g[chipdet[ichip]+1]->InsertChannel(rightblocky+3 	+ CTLBottomLeftYoffset);
-                        if (buffer.frame.data[offset] & 0x0040) g[chipdet[ichip]+1]->InsertChannel(rightblocky+4 	+ CTLBottomLeftYoffset);
-                        if (buffer.frame.data[offset] & 0x0010) g[chipdet[ichip]+1]->InsertChannel(rightblocky+5 	+ CTLBottomLeftYoffset);
-                        if (offset != 7)                                          
-                        {                                                         
-                            if (buffer.frame.data[offset] & 0x0004) g[chipdet[ichip]+1]->InsertChannel(rightblocky+6 	+ CTLBottomLeftYoffset);
-                            if (buffer.frame.data[offset] & 0x0001) g[chipdet[ichip]+1]->InsertChannel(rightblocky+7 	+ CTLBottomLeftYoffset);
-                        }
-                    }
-                } 
-                /////////////////////////////////////////////////////////////////////////////////////////
-                //
-                //          Cross Talk Less XY BottomLeft  
-                //
-                /////////////////////////////////////////////////////////////////////////////////////////
-                
-                /////////////////////////////////////////////////////////////////////////////////////////
-                //
-                //          Cross Talk Less XY TopLeft 
-                //
-                /////////////////////////////////////////////////////////////////////////////////////////
-                //---         
-                //---         
-                
-                if (ichip>= 0 && chipdet[ichip]==17) 
-                {
-                    //cout << "ChipId: " << ichip << " DetId: " << chipdet[ichip] << endl;
-                    // I mark this chip as read
-                    readcheck[ichip]++;
-                    if ( EBV_ChipIdVerbose  )  cout << "Chip " << buffer.frame.fullid << " read in event "<< ievent << endl;
-                    if (readcheck[ichip] > 1) 
-                    {
-                        cout << "77 Data misalignment error on chip index "
-                        << ichip << "\nat file position " << ifile.tellg() 
-                        << "\nat Chip ID " << buffer.frame.fullid
-                        << "\nin detector " <<(*DET[chipdet[ichip]]).DetectorName
-                        << "\nCTL TopRight Filling" 
-                        << "\nEvent Number: " << ievent 
-                        << endl;
-                        errorstatus = 10;
-                        break;
-                    }
-                    Int_t CTLTopRightXoffset = 0;
-                    Int_t CTLTopRightYoffset = 188;
-                    //--- The channels in the xy chips of the crosstalkless start from 4 and and at 127. In total we have therefore 124 channels and not 128.
-                    //--- I will assume therefore 62 channels per coordinate.
-                    //--- The first and the last pins of the connector should be connected to ground.
-                    //--- The first pin (looking the connector from the top) is on the top-right.
-                    //--- In the actual mapping I've used ch1 as the first real channel and it has been sent to ch0 (in fact to the first channel, that is not
-                    //--- necessarly 0) of the detector.
-                    //--- The first filled channel of the chip is 4: panasonic0->gnd, panasonic1->0(expected real, sent to X), panasonic2->1,...panasonic5->4(first real channel)
-                    
-                    //--- Not Used Variable: Int_t lastchanblock = channels_per_chip/2-16/2;//In the CTL we have 64 channels per coordinate
-                    for(Int_t offset=0; offset < 8; offset++)
-                    {
-                        //I write explicitely instead of using a for loop, hoping to save some cpu time
-                        //offset<<4 is a bit shift of 4 places, that is equivalent to a multiplication by 16 but
-                        //it is more cpu time cheap
-                        Int_t rightblocky = (offset<<3);// In the CTL we have 64 channels per coordinate. I've therefore to multiply for "8"
-                        //---[128-6]->[188-249]
-                        if (buffer.frame.data[offset] & 0x8000) g[chipdet[ichip]+1]->InsertChannel(rightblocky+0 + CTLTopRightYoffset); 
-                        if (buffer.frame.data[offset] & 0x2000) g[chipdet[ichip]+1]->InsertChannel(rightblocky+1 + CTLTopRightYoffset);
-                        if (buffer.frame.data[offset] & 0x0800) g[chipdet[ichip]+1]->InsertChannel(rightblocky+2 + CTLTopRightYoffset);
-                        if (buffer.frame.data[offset] & 0x0200) g[chipdet[ichip]+1]->InsertChannel(rightblocky+3 + CTLTopRightYoffset);
-                        if (buffer.frame.data[offset] & 0x0080) g[chipdet[ichip]+1]->InsertChannel(rightblocky+4 + CTLTopRightYoffset);
-                        if (buffer.frame.data[offset] & 0x0020) g[chipdet[ichip]+1]->InsertChannel(rightblocky+5 + CTLTopRightYoffset);
-                        //if (offset != 7)
-                        //{
-                        if (buffer.frame.data[offset] & 0x0008) g[chipdet[ichip]+1]->InsertChannel(rightblocky+6 + CTLTopRightYoffset);
-                        if (buffer.frame.data[offset] & 0x0002) g[chipdet[ichip]+1]->InsertChannel(rightblocky+7 + CTLTopRightYoffset);
-                        //}
-                    }
-                    for(Int_t offset=0; offset < 8; offset++)
-                    {
-                        Int_t rightblockx = (offset<<3);// In the CTL we have 64 channels per coordinate. I've therefore to multiply for "8"
-                        //---[127-5]->[000-061]
-                        if (buffer.frame.data[offset] & 0x4000) g[chipdet[ichip]]->InsertChannel(rightblockx+0 + CTLTopRightXoffset);
-                        if (buffer.frame.data[offset] & 0x1000) g[chipdet[ichip]]->InsertChannel(rightblockx+1 + CTLTopRightXoffset);
-                        if (buffer.frame.data[offset] & 0x0400) g[chipdet[ichip]]->InsertChannel(rightblockx+2 + CTLTopRightXoffset);
-                        if (buffer.frame.data[offset] & 0x0100) g[chipdet[ichip]]->InsertChannel(rightblockx+3 + CTLTopRightXoffset);
-                        if (buffer.frame.data[offset] & 0x0040) g[chipdet[ichip]]->InsertChannel(rightblockx+4 + CTLTopRightXoffset);
-                        if (buffer.frame.data[offset] & 0x0010) g[chipdet[ichip]]->InsertChannel(rightblockx+5 + CTLTopRightXoffset);
-                        //if (offset != 7)
-                        //{
-                        if (buffer.frame.data[offset] & 0x0004) g[chipdet[ichip]]->InsertChannel(rightblockx+6 + CTLTopRightXoffset);
-                        if (buffer.frame.data[offset] & 0x0001) g[chipdet[ichip]]->InsertChannel(rightblockx+7 + CTLTopRightXoffset);
-                        //}
-                    }
-                } 
-                /////////////////////////////////////////////////////////////////////////////////////////
-                //
-                //          Cross Talk Less XY TopLeft
-                //
-                /////////////////////////////////////////////////////////////////////////////////////////
-                
-                /////////////////////////////////////////////////////////////////////////////////////////
-                //
-                //          Cross Talk Less XY TopRight (TO UPDATE.....)  
-                //
-                /////////////////////////////////////////////////////////////////////////////////////////
-                //--- CTL --- 
-                //  DET[20] = new Detector("gCTLTopRightxcl"	, 0, 1/*-1*/, 1/*-1*/,  256,  256, 3,  0, 1, 256/10);
-                //  DET[21] = new Detector("gCTLTopRightycl"	, 1, 1/*-1*/, 1/*-1*/,  256,  256, 3,  0, 1, 256/10);
-                
-                //--- CTL Detector (0,0) = Bottom-Left
-                //---         
-                //---[192-255] CTL TopRight: Odd  :X-Coordina,VFAT Channel 1?-> Xch Detector 255-64_1=192, 	channel 127 -> Xch Detector 255
-                //---[000-127] CTL TopRight: Even :Y-Coordina,VFAT Channel 2?-> Ych Detector 0, 		channel 128 -> Ych Detector 127
-                //---
-                if (ichip>= 0 && chipdet[ichip]==20) 
-                {
-                    //cout << "ChipId: " << ichip << " DetId: " << chipdet[ichip] << endl;
-                    // I mark this chip as read
-                    readcheck[ichip]++;
-                    if ( EBV_ChipIdVerbose  )  cout << "Chip " << buffer.frame.fullid << " read in event "<< ievent << endl;
-                    if (readcheck[ichip] > 1) 
-                    {
-                        cout << "88 Data misalignment error on chip index "
-                        << ichip << "\nat file position " << ifile.tellg() 
-                        << "\nat Chip ID " << buffer.frame.fullid
-                        << "\nin detector " <<(*DET[chipdet[ichip]]).DetectorName
-                        << "\nCTL TopRight Filling" 
-                        << "\nEvent Number: " << ievent 
-                        << endl;
-                        errorstatus = 10;
-                        break;
-                    }
-                    Int_t CTLTopRightXoffset = 192;
-                    Int_t CTLTopRightYoffset = 192;
-                    
-                    Int_t lastchanblock = channels_per_chip/2-16/2;
-                    for(Int_t offset=0; offset < 8; offset++)
-                    {
-                        //I write explicitely instead of using a for loop, hoping to save some cpu time
-                        //offset<<4 is a bit shift of 4 places, that is equivalent to a multiplication by 16 but
-                        //it is more cpu time cheap
-                        Int_t rightblock = lastchanblock-(offset<<3);
-                        
-                        if (buffer.frame.data[offset] & 0x8000) g[chipdet[ichip]+1]->InsertChannel(rightblock+7 + CTLTopRightYoffset); 
-                        if (buffer.frame.data[offset] & 0x4000) g[chipdet[ichip]+0]->InsertChannel(rightblock+7 + CTLTopRightXoffset);
-                        if (buffer.frame.data[offset] & 0x2000) g[chipdet[ichip]+1]->InsertChannel(rightblock+6 + CTLTopRightYoffset);
-                        if (buffer.frame.data[offset] & 0x1000) g[chipdet[ichip]+0]->InsertChannel(rightblock+6 + CTLTopRightXoffset);
-                        if (buffer.frame.data[offset] & 0x0800) g[chipdet[ichip]+1]->InsertChannel(rightblock+5 + CTLTopRightYoffset);
-                        if (buffer.frame.data[offset] & 0x0400) g[chipdet[ichip]+0]->InsertChannel(rightblock+5 + CTLTopRightXoffset);
-                        if (buffer.frame.data[offset] & 0x0200) g[chipdet[ichip]+1]->InsertChannel(rightblock+4 + CTLTopRightYoffset);
-                        if (buffer.frame.data[offset] & 0x0100) g[chipdet[ichip]+0]->InsertChannel(rightblock+4 + CTLTopRightXoffset);
-                        if (buffer.frame.data[offset] & 0x0080) g[chipdet[ichip]+1]->InsertChannel(rightblock+3 + CTLTopRightYoffset);
-                        if (buffer.frame.data[offset] & 0x0040) g[chipdet[ichip]+0]->InsertChannel(rightblock+3 + CTLTopRightXoffset);
-                        if (buffer.frame.data[offset] & 0x0020) g[chipdet[ichip]+1]->InsertChannel(rightblock+2 + CTLTopRightYoffset);
-                        if (buffer.frame.data[offset] & 0x0010) g[chipdet[ichip]+0]->InsertChannel(rightblock+2 + CTLTopRightXoffset);
-                        if (buffer.frame.data[offset] & 0x0008) g[chipdet[ichip]+1]->InsertChannel(rightblock+1 + CTLTopRightYoffset);
-                        if (buffer.frame.data[offset] & 0x0004) g[chipdet[ichip]+0]->InsertChannel(rightblock+1 + CTLTopRightXoffset);
-                        if (buffer.frame.data[offset] & 0x0002) g[chipdet[ichip]+1]->InsertChannel(rightblock+0 + CTLTopRightYoffset);
-                        if (buffer.frame.data[offset] & 0x0001) g[chipdet[ichip]+0]->InsertChannel(rightblock+0 + CTLTopRightXoffset);
-                    }                                                                                         
-                } 
-                /////////////////////////////////////////////////////////////////////////////////////////
-                //
-                //          Cross Talk Less XY TopRight  
-                //
-                /////////////////////////////////////////////////////////////////////////////////////////
                 
      	    } //end of "if ( (buffer.frame.bof & 0x0FFF) == 0x0B0F .. etc.."
             else
@@ -1686,39 +1222,6 @@ int rd51_EventBuilderVFAT(
         }
     }	
     
-    for (Int_t i=0; i<chips_per_evt; i++)
-    {
-        if((*VFAT[i]).DetectorName == "g4")
-        {
-            TH2F *hg4BeamProfile = new TH2F("hg4BeamProfile","Beam profile on Tracker 4", 1000,-200.,200.,1000,-200.,200.);
-            tree_geo->Draw("g4ycl.geoposY:g4xcl.geoposX>>hg4BeamProfile","g4ycl@.GetEntries()==1 && g4xcl@.GetEntries()==1","Lego2");
-            hg4BeamProfile->Write();
-            
-            TH1F *hg4xoffsetwithg1 = new TH1F("hg4xoffsetwithg1","X Offset of Tracker 4 respect with Tracker 1", 500,-100.,100.);
-            tree_geo->Draw("g4xcl.geoposX-g1xcl.geoposX>>hg4xoffsetwithg1","g4xcl@.GetEntries()==1 && g1xcl@.GetEntries()==1","Lego2");
-            //hg4xoffsetwithg1->Write();
-            TH1F *hg4yoffsetwithg1 = new TH1F("hg4yoffsetwithg1","Y Offset of Tracker 4 respect with Tracker 1", 500,-100.,100.);
-            tree_geo->Draw("g4ycl.geoposY-g1ycl.geoposY>>hg4yoffsetwithg1","g4ycl@.GetEntries()==1 && g1ycl@.GetEntries()==1","Lego2");
-            //hg4yoffsetwithg1->Write();
-            if (EBV_BeampProfiledataPrintOut==1 && EBV_Verbose==0)
-            {
-                cout << " g4yBeamMean: "<< hg4BeamProfile->GetMean(2) << " g4yBeamRMS: "<< hg4BeamProfile->GetRMS(2) 
-                << " g4xBeamMean: "<< hg4BeamProfile->GetMean(1) << " g4xBeamRMS: "<< hg4BeamProfile->GetRMS(1);
-                cout << " g4-g1yoffset:"<< hg4yoffsetwithg1->GetMean() << " g4-g1yoffsetRMS:"<< hg4yoffsetwithg1->GetRMS() 
-                << " g4-g1xoffset:"<< hg4xoffsetwithg1->GetMean() << " g4-g1xoffsetRMS:"<< hg4xoffsetwithg1->GetRMS(); 
-            }
-            if (EBV_BeampProfiledataPrintOut==1 && EBV_Verbose==1)
-            {
-                printf("g4\t\t%-.3f\t\t%-.3f\t\t%-.3f\t\t%-.3f\t\t%-.3f\t\t%-.3f\t\t%-.3f\t\t%-.3f\t\t%-.0f\n",	
-                       hg4BeamProfile->GetMean(2)   ,hg4BeamProfile->GetRMS(2)  ,hg4BeamProfile->GetMean(1)  ,hg4BeamProfile->GetRMS(1),
-                       hg4yoffsetwithg1->GetMean()  ,hg4yoffsetwithg1->GetRMS() ,hg4xoffsetwithg1->GetMean() ,hg4xoffsetwithg1->GetRMS(),
-                       hg4BeamProfile->GetEntries());
-                BlueOut(".................................................................................................\n\n"); 	
-            }
-            
-            break;
-        }
-    }	
     
     
     
@@ -1901,125 +1404,77 @@ int rd51_EventBuilderVFAT(
         TCut g1SingleHit("g1SingleHit","g1ycl@.GetEntries()==1 && g1xcl@.GetEntries()==1");
         TCut g2SingleHit("g2SingleHit","g2ycl@.GetEntries()==1 && g2xcl@.GetEntries()==1");
         TCut g3SingleHit("g3SingleHit","g3ycl@.GetEntries()==1 && g3xcl@.GetEntries()==1");
-        TCut g4SingleHit("g4SingleHit","g4ycl@.GetEntries()==1 && g4xcl@.GetEntries()==1");
-        TCut g3Or4SingleHit("g3Or4SingleHit","((g3ycl@.GetEntries()==1 && g3xcl@.GetEntries()==1)+(g4ycl@.GetEntries()==1 && g4xcl@.GetEntries()==1))");
-        TCut g1T2SingleHit("g1SingleHit","g1T2Padscl@.GetEntries()==1 && g1T2Stripscl@.GetEntries()==1");
-        TCut g2T2SingleHit("g2SingleHit","g2T2Padscl@.GetEntries()==1 && g2T2Stripscl@.GetEntries()==1");
         
         TCut g1g2Algnd("g1g2Algnd","TMath::Abs(g1xcl.geoposX-g2xcl.geoposX)<4 && TMath::Abs(g1ycl.geoposY-g2ycl.geoposY)<4");
         TCut g1g3Algnd("g1g3Algnd","TMath::Abs(g1xcl.geoposX-g3xcl.geoposX)<4 && TMath::Abs(g1ycl.geoposY-g3ycl.geoposY)<4");
-        TCut g1g4Algnd("g1g4Algnd","TMath::Abs(g1xcl.geoposX-g4xcl.geoposX)<4 && TMath::Abs(g1ycl.geoposY-g4ycl.geoposY)<4");
-        TCut g1g3Or4Algnd("g1g3Or4Algnd","((TMath::Abs(g1xcl.geoposX-g3xcl.geoposX)<4 && TMath::Abs(g1ycl.geoposY-g3ycl.geoposY)<4)+(TMath::Abs(g1xcl.geoposX-g4xcl.geoposX)<4 && TMath::Abs(g1ycl.geoposY-g4ycl.geoposY)<4))");
         
         TCut g2g3Algnd("g2g3Algnd","TMath::Abs(g2xcl.geoposX-g3xcl.geoposX)<4 && TMath::Abs(g2ycl.geoposY-g3ycl.geoposY)<4");
-        TCut g2g4Algnd("g2g4Algnd","TMath::Abs(g2xcl.geoposX-g4xcl.geoposX)<4 && TMath::Abs(g2ycl.geoposY-g4ycl.geoposY)<4");
-        TCut g2g3Or4Algnd("g2g3Or4Algnd","((TMath::Abs(g2xcl.geoposX-g3xcl.geoposX)<4 && TMath::Abs(g2ycl.geoposY-g3ycl.geoposY)<4)+(TMath::Abs(g2xcl.geoposX-g4xcl.geoposX)<4 && TMath::Abs(g2ycl.geoposY-g4ycl.geoposY)<4))");
-        
-        TCut g3g4Algnd("g3g4Algnd","TMath::Abs(g3xcl.geoposX-g4xcl.geoposX)<4 && TMath::Abs(g3ycl.geoposY-g4ycl.geoposY)<4");
-        
-        TCut g1T2Padsg2Algnd("g1T2Padsg2Algnd","TMath::Abs(g1T2Padscl.geoposX-g2xcl.geoposX)<10 && TMath::Abs(g1T2Padscl.geoposY-g2ycl.geoposY)<10");
-        TCut g2T2Padsg2Algnd("g2T2Padsg2Algnd","TMath::Abs(g2T2Padscl.geoposX-g2xcl.geoposX)<10 && TMath::Abs(g2T2Padscl.geoposY-g2ycl.geoposY)<10");
-        
-        TCut g2T2Padsg1T2PadsAlgnd("g2T2Padsg1T2PadsAlgnd","TMath::Abs(g2T2Padscl.geoposX-g1T2Padscl.geoposX)<8 && TMath::Abs(g2T2Padscl.geoposY-g1T2Padscl.geoposY)<8");
-        
-        TCut g2T2Stripsg1T2StripsAlgnd("g2T2Stripsg1T2StripsAlgnd","TMath::Abs(g2T2Stripscl.geoposR-g1T2Stripscl.geoposR)<4");
         
         TCut CTLMiddleArea("CTLMiddleArea","g2xcl.geoposX>50 && g2xcl.geoposX<75 && g2ycl.geoposY>60 && g2ycl.geoposY<90");
         TCut CTLBottomLeftArea("CTLMiddleLeftArea","g2xcl.geoposX>22 && g2xcl.geoposX<44 && g2ycl.geoposY>32 && g2ycl.geoposY<54");
         
-        TCut CTLMiddleLeftg2Algnd("CTLMiddleLeftg2Algnd","TMath::Abs(gCTLMiddleLeftycl.geoposY-g2ycl.geoposY)<10");
-        TCut CTLTopMiddleg2Algnd("CTLTopMiddleg2Algnd","TMath::Abs(gCTLTopMiddlexcl.geoposX-g2xcl.geoposX)<10");
+//        TCut CTLMiddleLeftg2Algnd("CTLMiddleLeftg2Algnd","TMath::Abs(gCTLMiddleLeftycl.geoposY-g2ycl.geoposY)<10");
+//        TCut CTLTopMiddleg2Algnd("CTLTopMiddleg2Algnd","TMath::Abs(gCTLTopMiddlexcl.geoposX-g2xcl.geoposX)<10");
         
-        TCut CTLBottomLeftXg2Algnd("CTLBottomLeftXg2Algnd","TMath::Abs(gCTLBottomLeftxcl.geoposX-g2xcl.geoposX)<10");
-        TCut CTLBottomLeftYg2Algnd("CTLBottomLeftYg2Algnd","TMath::Abs(gCTLBottomLeftycl.geoposY-g2ycl.geoposY)<10");
+//        TCut CTLBottomLeftXg2Algnd("CTLBottomLeftXg2Algnd","TMath::Abs(gCTLBottomLeftxcl.geoposX-g2xcl.geoposX)<10");
+//        TCut CTLBottomLeftYg2Algnd("CTLBottomLeftYg2Algnd","TMath::Abs(gCTLBottomLeftycl.geoposY-g2ycl.geoposY)<10");
         
-        TCut g1T2StripsAligned("g1T2Strips","TMath::Abs(g1T2Padscl.geoposR-g1T2Stripscl.geoposR)<10");
-        TCut g2T2StripsAligned("g2T2Strips","TMath::Abs(g2T2Padscl.geoposR-g2T2Stripscl.geoposR)<10");
+        //TCut g1T2StripsAligned("g1T2Strips","TMath::Abs(g1T2Padscl.geoposR-g1T2Stripscl.geoposR)<10");
+        //TCut g2T2StripsAligned("g2T2Strips","TMath::Abs(g2T2Padscl.geoposR-g2T2Stripscl.geoposR)<10");
         
         
-        Float_t g1T2Pads_Eff	, g1T2Pads_EffErr  , g1T2Pads_Sample  , g1T2Pads_True		;
-        Float_t g1T2Strips_Eff	, g1T2Strips_EffErr, g1T2Strips_Sample, g1T2Strips_True		;
-        Float_t g2T2Pads_Eff	, g2T2Pads_EffErr  , g2T2Pads_Sample  , g2T2Pads_True		;
-        Float_t g2T2Strips_Eff	, g2T2Strips_EffErr, g2T2Strips_Sample, g2T2Strips_True		;
         Float_t gCTLMiddleLeft_Eff, gCTLMiddleLeft_EffErr, gCTLMiddleLeft_Sample, gCTLMiddleLeft_True;
         Float_t gCTLTopMiddle_Eff, gCTLTopMiddle_EffErr, gCTLTopMiddle_Sample, gCTLTopMiddle_True;
         Float_t gCTLBottomLeftY_Eff, gCTLBottomLeftX_EffErr, gCTLBottomLeftX_Sample, gCTLBottomLeftX_True;
         Float_t gCTLBottomLeftX_Eff, gCTLBottomLeftY_EffErr, gCTLBottomLeftY_Sample, gCTLBottomLeftY_True;
         
         
-        g1T2Pads_True		=(Float_t)(tree_geo->Project("htmp","g2ycl.geoposY:g2xcl.geoposX",g1SingleHit && g2SingleHit && g1g2Algnd && g1T2Padsg2Algnd && g2T2Padsg1T2PadsAlgnd));
-        g1T2Strips_True		=(Float_t)(tree_geo->Project("htmp","g2ycl.geoposY:g2xcl.geoposX",g1SingleHit && g2SingleHit && g1g2Algnd && g2T2SingleHit && g2T2Padsg2Algnd && g2T2StripsAligned && g2T2Stripsg1T2StripsAlgnd));
-        g2T2Pads_True		=(Float_t)(tree_geo->Project("htmp","g2ycl.geoposY:g2xcl.geoposX",g1SingleHit && g2SingleHit && g1g2Algnd && g2T2Padsg2Algnd && g2T2Padsg1T2PadsAlgnd));
-        g2T2Strips_True		=(Float_t)(tree_geo->Project("htmp","g2ycl.geoposY:g2xcl.geoposX",g1SingleHit && g2SingleHit && g1g2Algnd && g1T2SingleHit && g1T2Padsg2Algnd && g1T2StripsAligned && g2T2Stripsg1T2StripsAlgnd));
-        gCTLMiddleLeft_True	=(Float_t)(tree_geo->Project("htmp","g2ycl.geoposY:g2xcl.geoposX",g1SingleHit && g2SingleHit && g1g2Algnd && CTLMiddleArea && CTLMiddleLeftg2Algnd));
-        gCTLTopMiddle_True	=(Float_t)(tree_geo->Project("htmp","g2ycl.geoposY:g2xcl.geoposX",g1SingleHit && g2SingleHit && g1g2Algnd && CTLMiddleArea && CTLTopMiddleg2Algnd));
-        gCTLBottomLeftY_True	=(Float_t)(tree_geo->Project("htmp","g2ycl.geoposY:g2xcl.geoposX",g1SingleHit && g2SingleHit && g1g2Algnd && CTLBottomLeftArea && CTLBottomLeftXg2Algnd));
-        gCTLBottomLeftX_True	=(Float_t)(tree_geo->Project("htmp","g2ycl.geoposY:g2xcl.geoposX",g1SingleHit && g2SingleHit && g1g2Algnd && CTLBottomLeftArea && CTLBottomLeftYg2Algnd));
+//        gCTLMiddleLeft_True	=(Float_t)(tree_geo->Project("htmp","g2ycl.geoposY:g2xcl.geoposX",g1SingleHit && g2SingleHit && g1g2Algnd && CTLMiddleArea && CTLMiddleLeftg2Algnd));
+//        gCTLTopMiddle_True	=(Float_t)(tree_geo->Project("htmp","g2ycl.geoposY:g2xcl.geoposX",g1SingleHit && g2SingleHit && g1g2Algnd && CTLMiddleArea && CTLTopMiddleg2Algnd));
+//        gCTLBottomLeftY_True	=(Float_t)(tree_geo->Project("htmp","g2ycl.geoposY:g2xcl.geoposX",g1SingleHit && g2SingleHit && g1g2Algnd && CTLBottomLeftArea && CTLBottomLeftXg2Algnd));
+//        gCTLBottomLeftX_True	=(Float_t)(tree_geo->Project("htmp","g2ycl.geoposY:g2xcl.geoposX",g1SingleHit && g2SingleHit && g1g2Algnd && CTLBottomLeftArea && CTLBottomLeftYg2Algnd));
+//        
+//        
+//        
+//        gCTLMiddleLeft_Sample	=(Float_t)(tree_geo->Project("htmp","g2ycl.geoposY:g2xcl.geoposX",g1SingleHit && g2SingleHit && g1g2Algnd && CTLMiddleArea));
+//        gCTLTopMiddle_Sample	=(Float_t)(tree_geo->Project("htmp","g2ycl.geoposY:g2xcl.geoposX",g1SingleHit && g2SingleHit && g1g2Algnd && CTLMiddleArea));
+//        gCTLBottomLeftY_Sample  =(Float_t)(tree_geo->Project("htmp","g2ycl.geoposY:g2xcl.geoposX",g1SingleHit && g2SingleHit && g1g2Algnd && CTLBottomLeftArea));
+//        gCTLBottomLeftX_Sample  =(Float_t)(tree_geo->Project("htmp","g2ycl.geoposY:g2xcl.geoposX",g1SingleHit && g2SingleHit && g1g2Algnd && CTLBottomLeftArea));
+//        
+//        
+//        
+//        gCTLMiddleLeft_Eff	=gCTLMiddleLeft_True/gCTLMiddleLeft_Sample;
+//        gCTLTopMiddle_Eff	=gCTLTopMiddle_True/gCTLTopMiddle_Sample;
+//        gCTLBottomLeftY_Eff	=gCTLBottomLeftX_True/gCTLBottomLeftX_Sample;
+//        gCTLBottomLeftX_Eff	=gCTLBottomLeftY_True/gCTLBottomLeftY_Sample;
+//        
+//        
+//        gCTLMiddleLeft_EffErr	=TMath::Sqrt(gCTLMiddleLeft_Eff*(1-gCTLMiddleLeft_Eff)/gCTLMiddleLeft_Sample);
+//        gCTLTopMiddle_EffErr	=TMath::Sqrt(gCTLTopMiddle_Eff*(1-gCTLTopMiddle_Eff)/gCTLTopMiddle_Sample);
+//        gCTLBottomLeftY_EffErr	=TMath::Sqrt(gCTLBottomLeftX_Eff*(1-gCTLBottomLeftX_Eff)/(gCTLBottomLeftX_Sample));
+//        gCTLBottomLeftX_EffErr	=TMath::Sqrt(gCTLBottomLeftY_Eff*(1-gCTLBottomLeftY_Eff)/(gCTLBottomLeftY_Sample));
         
-        
-        
-        g1T2Pads_Sample  	=(Float_t)(tree_geo->Project("htmp","g2ycl.geoposY:g2xcl.geoposX",g1SingleHit && g2SingleHit && g1g2Algnd && g2T2Padsg2Algnd));
-        g1T2Strips_Sample	=(Float_t)(tree_geo->Project("htmp","g2ycl.geoposY:g2xcl.geoposX",g1SingleHit && g2SingleHit && g1g2Algnd && g2T2SingleHit && g2T2Padsg2Algnd && g2T2StripsAligned));
-        g2T2Pads_Sample  	=(Float_t)(tree_geo->Project("htmp","g2ycl.geoposY:g2xcl.geoposX",g1SingleHit && g2SingleHit && g1g2Algnd && g1T2Padsg2Algnd));
-        g2T2Strips_Sample	=(Float_t)(tree_geo->Project("htmp","g2ycl.geoposY:g2xcl.geoposX",g1SingleHit && g2SingleHit && g1g2Algnd && g1T2SingleHit && g1T2Padsg2Algnd && g1T2StripsAligned));
-        gCTLMiddleLeft_Sample	=(Float_t)(tree_geo->Project("htmp","g2ycl.geoposY:g2xcl.geoposX",g1SingleHit && g2SingleHit && g1g2Algnd && CTLMiddleArea));
-        gCTLTopMiddle_Sample	=(Float_t)(tree_geo->Project("htmp","g2ycl.geoposY:g2xcl.geoposX",g1SingleHit && g2SingleHit && g1g2Algnd && CTLMiddleArea));
-        gCTLBottomLeftY_Sample  =(Float_t)(tree_geo->Project("htmp","g2ycl.geoposY:g2xcl.geoposX",g1SingleHit && g2SingleHit && g1g2Algnd && CTLBottomLeftArea));
-        gCTLBottomLeftX_Sample  =(Float_t)(tree_geo->Project("htmp","g2ycl.geoposY:g2xcl.geoposX",g1SingleHit && g2SingleHit && g1g2Algnd && CTLBottomLeftArea));
-        
-        
-        
-        g1T2Pads_Eff 		=g1T2Pads_True	/g1T2Pads_Sample	; 
-        g1T2Strips_Eff		=g1T2Strips_True/g1T2Strips_Sample	;
-        g2T2Pads_Eff  		=g2T2Pads_True	/g2T2Pads_Sample	;
-        g2T2Strips_Eff		=g2T2Strips_True/g2T2Strips_Sample	;
-        gCTLMiddleLeft_Eff	=gCTLMiddleLeft_True/gCTLMiddleLeft_Sample;
-        gCTLTopMiddle_Eff	=gCTLTopMiddle_True/gCTLTopMiddle_Sample;
-        gCTLBottomLeftY_Eff	=gCTLBottomLeftX_True/gCTLBottomLeftX_Sample;
-        gCTLBottomLeftX_Eff	=gCTLBottomLeftY_True/gCTLBottomLeftY_Sample;
-        
-        
-        g1T2Pads_EffErr     	=TMath::Sqrt(g1T2Pads_Eff*(1-g1T2Pads_Eff)/g1T2Pads_Sample)		;
-        g1T2Strips_EffErr   	=TMath::Sqrt(g1T2Strips_Eff*(1-g1T2Strips_Eff)/g1T2Strips_Sample)	;
-        g2T2Pads_EffErr     	=TMath::Sqrt(g2T2Pads_Eff*(1-g2T2Pads_Eff)/g2T2Pads_Sample)		;
-        g2T2Strips_EffErr   	=TMath::Sqrt(g2T2Strips_Eff*(1-g2T2Strips_Eff)/g2T2Strips_Sample)	;
-        gCTLMiddleLeft_EffErr	=TMath::Sqrt(gCTLMiddleLeft_Eff*(1-gCTLMiddleLeft_Eff)/gCTLMiddleLeft_Sample);
-        gCTLTopMiddle_EffErr	=TMath::Sqrt(gCTLTopMiddle_Eff*(1-gCTLTopMiddle_Eff)/gCTLTopMiddle_Sample);
-        gCTLBottomLeftY_EffErr	=TMath::Sqrt(gCTLBottomLeftX_Eff*(1-gCTLBottomLeftX_Eff)/(gCTLBottomLeftX_Sample));
-        gCTLBottomLeftX_EffErr	=TMath::Sqrt(gCTLBottomLeftY_Eff*(1-gCTLBottomLeftY_Eff)/(gCTLBottomLeftY_Sample));
-        
-        if (EBV_EfficiencyEstimatorPrintOut==1 && EBV_Verbose==0){
-            cout << "FileName	"<<	"g1T2Pads_Eff	"		<<"g1T2Pads_EffErr	"	<<"g1T2Pads_Sample	"		<<
-            "g1T2Strips_Eff	"		<<"g1T2Strips_EffErr	"	<<"g1T2Strips_Sample	"		<<
-            "g2T2Pads_Eff	"		<<"g2T2Pads_EffErr	"	<<"g2T2Pads_Sample	"		<<
-            "g2T2Strips_Eff	"		<<"g2T2Strips_EffErr	"	<<"g2T2Strips_Sample	"		<<
-            "gCTLMiddleLeft_Eff	"	<<"gCTLMiddleLeft_EffErr	"	<<"gCTLMiddleLeft_Sample	"	<<
-            "gCTLTopMiddle_Eff	"	<<"gCTLTopMiddle_EffErr	"	<<"gCTLTopMiddle_Sample	"		<<
-            "gCTLBottomLeftY_Eff	"	<<"gCTLBottomLeftX_EffErr	"	<<"gCTLBottomLeftX_Sample	"		<<
-            "gCTLBottomLeftX_Eff	"	<<"gCTLBottomLeftY_EffErr	"	<<"gCTLBottomLeftY_Sample	"		<< endl;
-            cout << rawfilename <<"	"<<	g1T2Pads_Eff		<<"	"<<g1T2Pads_EffErr		<<"	"<<g1T2Pads_Sample		<<"	"<<
-            g1T2Strips_Eff		<<"	"<<g1T2Strips_EffErr		<<"	"<<g1T2Strips_Sample		<<"	"<<
-            g2T2Pads_Eff		<<"	"<<g2T2Pads_EffErr		<<"	"<<g2T2Pads_Sample		<<"	"<<
-            g2T2Strips_Eff		<<"	"<<g2T2Strips_EffErr		<<"	"<<g2T2Strips_Sample		<<"	"<<
-            gCTLMiddleLeft_Eff	<<"	"<<gCTLMiddleLeft_EffErr	<<"	"<<gCTLMiddleLeft_Sample	<<" 	"<<
-            gCTLTopMiddle_Eff	<<"	"<<gCTLTopMiddle_EffErr		<<"	"<<gCTLTopMiddle_Sample		<<"	"<<
-            gCTLBottomLeftY_Eff	<<"	"<<gCTLBottomLeftX_EffErr	<<"	"<<gCTLBottomLeftX_Sample	<<"	"<<
-            gCTLBottomLeftX_Eff	<<"	"<<gCTLBottomLeftY_EffErr	<<"	"<<gCTLBottomLeftY_Sample	<<"	"<< endl;
-        }
-        if (EBV_EfficiencyEstimatorPrintOut==1 && EBV_Verbose==1)
-        {
-            BlueOut("\nEFFICIENCY ESTIMATION OF THE DETECTRS UNDER TEST................................................\n");
-            BlueOut("Sample\t\tEfficiency\tError\t\tDetector Name\n");
-            printf("%-.0f\t\t%-.3f\t\t%-.3f\t\tg1T2Pads\n"		,g1T2Pads_Sample	,g1T2Pads_Eff		,g1T2Pads_EffErr	);
-            printf("%-.0f\t\t%-.3f\t\t%-.3f\t\tg1T2Strips\n"	,g1T2Strips_Sample	,g1T2Strips_Eff		,g1T2Strips_EffErr	);
-            printf("%-.0f\t\t%-.3f\t\t%-.3f\t\tg2T2Pads\n"		,g2T2Pads_Sample	,g2T2Pads_Eff		,g2T2Pads_EffErr	);
-            printf("%-.0f\t\t%-.3f\t\t%-.3f\t\tg2T2Strips\n"	,g2T2Strips_Sample	,g2T2Strips_Eff		,g2T2Strips_EffErr	);
-            printf("%-.0f\t\t%-.3f\t\t%-.3f\t\tgCTLMiddleLeft\n"	,gCTLMiddleLeft_Sample	,gCTLMiddleLeft_Eff	,gCTLMiddleLeft_EffErr	);
-            printf("%-.0f\t\t%-.3f\t\t%-.3f\t\tgCTLTopMiddle\n"	,gCTLTopMiddle_Sample	,gCTLTopMiddle_Eff	,gCTLTopMiddle_EffErr	);
-            printf("%-.0f\t\t%-.3f\t\t%-.3f\t\tgCTLBottomLeftY\n"	,gCTLBottomLeftX_Sample	,gCTLBottomLeftY_Eff	,gCTLBottomLeftX_EffErr	);
-            printf("%-.0f\t\t%-.3f\t\t%-.3f\t\tgCTLBottomLeftX\n"	,gCTLBottomLeftX_Sample	,gCTLBottomLeftY_Eff	,gCTLBottomLeftX_EffErr	);
-            BlueOut("................................................................................................\n\n");
-        }
+//        if (EBV_EfficiencyEstimatorPrintOut==1 && EBV_Verbose==0){
+//            cout << "FileName	"<<	
+//            "gCTLMiddleLeft_Eff	"	<<"gCTLMiddleLeft_EffErr	"	<<"gCTLMiddleLeft_Sample	"	<<
+//            "gCTLTopMiddle_Eff	"	<<"gCTLTopMiddle_EffErr	"	<<"gCTLTopMiddle_Sample	"		<<
+//            "gCTLBottomLeftY_Eff	"	<<"gCTLBottomLeftX_EffErr	"	<<"gCTLBottomLeftX_Sample	"		<<
+//            "gCTLBottomLeftX_Eff	"	<<"gCTLBottomLeftY_EffErr	"	<<"gCTLBottomLeftY_Sample	"		<< endl;
+//            cout << rawfilename <<"	"<<	            gCTLMiddleLeft_Eff	<<"	"<<gCTLMiddleLeft_EffErr	<<"	"<<gCTLMiddleLeft_Sample	<<" 	"<<
+//            gCTLTopMiddle_Eff	<<"	"<<gCTLTopMiddle_EffErr		<<"	"<<gCTLTopMiddle_Sample		<<"	"<<
+//            gCTLBottomLeftY_Eff	<<"	"<<gCTLBottomLeftX_EffErr	<<"	"<<gCTLBottomLeftX_Sample	<<"	"<<
+//            gCTLBottomLeftX_Eff	<<"	"<<gCTLBottomLeftY_EffErr	<<"	"<<gCTLBottomLeftY_Sample	<<"	"<< endl;
+//        }
+//        if (EBV_EfficiencyEstimatorPrintOut==1 && EBV_Verbose==1)
+//        {
+//            BlueOut("\nEFFICIENCY ESTIMATION OF THE DETECTRS UNDER TEST................................................\n");
+//            BlueOut("Sample\t\tEfficiency\tError\t\tDetector Name\n");
+//            printf("%-.0f\t\t%-.3f\t\t%-.3f\t\tgCTLMiddleLeft\n"	,gCTLMiddleLeft_Sample	,gCTLMiddleLeft_Eff	,gCTLMiddleLeft_EffErr	);
+//            printf("%-.0f\t\t%-.3f\t\t%-.3f\t\tgCTLTopMiddle\n"	,gCTLTopMiddle_Sample	,gCTLTopMiddle_Eff	,gCTLTopMiddle_EffErr	);
+//            printf("%-.0f\t\t%-.3f\t\t%-.3f\t\tgCTLBottomLeftY\n"	,gCTLBottomLeftX_Sample	,gCTLBottomLeftY_Eff	,gCTLBottomLeftX_EffErr	);
+//            printf("%-.0f\t\t%-.3f\t\t%-.3f\t\tgCTLBottomLeftX\n"	,gCTLBottomLeftX_Sample	,gCTLBottomLeftY_Eff	,gCTLBottomLeftX_EffErr	);
+//            BlueOut("................................................................................................\n\n");
+//        }
         
 cout<<"#############################11"<<endl;    
     }
