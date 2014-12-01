@@ -1,0 +1,8 @@
+BEGINNINGOFSETTINGS
+NumberOfDetectors	4
+Id	xOFF	yOff	zOff	DetectorName
+0	0.	0.	0.	g1
+1	0.	0.	355.	g2
+2	0.	0.   	843.	g3
+3	0.	0.	540.	g4
+ENDOFSETTINGS

@@ -36,22 +36,6 @@ int BeamProfile(TString RootFile,TString RecoFile, Int_t name)
         gStyle->SetOptStat(1111);
     	gStyle->SetPalette(1);        
 
-  //      gROOT->ProcessLine(".L tdrstyle.C");
-  //      gROOT->ProcessLine(".x rootlogon.C");
-  //      setTDRStyle();
-
-        TGaxis::SetMaxDigits(3);
-
-  const Int_t NRGBs = 5;
-  const Int_t NCont = 255;
-  Double_t stops[NRGBs] = { 0.00, 0.34, 0.61, 0.84, 1.00 };
-  Double_t red[NRGBs]   = { 0.00, 0.00, 0.87, 1.00, 0.51 };
-  Double_t green[NRGBs] = { 0.00, 0.81, 1.00, 0.20, 0.00 };
-  Double_t blue[NRGBs]  = { 0.51, 1.00, 0.12, 0.00, 0.00 };
-  TColor::CreateGradientColorTable(NRGBs, stops, red, green, blue, NCont);
-  gStyle->SetNumberContours(NCont);
-
-
 	std::vector<TFile*> InputFiles;
 	InputFiles.clear();
 	
@@ -65,51 +49,31 @@ int BeamProfile(TString RootFile,TString RecoFile, Int_t name)
 	tmpTree->AddFriend("trackertree",RecoFile);       
 
 	TCanvas *canvas_prof = new TCanvas("canvas_prof","canvas_prof",1);
-        gStyle->SetCanvasDefH(800);                                                                                                            
-        gStyle->SetCanvasDefW(700);
-
 	canvas_prof->Divide(2,2);
+	cout<<"###################"<<endl;
 	canvas_prof->cd(1);
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	//
 	//		BEAM PROFILE PLOTS
 	////////////////////////////////////////////////////////////////////////////////////////////////////
-
-        cmsprem = new TLatex(0,101,"CMS Preliminary");
-        cmsprem->SetTextSize(0.04);
-	
-	canvas_prof_1->SetLogz();
 	TH2F *hg1BeamProfile = new TH2F("hg1BeamProfile","Beam profile on Tracker 1", 10,0.,100.,10,0.,100.);
-	hg1BeamProfile->SetStats(0);
-	hg1BeamProfile->GetZaxis()->SetRangeUser(0,450);
 	tmpTree->Draw("g1ycl.geoposY:g1xcl.geoposX>>hg1BeamProfile","g1ycl@.GetEntries()==1 && g1xcl@.GetEntries()==1 && trackx.q>0 && tracky.q>0","colz");
 	hg1BeamProfile->GetXaxis()->SetTitle("x position in mm");
 	hg1BeamProfile->GetYaxis()->SetTitle("y position in mm");
-        cmsprem->Draw();   
 
 	canvas_prof->cd(2);
-	canvas_prof_2->SetLogz();
 	TH2F *hg2BeamProfile = new TH2F("hg2BeamProfile","Beam profile on Tracker 2", 10,0.,100.,10,0.,100.);
-	hg2BeamProfile->SetStats(0);
-	hg2BeamProfile->GetZaxis()->SetRangeUser(0,450);
 	tmpTree->Draw("g2ycl.geoposY:g2xcl.geoposX>>hg2BeamProfile","g2ycl@.GetEntries()==1 && g2xcl@.GetEntries()==1 && trackx.q>0 && tracky.q>0","colz");
 	hg2BeamProfile->GetXaxis()->SetTitle("x position in mm");
 	hg2BeamProfile->GetYaxis()->SetTitle("y position in mm");
-        cmsprem->Draw();   
 	
 	canvas_prof->cd(3);
-	canvas_prof_3->SetLogz();
 	TH2F *hg3BeamProfile = new TH2F("hg3BeamProfile","Beam profile on Tracker 3", 10,0.,100.,10,0.,100.);
-	hg3BeamProfile->SetStats(0);
-	hg3BeamProfile->GetZaxis()->SetRangeUser(0,450);
-	//hg3BeamProfile->SetLogz();
 	tmpTree->Draw("g3ycl.geoposY:g3xcl.geoposX>>hg3BeamProfile","g3ycl@.GetEntries()==1 && g3xcl@.GetEntries()==1 && trackx.q>0 && tracky.q>0","colz");
 	hg3BeamProfile->GetXaxis()->SetTitle("x position in mm");
 	hg3BeamProfile->GetYaxis()->SetTitle("y position in mm");
-        cmsprem->Draw();   
 	
 	canvas_prof->SaveAs(Form("profile_plots_for_Trackers_Run%d.pdf",name));
-//	canvas_prof->SaveAs(Form("profile_plots_for_Trackers_Run%d.root",name));
 	canvas_prof->Clear();
 
 	delete gDirectory->FindObject("hg1BeamProfile");
@@ -124,37 +88,37 @@ int BeamProfile(TString RootFile,TString RecoFile, Int_t name)
 	canvas_prof->Divide(3,2);
 
 	canvas_prof->cd(1);
-	TH1F *g1x = new TH1F("g1x","Hit Position on tracker 1 (x)", 20, -20,130);
+	TH1F *g1x = new TH1F("g1x","Hit Position on tracker 1 (x)", 20, 0,100);
 	tmpTree->Draw("g1xcl.geoposX>>g1x","trackx.q>0 && tracky.q>0");
 	g1x->GetXaxis()->SetTitle("X position in mm");
 	g1x->GetYaxis()->SetTitle("Number of Hits");
 
 	canvas_prof->cd(2);
-	TH1F *g2x = new TH1F("g2x","Hit Position on tracker 2 (x)", 20, -20,130);
+	TH1F *g2x = new TH1F("g2x","Hit Position on tracker 2 (x)", 20, 0,100);
 	tmpTree->Draw("g2xcl.geoposX>>g2x","trackx.q>0 && tracky.q>0");
 	g2x->GetXaxis()->SetTitle("X position in mm");
 	g2x->GetYaxis()->SetTitle("Number of Hits");
 
 	canvas_prof->cd(3);
-	TH1F *g3x = new TH1F("g3x","Hit Position on tracker 3 (x)", 20, -20,130);
+	TH1F *g3x = new TH1F("g3x","Hit Position on tracker 3 (x)", 20, 0,100);
 	tmpTree->Draw("g3xcl.geoposX>>g3x","trackx.q>0 && tracky.q>0");
 	g3x->GetXaxis()->SetTitle("X position in mm");
 	g3x->GetYaxis()->SetTitle("Number of Hits");
 
 	canvas_prof->cd(4);
-	TH1F *g1y = new TH1F("g1y","Hit Position on tracker 1 (y)", 20, -20,130);
+	TH1F *g1y = new TH1F("g1y","Hit Position on tracker 1 (y)", 20, 0,100);
 	tmpTree->Draw("g1ycl.geoposY>>g1y","trackx.q>0 && tracky.q>0");
 	g1y->GetXaxis()->SetTitle("Y position in mm");
 	g1y->GetYaxis()->SetTitle("Number of Hits");
 
 	canvas_prof->cd(5);
-	TH1F *g2y = new TH1F("g2y","Hit Position on tracker 2 (y)", 20, -20,130);
+	TH1F *g2y = new TH1F("g2y","Hit Position on tracker 2 (y)", 20, 0,100);
 	tmpTree->Draw("g2ycl.geoposY>>g2y","trackx.q>0 && tracky.q>0");
 	g2y->GetXaxis()->SetTitle("Y position in mm");
 	g2y->GetYaxis()->SetTitle("Number of Hits");
 
 	canvas_prof->cd(6);
-	TH1F *g3y = new TH1F("g3y","Hit Position on tracker 3 (x)", 20, -20,130);
+	TH1F *g3y = new TH1F("g3y","Hit Position on tracker 3 (x)", 20, 0,100);
 	tmpTree->Draw("g3ycl.geoposY>>g3y","trackx.q>0 && tracky.q>0");
 	g3y->GetXaxis()->SetTitle("Y position in mm");
 	g3y->GetYaxis()->SetTitle("Number of Hits");
@@ -172,21 +136,21 @@ int BeamProfile(TString RootFile,TString RecoFile, Int_t name)
 	canvas_prof->Divide(2,2);
 
 	canvas_prof->cd(1);
-	TH1F *LC1 = new TH1F("LC1","Hit Position on GE11_1 (x)", 20, -20,130);
-	tmpTree->Draw("sCMSNS2LC1.geoposX>>LC1","trackx.q>0 && tracky.q>0");
-	LC1->GetXaxis()->SetTitle("X position in mm");
+	TH1F *LC1 = new TH1F("LC1","Hit Position on GE11_1 (y)", 20, 0,100);
+	tmpTree->Draw("sCMSNS2LC1.geoposY>>LC1","trackx.q>0 && tracky.q>0");
+	LC1->GetXaxis()->SetTitle("Y position in mm");
 	LC1->GetYaxis()->SetTitle("Number of Hits");
 
 	canvas_prof->cd(2);
-	TH1F *LC2 = new TH1F("LC2","Hit Position on GE11_2 (x)", 20, -20,130);
-	tmpTree->Draw("sCMSNS2LC2.geoposX>>LC2","trackx.q>0 && tracky.q>0");
-	LC2->GetXaxis()->SetTitle("X position in mm");
+	TH1F *LC2 = new TH1F("LC2","Hit Position on GE11_2 (y)", 20, 0,100);
+	tmpTree->Draw("sCMSNS2LC2.geoposY>>LC2","trackx.q>0 && tracky.q>0");
+	LC2->GetXaxis()->SetTitle("Y position in mm");
 	LC2->GetYaxis()->SetTitle("Number of Hits");
 
 	canvas_prof->cd(3);
-	TH1F *LC3 = new TH1F("LC3","Hit Position on GE11_3 (x)", 20, -20,130);
-	tmpTree->Draw("sCMSNS2LC3.geoposX>>LC3","trackx.q>0 && tracky.q>0");
-	LC3->GetXaxis()->SetTitle("X position in mm");
+	TH1F *LC3 = new TH1F("LC3","Hit Position on GE11_3 (y)", 20, 0,100);
+	tmpTree->Draw("sCMSNS2LC3.geoposY>>LC3","trackx.q>0 && tracky.q>0");
+	LC3->GetXaxis()->SetTitle("Y position in mm");
 	LC3->GetYaxis()->SetTitle("Number of Hits");
 
 	canvas_prof->SaveAs(Form("GEM_Hit_position_Run%d.pdf",name));
@@ -204,17 +168,17 @@ int BeamProfile(TString RootFile,TString RecoFile, Int_t name)
 
 	canvas_prof->cd(1);
 	TH1F *res1 = new TH1F("res1","Space Resolution for GE11_1",20,-30,40);
-	tmpTree->Draw("trackx.m*1400.0+trackx.q-sCMSNS2LC1.geoposX>>res1","trackx.q>0 && tracky.q>0");
+	tmpTree->Draw("tracky.m*1400.0+tracky.q-sCMSNS2LC1.geoposY>>res1","trackx.q>0 && tracky.q>0");
 	res1->GetXaxis()->SetTitle("Space Resolution in mm");
 	res1->GetYaxis()->SetTitle("Number of events");
 	canvas_prof->cd(2);
 	TH1F *res2 = new TH1F("res2","Space Resolution for GE11_2",20,-30,40);
-	tmpTree->Draw("trackx.m*1580.0+trackx.q-sCMSNS2LC2.geoposX>>res2","trackx.q>0 && tracky.q>0");
+	tmpTree->Draw("tracky.m*1580.0+tracky.q-sCMSNS2LC2.geoposY>>res2","trackx.q>0 && tracky.q>0");
 	res2->GetXaxis()->SetTitle("Space Resolution in mm");
 	res2->GetYaxis()->SetTitle("Number of events");
 	canvas_prof->cd(3);
 	TH1F *res3 = new TH1F("res3","Space Resolution for GE11_1",20,-30,40);
-	tmpTree->Draw("trackx.m*1780.0+trackx.q-sCMSNS2LC3.geoposX>>res3","trackx.q>0 && tracky.q>0");
+	tmpTree->Draw("tracky.m*1780.0+tracky.q-sCMSNS2LC3.geoposY>>res3","trackx.q>0 && tracky.q>0");
 	res3->GetXaxis()->SetTitle("Space Resolution in mm");
 	res3->GetYaxis()->SetTitle("Number of events");
 
@@ -225,56 +189,62 @@ int BeamProfile(TString RootFile,TString RecoFile, Int_t name)
 //
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	canvas_prof->Divide(3,2);
+	canvas_prof->Divide(2,1);
 
 	canvas_prof->cd(1);
-	TH1F *res4 = new TH1F("res4","Offset between g1x and g2x",20,-4,10);
+	TH1F *res4 = new TH1F("res4","Offset between g1x and g2x",20,-4,4);
 	tmpTree->Draw("g1xcl.geoposX-g2xcl.geoposX>>res4","trackx.q>0 && tracky.q>0");
 	res4->GetXaxis()->SetTitle("#Delta x in mm");
 	res4->GetYaxis()->SetTitle("Number of entries");
 
 	canvas_prof->cd(2);
-	TH1F *res5 = new TH1F("res5","Offset between g1x and g3x",20,-4,10);
+	TH1F *res5 = new TH1F("res5","Offset between g1x and g3x",20,-4,4);
 	tmpTree->Draw("g1xcl.geoposX-g3xcl.geoposX>>res5","trackx.q>0 && tracky.q>0");
 	res5->GetXaxis()->SetTitle("#Delta x in mm");
 	res5->GetYaxis()->SetTitle("Number of entries");
 
-	canvas_prof->cd(3);
-	TH1F *res9 = new TH1F("res9","Offset between g1y and LC1",20,-40,70);
-	tmpTree->Draw("g1xcl.geoposX-sCMSNS2LC1.geoposX>>res9","trackx.q>0 && tracky.q>0");
-	res9->GetXaxis()->SetTitle("#Delta x in mm");
-	res9->GetYaxis()->SetTitle("Number of entries");
-
-	canvas_prof->cd(4);
-	TH1F *res19 = new TH1F("res19","Offset between g1y and LC2",20,-40,70);
-	tmpTree->Draw("g1xcl.geoposX-sCMSNS2LC2.geoposX>>res19","trackx.q>0 && tracky.q>0");
-	res19->GetXaxis()->SetTitle("#Delta x in mm");
-	res19->GetYaxis()->SetTitle("Number of entries");
-
-	canvas_prof->cd(5);
-	TH1F *res10 = new TH1F("res10","Offset between g1y and LC3",20,-40,70);
-	tmpTree->Draw("g1xcl.geoposX-sCMSNS2LC3.geoposX>>res10","trackx.q>0 && tracky.q>0");
-	res10->GetXaxis()->SetTitle("#Delta x in mm");
-	res10->GetYaxis()->SetTitle("Number of entries");
-
 	canvas_prof->SaveAs(Form("X_Offset_For_Run%d.pdf",name));
 	canvas_prof->Clear();
 
-	canvas_prof->Divide(2,1);
+	canvas_prof->Divide(3,2);
 
 	canvas_prof->cd(1);
+	TH1F *res6 = new TH1F("res6","Offset between g1y and g1y",20,-4,4);
+	tmpTree->Draw("g1ycl.geoposY-g1ycl.geoposY>>res6","trackx.q>0 && tracky.q>0");
+	res6->GetXaxis()->SetTitle("#Delta y in mm");
+	res6->GetYaxis()->SetTitle("Number of entries");
+
+	canvas_prof->cd(2);
 	TH1F *res7 = new TH1F("res7","Offset between g1y and g2y",20,-4,4);
 	tmpTree->Draw("g1ycl.geoposY-g2ycl.geoposY>>res7","trackx.q>0 && tracky.q>0");
 	res7->GetXaxis()->SetTitle("#Delta y in mm");
 	res7->GetYaxis()->SetTitle("Number of entries");
 
-	canvas_prof->cd(2);
+	canvas_prof->cd(3);
 	TH1F *res8 = new TH1F("res8","Offset between g1y and g3y",20,-4,4);
 	tmpTree->Draw("g1ycl.geoposY-g3ycl.geoposY>>res8","trackx.q>0 && tracky.q>0");
 	res8->GetXaxis()->SetTitle("#Delta y in mm");
 	res8->GetYaxis()->SetTitle("Number of entries");
 
-	canvas_prof->SaveAs(Form("Offset_For_Run%d.pdf",name));
+	canvas_prof->cd(4);
+	TH1F *res9 = new TH1F("res9","Offset between g1y and LC1",20,-40,40);
+	tmpTree->Draw("g1ycl.geoposY-sCMSNS2LC1.geoposY>>res9","trackx.q>0 && tracky.q>0");
+	res9->GetXaxis()->SetTitle("#Delta y in mm");
+	res9->GetYaxis()->SetTitle("Number of entries");
+
+	canvas_prof->cd(5);
+	TH1F *res19 = new TH1F("res19","Offset between g1y and LC2",20,-40,40);
+	tmpTree->Draw("g1ycl.geoposY-sCMSNS2LC2.geoposY>>res19","trackx.q>0 && tracky.q>0");
+	res19->GetXaxis()->SetTitle("#Delta y in mm");
+	res19->GetYaxis()->SetTitle("Number of entries");
+
+	canvas_prof->cd(6);
+	TH1F *res10 = new TH1F("res10","Offset between g1y and LC3",20,-40,40);
+	tmpTree->Draw("g1ycl.geoposY-sCMSNS2LC3.geoposY>>res10","trackx.q>0 && tracky.q>0");
+	res10->GetXaxis()->SetTitle("#Delta y in mm");
+	res10->GetYaxis()->SetTitle("Number of entries");
+
+	canvas_prof->SaveAs(Form("Y_Offset_For_Run%d.pdf",name));
 	canvas_prof->Clear();
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //		CORRELATION PLOTS
@@ -284,15 +254,15 @@ int BeamProfile(TString RootFile,TString RecoFile, Int_t name)
 const Int_t nbranch = 12;
 char *bnames[nbranch]={	"g1xcl.geoposX:g1xcl.geoposX",	"g1xcl.geoposX:g2xcl.geoposX",	"g1xcl.geoposX:g3xcl.geoposX",
 			"g1ycl.geoposY:g1ycl.geoposY",	"g1ycl.geoposY:g2ycl.geoposY",	"g1ycl.geoposY:g3ycl.geoposY",
-			"g1ycl.geoposY:sCMSNS2LC1.geoposX",	"g1ycl.geoposY:sCMSNS2LC2.geoposX",
-			"g1xcl.geoposX:sCMSNS2LC1.geoposX",	"g1xcl.geoposX:sCMSNS2LC2.geoposX",
-			"g1ycl.geoposY:sCMSNS2LC3.geoposX",	"g1xcl.geoposX:sCMSNS2LC3.geoposX"};
+			"g1ycl.geoposY:sCMSNS2LC1.geoposY",	"g1ycl.geoposY:sCMSNS2LC2.geoposY",
+			"g1xcl.geoposX:sCMSNS2LC1.geoposY",	"g1xcl.geoposX:sCMSNS2LC2.geoposY",
+			"g1ycl.geoposY:sCMSNS2LC3.geoposY",	"g1xcl.geoposX:sCMSNS2LC3.geoposY"};
 
 char *fnames[nbranch] = {"g1x_geoposX_vs_g1x_geoposX",	"g1x_geoposX_vs_g2x_geoposX",	"g1x_geoposX_vs_g3x_geoposX",
 			"g1y_geoposY_vs_g1y_geoposY",	"g1y_geoposY_vs_g2y_geoposY",	"g1y_geoposY_vs_g3y_geoposY",
-			"g1y_geoposY_vs_sCMSLC1_geoposX",	"g1y_geoposY_vs_sCMSLC2_geoposX",
-			"g1x_geoposX_vs_sCMSLC1_geoposX",	"g1x_geoposX_vs_sCMSLC2_geoposX",
-			"g1y_geoposY_vs_sCMSLC3_geoposX",	"g1x_geoposX_vs_sCMSLC3_geoposX"};
+			"g1y_geoposY_vs_sCMSLC1_geoposY",	"g1y_geoposY_vs_sCMSLC2_geoposY",
+			"g1x_geoposX_vs_sCMSLC1_geoposY",	"g1x_geoposX_vs_sCMSLC2_geoposY",
+			"g1y_geoposY_vs_sCMSLC3_geoposY",	"g1x_geoposX_vs_sCMSLC3_geoposY"};
 const Float_t range[4*nbranch] ={0,100,0,100,		-10,110,-10,110,		-10,110,-10,110,
 				0,100,0,100,		-10,110,-10,110,		-10,110,-10,110,
 				-10,110,-10,110,		-10,110,-10,110,
