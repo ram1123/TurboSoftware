@@ -23,7 +23,6 @@ Float_t GetX(Int_t ReadoutType, Int_t channel)
 	else if (ReadoutType == 5) return GetX_TotemT2Pads(channel);
 	else if (ReadoutType == 6) return GetX_TotemT1LG(channel);
 	else if (ReadoutType == 8) return 0.8*GetX_Cms30x30(channel);
-        else if (ReadoutType == 9) return 0.8*GetX_Cmsbig(channel);
 	else {cout <<  "ReadOutType: " << ReadoutType << "\tAttention Wrong Map Type: No Type Found or Wrong Request "<< endl; return 999;}
 };
 
@@ -33,14 +32,15 @@ Float_t GetY(Int_t ReadoutType, Int_t channel)
 	else if (ReadoutType == 3) return 0.8*channel;
 	else if (ReadoutType == 5) return GetY_TotemT2Pads(channel);
 	else if (ReadoutType == 6) return GetY_TotemT1LG(channel);
+        else if (ReadoutType == 9) return 0.8*GetX_Cmsbig(channel);
 	else {cout <<  "Wrong Map Type: No Type Found or Wrong Request"; return 999;}
 };
 
-//Float_t GetZ(Int_t ReadoutType, Int_t channel)
-//{
-//	if (ReadoutType <=9 ) return 0.;
-//	else {cout<<  "ReadOutType: " << ReadoutType  <<  "Wrong Map Type: No Type Found or Wrong Request"<< endl; return 999;}
-//};
+Float_t GetZ(Int_t ReadoutType, Int_t channel)
+{
+	if (ReadoutType <=9 ) return 0.;
+	else {cout<<  "ReadOutType: " << ReadoutType  <<  "Wrong Map Type: No Type Found or Wrong Request"<< endl; return 999;}
+};
 
 Float_t GetR(Int_t ReadoutType, Int_t channel)
 {
