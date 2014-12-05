@@ -87,8 +87,8 @@ class rd51_Analyzer {
     
     // Efficiency Calculator
     int Calc_sCMSNS2LC3_Eff(int verbose);
-    int Calc_sCMSNS2LC2_Eff(int verbose);
-    int Calc_sCMSNS2LC1_Eff(int verbose);
+    int Calc_GE11_IV_Eff(int verbose);
+    int Calc_GE11_IV_GIF_Eff(int verbose);
     
     //Efficiency Radius Scan
     void InitializeEfficiencyRadiusScan(int verbose);
@@ -100,20 +100,20 @@ class rd51_Analyzer {
     Float_t                 *ERSRad;
     
     Float_t  sCMSNS2LC3_ERSEntries;
-    Float_t  sCMSNS2LC2_ERSEntries;
-    Float_t  sCMSNS2LC1_ERSEntries;
+    Float_t  GE11_IV_ERSEntries;
+    Float_t  GE11_IV_GIF_ERSEntries;
     
     Float_t  *sCMSNS2LC3_ERSIneff;
-    Float_t  *sCMSNS2LC2_ERSIneff;
-    Float_t  *sCMSNS2LC1_ERSIneff;
+    Float_t  *GE11_IV_ERSIneff;
+    Float_t  *GE11_IV_GIF_ERSIneff;
     
     Float_t  *sCMSNS2LC3_ERSErr;
-    Float_t  *sCMSNS2LC2_ERSErr;
-    Float_t  *sCMSNS2LC1_ERSErr;
+    Float_t  *GE11_IV_ERSErr;
+    Float_t  *GE11_IV_GIF_ERSErr;
     
     TGraphErrors *sCMSNS2LC3_ERSIneffGraph;
-    TGraphErrors *sCMSNS2LC2_ERSIneffGraph;
-    TGraphErrors *sCMSNS2LC1_ERSIneffGraph;
+    TGraphErrors *GE11_IV_ERSIneffGraph;
+    TGraphErrors *GE11_IV_GIF_ERSIneffGraph;
 
     // Histograms
     void HistoDefine(int verbose);
@@ -130,25 +130,25 @@ class rd51_Analyzer {
     TH1F *hsCMSNS2LC3_Distance_Noise     ;
     TH1F *hsCMSNS2LC3_Residual_X         ;
     
-    TH1F *hsCMSNS2LC2_Eff                ;
-    TH2F *hsCMSNS2LC2_XY_Eff             ;
-    TH2F *hsCMSNS2LC2_XY_Ineff           ;
-    TH2F *hsCMSNS2LC2_XY_Noise           ;
-    TH1F *hsCMSNS2LC2_CLS_Eff            ;
-    TH1F *hsCMSNS2LC2_CLS_Noise          ;
-    TH1F *hsCMSNS2LC2_Distance_Eff       ;
-    TH1F *hsCMSNS2LC2_Distance_Noise     ;
-    TH1F *hsCMSNS2LC2_Residual_X         ;
+    TH1F *hGE11_IV_Eff                ;
+    TH2F *hGE11_IV_XY_Eff             ;
+    TH2F *hGE11_IV_XY_Ineff           ;
+    TH2F *hGE11_IV_XY_Noise           ;
+    TH1F *hGE11_IV_CLS_Eff            ;
+    TH1F *hGE11_IV_CLS_Noise          ;
+    TH1F *hGE11_IV_Distance_Eff       ;
+    TH1F *hGE11_IV_Distance_Noise     ;
+    TH1F *hGE11_IV_Residual_X         ;
     
-    TH1F *hsCMSNS2LC1_Eff                ;
-    TH2F *hsCMSNS2LC1_XY_Eff             ;
-    TH2F *hsCMSNS2LC1_XY_Ineff           ;
-    TH2F *hsCMSNS2LC1_XY_Noise           ;
-    TH1F *hsCMSNS2LC1_CLS_Eff            ;
-    TH1F *hsCMSNS2LC1_CLS_Noise          ;
-    TH1F *hsCMSNS2LC1_Distance_Eff       ;
-    TH1F *hsCMSNS2LC1_Distance_Noise     ;
-    TH1F *hsCMSNS2LC1_Residual_X         ;
+    TH1F *hGE11_IV_GIF_Eff                ;
+    TH2F *hGE11_IV_GIF_XY_Eff             ;
+    TH2F *hGE11_IV_GIF_XY_Ineff           ;
+    TH2F *hGE11_IV_GIF_XY_Noise           ;
+    TH1F *hGE11_IV_GIF_CLS_Eff            ;
+    TH1F *hGE11_IV_GIF_CLS_Noise          ;
+    TH1F *hGE11_IV_GIF_Distance_Eff       ;
+    TH1F *hGE11_IV_GIF_Distance_Noise     ;
+    TH1F *hGE11_IV_GIF_Residual_X         ;
 
     ClassDef(rd51_Analyzer,1);
 };

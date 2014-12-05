@@ -71,8 +71,8 @@ rd51_Analyzer::rd51_Analyzer(TString rd51reco_filename, TString rd51tracker_file
         {
             
             // Processing..........................................................................
-            Calc_sCMSNS2LC1_Eff(rd51analyzer_Verbose && rd51analyzer_EffCalculatorVerbose);
-            Calc_sCMSNS2LC2_Eff(rd51analyzer_Verbose && rd51analyzer_EffCalculatorVerbose);
+            Calc_GE11_IV_GIF_Eff(rd51analyzer_Verbose && rd51analyzer_EffCalculatorVerbose);
+            Calc_GE11_IV_Eff(rd51analyzer_Verbose && rd51analyzer_EffCalculatorVerbose);
             Calc_sCMSNS2LC3_Eff(rd51analyzer_Verbose && rd51analyzer_EffCalculatorVerbose);
             // End of Processing...................................................................
             
@@ -124,31 +124,31 @@ rd51_Analyzer::rd51_Analyzer(TString rd51reco_filename, TString rd51tracker_file
  
 
 
-        //double sCMSNS2LC2_CovLength	= TMath::Abs(DUT_MaxY[1]-DUT_MinY[1]);  // Patr
-        double sCMSNS2LC2_CovLength	= TMath::Abs(DUT_MaxX[1]-DUT_MinX[1]);  // Patr
-        double sCMSNS2LC2_EffRadLength= 2*DUT_effRad[1];     // Patr
-        double sCMSNS2LC2_Eff 	= (1-hsCMSNS2LC2_Eff->GetBinContent(1)/hsCMSNS2LC2_Eff->GetEntries());
-        int    sCMSNS2LC2_Sample	= hsCMSNS2LC2_Eff->GetEntries(); 
-        double sCMSNS2LC2_NoiseErr	= 
-        (sCMSNS2LC2_EffRadLength/sCMSNS2LC2_CovLength)*hsCMSNS2LC2_Distance_Noise->GetEntries()/hsCMSNS2LC2_Eff->GetEntries(); 
-        double sCMSNS2LC2_EffErr	= TMath::Sqrt(sCMSNS2LC2_Eff*(1-sCMSNS2LC2_Eff)/sCMSNS2LC2_Sample);
+        //double GE11_IV_CovLength	= TMath::Abs(DUT_MaxY[1]-DUT_MinY[1]);  // Patr
+        double GE11_IV_CovLength	= TMath::Abs(DUT_MaxX[1]-DUT_MinX[1]);  // Patr
+        double GE11_IV_EffRadLength= 2*DUT_effRad[1];     // Patr
+        double GE11_IV_Eff 	= (1-hGE11_IV_Eff->GetBinContent(1)/hGE11_IV_Eff->GetEntries());
+        int    GE11_IV_Sample	= hGE11_IV_Eff->GetEntries(); 
+        double GE11_IV_NoiseErr	= 
+        (GE11_IV_EffRadLength/GE11_IV_CovLength)*hGE11_IV_Distance_Noise->GetEntries()/hGE11_IV_Eff->GetEntries(); 
+        double GE11_IV_EffErr	= TMath::Sqrt(GE11_IV_Eff*(1-GE11_IV_Eff)/GE11_IV_Sample);
         
-        double sCMSNS2LC2_CombErr	= TMath::Sqrt(TMath::Power(sCMSNS2LC2_EffErr,2) + TMath::Power(sCMSNS2LC2_NoiseErr,2));
-        printf("%-.3f\t\t%-.3f\t\t%-.3f\t\t%-.3f\t\t%d\t\tsCMSNS2LC2\n",
-               sCMSNS2LC2_Eff,sCMSNS2LC2_EffErr,sCMSNS2LC2_NoiseErr,sCMSNS2LC2_CombErr,sCMSNS2LC2_Sample);
+        double GE11_IV_CombErr	= TMath::Sqrt(TMath::Power(GE11_IV_EffErr,2) + TMath::Power(GE11_IV_NoiseErr,2));
+        printf("%-.3f\t\t%-.3f\t\t%-.3f\t\t%-.3f\t\t%d\t\tGE11_IV\n",
+               GE11_IV_Eff,GE11_IV_EffErr,GE11_IV_NoiseErr,GE11_IV_CombErr,GE11_IV_Sample);
         
 
-        //double sCMSNS2LC1_CovLength	= TMath::Abs(DUT_MaxY[0]-DUT_MinY[0]); //Patr
-        double sCMSNS2LC1_CovLength	= TMath::Abs(DUT_MaxX[0]-DUT_MinX[0]); //Patr
-        double sCMSNS2LC1_EffRadLength= 2*DUT_effRad[0];//Patr
-        double sCMSNS2LC1_Eff 	= (1-hsCMSNS2LC1_Eff->GetBinContent(1)/hsCMSNS2LC1_Eff->GetEntries());
-        int    sCMSNS2LC1_Sample	= hsCMSNS2LC1_Eff->GetEntries();
-        double sCMSNS2LC1_NoiseErr	= 
-        (sCMSNS2LC1_EffRadLength/sCMSNS2LC1_CovLength)*hsCMSNS2LC1_Distance_Noise->GetEntries()/hsCMSNS2LC1_Eff->GetEntries(); 
-        double sCMSNS2LC1_EffErr	= TMath::Sqrt(sCMSNS2LC1_Eff*(1-sCMSNS2LC1_Eff)/sCMSNS2LC1_Sample);
-        double sCMSNS2LC1_CombErr	= TMath::Sqrt(TMath::Power(sCMSNS2LC1_EffErr,2) + TMath::Power(sCMSNS2LC1_NoiseErr,2));
-        printf("%-.3f\t\t%-.3f\t\t%-.3f\t\t%-.3f\t\t%d\t\tsCMSNS2LC1\n",
-               sCMSNS2LC1_Eff,sCMSNS2LC1_EffErr,sCMSNS2LC1_NoiseErr,sCMSNS2LC1_CombErr,sCMSNS2LC1_Sample);        
+        //double GE11_IV_GIF_CovLength	= TMath::Abs(DUT_MaxY[0]-DUT_MinY[0]); //Patr
+        double GE11_IV_GIF_CovLength	= TMath::Abs(DUT_MaxX[0]-DUT_MinX[0]); //Patr
+        double GE11_IV_GIF_EffRadLength= 2*DUT_effRad[0];//Patr
+        double GE11_IV_GIF_Eff 	= (1-hGE11_IV_GIF_Eff->GetBinContent(1)/hGE11_IV_GIF_Eff->GetEntries());
+        int    GE11_IV_GIF_Sample	= hGE11_IV_GIF_Eff->GetEntries();
+        double GE11_IV_GIF_NoiseErr	= 
+        (GE11_IV_GIF_EffRadLength/GE11_IV_GIF_CovLength)*hGE11_IV_GIF_Distance_Noise->GetEntries()/hGE11_IV_GIF_Eff->GetEntries(); 
+        double GE11_IV_GIF_EffErr	= TMath::Sqrt(GE11_IV_GIF_Eff*(1-GE11_IV_GIF_Eff)/GE11_IV_GIF_Sample);
+        double GE11_IV_GIF_CombErr	= TMath::Sqrt(TMath::Power(GE11_IV_GIF_EffErr,2) + TMath::Power(GE11_IV_GIF_NoiseErr,2));
+        printf("%-.3f\t\t%-.3f\t\t%-.3f\t\t%-.3f\t\t%d\t\tGE11_IV_GIF\n",
+               GE11_IV_GIF_Eff,GE11_IV_GIF_EffErr,GE11_IV_GIF_NoiseErr,GE11_IV_GIF_CombErr,GE11_IV_GIF_Sample);        
 
         cout << "=======rd51tracker_nentries========= :"<< rd51tracker_tree->GetEntries()<< endl;
         cout << "********rd51reco_nentries********* :"<< rd51reco_tree->GetEntries()<< endl;
@@ -162,21 +162,21 @@ rd51_Analyzer::rd51_Analyzer(TString rd51reco_filename, TString rd51tracker_file
         cout << "sCMSNS2LC3_NoiseErr =" << sCMSNS2LC3_NoiseErr << endl;
         cout << "sCMSNS2LC3_CombErr =" << sCMSNS2LC3_CombErr << endl;
 
-        cout << "sCMSNS2LC2_Sample =" <<  sCMSNS2LC2_Sample << endl;
-        cout << "sCMSNS2LC2_CovLength =" <<sCMSNS2LC2_CovLength << endl;
-        cout << "sCMSNS2LC2_EffRadLength =" << sCMSNS2LC2_EffRadLength << endl;
-        cout << "sCMSNS2LC2_Eff ="<< sCMSNS2LC2_Eff<< endl;
-        cout << "sCMSNS2LC2_EffErr =" << sCMSNS2LC2_EffErr << endl;
-        cout << "sCMSNS2LC2_NoiseErr =" << sCMSNS2LC2_NoiseErr << endl;
-        cout << "sCMSNS2LC2_CombErr =" << sCMSNS2LC2_CombErr << endl;
+        cout << "GE11_IV_Sample =" <<  GE11_IV_Sample << endl;
+        cout << "GE11_IV_CovLength =" <<GE11_IV_CovLength << endl;
+        cout << "GE11_IV_EffRadLength =" << GE11_IV_EffRadLength << endl;
+        cout << "GE11_IV_Eff ="<< GE11_IV_Eff<< endl;
+        cout << "GE11_IV_EffErr =" << GE11_IV_EffErr << endl;
+        cout << "GE11_IV_NoiseErr =" << GE11_IV_NoiseErr << endl;
+        cout << "GE11_IV_CombErr =" << GE11_IV_CombErr << endl;
     
-        cout << "sCMSNS2LC1_Sample =" <<  sCMSNS2LC1_Sample << endl;
-        cout << "sCMSNS2LC1_CovLength =" <<sCMSNS2LC1_CovLength << endl;
-        cout << "sCMSNS2LC1_EffRadLength =" << sCMSNS2LC1_EffRadLength << endl;
-        cout << "sCMSNS2LC1_Eff ="<< sCMSNS2LC1_Eff<< endl;
-        cout << "sCMSNS2LC1_EffErr =" << sCMSNS2LC1_EffErr << endl;
-        cout << "sCMSNS2LC1_NoiseErr =" << sCMSNS2LC1_NoiseErr << endl;
-        cout << "sCMSNS2LC1_CombErr =" << sCMSNS2LC1_CombErr << endl;
+        cout << "GE11_IV_GIF_Sample =" <<  GE11_IV_GIF_Sample << endl;
+        cout << "GE11_IV_GIF_CovLength =" <<GE11_IV_GIF_CovLength << endl;
+        cout << "GE11_IV_GIF_EffRadLength =" << GE11_IV_GIF_EffRadLength << endl;
+        cout << "GE11_IV_GIF_Eff ="<< GE11_IV_GIF_Eff<< endl;
+        cout << "GE11_IV_GIF_EffErr =" << GE11_IV_GIF_EffErr << endl;
+        cout << "GE11_IV_GIF_NoiseErr =" << GE11_IV_GIF_NoiseErr << endl;
+        cout << "GE11_IV_GIF_CombErr =" << GE11_IV_GIF_CombErr << endl;
 
 
         BlueOut("...................................................................................................\n");
@@ -267,7 +267,7 @@ rd51_Analyzer::rd51_Analyzer(TString rd51reco_filename, TString rd51tracker_file
 //--- CMS30x30 and GE1/1 Efficiency Calculator
 //__________________________________________________________________________________________
 
-int rd51_Analyzer::Calc_sCMSNS2LC1_Eff(int verbose)
+int rd51_Analyzer::Calc_GE11_IV_GIF_Eff(int verbose)
 {
 //std::cout<<"###################################################################################11"<<std::endl;
     bool ERSFound = 0; //--- Control Variable for the Efficiency Radius Scan 
@@ -281,51 +281,51 @@ int rd51_Analyzer::Calc_sCMSNS2LC1_Eff(int verbose)
     bool YCov= (ProjectedY   >= DUT_MinY[0]   && ProjectedY <= DUT_MaxY[0]); //Patr		
     bool InsideCoverage   = XCov && YCov;
     
-    if(verbose) cout << "Number of Clusters in sCMSNS2LC1: " << rd51reco->sCMSNS2LC1_ << endl;	
+    if(verbose) cout << "Number of Clusters in GE11_IV_GIF: " << rd51reco->GE11_IV_GIF_ << endl;	
     
   //  cout<<"For LC1 : ProjectedX = "<<ProjectedX<<"\tProjectedY = "<<ProjectedY<<"\tDUT_MinX = "<<DUT_MinX[0]<<"\tmaxX = "<<DUT_MaxX[0]<<"\tXCov = "<<XCov<<"\tYCov = "<<YCov<<endl;
     if ( !rd51analyzer_EnableCoverage || InsideCoverage )
     {
         if ( verbose && rd51analyzer_EnableCoverage) GreenOut("Inside the Coverage\n");
         //--- Updating the entries in the Efficiency Radius Scan
-        if (rd51analyzer_EfficiencyRadiusScan) sCMSNS2LC1_ERSEntries += 1.;
+        if (rd51analyzer_EfficiencyRadiusScan) GE11_IV_GIF_ERSEntries += 1.;
         //--- Loop on the DUT clusters
         int neff = 0;
-        for (int ihit = 0; ihit <rd51reco->sCMSNS2LC1_ ; ihit++)
+        for (int ihit = 0; ihit <rd51reco->GE11_IV_GIF_ ; ihit++)
         {
-	   Float_t distance = TMath::Abs( rd51reco->sCMSNS2LC1_geoposX[ihit] +DUT_offsetX[0] - ProjectedX ); //Patr
+	   Float_t distance = TMath::Abs( rd51reco->GE11_IV_GIF_geoposX[ihit] +DUT_offsetX[0] - ProjectedX ); //Patr
 	     if ( distance  < DUT_effRad[0] ) //Patr
             {
-                hsCMSNS2LC1_XY_Eff->Fill(ProjectedX,ProjectedY);
-                hsCMSNS2LC1_CLS_Eff->Fill(rd51reco->sCMSNS2LC1_ngeoch[ihit]);
-                hsCMSNS2LC1_Distance_Eff->Fill(distance);
-                hsCMSNS2LC1_Residual_X->Fill(rd51reco->sCMSNS2LC1_geoposX[ihit] + DUT_offsetX[0] - ProjectedX); //Patr
+                hGE11_IV_GIF_XY_Eff->Fill(ProjectedX,ProjectedY);
+                hGE11_IV_GIF_CLS_Eff->Fill(rd51reco->GE11_IV_GIF_ngeoch[ihit]);
+                hGE11_IV_GIF_Distance_Eff->Fill(distance);
+                hGE11_IV_GIF_Residual_X->Fill(rd51reco->GE11_IV_GIF_geoposX[ihit] + DUT_offsetX[0] - ProjectedX); //Patr
                 neff++;
             }
             else
             {
-                hsCMSNS2LC1_XY_Noise->Fill(ProjectedX,ProjectedY);
-                hsCMSNS2LC1_CLS_Noise->Fill(rd51reco->sCMSNS2LC1_ngeoch[ihit]);
-                hsCMSNS2LC1_Distance_Noise->Fill(distance);
+                hGE11_IV_GIF_XY_Noise->Fill(ProjectedX,ProjectedY);
+                hGE11_IV_GIF_CLS_Noise->Fill(rd51reco->GE11_IV_GIF_ngeoch[ihit]);
+                hGE11_IV_GIF_Distance_Noise->Fill(distance);
             }
             //--- Filling the Efficiency Radius Scan Arrays
 	      	if (rd51analyzer_EfficiencyRadiusScan && !ERSFound)
             {
                 for (int iers=0; iers<ERSSteps; iers++)
                 {
-                    if (distance < ERSRad[iers]) { sCMSNS2LC1_ERSIneff[iers] += 1.; ERSFound=1;}
+                    if (distance < ERSRad[iers]) { GE11_IV_GIF_ERSIneff[iers] += 1.; ERSFound=1;}
                 }
             }
         }
-        hsCMSNS2LC1_Eff->Fill(neff);
-        if (neff==0) hsCMSNS2LC1_XY_Ineff->Fill(ProjectedX,ProjectedY);
+        hGE11_IV_GIF_Eff->Fill(neff);
+        if (neff==0) hGE11_IV_GIF_XY_Ineff->Fill(ProjectedX,ProjectedY);
     }
     if (  verbose && rd51analyzer_EnableCoverage && !InsideCoverage ) RedOut("Outside of the Coverage\n");
     return 0;
 }
 
 
-int rd51_Analyzer::Calc_sCMSNS2LC2_Eff(int verbose)
+int rd51_Analyzer::Calc_GE11_IV_Eff(int verbose)
 {
     bool ERSFound = 0; //--- Control Variable for the Efficiency Radius Scan 
     
@@ -339,46 +339,46 @@ int rd51_Analyzer::Calc_sCMSNS2LC2_Eff(int verbose)
      bool YCov= (ProjectedY   >= DUT_MinY[1]   && ProjectedY <= DUT_MaxY[1]);  //Patr		
     bool InsideCoverage   = XCov && YCov;
     
-    if(verbose) cout << "Number of Clusters in sCMSNS2LC2: " << rd51reco->sCMSNS2LC2_ << endl;	
+    if(verbose) cout << "Number of Clusters in GE11_IV: " << rd51reco->GE11_IV_ << endl;	
  //   cout<<"For LC2 : ProjectedX = "<<ProjectedX<<"\tProjectedY = "<<ProjectedY<<"\tDUT_MinX = "<<DUT_MinX[1]<<"\tmaxX = "<<DUT_MaxX[1]<<"\tXCov = "<<XCov<<"\tYCov = "<<YCov<<endl;
     
     if ( !rd51analyzer_EnableCoverage || InsideCoverage )
     {
         if ( verbose && rd51analyzer_EnableCoverage) GreenOut("Inside the Coverage\n");
         //--- Updating the entries in the Efficiency Radius Scan
-        if (rd51analyzer_EfficiencyRadiusScan) sCMSNS2LC2_ERSEntries += 1.;
+        if (rd51analyzer_EfficiencyRadiusScan) GE11_IV_ERSEntries += 1.;
         //--- Loop on the DUT clusters
         int neff = 0;
-        for (int ihit = 0; ihit <rd51reco->sCMSNS2LC2_ ; ihit++)
+        for (int ihit = 0; ihit <rd51reco->GE11_IV_ ; ihit++)
         {
-	   Float_t distance = TMath::Abs( rd51reco->sCMSNS2LC2_geoposX[ihit] +DUT_offsetX[1] - ProjectedX ); //Patr
+	   Float_t distance = TMath::Abs( rd51reco->GE11_IV_geoposX[ihit] +DUT_offsetX[1] - ProjectedX ); //Patr
 	  //if ( distance  < DUT_effRad[7] )
 	  if ( distance  < DUT_effRad[1] ) //Patr
             {
-                hsCMSNS2LC2_XY_Eff->Fill(ProjectedX,ProjectedY);
-                hsCMSNS2LC2_CLS_Eff->Fill(rd51reco->sCMSNS2LC2_ngeoch[ihit]);
-                hsCMSNS2LC2_Distance_Eff->Fill(distance);
-                hsCMSNS2LC2_Residual_X->Fill(rd51reco->sCMSNS2LC2_geoposX[ihit] + DUT_offsetX[1] - ProjectedX); //Patr
+                hGE11_IV_XY_Eff->Fill(ProjectedX,ProjectedY);
+                hGE11_IV_CLS_Eff->Fill(rd51reco->GE11_IV_ngeoch[ihit]);
+                hGE11_IV_Distance_Eff->Fill(distance);
+                hGE11_IV_Residual_X->Fill(rd51reco->GE11_IV_geoposX[ihit] + DUT_offsetX[1] - ProjectedX); //Patr
                 neff++;
             }
             else
             {
-                hsCMSNS2LC2_XY_Noise->Fill(ProjectedX,ProjectedY);
-                hsCMSNS2LC2_CLS_Noise->Fill(rd51reco->sCMSNS2LC2_ngeoch[ihit]);
-                hsCMSNS2LC2_Distance_Noise->Fill(distance);
+                hGE11_IV_XY_Noise->Fill(ProjectedX,ProjectedY);
+                hGE11_IV_CLS_Noise->Fill(rd51reco->GE11_IV_ngeoch[ihit]);
+                hGE11_IV_Distance_Noise->Fill(distance);
             }
             //--- Filling the Efficiency Radius Scan Arrays
 	    if (rd51analyzer_EfficiencyRadiusScan && !ERSFound) {
                 for (int iers=0; iers<ERSSteps; iers++)
                 {
-                    if (distance < ERSRad[iers]) { sCMSNS2LC2_ERSIneff[iers] += 1.; ERSFound=1;}
+                    if (distance < ERSRad[iers]) { GE11_IV_ERSIneff[iers] += 1.; ERSFound=1;}
                 }
             }
         }
-        hsCMSNS2LC2_Eff->Fill(neff);
+        hGE11_IV_Eff->Fill(neff);
        
        
-        if (neff==0) hsCMSNS2LC2_XY_Ineff->Fill(ProjectedX,ProjectedY);
+        if (neff==0) hGE11_IV_XY_Ineff->Fill(ProjectedX,ProjectedY);
     }
     if (  verbose && rd51analyzer_EnableCoverage && !InsideCoverage ) RedOut("Outside of the Coverage\n");
     return 0;
@@ -398,7 +398,7 @@ int rd51_Analyzer::Calc_sCMSNS2LC3_Eff(int verbose)
     
      bool XCov= (ProjectedX   >= DUT_MinX[2]   && ProjectedX <= DUT_MaxX[2]); 		
      bool YCov= (ProjectedY   >= DUT_MinY[2]   && ProjectedY <= DUT_MaxY[2]);  		
-    bool InsideCoverage   = XCov && YCov;
+     bool InsideCoverage   = XCov && YCov;
     
     if(verbose) cout << "Number of Clusters in sCMSNS2LC3: " << rd51reco->sCMSNS2LC3_ << endl;	
 //    cout<<
@@ -536,27 +536,27 @@ void rd51_Analyzer::InitializeEfficiencyRadiusScan(int verbose)
     ERSRad = new Float_t[ERSSteps];
   
     sCMSNS2LC3_ERSIneff = new Float_t[ERSSteps];
-    sCMSNS2LC2_ERSIneff = new Float_t[ERSSteps];
-    sCMSNS2LC1_ERSIneff = new Float_t[ERSSteps];
+    GE11_IV_ERSIneff = new Float_t[ERSSteps];
+    GE11_IV_GIF_ERSIneff = new Float_t[ERSSteps];
 
     sCMSNS2LC3_ERSErr = new Float_t[ERSSteps];
-    sCMSNS2LC2_ERSErr = new Float_t[ERSSteps];
-    sCMSNS2LC1_ERSErr = new Float_t[ERSSteps];
+    GE11_IV_ERSErr = new Float_t[ERSSteps];
+    GE11_IV_GIF_ERSErr = new Float_t[ERSSteps];
 
     sCMSNS2LC3_ERSEntries = 0.;
-    sCMSNS2LC2_ERSEntries = 0.;
-    sCMSNS2LC1_ERSEntries = 0.;
+    GE11_IV_ERSEntries = 0.;
+    GE11_IV_GIF_ERSEntries = 0.;
 
     for (int i=0; i<ERSSteps; i++) {
         ERSRad[i] = rd51analyzer_EfficiencyRadiusMin+rd51analyzer_EfficiencyRadiusStep*i;
         
         sCMSNS2LC3_ERSIneff[i] = 0.;
-        sCMSNS2LC2_ERSIneff[i] = 0.;
-        sCMSNS2LC1_ERSIneff[i] = 0.;
+        GE11_IV_ERSIneff[i] = 0.;
+        GE11_IV_GIF_ERSIneff[i] = 0.;
 
         sCMSNS2LC3_ERSErr[i] = 0.;
-        sCMSNS2LC2_ERSErr[i] = 0.;
-        sCMSNS2LC1_ERSErr[i] = 0.;
+        GE11_IV_ERSErr[i] = 0.;
+        GE11_IV_GIF_ERSErr[i] = 0.;
     }		
 }
 
@@ -568,29 +568,29 @@ void rd51_Analyzer::ProcessEfficiencyRadiusScan(int verbose)
     EfficiencyTree->Branch("ERSRad",ERSRad,"ERSRad[ERSSteps]/F");
 
     EfficiencyTree->Branch("sCMSNS2LC3_ERSEntries",&sCMSNS2LC3_ERSEntries,"sCMSNS2LC3_ERSEntries/I");
-    EfficiencyTree->Branch("sCMSNS2LC2_ERSEntries",&sCMSNS2LC2_ERSEntries,"sCMSNS2LC2_ERSEntries/I");
-    EfficiencyTree->Branch("sCMSNS2LC1_ERSEntries",&sCMSNS2LC1_ERSEntries,"sCMSNS2LC1_ERSEntries/I");
+    EfficiencyTree->Branch("GE11_IV_ERSEntries",&GE11_IV_ERSEntries,"GE11_IV_ERSEntries/I");
+    EfficiencyTree->Branch("GE11_IV_GIF_ERSEntries",&GE11_IV_GIF_ERSEntries,"GE11_IV_GIF_ERSEntries/I");
     
     EfficiencyTree->Branch("sCMSNS2LC3_ERSIneff",sCMSNS2LC3_ERSIneff,"sCMSNS2LC3_ERSIneff[ERSSteps]/F");
-    EfficiencyTree->Branch("sCMSNS2LC2_ERSIneff",sCMSNS2LC2_ERSIneff,"sCMSNS2LC2_ERSIneff[ERSSteps]/F");
-    EfficiencyTree->Branch("sCMSNS2LC1_ERSIneff",sCMSNS2LC1_ERSIneff,"sCMSNS2LC1_ERSIneff[ERSSteps]/F");
+    EfficiencyTree->Branch("GE11_IV_ERSIneff",GE11_IV_ERSIneff,"GE11_IV_ERSIneff[ERSSteps]/F");
+    EfficiencyTree->Branch("GE11_IV_GIF_ERSIneff",GE11_IV_GIF_ERSIneff,"GE11_IV_GIF_ERSIneff[ERSSteps]/F");
 
     EfficiencyTree->Branch("sCMSNS2LC3_ERSErr",sCMSNS2LC3_ERSErr,"sCMSNS2LC3_ERSErr[ERSSteps]/F");
-    EfficiencyTree->Branch("sCMSNS2LC2_ERSErr",sCMSNS2LC2_ERSErr,"sCMSNS2LC2_ERSErr[ERSSteps]/F");
-    EfficiencyTree->Branch("sCMSNS2LC1_ERSErr",sCMSNS2LC1_ERSErr,"sCMSNS2LC1_ERSErr[ERSSteps]/F");
+    EfficiencyTree->Branch("GE11_IV_ERSErr",GE11_IV_ERSErr,"GE11_IV_ERSErr[ERSSteps]/F");
+    EfficiencyTree->Branch("GE11_IV_GIF_ERSErr",GE11_IV_GIF_ERSErr,"GE11_IV_GIF_ERSErr[ERSSteps]/F");
     
     //--- Processing the data----------------------------------------------------------------------------------------------
     for (int i=0; i<ERSSteps; i++)
     {
         //--- Efficiency	
         sCMSNS2LC3_ERSIneff[i] =1- sCMSNS2LC3_ERSIneff[i]  / sCMSNS2LC3_ERSEntries;
-        sCMSNS2LC2_ERSIneff[i] =1- sCMSNS2LC2_ERSIneff[i]  / sCMSNS2LC2_ERSEntries;
-        sCMSNS2LC1_ERSIneff[i] =1- sCMSNS2LC1_ERSIneff[i]  / sCMSNS2LC1_ERSEntries;
+        GE11_IV_ERSIneff[i] =1- GE11_IV_ERSIneff[i]  / GE11_IV_ERSEntries;
+        GE11_IV_GIF_ERSIneff[i] =1- GE11_IV_GIF_ERSIneff[i]  / GE11_IV_GIF_ERSEntries;
 
         //---  Binomial Error                                 
         sCMSNS2LC3_ERSErr[i] = TMath::Sqrt(sCMSNS2LC3_ERSIneff[i]*(1-sCMSNS2LC3_ERSIneff[i])/sCMSNS2LC3_ERSEntries);
-        sCMSNS2LC2_ERSErr[i] = TMath::Sqrt(sCMSNS2LC2_ERSIneff[i]*(1-sCMSNS2LC2_ERSIneff[i])/sCMSNS2LC2_ERSEntries);
-        sCMSNS2LC1_ERSErr[i] = TMath::Sqrt(sCMSNS2LC1_ERSIneff[i]*(1-sCMSNS2LC1_ERSIneff[i])/sCMSNS2LC1_ERSEntries);
+        GE11_IV_ERSErr[i] = TMath::Sqrt(GE11_IV_ERSIneff[i]*(1-GE11_IV_ERSIneff[i])/GE11_IV_ERSEntries);
+        GE11_IV_GIF_ERSErr[i] = TMath::Sqrt(GE11_IV_GIF_ERSIneff[i]*(1-GE11_IV_GIF_ERSIneff[i])/GE11_IV_GIF_ERSEntries);
     }
     //---End of Processing the data--------------------------------------------------------------------------------------
     
@@ -601,32 +601,32 @@ void rd51_Analyzer::ProcessEfficiencyRadiusScan(int verbose)
     
     //--- Initializing and writing the TGraphErrors	
     sCMSNS2LC3_ERSIneffGraph = new TGraphErrors(ERSSteps,ERSRad,      sCMSNS2LC3_ERSIneff,(const Float_t*)0,      sCMSNS2LC3_ERSErr);
-    sCMSNS2LC2_ERSIneffGraph = new TGraphErrors(ERSSteps,ERSRad,      sCMSNS2LC2_ERSIneff,(const Float_t*)0,      sCMSNS2LC2_ERSErr);
-    sCMSNS2LC1_ERSIneffGraph = new TGraphErrors(ERSSteps,ERSRad,      sCMSNS2LC1_ERSIneff,(const Float_t*)0,      sCMSNS2LC1_ERSErr);
+    GE11_IV_ERSIneffGraph = new TGraphErrors(ERSSteps,ERSRad,      GE11_IV_ERSIneff,(const Float_t*)0,      GE11_IV_ERSErr);
+    GE11_IV_GIF_ERSIneffGraph = new TGraphErrors(ERSSteps,ERSRad,      GE11_IV_GIF_ERSIneff,(const Float_t*)0,      GE11_IV_GIF_ERSErr);
 
     sCMSNS2LC3_ERSIneffGraph->SetTitle("sCMSNS2LC3");
-    sCMSNS2LC2_ERSIneffGraph->SetTitle("sCMSNS2LC2");
-    sCMSNS2LC1_ERSIneffGraph->SetTitle("sCMSNS2LC1");
+    GE11_IV_ERSIneffGraph->SetTitle("GE11_IV");
+    GE11_IV_GIF_ERSIneffGraph->SetTitle("GE11_IV_GIF");
 
     sCMSNS2LC3_ERSIneffGraph->SetName("sCMSNS2LC3_ERSIneffGraph");
-    sCMSNS2LC2_ERSIneffGraph->SetName("sCMSNS2LC2_ERSIneffGraph");
-    sCMSNS2LC1_ERSIneffGraph->SetName("sCMSNS2LC1_ERSIneffGraph");
+    GE11_IV_ERSIneffGraph->SetName("GE11_IV_ERSIneffGraph");
+    GE11_IV_GIF_ERSIneffGraph->SetName("GE11_IV_GIF_ERSIneffGraph");
 
     sCMSNS2LC3_ERSIneffGraph->GetYaxis()->SetTitle("Efficiency Radius[mm]");
-    sCMSNS2LC2_ERSIneffGraph->GetYaxis()->SetTitle("Efficiency Radius[mm]");
-    sCMSNS2LC1_ERSIneffGraph->GetYaxis()->SetTitle("Efficiency Radius[mm]");
+    GE11_IV_ERSIneffGraph->GetYaxis()->SetTitle("Efficiency Radius[mm]");
+    GE11_IV_GIF_ERSIneffGraph->GetYaxis()->SetTitle("Efficiency Radius[mm]");
 
     sCMSNS2LC3_ERSIneffGraph->GetXaxis()->SetTitle("Inefficiency");
-    sCMSNS2LC2_ERSIneffGraph->GetXaxis()->SetTitle("Inefficiency");
-    sCMSNS2LC1_ERSIneffGraph->GetXaxis()->SetTitle("Inefficiency");    
+    GE11_IV_ERSIneffGraph->GetXaxis()->SetTitle("Inefficiency");
+    GE11_IV_GIF_ERSIneffGraph->GetXaxis()->SetTitle("Inefficiency");    
 
     sCMSNS2LC3_ERSIneffGraph->GetXaxis()->SetRangeUser(0,1);
-    sCMSNS2LC2_ERSIneffGraph->GetXaxis()->SetRangeUser(0,1);
-    sCMSNS2LC1_ERSIneffGraph->GetXaxis()->SetRangeUser(0,1);    
+    GE11_IV_ERSIneffGraph->GetXaxis()->SetRangeUser(0,1);
+    GE11_IV_GIF_ERSIneffGraph->GetXaxis()->SetRangeUser(0,1);    
 
     sCMSNS2LC3_ERSIneffGraph->Write();
-    sCMSNS2LC2_ERSIneffGraph->Write();
-    sCMSNS2LC1_ERSIneffGraph->Write();
+    GE11_IV_ERSIneffGraph->Write();
+    GE11_IV_GIF_ERSIneffGraph->Write();
 }
 
 void rd51_Analyzer::DeleteEfficiencyRadiusScan(int verbose)
@@ -634,16 +634,16 @@ void rd51_Analyzer::DeleteEfficiencyRadiusScan(int verbose)
     delete 	             		ERSRad;
 
     delete                sCMSNS2LC3_ERSIneff;
-    delete                sCMSNS2LC2_ERSIneff;
-    delete                sCMSNS2LC1_ERSIneff;
+    delete                GE11_IV_ERSIneff;
+    delete                GE11_IV_GIF_ERSIneff;
 
     delete                sCMSNS2LC3_ERSErr;
-    delete                sCMSNS2LC2_ERSErr;
-    delete                sCMSNS2LC1_ERSErr;
+    delete                GE11_IV_ERSErr;
+    delete                GE11_IV_GIF_ERSErr;
 
     delete                sCMSNS2LC3_ERSIneffGraph;
-    delete                sCMSNS2LC2_ERSIneffGraph;
-    delete                sCMSNS2LC1_ERSIneffGraph;
+    delete                GE11_IV_ERSIneffGraph;
+    delete                GE11_IV_GIF_ERSIneffGraph;
 }
 //-------------------------------------------------------------------------------------
 //--- End Of Efficiency Radius Scan Initilaization                                       
@@ -762,25 +762,25 @@ void rd51_Analyzer::HistoWrite(int verbose)
     hsCMSNS2LC3_Distance_Noise	->Write();	
     hsCMSNS2LC3_Residual_X	->Write();	    
 
-    hsCMSNS2LC2_Eff		->Write();		
-    hsCMSNS2LC2_XY_Eff		->Write();	
-    hsCMSNS2LC2_XY_Ineff	->Write();	
-    hsCMSNS2LC2_XY_Noise	->Write();	
-    hsCMSNS2LC2_CLS_Eff		->Write();	
-    hsCMSNS2LC2_CLS_Noise	->Write();	
-    hsCMSNS2LC2_Distance_Eff	->Write();	
-    hsCMSNS2LC2_Distance_Noise	->Write();	
-    hsCMSNS2LC2_Residual_X	->Write();		
+    hGE11_IV_Eff		->Write();		
+    hGE11_IV_XY_Eff		->Write();	
+    hGE11_IV_XY_Ineff	->Write();	
+    hGE11_IV_XY_Noise	->Write();	
+    hGE11_IV_CLS_Eff		->Write();	
+    hGE11_IV_CLS_Noise	->Write();	
+    hGE11_IV_Distance_Eff	->Write();	
+    hGE11_IV_Distance_Noise	->Write();	
+    hGE11_IV_Residual_X	->Write();		
     
-    hsCMSNS2LC1_Eff		->Write();		
-    hsCMSNS2LC1_XY_Eff		->Write();	
-    hsCMSNS2LC1_XY_Ineff	->Write();	
-    hsCMSNS2LC1_XY_Noise	->Write();	
-    hsCMSNS2LC1_CLS_Eff		->Write();	
-    hsCMSNS2LC1_CLS_Noise	->Write();	
-    hsCMSNS2LC1_Distance_Eff	->Write();	
-    hsCMSNS2LC1_Distance_Noise	->Write();	
-    hsCMSNS2LC1_Residual_X	->Write();		
+    hGE11_IV_GIF_Eff		->Write();		
+    hGE11_IV_GIF_XY_Eff		->Write();	
+    hGE11_IV_GIF_XY_Ineff	->Write();	
+    hGE11_IV_GIF_XY_Noise	->Write();	
+    hGE11_IV_GIF_CLS_Eff		->Write();	
+    hGE11_IV_GIF_CLS_Noise	->Write();	
+    hGE11_IV_GIF_Distance_Eff	->Write();	
+    hGE11_IV_GIF_Distance_Noise	->Write();	
+    hGE11_IV_GIF_Residual_X	->Write();		
 
 }
 
@@ -801,25 +801,25 @@ void rd51_Analyzer::HistoDelete(int verbose)
     delete hsCMSNS2LC3_Distance_Noise	;
     delete hsCMSNS2LC3_Residual_X	;
     
-    delete hsCMSNS2LC2_Eff		;
-    delete hsCMSNS2LC2_XY_Eff		;
-    delete hsCMSNS2LC2_XY_Ineff		;
-    delete hsCMSNS2LC2_XY_Noise		;
-    delete hsCMSNS2LC2_CLS_Eff		;
-    delete hsCMSNS2LC2_CLS_Noise	;
-    delete hsCMSNS2LC2_Distance_Eff	;
-    delete hsCMSNS2LC2_Distance_Noise	;
-    delete hsCMSNS2LC2_Residual_X	;
+    delete hGE11_IV_Eff		;
+    delete hGE11_IV_XY_Eff		;
+    delete hGE11_IV_XY_Ineff		;
+    delete hGE11_IV_XY_Noise		;
+    delete hGE11_IV_CLS_Eff		;
+    delete hGE11_IV_CLS_Noise	;
+    delete hGE11_IV_Distance_Eff	;
+    delete hGE11_IV_Distance_Noise	;
+    delete hGE11_IV_Residual_X	;
     
-    delete hsCMSNS2LC1_Eff		;
-    delete hsCMSNS2LC1_XY_Eff		;
-    delete hsCMSNS2LC1_XY_Ineff		;
-    delete hsCMSNS2LC1_XY_Noise		;
-    delete hsCMSNS2LC1_CLS_Eff		;
-    delete hsCMSNS2LC1_CLS_Noise	;
-    delete hsCMSNS2LC1_Distance_Eff	;
-    delete hsCMSNS2LC1_Distance_Noise	;
-    delete hsCMSNS2LC1_Residual_X	;
+    delete hGE11_IV_GIF_Eff		;
+    delete hGE11_IV_GIF_XY_Eff		;
+    delete hGE11_IV_GIF_XY_Ineff		;
+    delete hGE11_IV_GIF_XY_Noise		;
+    delete hGE11_IV_GIF_CLS_Eff		;
+    delete hGE11_IV_GIF_CLS_Noise	;
+    delete hGE11_IV_GIF_Distance_Eff	;
+    delete hGE11_IV_GIF_Distance_Noise	;
+    delete hGE11_IV_GIF_Residual_X	;
 
 }
 
@@ -852,45 +852,45 @@ void rd51_Analyzer::HistoDefine(int verbose)
     
 
     //--- CMS 30x30 and GE1/1---
-    hsCMSNS2LC2_Eff		= new TH1F("hsCMSNS2LC2_Eff"		,"",  20, -0.5	, 19.5			); // commented by PATR
-    hsCMSNS2LC2_XY_Eff		= new TH2F("hsCMSNS2LC2_XY_Eff"		,"", 400,-200.	,200.	,400,-200.,200.	);
-    hsCMSNS2LC2_XY_Ineff	= new TH2F("hsCMSNS2LC2_XY_Ineff"	,"", 400,-200.	,200.	,400,-200.,200.	);
-    hsCMSNS2LC2_XY_Noise	= new TH2F("hsCMSNS2LC2_XY_Noise"	,"", 400,-200.	,200.	,400,-200.,200.	);
-    hsCMSNS2LC2_CLS_Eff		= new TH1F("hsCMSNS2LC2_CLS_Eff"	,"", 100,-0.5	,99.5			);
-    hsCMSNS2LC2_CLS_Noise	= new TH1F("hsCMSNS2LC2_CLS_Noise"	,"", 100,-0.5	,99.5			);
-    hsCMSNS2LC2_Distance_Eff	= new TH1F("hsCMSNS2LC2_Distance_Eff"	,"",1000, 0.	,100.			);
-    hsCMSNS2LC2_Distance_Noise	= new TH1F("hsCMSNS2LC2_Distance_Noise"	,"",1000, 0.	,100.			);
-    hsCMSNS2LC2_Residual_X 	= new TH1F("hsCMSNS2LC2_Residual_X"	,"",110,-4.	,4.			);
+    hGE11_IV_Eff		= new TH1F("hGE11_IV_Eff"		,"",  20, -0.5	, 19.5			); // commented by PATR
+    hGE11_IV_XY_Eff		= new TH2F("hGE11_IV_XY_Eff"		,"", 400,-200.	,200.	,400,-200.,200.	);
+    hGE11_IV_XY_Ineff	= new TH2F("hGE11_IV_XY_Ineff"	,"", 400,-200.	,200.	,400,-200.,200.	);
+    hGE11_IV_XY_Noise	= new TH2F("hGE11_IV_XY_Noise"	,"", 400,-200.	,200.	,400,-200.,200.	);
+    hGE11_IV_CLS_Eff		= new TH1F("hGE11_IV_CLS_Eff"	,"", 100,-0.5	,99.5			);
+    hGE11_IV_CLS_Noise	= new TH1F("hGE11_IV_CLS_Noise"	,"", 100,-0.5	,99.5			);
+    hGE11_IV_Distance_Eff	= new TH1F("hGE11_IV_Distance_Eff"	,"",1000, 0.	,100.			);
+    hGE11_IV_Distance_Noise	= new TH1F("hGE11_IV_Distance_Noise"	,"",1000, 0.	,100.			);
+    hGE11_IV_Residual_X 	= new TH1F("hGE11_IV_Residual_X"	,"",110,-4.	,4.			);
     
-    hsCMSNS2LC2_Eff		->SetTitle("CMS 30x30: Efficiency"					  	);	   
-    hsCMSNS2LC2_XY_Eff		->SetTitle("CMS 30x30: Tracker Hits with DUT Active"			  	);         
-    hsCMSNS2LC2_XY_Ineff	->SetTitle("CMS 30x30:: Tracker Hits with DUT Inactive/Not Aligned"	  	);         
-    hsCMSNS2LC2_XY_Noise	->SetTitle("CMS 30x30:: Tracker Hits with DUT Not Aligned"		  	);         
-    hsCMSNS2LC2_CLS_Eff		->SetTitle("CMS 30x30:: Cluster Size for hits aligned with tracks"	  	);         
-    hsCMSNS2LC2_CLS_Noise	->SetTitle("CMS 30x30:: Cluster Size for hits not aligned with tracks" 		);         
-    hsCMSNS2LC2_Distance_Eff	->SetTitle("CMS 30x30:: Hit-Track Distance for ALIGNED hits"		  	);         
-    hsCMSNS2LC2_Distance_Noise	->SetTitle("CMS 30x30:: Hit-Track Distance for NOT ALIGNED hits"	  	);         
-    hsCMSNS2LC2_Residual_X	->SetTitle("CMS 30x30:: X Residuals"					  	);         
+    hGE11_IV_Eff		->SetTitle("CMS 30x30: Efficiency"					  	);	   
+    hGE11_IV_XY_Eff		->SetTitle("CMS 30x30: Tracker Hits with DUT Active"			  	);         
+    hGE11_IV_XY_Ineff	->SetTitle("CMS 30x30:: Tracker Hits with DUT Inactive/Not Aligned"	  	);         
+    hGE11_IV_XY_Noise	->SetTitle("CMS 30x30:: Tracker Hits with DUT Not Aligned"		  	);         
+    hGE11_IV_CLS_Eff		->SetTitle("CMS 30x30:: Cluster Size for hits aligned with tracks"	  	);         
+    hGE11_IV_CLS_Noise	->SetTitle("CMS 30x30:: Cluster Size for hits not aligned with tracks" 		);         
+    hGE11_IV_Distance_Eff	->SetTitle("CMS 30x30:: Hit-Track Distance for ALIGNED hits"		  	);         
+    hGE11_IV_Distance_Noise	->SetTitle("CMS 30x30:: Hit-Track Distance for NOT ALIGNED hits"	  	);         
+    hGE11_IV_Residual_X	->SetTitle("CMS 30x30:: X Residuals"					  	);         
 
-    hsCMSNS2LC1_Eff		= new TH1F("hsCMSNS2LC1_Eff"		,"",  20, -0.5	, 19.5			);
-    hsCMSNS2LC1_XY_Eff		= new TH2F("hsCMSNS2LC1_XY_Eff"		,"", 400,-200.	,200.	,400,-200.,200.	);
-    hsCMSNS2LC1_XY_Ineff	= new TH2F("hsCMSNS2LC1_XY_Ineff"	,"", 400,-200.	,200.	,400,-200.,200.	);
-    hsCMSNS2LC1_XY_Noise	= new TH2F("hsCMSNS2LC1_XY_Noise"	,"", 400,-200.	,200.	,400,-200.,200.	);
-    hsCMSNS2LC1_CLS_Eff		= new TH1F("hsCMSNS2LC1_CLS_Eff"	,"", 100,-0.5	,99.5			);
-    hsCMSNS2LC1_CLS_Noise	= new TH1F("hsCMSNS2LC1_CLS_Noise"	,"", 100,-0.5	,99.5			);
-    hsCMSNS2LC1_Distance_Eff	= new TH1F("hsCMSNS2LC1_Distance_Eff"	,"",1000, 0.	,100.			);
-    hsCMSNS2LC1_Distance_Noise	= new TH1F("hsCMSNS2LC1_Distance_Noise"	,"",1000, 0.	,100.			);
-    hsCMSNS2LC1_Residual_X 	= new TH1F("hsCMSNS2LC1_Residual_X"	,"",1000,-100.	,100.			);
+    hGE11_IV_GIF_Eff		= new TH1F("hGE11_IV_GIF_Eff"		,"",  20, -0.5	, 19.5			);
+    hGE11_IV_GIF_XY_Eff		= new TH2F("hGE11_IV_GIF_XY_Eff"		,"", 400,-200.	,200.	,400,-200.,200.	);
+    hGE11_IV_GIF_XY_Ineff	= new TH2F("hGE11_IV_GIF_XY_Ineff"	,"", 400,-200.	,200.	,400,-200.,200.	);
+    hGE11_IV_GIF_XY_Noise	= new TH2F("hGE11_IV_GIF_XY_Noise"	,"", 400,-200.	,200.	,400,-200.,200.	);
+    hGE11_IV_GIF_CLS_Eff		= new TH1F("hGE11_IV_GIF_CLS_Eff"	,"", 100,-0.5	,99.5			);
+    hGE11_IV_GIF_CLS_Noise	= new TH1F("hGE11_IV_GIF_CLS_Noise"	,"", 100,-0.5	,99.5			);
+    hGE11_IV_GIF_Distance_Eff	= new TH1F("hGE11_IV_GIF_Distance_Eff"	,"",1000, 0.	,100.			);
+    hGE11_IV_GIF_Distance_Noise	= new TH1F("hGE11_IV_GIF_Distance_Noise"	,"",1000, 0.	,100.			);
+    hGE11_IV_GIF_Residual_X 	= new TH1F("hGE11_IV_GIF_Residual_X"	,"",1000,-100.	,100.			);
     
-    hsCMSNS2LC1_Eff		->SetTitle("CMS 30x30: Efficiency"					  	);	   
-    hsCMSNS2LC1_XY_Eff		->SetTitle("CMS 30x30: Tracker Hits with DUT Active"			  	);         
-    hsCMSNS2LC1_XY_Ineff	->SetTitle("CMS 30x30:: Tracker Hits with DUT Inactive/Not Aligned"	  	);         
-    hsCMSNS2LC1_XY_Noise	->SetTitle("CMS 30x30:: Tracker Hits with DUT Not Aligned"		  	);         
-    hsCMSNS2LC1_CLS_Eff		->SetTitle("CMS 30x30:: Cluster Size for hits aligned with tracks"	  	);         
-    hsCMSNS2LC1_CLS_Noise	->SetTitle("CMS 30x30:: Cluster Size for hits not aligned with tracks" 		);         
-    hsCMSNS2LC1_Distance_Eff	->SetTitle("CMS 30x30:: Hit-Track Distance for ALIGNED hits"		  	);         
-    hsCMSNS2LC1_Distance_Noise	->SetTitle("CMS 30x30:: Hit-Track Distance for NOT ALIGNED hits"	  	);         
-    hsCMSNS2LC1_Residual_X	->SetTitle("CMS 30x30:: X Residuals"					  	);         
+    hGE11_IV_GIF_Eff		->SetTitle("CMS 30x30: Efficiency"					  	);	   
+    hGE11_IV_GIF_XY_Eff		->SetTitle("CMS 30x30: Tracker Hits with DUT Active"			  	);         
+    hGE11_IV_GIF_XY_Ineff	->SetTitle("CMS 30x30:: Tracker Hits with DUT Inactive/Not Aligned"	  	);         
+    hGE11_IV_GIF_XY_Noise	->SetTitle("CMS 30x30:: Tracker Hits with DUT Not Aligned"		  	);         
+    hGE11_IV_GIF_CLS_Eff		->SetTitle("CMS 30x30:: Cluster Size for hits aligned with tracks"	  	);         
+    hGE11_IV_GIF_CLS_Noise	->SetTitle("CMS 30x30:: Cluster Size for hits not aligned with tracks" 		);         
+    hGE11_IV_GIF_Distance_Eff	->SetTitle("CMS 30x30:: Hit-Track Distance for ALIGNED hits"		  	);         
+    hGE11_IV_GIF_Distance_Noise	->SetTitle("CMS 30x30:: Hit-Track Distance for NOT ALIGNED hits"	  	);         
+    hGE11_IV_GIF_Residual_X	->SetTitle("CMS 30x30:: X Residuals"					  	);         
 
 } 
 //-------------------------------------------------------------------------------------
