@@ -47,7 +47,7 @@
 	
 	# Should be changed by user according to their path
 	#PathOfInputData=/afs/cern.ch/work/p/pbarria/public/TB_H2_OCT_2014/beamdata
-	PathOfInputData=/home/ramkrishna
+	PathOfInputData=/home/user/beamdatah4
 	
 	JustTextFile=0
 	# Some Default values
@@ -320,10 +320,23 @@ fi
 
 while getopts ":hrlfemi" opt; do
 	case $opt in
-		r )	echo -n "Initial Run Number (IRunNo) = " 
+		r )	echo "This software is configured for the H4 test beam. So, please enter run number greater then 1586."
+			echo -n "Initial Run Number (IRunNo) = " 
 			read IRunNo
+			if [ "$IRunNo" -le 1586 ]; then
+				error_exit "Please enter run number greater than 1586. This software is designed for H4 test beam. Please clone the appropriate software for H2 test beam form github."
+			fi
 			echo -n "Final Run Number (FRunNo) = " 
 			read FRunNo
+                        if [ "$FRunNo" == "" ]; then
+                                FRunNo=$IRunNo
+                        fi
+			if [ "$IRunNo" -le 1646 ] && [ "$FRunNo" -gt 1646 ]; then
+				error_exit "Initial run number and final run number both should be either greater than 1646 or less then 1646. Because of Different configurations."
+			fi
+			if [ "$IRunNo" -le 1864 ] && [ "$FRunNo" -gt 1864 ]; then
+				error_exit "Initial run number and final run number both should be either greater than 1864 or less then 1865. Because of Different configurations."
+			fi
 			if [ "$IRunNo" -gt "$FRunNo" ]; then 
 				error_exit "Initial Run Number should be Less then or equal to Final Run Number"
 			fi;;
@@ -390,9 +403,20 @@ if [ "$#" == "0" ]; then
 	error_exit "Please enter atleast one arguments from above."
 fi
 DeleteIfFileExists EfficiencyData_R${IRunNo}_R${FRunNo}.txt
-echo -e  "FileName\t\t\t\t\t\t\t\t\t GE11_IV_GIF \t GE11_IV \t\t GE11_V" > EfficiencyData_R${IRunNo}_R${FRunNo}.txt
+
 
 RunCounter=$IRunNo
+
+if [ $RunCounter -le 1646 ]; then
+	echo -e  "FileName\t\t\t\t\t\t\t\t\t\t GE11_IV_GIF \t GE11_IV \t\t GE11_V" > EfficiencyData_R${IRunNo}_R${FRunNo}.txt
+fi
+
+if [ $RunCounter -gt 1646 ]; then
+	echo -e  "FileName\t\t\t\t\t\t\t\t\t\t GE11_IV_GIF \t GE11_IV \t\t GE11_III" > EfficiencyData_R${IRunNo}_R${FRunNo}.txt
+fi
+if [ $RunCounter -gt 1684 ]; then
+	echo -e  "FileName\t\t\t\t\t\t\t\t\t\t GE11_IV_GIF \t GE11_IV \t\t GE11_IV_Frascati" > EfficiencyData_R${IRunNo}_R${FRunNo}.txt
+fi
 
 
 while [ $RunCounter -le $FRunNo ]
@@ -412,9 +436,18 @@ do
   fi
 
   # Copies the right configuration file for the present run
-#  if [ $RunCounter -le 103 ]; then
-#    cp Setting_EventBuilderVFAT_Run0103AndBelow.conf Setting_EventBuilderVFAT.conf
-#  else
+  if [ $RunCounter -le 1646 ]; then
+    cp Setting_EventBuilderVFAT_BelowRun1647.conf Setting_EventBuilderVFAT.conf
+    cp Setting_Analyzer_BelowRun1647.conf Setting_Analyzer.conf
+  fi
+  if [ $RunCounter -gt 1646 ]; then
+    cp Setting_EventBuilderVFAT_AboveRun1646.conf Setting_EventBuilderVFAT.conf
+    cp Setting_Analyzer_AboveRun1646.conf Setting_Analyzer.conf
+  fi
+  if [ $RunCounter -gt 1864 ]; then
+    cp Setting_EventBuilderVFAT_AboveRun1864.conf Setting_EventBuilderVFAT.conf
+    cp Setting_Analyzer_AboveRun1864.conf Setting_Analyzer.conf
+  fi
 #  if [ $RunCounter -le 1117 ]; then
 #    cp Setting_EventBuilderVFAT_Run1117AndBelow.conf Setting_EventBuilderVFAT.conf
 #  else  
@@ -423,6 +456,8 @@ do
 #  fi
   for f in $PathOfInputData/Run$file* 	# Stores path of File in variable f
   do
+	cat Setting_EventBuilderVFAT.conf
+	cat Setting_Analyzer.conf
 	echo "Data File : ${f}"
 	temp=$(echo $f | sed 's/.*Run//' | sed 's/.//5g')	# This greps the number of run from the path.
 								# Here sed command removes everything till *Run. and then

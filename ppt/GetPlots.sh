@@ -30,7 +30,7 @@
 #	Constants
 #	-------------------------------------------------------------------
 
-	PathOfInputNtuple=H4testBeam
+	PathOfInputNtuple=/home/user/TurboSoftware_New/EventBuilder/OutPutData
 
 	getppt=1
 	mail=0
@@ -219,6 +219,9 @@ while getopts ":hrpgm" opt; do
 			read IRunNo
 			echo -n "Final Run Number (FRunNo) = " 
 			read FRunNo
+                        if [ "$FRunNo" == "" ]; then
+                                FRunNo=$IRunNo
+                        fi
 			if [ "$IRunNo" -gt "$FRunNo" ]; then 
 				error_exit "Initial Run Number should be Less then or equal to Final Run Number"
 			fi;;
