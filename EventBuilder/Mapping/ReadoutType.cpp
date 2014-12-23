@@ -32,7 +32,7 @@ Float_t GetY(Int_t ReadoutType, Int_t channel)
 	else if (ReadoutType == 3) return 0.8*channel;
 	else if (ReadoutType == 5) return GetY_TotemT2Pads(channel);
 	else if (ReadoutType == 6) return GetY_TotemT1LG(channel);
-        else if (ReadoutType == 9) return 0.8*GetX_Cmsbig(channel);
+        else if (ReadoutType == 9) return 0.8169*GetX_Cmsbig(channel);
 	else {cout <<  "Wrong Map Type: No Type Found or Wrong Request"; return 999;}
 };
 
