@@ -481,8 +481,8 @@ do
 			echo -e "\n\n\t\tROOT FILE IS REMOVED\n\n\n"
 		fi
 		echo -e "\n\n\t\tEventBuilder started\n\n"
-		echo -e "\n\n./shrd51_EventBuilderVFAT.sh ${f}  ${PathOfOutPutData} | tee ${PathOfOutPutData}/$(basename $f)/Run${temp}_EventBuilderVFAT.log\n\n"
-		./shrd51_EventBuilderVFAT.sh $f  $PathOfOutPutData | tee $PathOfOutPutData/$(basename $f)/Run${temp}_EventBuilderVFAT.log
+		echo -e "\n\n./shrd51_EventBuilderVFAT.sh ${f} $PathOfOutPutData/$(basename $f) | tee ${PathOfOutPutData}/$(basename $f)/Run${temp}_EventBuilderVFAT.log\n\n"
+		./shrd51_EventBuilderVFAT.sh ${f}  $PathOfOutPutData/$(basename $f) | tee $PathOfOutPutData/$(basename $f)/Run${temp}_EventBuilderVFAT.log
 	fi
 	if [ "$run" == 0 -o "$run" == 2 ]; then
 		echo -e "\n\n\t\t TrackFinder started\n\n"
