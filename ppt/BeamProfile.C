@@ -36,6 +36,17 @@ int BeamProfile(TString RootFile,TString RecoFile, Int_t name)
         gStyle->SetOptStat(1111);
     	gStyle->SetPalette(1);        
 
+        TGaxis::SetMaxDigits(3);
+
+  const Int_t NRGBs = 5;
+  const Int_t NCont = 255;
+  Double_t stops[NRGBs] = { 0.00, 0.34, 0.61, 0.84, 1.00 };
+  Double_t red[NRGBs]   = { 0.00, 0.00, 0.87, 1.00, 0.51 };
+  Double_t green[NRGBs] = { 0.00, 0.81, 1.00, 0.20, 0.00 };
+  Double_t blue[NRGBs]  = { 0.51, 1.00, 0.12, 0.00, 0.00 };
+  TColor::CreateGradientColorTable(NRGBs, stops, red, green, blue, NCont);
+  gStyle->SetNumberContours(NCont);
+
 	std::vector<TFile*> InputFiles;
 	InputFiles.clear();
 	
@@ -49,17 +60,55 @@ int BeamProfile(TString RootFile,TString RecoFile, Int_t name)
 	tmpTree->AddFriend("trackertree",RecoFile);       
 
 	TCanvas *canvas_prof = new TCanvas("canvas_prof","canvas_prof",1);
+        gStyle->SetCanvasDefH(800);                                                                                                            
+        gStyle->SetCanvasDefW(700);
+	
 	canvas_prof->Divide(2,2);
-	cout<<"###################"<<endl;
 	canvas_prof->cd(1);
+
+	ofstream o_file2,o_file3;//,o_file3;
+  	//o_file1.open("hits_details.txt",std::fstream::in | std::fstream::out | std::fstream::app);
+  	o_file2.open("offset_details.txt",std::fstream::in | std::fstream::out | std::fstream::app);
+  	o_file3.open("beam_profile_details.txt",std::fstream::in | std::fstream::out | std::fstream::app);
+
+	o_file2<<"RunNo\t\tg2x\t\tg3x\t\t\tg2y\t\t\tg3y\t\t\tLC1\t\tLC2\t\tLC3"<<endl;
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	//
 	//		BEAM PROFILE PLOTS
 	////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        cmsprem = new TLatex(0,101,"CMS Preliminary");
+        cmsprem->SetTextSize(0.04);
+	
+	canvas_prof_1->SetLogz();
 	TH2F *hg1BeamProfile = new TH2F("hg1BeamProfile","Beam profile on Tracker 1", 10,0.,100.,10,0.,100.);
+	hg1BeamProfile->SetStats(0);
+	hg1BeamProfile->GetZaxis()->SetRangeUser(0,450);
 	tmpTree->Draw("g1ycl.geoposY:g1xcl.geoposX>>hg1BeamProfile","g1ycl@.GetEntries()==1 && g1xcl@.GetEntries()==1 && trackx.q>0 && tracky.q>0","colz");
 	hg1BeamProfile->GetXaxis()->SetTitle("x position in mm");
 	hg1BeamProfile->GetYaxis()->SetTitle("y position in mm");
+        cmsprem->Draw();   
+
+
+   // Highlight the maximum
+   Int_t bin = hg1BeamProfile->GetMaximumBin();
+   
+   Int_t binx, biny, binz;
+   hg1BeamProfile->GetBinXYZ(bin, binx, biny, binz);
+
+                                                                                                                                               
+   Double_t x1 = hg1BeamProfile->GetXaxis()->GetBinLowEdge(binx);
+   Double_t x2 = hg1BeamProfile->GetXaxis()->GetBinUpEdge(binx);
+   Double_t y1 = hg1BeamProfile->GetYaxis()->GetBinLowEdge(biny);
+   Double_t y2 = hg1BeamProfile->GetYaxis()->GetBinUpEdge(biny);
+
+   cout<<"x1 = "<<x1<<"\ty1 = "<<y1<<"\tx2 = "<<x2<<"\ty2 = "<<y2<<endl;
+   TBox b(x1, y1, x2, y2);
+   b.SetFillStyle(0);
+   b.SetLineWidth(2);
+   b.SetLineColor(kBlue);
+   b.Draw();
+
 
 	canvas_prof->cd(2);
 	TH2F *hg2BeamProfile = new TH2F("hg2BeamProfile","Beam profile on Tracker 2", 10,0.,100.,10,0.,100.);
@@ -67,12 +116,61 @@ int BeamProfile(TString RootFile,TString RecoFile, Int_t name)
 	hg2BeamProfile->GetXaxis()->SetTitle("x position in mm");
 	hg2BeamProfile->GetYaxis()->SetTitle("y position in mm");
 	
+       cmsprem->Draw();   
+
+   // Highlight the maximum
+   Int_t bin = hg1BeamProfile->GetMaximumBin();
+   
+   Int_t binx, biny, binz;
+   hg1BeamProfile->GetBinXYZ(bin, binx, biny, binz);
+  
+   cout<<"max bin number in X is "<<binx<<endl;
+   cout<<"max bin number in Y is "<<binx<<endl;
+   cout<<"max bin number in Z is "<<binx<<endl;
+                                                                                                                                              
+   Double_t x1 = hg1BeamProfile->GetXaxis()->GetBinLowEdge(binx);
+   Double_t x2 = hg1BeamProfile->GetXaxis()->GetBinUpEdge(binx);
+   Double_t y1 = hg1BeamProfile->GetYaxis()->GetBinLowEdge(biny);
+   Double_t y2 = hg1BeamProfile->GetYaxis()->GetBinUpEdge(biny);
+
+   cout<<" chk this x1 = "<<x1<<"\ty1 = "<<y1<<"\tx2 = "<<x2<<"\ty2 = "<<y2<<endl;
+   TBox e(x1, y1, x2, y2);
+   e.SetFillStyle(0);
+   e.SetLineWidth(2);
+   e.SetLineColor(kBlue);
+   e.Draw();
+	
+	
+
 	canvas_prof->cd(3);
 	TH2F *hg3BeamProfile = new TH2F("hg3BeamProfile","Beam profile on Tracker 3", 10,0.,100.,10,0.,100.);
 	tmpTree->Draw("g3ycl.geoposY:g3xcl.geoposX>>hg3BeamProfile","g3ycl@.GetEntries()==1 && g3xcl@.GetEntries()==1 && trackx.q>0 && tracky.q>0","colz");
 	hg3BeamProfile->GetXaxis()->SetTitle("x position in mm");
 	hg3BeamProfile->GetYaxis()->SetTitle("y position in mm");
-	
+        cmsprem->Draw();   
+
+   // Highlight the maximum
+   Int_t bin = hg1BeamProfile->GetMaximumBin();
+   
+   Int_t binx, biny, binz;
+   hg1BeamProfile->GetBinXYZ(bin, binx, biny, binz);
+
+                                                                                                                                               
+   Double_t x1 = hg1BeamProfile->GetXaxis()->GetBinLowEdge(binx);
+   Double_t x2 = hg1BeamProfile->GetXaxis()->GetBinUpEdge(binx);
+   Double_t y1 = hg1BeamProfile->GetYaxis()->GetBinLowEdge(biny);
+   Double_t y2 = hg1BeamProfile->GetYaxis()->GetBinUpEdge(biny);
+
+   cout<<"x1 = "<<x1<<"\ty1 = "<<y1<<"\tx2 = "<<x2<<"\ty2 = "<<y2<<endl;
+   TBox c(x1, y1, x2, y2);
+   c.SetFillStyle(0);
+   c.SetLineWidth(2);
+   c.SetLineColor(kBlue);
+   c.Draw();
+
+o_file3<<name<<"\t\t"<<hg1BeamProfile->GetXaxis()->GetBinCenter(binx)<<"\t\t"<<hg1BeamProfile->GetYaxis()->GetBinCenter(biny)<<endl;
+
+
 	canvas_prof->SaveAs(Form("profile_plots_for_Trackers_Run%d.pdf",name));
 	canvas_prof->Clear();
 
@@ -203,6 +301,7 @@ int BeamProfile(TString RootFile,TString RecoFile, Int_t name)
 	res5->GetXaxis()->SetTitle("#Delta x in mm");
 	res5->GetYaxis()->SetTitle("Number of entries");
 
+	o_file2<<name<<"\t\t"<<res4->GetMean()<<"\t\t"<<res5->GetMean();  
 	canvas_prof->SaveAs(Form("X_Offset_For_Run%d.pdf",name));
 	canvas_prof->Clear();
 
@@ -244,6 +343,8 @@ int BeamProfile(TString RootFile,TString RecoFile, Int_t name)
 	res10->GetXaxis()->SetTitle("#Delta y in mm");
 	res10->GetYaxis()->SetTitle("Number of entries");
 
+	o_file2<<name<<"\t\t"<<res7->GetMean()<<"\t\t"<<res8->GetMean()<<"\t\t"<<res9->GetMean()<<"\t\t"<<res19->GetMean()<<"\t\t"<<res10->GetMean()<<endl;
+	
 	canvas_prof->SaveAs(Form("Y_Offset_For_Run%d.pdf",name));
 	canvas_prof->Clear();
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -350,6 +451,8 @@ for(Int_t i=0;i<nbranch;i++){
 }
 
 o_file.close();
+o_file3.close();
+o_file2.close();
 	
 	}
 	}
