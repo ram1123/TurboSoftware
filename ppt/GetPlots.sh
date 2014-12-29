@@ -217,10 +217,17 @@ fi
 
 while getopts ":hrpgm" opt; do
 	case $opt in
-		r )	echo -n "Initial Run Number (IRunNo) = " 
+		r )	echo "Enter Run number between 33 and 1587."
+			echo -n "Initial Run Number (IRunNo) = " 
 			read IRunNo
+			if [ "$IRunNo" -lt 33 ]; then
+				error_exit "Minimum allowed Run Number is 33."
+			fi
 			echo -n "Final Run Number (FRunNo) = " 
 			read FRunNo
+			if [ "$FRunNo" == "" ]; then
+				FRunNo=$IRunNo
+			fi
 			if [ "$IRunNo" -gt "$FRunNo" ]; then 
 				error_exit "Initial Run Number should be Less then or equal to Final Run Number"
 			fi;;
