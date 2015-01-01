@@ -83,7 +83,7 @@ int BeamProfile(TString RootFile,TString RecoFile, Int_t name)
 	
 	canvas_prof_1->SetLogz();
 	TH2F *hg1BeamProfile = new TH2F("hg1BeamProfile","Beam profile on Tracker 1", 10,0.,100.,10,0.,100.);
-	hg1BeamProfile->SetStats(0);
+	//hg1BeamProfile->SetStats(0);
 	hg1BeamProfile->GetZaxis()->SetRangeUser(0,450);
 	tmpTree->Draw("g1ycl.geoposY:g1xcl.geoposX>>hg1BeamProfile","g1ycl@.GetEntries()==1 && g1xcl@.GetEntries()==1 && trackx.q>0 && tracky.q>0","colz");
 	hg1BeamProfile->GetXaxis()->SetTitle("x position in mm");
@@ -112,6 +112,7 @@ int BeamProfile(TString RootFile,TString RecoFile, Int_t name)
 
 
 	canvas_prof->cd(2);
+	canvas_prof_2->SetLogz();
 	TH2F *hg2BeamProfile = new TH2F("hg2BeamProfile","Beam profile on Tracker 2", 10,0.,100.,10,0.,100.);
 	tmpTree->Draw("g2ycl.geoposY:g2xcl.geoposX>>hg2BeamProfile","g2ycl@.GetEntries()==1 && g2xcl@.GetEntries()==1 && trackx.q>0 && tracky.q>0","colz");
 	hg2BeamProfile->GetXaxis()->SetTitle("x position in mm");
@@ -144,6 +145,7 @@ int BeamProfile(TString RootFile,TString RecoFile, Int_t name)
 	
 
 	canvas_prof->cd(3);
+	canvas_prof_3->SetLogz();
 	TH2F *hg3BeamProfile = new TH2F("hg3BeamProfile","Beam profile on Tracker 3", 10,0.,100.,10,0.,100.);
 	tmpTree->Draw("g3ycl.geoposY:g3xcl.geoposX>>hg3BeamProfile","g3ycl@.GetEntries()==1 && g3xcl@.GetEntries()==1 && trackx.q>0 && tracky.q>0","colz");
 	hg3BeamProfile->GetXaxis()->SetTitle("x position in mm");
