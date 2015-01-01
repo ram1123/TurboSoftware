@@ -429,14 +429,15 @@ for(Int_t i=0;i<nbranch;i++){
 	hprofile[i]->Fit("f1");
 	hprofile[i]->Draw();
 
-	TLegend *legend2 = new TLegend (0.3,0.9,.7,0.7,"Linear Fit");
+	TLegend *legend2 = new TLegend (0.1,0.9,.6,0.8,"Linear Fit");
+	legend2->SetTextSize(0.04);
 	TF1 *fun=hprofile[i]->GetFunction("f1");
 	cout<<"##############################################################"<<endl;
 	cout<<"chi-sqr = "<<fun->GetChisquare()<<endl;
 	cout<<"NDF = "<<fun->GetNDF()<<endl;
 	o_file<<TString(fnames[i])<<"\t\t"<<setprecision(3)<<fixed<<fun->GetChisquare()/fun->GetNDF()<<"\t\t"<<fun->GetParameter(0)<<"\t\t"<<fun->GetParError(0)<<"\t\t\t"<<fun->GetParameter(1)<<"\t\t"<<fun->GetParError(1)<<endl; 
 	cout<<"##############################################################"<<endl;
-	sprintf(message,"Total : #chi^{2}/NDF = %.2d",fun->GetChisquare()/fun->GetNDF());
+	sprintf(message,"#chi^{2}/NDF = %.2d",fun->GetChisquare()/fun->GetNDF());
 	legend2->AddEntry(fun,message);
 	sprintf(message,"p0 = %.3f #pm  %.3f",fun->GetParameter(0),fun->GetParError(0));
 	legend2->AddEntry(fun,message);
