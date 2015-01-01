@@ -391,11 +391,11 @@ for(Int_t i=0;i<nbranch;i++){
 	Canvas[i]->Divide(2,1);
 	Canvas[i]->cd(1);
 
-	hist[i] = new TH2F("H_"+TString(fnames[i]),TString(bnames[i]),100,range[k],range[k+1],100,range[k+2],range[k+3]);
-	tmpTree->Draw(TString(bnames[i])+">>H_"+TString(fnames[i]),"trackx@.GetEntries()==1 && tracky@.GetEntries()==1 && trackx.q>0 && tracky.q>0","colz");
+	hist[i] = new TH2F(TString("H_")+TString(fnames[i]),TString(bnames[i]),100,range[k],range[k+1],100,range[k+2],range[k+3]);
+	tmpTree->Draw(TString(bnames[i])+TString(">>H_")+TString(fnames[i]),"trackx@.GetEntries()==1 && tracky@.GetEntries()==1 && trackx.q>0 && tracky.q>0","colz");
 
-	hprofile[i] = new TProfile("P_"+TString(fnames[i]),TString(bnames[i]),100,range[k],range[k+1],range[k+2],range[k+3]);
-	tmpTree->Draw(TString(bnames[i])+">>P_"+TString(fnames[i]),"trackx@.GetEntries()==1 && tracky@.GetEntries()==1 && trackx.q>0 && tracky.q>0");
+	hprofile[i] = new TProfile(TString("P_")+TString(fnames[i]),TString(bnames[i]),100,range[k],range[k+1],range[k+2],range[k+3]);
+	tmpTree->Draw(TString(bnames[i])+TString(">>P_")+TString(fnames[i]),"trackx@.GetEntries()==1 && tracky@.GetEntries()==1 && trackx.q>0 && tracky.q>0");
 
 	for (int m=0; m<100; m++)
 	for (int n=0; n<100; n++)
@@ -413,7 +413,7 @@ for(Int_t i=0;i<nbranch;i++){
 //	hprofile[i]->SetMinimum(fit_Low);
 	hprofile[i]->SetStats(0);
 	hist[i]->SetStats(0);
-	hist[i]->Draw();
+	hist[i]->Draw("colz");
 
 	Canvas[i]->cd(2);
 	hprofile[i]->Draw();
