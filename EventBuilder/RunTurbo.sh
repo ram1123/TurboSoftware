@@ -333,6 +333,11 @@ while getopts ":hrlfemi" opt; do
 			if [ "$IRunNo" -gt "$FRunNo" ]; then 
 				error_exit "Initial Run Number should be Less then or equal to Final Run Number"
 			fi
+			echo -n "Enter Number of iteration to be done (default value 5) = "
+			read NoOfIte
+			if [ "$NoOfIte" == "" ]; then
+				NoOfIte=5
+			fi
 			if [ "$IRunNo" -gt 1586 ] || [ "$FRunNo" -gt 1586 ]; then
 				error_exit "Maximum allowed Run Number is 1586."
 			fi;;
@@ -426,6 +431,9 @@ do
   else
   if [ $RunCounter -le 1117 ]; then
     cp Setting_EventBuilderVFAT_Run1117AndBelow.conf Setting_EventBuilderVFAT.conf
+    #if ask_yes_no "Want to checkout Configuration file from GitHub... [y/n] "; then
+    	git checkout ConfigFiles/OffsetFlip_EventBuilderVFAT_Oct2014_H2.conf
+    #fi
   else  
     cp Setting_EventBuilderVFAT_Run1118AndUp.conf Setting_EventBuilderVFAT.conf						         
   fi 
@@ -447,6 +455,14 @@ do
 	fi	
     if [ "$JustTextFile" == 0 ]; then
 	CheckOutPutDir
+################################################################################3
+##
+##		BEGIN OF ITERATION LOOP
+##
+################################################################################3
+	#for iteNum in 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 
+	for (( iteNum=0; iteNum<=$NoOfIte; iteNum++ ))
+	do
 	if [ "$run" == 0 -o "$run" == 1 ]; then
 		if [ "$DeleteRootFile" == 1 ]; then
 			echo -e "\n\n\tls  ${PathOfOutPutData}/$(basename $f)/*.root\n\n"
@@ -470,7 +486,42 @@ do
 		./shrd51_Analyzer.sh $PathOfOutPutData/$(basename $f) $temp | tee $PathOfOutPutData/$(basename $f)/Run${temp}_Analyzer.log
 		echo -e "\n\n\t\tAnalyzer Done\n\n"
 	fi
-
+	cd /afs/cern.ch/user/r/rasharma/work/public/GEMTestBeam/TurboSoftware/ppt
+	echo "./ProducePlots.sh $IRunNo $FRunNo  $PathOfOutPutData"
+	./ProducePlots.sh $IRunNo $FRunNo  $PathOfOutPutData
+	echo "./ModifyConfig.sh ${RunCounter} $iteNum"
+	./ModifyConfig.sh ${RunCounter} $iteNum
+	echo "cp OffsetFlip_EventBuilderVFAT_Nov2012_H4.config_Run${RunCounter}_Ite${iteNum} ../EventBuilder/ConfigFiles/OffsetFlip_EventBuilderVFAT_Oct2014_H2.conf"
+	cp OffsetFlip_EventBuilderVFAT_Nov2012_H4.config_Run${RunCounter}_Ite${iteNum} ../EventBuilder/ConfigFiles/OffsetFlip_EventBuilderVFAT_Oct2014_H2.conf
+	if [ $? -ne 0 ]
+	then
+		error_exit "Could not copy config file to right place"
+	fi
+	echo "cp fit_detail_${RunCounter}.txt fit_detail_${RunCounter}_Ite${iteNum}.txt"
+	cp fit_detail_${RunCounter}.txt fit_detail_${RunCounter}_Ite${iteNum}.txt
+	if [ $? -ne 0 ]
+	then
+		error_exit "Could not copy config file to right place"
+	fi
+	echo "cp offset_details_${RunCounter}.txt offset_details_${RunCounter}_Ite${iteNum}.txt"
+	cp offset_details_${RunCounter}.txt offset_details_${RunCounter}_Ite${iteNum}.txt
+	if [ $? -ne 0 ]
+	then
+		error_exit "Could not copy config file to right place"
+	fi
+	echo "cp beam_profile_details_${RunCounter}.txt beam_profile_details_${RunCounter}_Ite${iteNum}.txt"
+	cp beam_profile_details_${RunCounter}.txt beam_profile_details_${RunCounter}_Ite${iteNum}.txt
+	if [ $? -ne 0 ]
+	then
+		error_exit "Could not copy config file to right place"
+	fi
+	cd -
+	done
+################################################################################3
+##
+##		END OF ITERATION LOOP
+##
+################################################################################3
 	LC1=$(sed -n '/Loading the trees.../{n;n;n;n;n;p;}'	$PathOfOutPutData/$(basename $f)/Run${temp}_Analyzer.log | awk '{print $1}')
 	LC2=$(sed -n '/Loading the trees.../{n;n;n;n;p;  }' $PathOfOutPutData/$(basename $f)/Run${temp}_Analyzer.log | awk '{print $1}')
 	LC3=$(sed -n '/Loading the trees.../{n;n;n;p;    }' $PathOfOutPutData/$(basename $f)/Run${temp}_Analyzer.log | awk '{print substr($1,5)}')  

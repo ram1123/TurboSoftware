@@ -54,7 +54,7 @@ int BeamProfile(TString RootFile,TString RecoFile, Int_t name)
 	InputFiles.push_back(TFile::Open(RootFile));
 
 	const Int_t NumOfFiles = InputFiles.size();
-	cout<<"Num of FIles = "<<NumOfFiles<<endl;
+	//cout<<"Num of FIles = "<<NumOfFiles<<endl;
 
 	for(unsigned int j = 0; j < InputFiles.size(); ++j ) {
 	TTree * tmpTree = (TTree*)InputFiles.at(j)->Get("rd51tbgeo");
@@ -69,10 +69,12 @@ int BeamProfile(TString RootFile,TString RecoFile, Int_t name)
 
 	ofstream o_file2,o_file3;//,o_file3;
   	//o_file1.open("hits_details.txt",std::fstream::in | std::fstream::out | std::fstream::app);
-  	o_file2.open("offset_details.txt",std::fstream::in | std::fstream::out | std::fstream::app);
-  	o_file3.open("beam_profile_details.txt",std::fstream::in | std::fstream::out | std::fstream::app);
+  	//o_file2.open("offset_details.txt",std::fstream::in | std::fstream::out | std::fstream::app);
+  	//o_file3.open("beam_profile_details.txt",std::fstream::in | std::fstream::out | std::fstream::app);
+  	o_file2.open(Form("offset_details_%d.txt",name));
+  	o_file3.open(Form("beam_profile_details_%d.txt",name));
 
-	o_file2<<"RunNo\t\tg2x\t\tg3x\t\t\tg2y\t\t\tg3y\t\t\tLC1\t\tLC2\t\tLC3"<<endl;
+	o_file2<<"RunNo\tg1x\tg2x\tg3x\tg1y\tg2y\tg3y\tLC1\tLC2\tLC3"<<endl;
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	//
 	//		BEAM PROFILE PLOTS
@@ -103,7 +105,7 @@ int BeamProfile(TString RootFile,TString RecoFile, Int_t name)
    Double_t y1 = hg1BeamProfile->GetYaxis()->GetBinLowEdge(biny);
    Double_t y2 = hg1BeamProfile->GetYaxis()->GetBinUpEdge(biny);
 
-   cout<<"x1 = "<<x1<<"\ty1 = "<<y1<<"\tx2 = "<<x2<<"\ty2 = "<<y2<<endl;
+   //cout<<"x1 = "<<x1<<"\ty1 = "<<y1<<"\tx2 = "<<x2<<"\ty2 = "<<y2<<endl;
    TBox b(x1, y1, x2, y2);
    b.SetFillStyle(0);
    b.SetLineWidth(2);
@@ -126,16 +128,16 @@ int BeamProfile(TString RootFile,TString RecoFile, Int_t name)
    Int_t binx, biny, binz;
    hg1BeamProfile->GetBinXYZ(bin, binx, biny, binz);
   
-   cout<<"max bin number in X is "<<binx<<endl;
-   cout<<"max bin number in Y is "<<binx<<endl;
-   cout<<"max bin number in Z is "<<binx<<endl;
+   //cout<<"max bin number in X is "<<binx<<endl;
+   //cout<<"max bin number in Y is "<<binx<<endl;
+   //cout<<"max bin number in Z is "<<binx<<endl;
                                                                                                                                               
    Double_t x1 = hg1BeamProfile->GetXaxis()->GetBinLowEdge(binx);
    Double_t x2 = hg1BeamProfile->GetXaxis()->GetBinUpEdge(binx);
    Double_t y1 = hg1BeamProfile->GetYaxis()->GetBinLowEdge(biny);
    Double_t y2 = hg1BeamProfile->GetYaxis()->GetBinUpEdge(biny);
 
-   cout<<" chk this x1 = "<<x1<<"\ty1 = "<<y1<<"\tx2 = "<<x2<<"\ty2 = "<<y2<<endl;
+   //cout<<" chk this x1 = "<<x1<<"\ty1 = "<<y1<<"\tx2 = "<<x2<<"\ty2 = "<<y2<<endl;
    TBox e(x1, y1, x2, y2);
    e.SetFillStyle(0);
    e.SetLineWidth(2);
@@ -164,7 +166,7 @@ int BeamProfile(TString RootFile,TString RecoFile, Int_t name)
    Double_t y1 = hg1BeamProfile->GetYaxis()->GetBinLowEdge(biny);
    Double_t y2 = hg1BeamProfile->GetYaxis()->GetBinUpEdge(biny);
 
-   cout<<"x1 = "<<x1<<"\ty1 = "<<y1<<"\tx2 = "<<x2<<"\ty2 = "<<y2<<endl;
+   //cout<<"x1 = "<<x1<<"\ty1 = "<<y1<<"\tx2 = "<<x2<<"\ty2 = "<<y2<<endl;
    TBox c(x1, y1, x2, y2);
    c.SetFillStyle(0);
    c.SetLineWidth(2);
@@ -290,21 +292,27 @@ o_file3<<name<<"\t\t"<<hg1BeamProfile->GetXaxis()->GetBinCenter(binx)<<"\t\t"<<h
 //
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	canvas_prof->Divide(2,1);
+	canvas_prof->Divide(2,2);
 
 	canvas_prof->cd(1);
+	TH1F *res41 = new TH1F("res41","Offset between g1x and g1x",20,-4,4);
+	tmpTree->Draw("g1xcl.geoposX-g1xcl.geoposX>>res41","trackx.q>0 && tracky.q>0");
+	res41->GetXaxis()->SetTitle("#Delta x in mm");
+	res41->GetYaxis()->SetTitle("Number of entries");
+
+	canvas_prof->cd(2);
 	TH1F *res4 = new TH1F("res4","Offset between g1x and g2x",20,-4,4);
 	tmpTree->Draw("g1xcl.geoposX-g2xcl.geoposX>>res4","trackx.q>0 && tracky.q>0");
 	res4->GetXaxis()->SetTitle("#Delta x in mm");
 	res4->GetYaxis()->SetTitle("Number of entries");
 
-	canvas_prof->cd(2);
+	canvas_prof->cd(3);
 	TH1F *res5 = new TH1F("res5","Offset between g1x and g3x",20,-4,4);
 	tmpTree->Draw("g1xcl.geoposX-g3xcl.geoposX>>res5","trackx.q>0 && tracky.q>0");
 	res5->GetXaxis()->SetTitle("#Delta x in mm");
 	res5->GetYaxis()->SetTitle("Number of entries");
 
-	o_file2<<name<<"\t\t"<<res4->GetMean()<<"\t\t"<<res5->GetMean();  
+	o_file2<<name<<"\t"<<res41->GetMean()<<"\t"<<res4->GetMean()<<"\t"<<res5->GetMean();  
 	canvas_prof->SaveAs(Form("X_Offset_For_Run%d.pdf",name));
 	canvas_prof->Clear();
 
@@ -346,7 +354,7 @@ o_file3<<name<<"\t\t"<<hg1BeamProfile->GetXaxis()->GetBinCenter(binx)<<"\t\t"<<h
 	res10->GetXaxis()->SetTitle("#Delta y in mm");
 	res10->GetYaxis()->SetTitle("Number of entries");
 
-	o_file2<<name<<"\t\t"<<res7->GetMean()<<"\t\t"<<res8->GetMean()<<"\t\t"<<res9->GetMean()<<"\t\t"<<res19->GetMean()<<"\t\t"<<res10->GetMean()<<endl;
+	o_file2<<"\t"<<res6->GetMean()<<"\t"<<res7->GetMean()<<"\t"<<res8->GetMean()<<"\t"<<res9->GetMean()<<"\t"<<res19->GetMean()<<"\t"<<res10->GetMean()<<endl;
 	
 	canvas_prof->SaveAs(Form("Y_Offset_For_Run%d.pdf",name));
 	canvas_prof->Clear();
@@ -384,7 +392,7 @@ Double_t fit_Low, fit_High;
 Int_t k=0;
 
 ofstream o_file;
-o_file.open("fit_detail.txt");
+o_file.open(Form("fit_detail_%d.txt",name));
 
 gStyle->SetOptStat("ne");
 
@@ -428,17 +436,17 @@ for(Int_t i=0;i<nbranch;i++){
 
 	function[i]->SetParameters(1,1);
 
-	hprofile[i]->Fit("f1");
+	hprofile[i]->Fit("f1","Q");
 	hprofile[i]->Draw();
 
 	TLegend *legend2 = new TLegend (0.1,0.9,.6,0.8,"Linear Fit");
 	legend2->SetTextSize(0.04);
 	TF1 *fun=hprofile[i]->GetFunction("f1");
-	cout<<"##############################################################"<<endl;
-	cout<<"chi-sqr = "<<fun->GetChisquare()<<endl;
-	cout<<"NDF = "<<fun->GetNDF()<<endl;
+	//cout<<"##############################################################"<<endl;
+	//cout<<"chi-sqr = "<<fun->GetChisquare()<<endl;
+	//cout<<"NDF = "<<fun->GetNDF()<<endl;
 	o_file<<TString(fnames[i])<<"\t\t"<<setprecision(3)<<fixed<<fun->GetChisquare()/fun->GetNDF()<<"\t\t"<<fun->GetParameter(0)<<"\t\t"<<fun->GetParError(0)<<"\t\t\t"<<fun->GetParameter(1)<<"\t\t"<<fun->GetParError(1)<<endl; 
-	cout<<"##############################################################"<<endl;
+	//cout<<"##############################################################"<<endl;
 	sprintf(message,"#chi^{2}/NDF = %.3f",fun->GetChisquare()/fun->GetNDF());
 	legend2->AddEntry(fun,message);
 	sprintf(message,"p0 = %.3f #pm  %.3f",fun->GetParameter(0),fun->GetParError(0));
