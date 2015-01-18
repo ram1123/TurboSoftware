@@ -333,7 +333,7 @@ while getopts ":hrlfemi" opt; do
 			if [ "$IRunNo" -gt "$FRunNo" ]; then 
 				error_exit "Initial Run Number should be Less then or equal to Final Run Number"
 			fi
-			echo -n "Enter Number of iteration to be done (default value 5) = "
+			echo -n "Enter Number of iteration to be done (default value 0) = "
 			read NoOfIte
 			if [ "$NoOfIte" == "" ]; then
 				NoOfIte=0
