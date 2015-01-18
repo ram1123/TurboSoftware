@@ -431,9 +431,9 @@ do
   else
   if [ $RunCounter -le 1117 ]; then
     cp Setting_EventBuilderVFAT_Run1117AndBelow.conf Setting_EventBuilderVFAT.conf
-    #if ask_yes_no "Want to checkout Configuration file from GitHub... [y/n] "; then
+    if ask_yes_no "Want to checkout Configuration file from GitHub... [y/n] "; then
     	git checkout ConfigFiles/OffsetFlip_EventBuilderVFAT_Oct2014_H2.conf
-    #fi
+    fi
   else  
     cp Setting_EventBuilderVFAT_Run1118AndUp.conf Setting_EventBuilderVFAT.conf						         
   fi 
