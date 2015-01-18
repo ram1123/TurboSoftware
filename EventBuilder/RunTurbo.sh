@@ -336,7 +336,7 @@ while getopts ":hrlfemi" opt; do
 			echo -n "Enter Number of iteration to be done (default value 5) = "
 			read NoOfIte
 			if [ "$NoOfIte" == "" ]; then
-				NoOfIte=5
+				NoOfIte=0
 			fi
 			if [ "$IRunNo" -gt 1586 ] || [ "$FRunNo" -gt 1586 ]; then
 				error_exit "Maximum allowed Run Number is 1586."
