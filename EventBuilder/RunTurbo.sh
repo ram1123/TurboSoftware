@@ -434,6 +434,7 @@ do
     if ask_yes_no "Want to checkout Configuration file from GitHub... [y/n] "; then
     	git checkout ConfigFiles/OffsetFlip_EventBuilderVFAT_Oct2014_H2.conf
     fi
+
   else  
     cp Setting_EventBuilderVFAT_Run1118AndUp.conf Setting_EventBuilderVFAT.conf						         
   fi 
@@ -486,6 +487,7 @@ do
 		./shrd51_Analyzer.sh $PathOfOutPutData/$(basename $f) $temp | tee $PathOfOutPutData/$(basename $f)/Run${temp}_Analyzer.log
 		echo -e "\n\n\t\tAnalyzer Done\n\n"
 	fi
+	if [ $NoOfIte != 0 ]; then
 	cd /afs/cern.ch/user/r/rasharma/work/public/GEMTestBeam/TurboSoftware/ppt
 	echo "./ProducePlots.sh $IRunNo $FRunNo  $PathOfOutPutData"
 	./ProducePlots.sh $IRunNo $FRunNo  $PathOfOutPutData
@@ -516,6 +518,7 @@ do
 		error_exit "Could not copy config file to right place"
 	fi
 	cd -
+	fi
 	done
 ################################################################################3
 ##
