@@ -173,7 +173,7 @@ int BeamProfile(TString RootFile,TString RecoFile, Int_t name)
    c.SetLineColor(kBlue);
    c.Draw();
 
-o_file3<<name<<"\t\t"<<hg1BeamProfile->GetXaxis()->GetBinCenter(binx)<<"\t\t"<<hg1BeamProfile->GetYaxis()->GetBinCenter(biny)<<endl;
+o_file3<<name<<"\t("<<hg1BeamProfile->GetXaxis()->GetBinCenter(binx)<<","<<hg1BeamProfile->GetYaxis()->GetBinCenter(biny)<<")\t("<<hg2BeamProfile->GetXaxis()->GetBinCenter(binx)<<","<<hg2BeamProfile->GetYaxis()->GetBinCenter(biny)<<")\t("<<hg3BeamProfile->GetXaxis()->GetBinCenter(binx)<<","<<hg3BeamProfile->GetYaxis()->GetBinCenter(biny)<<endl;
 
 
 	canvas_prof->SaveAs(Form("profile_plots_for_Trackers_Run%d.pdf",name));

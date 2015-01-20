@@ -515,9 +515,23 @@ do
 	cp beam_profile_details_${RunCounter}.txt beam_profile_details_${RunCounter}_Ite${iteNum}.txt
 	if [ $? -ne 0 ]
 	then
-		error_exit "Could not copy config file to right place"
+		error_exit "Could not copy beamprofile file to right place"
 	fi
 	cd -
+	LC1=$(sed -n '/Loading the trees.../{n;n;n;n;n;p;}'	$PathOfOutPutData/$(basename $f)/Run${temp}_Analyzer.log | awk '{print $1}')
+	LC2=$(sed -n '/Loading the trees.../{n;n;n;n;p;  }' $PathOfOutPutData/$(basename $f)/Run${temp}_Analyzer.log | awk '{print $1}')
+	LC3=$(sed -n '/Loading the trees.../{n;n;n;p;    }' $PathOfOutPutData/$(basename $f)/Run${temp}_Analyzer.log | awk '{print substr($1,5)}')  
+	LC1_Err=$(sed -n '/Loading the trees.../{n;n;n;n;n;p;}' $PathOfOutPutData/$(basename $f)/Run${temp}_Analyzer.log | awk '{print $2}')
+	LC2_Err=$(sed -n '/Loading the trees.../{n;n;n;n;p;  }' $PathOfOutPutData/$(basename $f)/Run${temp}_Analyzer.log | awk '{print $2}')
+	LC3_Err=$(sed -n '/Loading the trees.../{n;n;n;p;    }' $PathOfOutPutData/$(basename $f)/Run${temp}_Analyzer.log | awk '{print $2}')  
+	echo -e "$(basename $f)_Ite${iteNum}\t\t $LC1+/-$LC1_Err \t $LC2+/-$LC2_Err \t $LC3+/-$LC3_Err" >> EfficiencyData_R${IRunNo}_R${FRunNo}.txt
+
+	#echo "cp EfficiencyData_R${RunCounter}_R${RunCounter}.txt   EfficiencyData_R${RunCounter}_R${RunCounter}_Ite${iteNum}.txt "
+	#cp EfficiencyData_R${RunCounter}_R${RunCounter}.txt   EfficiencyData_R${RunCounter}_R${RunCounter}_Ite${iteNum}.txt
+	#if [ $? -ne 0 ]
+	#then
+	#	error_exit "Could not copy Efficiency file to right place"
+	#fi
 	fi
 	done
 ################################################################################3
@@ -525,13 +539,6 @@ do
 ##		END OF ITERATION LOOP
 ##
 ################################################################################3
-	LC1=$(sed -n '/Loading the trees.../{n;n;n;n;n;p;}'	$PathOfOutPutData/$(basename $f)/Run${temp}_Analyzer.log | awk '{print $1}')
-	LC2=$(sed -n '/Loading the trees.../{n;n;n;n;p;  }' $PathOfOutPutData/$(basename $f)/Run${temp}_Analyzer.log | awk '{print $1}')
-	LC3=$(sed -n '/Loading the trees.../{n;n;n;p;    }' $PathOfOutPutData/$(basename $f)/Run${temp}_Analyzer.log | awk '{print substr($1,5)}')  
-	LC1_Err=$(sed -n '/Loading the trees.../{n;n;n;n;n;p;}' $PathOfOutPutData/$(basename $f)/Run${temp}_Analyzer.log | awk '{print $2}')
-	LC2_Err=$(sed -n '/Loading the trees.../{n;n;n;n;p;  }' $PathOfOutPutData/$(basename $f)/Run${temp}_Analyzer.log | awk '{print $2}')
-	LC3_Err=$(sed -n '/Loading the trees.../{n;n;n;p;    }' $PathOfOutPutData/$(basename $f)/Run${temp}_Analyzer.log | awk '{print $2}')  
-
     fi
  
     if [ "$JustTextFile" == 1 ]; then
@@ -550,8 +557,8 @@ do
 	LC1_Err=$(sed -n '/Loading the trees.../{n;n;n;n;n;p;}' $PathOfOutPutData/$(basename $f)/Run${temp}_Analyzer.log | awk '{print $2}')
 	LC2_Err=$(sed -n '/Loading the trees.../{n;n;n;n;p;  }' $PathOfOutPutData/$(basename $f)/Run${temp}_Analyzer.log | awk '{print $2}')
 	LC3_Err=$(sed -n '/Loading the trees.../{n;n;n;p;    }' $PathOfOutPutData/$(basename $f)/Run${temp}_Analyzer.log | awk '{print $2}')  
-    fi
 	echo -e "$(basename $f)\t\t $LC1+/-$LC1_Err \t $LC2+/-$LC2_Err \t $LC3+/-$LC3_Err" >> EfficiencyData_R${IRunNo}_R${FRunNo}.txt
+    fi
 	RunCounter=$[$RunCounter+1]
   done
 done
