@@ -502,14 +502,39 @@ do
 	cd /afs/cern.ch/user/r/rasharma/work/public/GEMTestBeam/TurboSoftware/ppt
 	echo "./ProducePlots.sh $IRunNo $FRunNo  $PathOfOutPutData"
 	./ProducePlots.sh $IRunNo $FRunNo  $PathOfOutPutData
-	echo "./ModifyConfig.sh ${RunCounter} $iteNum"
-	./ModifyConfig.sh ${RunCounter} $iteNum
-	echo "cp OffsetFlip_EventBuilderVFAT_Nov2012_H4.config_Run${RunCounter}_Ite${iteNum} ../EventBuilder/ConfigFiles/OffsetFlip_EventBuilderVFAT_Oct2014_H2.conf"
-	cp OffsetFlip_EventBuilderVFAT_Nov2012_H4.config_Run${RunCounter}_Ite${iteNum} ../EventBuilder/ConfigFiles/OffsetFlip_EventBuilderVFAT_Oct2014_H2.conf
-	if [ $? -ne 0 ]
-	then
-		error_exit "Could not copy config file to right place"
+
+	# Copies the right Modification configuration file for the present run
+	if [ $RunCounter -le 103 ]; then
+		echo "./ModifyConfig_Run0103AndBelow.sh ${RunCounter} $iteNum"
+		./ModifyConfig_Run0103AndBelow.sh ${RunCounter} $iteNum
+		echo "cp OffsetFlip_EventBuilderVFAT_Oct2014_H2_Run0103AndBelow.conf_Run${RunCounter}_Ite${iteNum} ../EventBuilder/OffsetFlip_EventBuilderVFAT_Oct2014_H2_Run0103AndBelow.conf"
+		cp OffsetFlip_EventBuilderVFAT_Oct2014_H2_Run0103AndBelow.conf_Run${RunCounter}_Ite${iteNum} ../EventBuilder/ConfigFiles/OffsetFlip_EventBuilderVFAT_Oct2014_H2_Run0103AndBelow.conf
+		if [ $? -ne 0 ]
+		then
+			error_exit "Could not copy config file to right place"
+		fi
+	else
+	if [ $RunCounter -le 1117 ]; then
+		echo "./ModifyConfig_Run0103_to_Run1117.sh ${RunCounter} $iteNum"
+		./ModifyConfig_Run0103_to_Run1117.sh ${RunCounter} $iteNum
+		echo "cp OffsetFlip_EventBuilderVFAT_Oct2014_H2.conf_Run${RunCounter}_Ite${iteNum} ../EventBuilder/ConfigFiles/OffsetFlip_EventBuilderVFAT_Oct2014_H2.conf"
+		cp OffsetFlip_EventBuilderVFAT_Oct2014_H2.conf_Run${RunCounter}_Ite${iteNum} ../EventBuilder/ConfigFiles/OffsetFlip_EventBuilderVFAT_Oct2014_H2.conf
+		if [ $? -ne 0 ]
+		then
+			error_exit "Could not copy config file to right place"
+		fi
+	else  
+		echo "./ModifyConfig_Run1118AndUp.sh ${RunCounter} $iteNum"
+		./ModifyConfig_Run1118AndUp.sh ${RunCounter} $iteNum
+		echo "cp OffsetFlip_EventBuilderVFAT_Oct2014_H2_Run1118AndUp.conf_Run${RunCounter}_Ite${iteNum} ../EventBuilder/ConfigFiles/OffsetFlip_EventBuilderVFAT_Oct2014_H2_Run1118AndUp.conf"
+		cp OffsetFlip_EventBuilderVFAT_Oct2014_H2_Run1118AndUp.conf_Run${RunCounter}_Ite${iteNum} ../EventBuilder/ConfigFiles/OffsetFlip_EventBuilderVFAT_Oct2014_H2_Run1118AndUp.conf
+		if [ $? -ne 0 ]
+		then
+			error_exit "Could not copy config file to right place"
+		fi
+	fi 
 	fi
+	
 	echo "cp fit_detail_${RunCounter}.txt fit_detail_${RunCounter}_Ite${iteNum}.txt"
 	cp fit_detail_${RunCounter}.txt fit_detail_${RunCounter}_Ite${iteNum}.txt
 	if [ $? -ne 0 ]
