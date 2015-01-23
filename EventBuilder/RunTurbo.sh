@@ -338,6 +338,9 @@ while getopts ":hrlfemi" opt; do
 			if [ "$NoOfIte" == "" ]; then
 				NoOfIte=0
 			fi
+			if ask_yes_no "Want to checkout Configuration file from GitHub... [y/n] "; then
+				checkOutConfig=1
+			fi
 			if [ "$IRunNo" -gt 1586 ] || [ "$FRunNo" -gt 1586 ]; then
 				error_exit "Maximum allowed Run Number is 1586."
 			fi;;
@@ -428,15 +431,23 @@ do
   # Copies the right configuration file for the present run
   if [ $RunCounter -le 103 ]; then
     cp Setting_EventBuilderVFAT_Run0103AndBelow.conf Setting_EventBuilderVFAT.conf
+    if [ "$checkOutConfig" == 1 ]; then
+	echo "Checking Out config file from GitHub...."
+    	git checkout ConfigFiles/OffsetFlip_EventBuilderVFAT_Oct2014_H2_Run0103AndBelow.conf
+    fi
   else
   if [ $RunCounter -le 1117 ]; then
     cp Setting_EventBuilderVFAT_Run1117AndBelow.conf Setting_EventBuilderVFAT.conf
-    if ask_yes_no "Want to checkout Configuration file from GitHub... [y/n] "; then
+    if [ "$checkOutConfig" == 1 ]; then
+	echo "Checking Out config file from GitHub...."
     	git checkout ConfigFiles/OffsetFlip_EventBuilderVFAT_Oct2014_H2.conf
     fi
-
   else  
     cp Setting_EventBuilderVFAT_Run1118AndUp.conf Setting_EventBuilderVFAT.conf						         
+    if [ "$checkOutConfig" == 1 ]; then
+	echo "Checking Out config file from GitHub...."
+    	git checkout ConfigFiles/OffsetFlip_EventBuilderVFAT_Oct2014_H2_Run1118AndUp.conf
+    fi
   fi 
   fi
   for f in $PathOfInputData/Run$file* 	# Stores path of File in variable f
@@ -511,11 +522,23 @@ do
 	then
 		error_exit "Could not copy config file to right place"
 	fi
+	if [ $iteNum == 0 ]
+	then
+		cat offset_details_${RunCounter}_Ite${iteNum}.txt > offset_details_${RunCounter}_Final.txt
+	else
+		grep "${RunCounter}" offset_details_${RunCounter}_Ite${iteNum}.txt >> offset_details_${RunCounter}_Final.txt
+	fi
 	echo "cp beam_profile_details_${RunCounter}.txt beam_profile_details_${RunCounter}_Ite${iteNum}.txt"
 	cp beam_profile_details_${RunCounter}.txt beam_profile_details_${RunCounter}_Ite${iteNum}.txt
 	if [ $? -ne 0 ]
 	then
 		error_exit "Could not copy beamprofile file to right place"
+	fi
+	if [ $iteNum == 0 ]
+	then
+		cat beam_profile_details_${RunCounter}.txt  > beam_profile_details_${RunCounter}_Final.txt
+	else
+		grep "${RunCounter}" beam_profile_details_${RunCounter}.txt >> beam_profile_details_${RunCounter}_Final.txt
 	fi
 	cd -
 	LC1=$(sed -n '/Loading the trees.../{n;n;n;n;n;p;}'	$PathOfOutPutData/$(basename $f)/Run${temp}_Analyzer.log | awk '{print $1}')
@@ -524,7 +547,7 @@ do
 	LC1_Err=$(sed -n '/Loading the trees.../{n;n;n;n;n;p;}' $PathOfOutPutData/$(basename $f)/Run${temp}_Analyzer.log | awk '{print $2}')
 	LC2_Err=$(sed -n '/Loading the trees.../{n;n;n;n;p;  }' $PathOfOutPutData/$(basename $f)/Run${temp}_Analyzer.log | awk '{print $2}')
 	LC3_Err=$(sed -n '/Loading the trees.../{n;n;n;p;    }' $PathOfOutPutData/$(basename $f)/Run${temp}_Analyzer.log | awk '{print $2}')  
-	echo -e "$(basename $f)_Ite${iteNum}\t\t $LC1+/-$LC1_Err \t $LC2+/-$LC2_Err \t $LC3+/-$LC3_Err" >> EfficiencyData_R${IRunNo}_R${FRunNo}.txt
+	echo -e "$(basename $f)_Ite${iteNum}\t $LC1+/-$LC1_Err \t $LC2+/-$LC2_Err \t $LC3+/-$LC3_Err" >> EfficiencyData_R${IRunNo}_R${FRunNo}.txt
 
 	#echo "cp EfficiencyData_R${RunCounter}_R${RunCounter}.txt   EfficiencyData_R${RunCounter}_R${RunCounter}_Ite${iteNum}.txt "
 	#cp EfficiencyData_R${RunCounter}_R${RunCounter}.txt   EfficiencyData_R${RunCounter}_R${RunCounter}_Ite${iteNum}.txt
