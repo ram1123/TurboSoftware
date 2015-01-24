@@ -7,7 +7,7 @@
 #	directory. Also it will create a text file in which we can find the 
 #	Efficiencies for various run..
 #
-#	Author: 2014, Ramkrishna Sharma,<ramkrishna.sharma71@gmail.com>; Brian Dorney, <brian.l.dorney@cern.ch>
+#	Author: 2014, Ramkrishna Sharma,<ramkrishna.sharma71@gmail.com>
 #		
 #	The structure of the program is created by a script prodived on LinuxCommand.org
 #
@@ -572,7 +572,7 @@ do
 	LC1_Err=$(sed -n '/Loading the trees.../{n;n;n;n;n;p;}' $PathOfOutPutData/$(basename $f)/Run${temp}_Analyzer.log | awk '{print $2}')
 	LC2_Err=$(sed -n '/Loading the trees.../{n;n;n;n;p;  }' $PathOfOutPutData/$(basename $f)/Run${temp}_Analyzer.log | awk '{print $2}')
 	LC3_Err=$(sed -n '/Loading the trees.../{n;n;n;p;    }' $PathOfOutPutData/$(basename $f)/Run${temp}_Analyzer.log | awk '{print $2}')  
-	echo -e "$(basename $f)_Ite${iteNum}\t $LC1+/-$LC1_Err \t $LC2+/-$LC2_Err \t $LC3+/-$LC3_Err" >> EfficiencyData_R${IRunNo}_R${FRunNo}.txt
+	echo -e "$(basename $f)_Ite${iteNum}\t $LC1+/-$LC1_Err \t $LC2+/-$LC2_Err \t $LC3+/-$LC3_Err" >> EfficiencyData_R${IRunNo}_R${FRunNo}_WithIteration.txt
 
 	#echo "cp EfficiencyData_R${RunCounter}_R${RunCounter}.txt   EfficiencyData_R${RunCounter}_R${RunCounter}_Ite${iteNum}.txt "
 	#cp EfficiencyData_R${RunCounter}_R${RunCounter}.txt   EfficiencyData_R${RunCounter}_R${RunCounter}_Ite${iteNum}.txt
@@ -605,8 +605,8 @@ do
 	LC1_Err=$(sed -n '/Loading the trees.../{n;n;n;n;n;p;}' $PathOfOutPutData/$(basename $f)/Run${temp}_Analyzer.log | awk '{print $2}')
 	LC2_Err=$(sed -n '/Loading the trees.../{n;n;n;n;p;  }' $PathOfOutPutData/$(basename $f)/Run${temp}_Analyzer.log | awk '{print $2}')
 	LC3_Err=$(sed -n '/Loading the trees.../{n;n;n;p;    }' $PathOfOutPutData/$(basename $f)/Run${temp}_Analyzer.log | awk '{print $2}')  
-	echo -e "$(basename $f)\t\t $LC1+/-$LC1_Err \t $LC2+/-$LC2_Err \t $LC3+/-$LC3_Err" >> EfficiencyData_R${IRunNo}_R${FRunNo}.txt
     fi
+	echo -e "$(basename $f)\t ${LC1}+/-${LC1_Err} \t ${LC2}+/-${LC2_Err} \t ${LC3}+/-${LC3_Err}" >> EfficiencyData_R${IRunNo}_R${FRunNo}.txt
 	RunCounter=$[$RunCounter+1]
   done
 done
