@@ -501,7 +501,7 @@ do
 		echo -e "\n\n\t\tAnalyzer Done\n\n"
 	fi
 	if [ $NoOfIte != 0 ]; then
-	cd /afs/cern.ch/user/r/rasharma/work/public/GEMTestBeam/TurboSoftware/ppt
+	cd ../ppt
 	echo "./ProducePlots.sh $IRunNo $FRunNo  $PathOfOutPutData"
 	./ProducePlots.sh $IRunNo $FRunNo  $PathOfOutPutData
 
