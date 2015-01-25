@@ -407,7 +407,9 @@ if [ "$#" == "0" ]; then
 	error_exit "Please enter atleast one arguments from above."
 fi
 DeleteIfFileExists EfficiencyData_R${IRunNo}_R${FRunNo}.txt
+DeleteIfFileExists EfficiencyData_R${IRunNo}_R${FRunNo}_WithIteration.txt
 echo -e  "FileName\t\t\t\t\t\t\t\t\t GE11_IV_GIF \t GE11_IV \t\t GE11_V" > EfficiencyData_R${IRunNo}_R${FRunNo}.txt
+echo -e  "FileName\t\t\t\t\t\t\t\t\t GE11_IV_GIF \t GE11_IV \t\t GE11_V" > EfficiencyData_R${IRunNo}_R${FRunNo}_WithIteration.txt
 
 RunCounter=$IRunNo
 
