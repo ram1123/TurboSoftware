@@ -406,6 +406,9 @@ if [ "$#" == "0" ]; then
 	helptext
 	error_exit "Please enter atleast one arguments from above."
 fi
+#if [ "$2" == "-r" -o "$2" == "-h" ]; then
+#	error_exit "First argument should be -r  or -h."
+#fi
 DeleteIfFileExists EfficiencyData_R${IRunNo}_R${FRunNo}.txt
 DeleteIfFileExists EfficiencyData_R${IRunNo}_R${FRunNo}_WithIteration.txt
 echo -e  "FileName\t\t\t\t\t\t\t\t\t GE11_IV_GIF \t GE11_IV \t\t GE11_V" > EfficiencyData_R${IRunNo}_R${FRunNo}.txt
@@ -483,6 +486,8 @@ do
 			rm $PathOfOutPutData/$(basename $f)/*.root
 			echo -e "\n\n\t\tROOT FILE IS REMOVED\n\n\n"
 		fi
+		echo -e "\n\n\t\tCleaning Presetn Directory\n\n"
+		./clean.sh
 		echo -e "\n\n\t\tEventBuilder started\n\n"
 		echo -e "\n\n./shrd51_EventBuilderVFAT.sh ${f}  ${PathOfOutPutData}/$(basename $f) | tee ${PathOfOutPutData}/$(basename $f)/Run${temp}_EventBuilderVFAT.log\n\n"
 		#./shrd51_EventBuilderVFAT.sh $f  $PathOfOutPutData | tee $PathOfOutPutData/$(basename $f)/Run${temp}_EventBuilderVFAT.log
@@ -616,29 +621,29 @@ done
 
 echo "file(s) of interest:" 
 
-rm FilesToAnalyze.txt
-echo "EfficiencyData_R${IRunNo}_R${FRunNo}.txt" >> FilesToAnalyze.txt
+rm FilesToAnalyze/Eff/FilesToAnalyze.txt
+echo "EfficiencyData_R${IRunNo}_R${FRunNo}.txt" >> FilesToAnalyze/Eff/FilesToAnalyze.txt
 
 
 while [ $ILat -le $FLat ]
 do
-  rm EfficiencyData_R${IRunNo}_R${FRunNo}_Lat${ILat}.txt
-  grep "Lat$ILat" EfficiencyData_R${IRunNo}_R${FRunNo}.txt >> EfficiencyData_R${IRunNo}_R${FRunNo}_Lat${ILat}.txt
+  rm FilesToAnalyze/Eff/EfficiencyData_R${IRunNo}_R${FRunNo}_Lat${ILat}.txt
+  grep "Lat$ILat" EfficiencyData_R${IRunNo}_R${FRunNo}.txt >> FilesToAnalyze/Eff/EfficiencyData_R${IRunNo}_R${FRunNo}_Lat${ILat}.txt
 
-  outputFile=EfficiencyData_R${IRunNo}_R${FRunNo}_Lat${ILat}.txt
-  outputFile_short=EfficiencyData_R${IRunNo}_R${FRunNo}_Lat${ILat}.txt
+  outputFile=FilesToAnalyze/Eff/EfficiencyData_R${IRunNo}_R${FRunNo}_Lat${ILat}.txt
+  outputFile_short=FilesToAnalyze/Eff/EfficiencyData_R${IRunNo}_R${FRunNo}_Lat${ILat}.txt
 
   if [ $(stat -c%s "$outputFile") -le 46 ]; then
     rm $outputFile
   else
     echo "gedit $outputFile"
-    echo "EfficiencyData_R${IRunNo}_R${FRunNo}_Lat${ILat}.txt" >> FilesToAnalyze.txt
+    echo "EfficiencyData_R${IRunNo}_R${FRunNo}_Lat${ILat}.txt" >> FilesToAnalyze/Eff/FilesToAnalyze.txt
   fi
   
   ILat=$[$ILat+1]
 done
 
-cp FilesToAnalyze.txt FilesToAnalyze_R${IRunNo}_R${FRunNo}.txt
+cp FilesToAnalyze/Eff/FilesToAnalyze.txt FilesToAnalyze/Eff/FilesToAnalyze_R${IRunNo}_R${FRunNo}.txt
 
 if [ "$mail" == 1 ]; then
 	echo "mailing the Efficiency files.... "

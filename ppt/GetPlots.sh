@@ -33,7 +33,8 @@
 	#PathOfInputNtuple=/afs/cern.ch/work/p/pbarria/public/TB_H2_OCT_2014/beamdata
 	#PathOfInputNtuple=/afs/cern.ch/work/t/tmaersch/public/H2Oct14_Ntuples_Pitch08
 	#PathOfInputNtuple=/afs/cern.ch/user/r/rasharma/work/public/GEMTestBeam/TurboSoftware/EventBuilder/OutPutData
-	PathOfInputNtuple=/afs/cern.ch/user/r/rasharma/work/public/GEMTestBeam/Ntuples/H4NovDec14_Ntuples_Rotation_Pitch08
+	#PathOfInputNtuple=/afs/cern.ch/user/r/rasharma/work/public/GEMTestBeam/Ntuples/H4NovDec14_Ntuples_Rotation_Pitch08
+	PathOfInputNtuple=../EventBuilder/OutPutData
 
 	getppt=1
 	mail=0
