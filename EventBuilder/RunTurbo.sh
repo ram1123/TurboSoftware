@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash 
 
 #	-------------------------------------------------------------------
 #
@@ -33,6 +33,10 @@
 #
 #	Revision History:
 #
+#	24/02/2014	Trying to Change the iterative alingment part such that it 
+#			will automatically decide when to exit the loop.
+#			for run number b/w 103 and 1117 its done but need to modify for
+#			others.
 #	10/26/2014	File created based on the old script runfull_v9.sh
 #	10/27/2014	Added option -e in the script and some default values.
 #	11/02/2014	added option -t in the script 
@@ -47,11 +51,12 @@
 	
 	# Should be changed by user according to their path
 	PathOfInputData=/afs/cern.ch/work/p/pbarria/public/TB_H2_OCT_2014/beamdata
+	#PathOfInputData=/afs/cern.ch/user/r/rasharma/work/public/GEMTestBeam/H2SepOct14_RawData/TURBO_data
 	
 	JustTextFile=0
 	# Some Default values
-	IRunNo=1120
-	FRunNo=1120
+	IRunNo=411
+	FRunNo=411
 	ILat=10
 	FLat=30
 	run=0
@@ -333,14 +338,14 @@ while getopts ":hrlfemi" opt; do
 			if [ "$IRunNo" -gt "$FRunNo" ]; then 
 				error_exit "Initial Run Number should be Less then or equal to Final Run Number"
 			fi
-			echo -n "Enter Number of iteration to be done (default value 0) = "
-			read NoOfIte
-			if [ "$NoOfIte" == "" ]; then
-				NoOfIte=0
-			fi
-			if ask_yes_no "Want to checkout Configuration file from GitHub... [y/n] "; then
-				checkOutConfig=1
-			fi
+			#echo -n "Enter Number of iteration to be done (default value 0) = "
+			#read NoOfIte
+			#if [ "$NoOfIte" == "" ]; then
+			#	NoOfIte=0
+			#fi
+			#if ask_yes_no "Want to checkout Configuration file from GitHub... [y/n] "; then
+			#	checkOutConfig=1
+			#fi
 			if [ "$IRunNo" -gt 1586 ] || [ "$FRunNo" -gt 1586 ]; then
 				error_exit "Maximum allowed Run Number is 1586."
 			fi;;
@@ -436,23 +441,17 @@ do
   # Copies the right configuration file for the present run
   if [ $RunCounter -le 103 ]; then
     cp Setting_EventBuilderVFAT_Run0103AndBelow.conf Setting_EventBuilderVFAT.conf
-    if [ "$checkOutConfig" == 1 ]; then
-	echo "Checking Out config file from GitHub...."
-    	git checkout ConfigFiles/OffsetFlip_EventBuilderVFAT_Oct2014_H2_Run0103AndBelow.conf
-    fi
+    echo "Checking Out config file from GitHub...."
+    git checkout ConfigFiles/OffsetFlip_EventBuilderVFAT_Oct2014_H2_Run0103AndBelow.conf
   else
   if [ $RunCounter -le 1117 ]; then
     cp Setting_EventBuilderVFAT_Run1117AndBelow.conf Setting_EventBuilderVFAT.conf
-    if [ "$checkOutConfig" == 1 ]; then
-	echo "Checking Out config file from GitHub...."
-    	git checkout ConfigFiles/OffsetFlip_EventBuilderVFAT_Oct2014_H2.conf
-    fi
+    echo "Checking Out config file from GitHub...."
+    git checkout ConfigFiles/OffsetFlip_EventBuilderVFAT_Oct2014_H2.conf
   else  
     cp Setting_EventBuilderVFAT_Run1118AndUp.conf Setting_EventBuilderVFAT.conf						         
-    if [ "$checkOutConfig" == 1 ]; then
-	echo "Checking Out config file from GitHub...."
-    	git checkout ConfigFiles/OffsetFlip_EventBuilderVFAT_Oct2014_H2_Run1118AndUp.conf
-    fi
+    echo "Checking Out config file from GitHub...."
+    git checkout ConfigFiles/OffsetFlip_EventBuilderVFAT_Oct2014_H2_Run1118AndUp.conf
   fi 
   fi
   for f in $PathOfInputData/Run$file* 	# Stores path of File in variable f
@@ -477,8 +476,9 @@ do
 ##		BEGIN OF ITERATION LOOP
 ##
 ################################################################################3
-	#for iteNum in 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 
-	for (( iteNum=0; iteNum<=$NoOfIte; iteNum++ ))
+	iterating=0
+	iteNum=0
+	while [ $iterating -lt 1 ]
 	do
 	if [ "$run" == 0 -o "$run" == 1 ]; then
 		if [ "$DeleteRootFile" == 1 ]; then
@@ -487,7 +487,7 @@ do
 			echo -e "\n\n\t\tROOT FILE IS REMOVED\n\n\n"
 		fi
 		echo -e "\n\n\t\tCleaning Presetn Directory\n\n"
-		./clean.sh
+		#./clean.sh
 		echo -e "\n\n\t\tEventBuilder started\n\n"
 		echo -e "\n\n./shrd51_EventBuilderVFAT.sh ${f}  ${PathOfOutPutData}/$(basename $f) | tee ${PathOfOutPutData}/$(basename $f)/Run${temp}_EventBuilderVFAT.log\n\n"
 		#./shrd51_EventBuilderVFAT.sh $f  $PathOfOutPutData | tee $PathOfOutPutData/$(basename $f)/Run${temp}_EventBuilderVFAT.log
@@ -505,7 +505,6 @@ do
 		./shrd51_Analyzer.sh $PathOfOutPutData/$(basename $f) $temp | tee $PathOfOutPutData/$(basename $f)/Run${temp}_Analyzer.log
 		echo -e "\n\n\t\tAnalyzer Done\n\n"
 	fi
-	if [ $NoOfIte != 0 ]; then
 	cd ../ppt
 	echo "./ProducePlots.sh $IRunNo $FRunNo  $PathOfOutPutData"
 	./ProducePlots.sh $IRunNo $FRunNo  $PathOfOutPutData
@@ -572,6 +571,25 @@ do
 	else
 		grep "${RunCounter}" beam_profile_details_${RunCounter}.txt >> beam_profile_details_${RunCounter}_Final.txt
 	fi
+	echo "##########################################################################RAM###################################"
+	cat fit_detail_${RunCounter}_Ite${iteNum}.txt
+	echo "##########################################################################RAM###################################"
+	if [ $RunCounter -le 103 ]; then
+		if [ $(bc <<< "$(awk 'NR==2{print $3}' fit_detail_${RunCounter}_Ite${iteNum}.txt) <= 0.001") -eq 1 -a  $(bc <<< "$(awk 'NR==3{print $3}' fit_detail_${RunCounter}_Ite${iteNum}.txt) <= 0.001") -eq 1 -a  $(bc <<< "$(awk 'NR==5{print $3}' fit_detail_${RunCounter}_Ite${iteNum}.txt) <= 0.001") -eq 1   -a  $(bc <<< "$(awk 'NR==6{print $3}' fit_detail_${RunCounter}_Ite${iteNum}.txt) <= 0.001") -eq 1   -a  $(bc <<< "$(awk 'NR==8{print $3}' fit_detail_${RunCounter}_Ite${iteNum}.txt) <= 0.001") -eq 1   -a  $(bc <<< "$(awk 'NR==9{print $3}' fit_detail_${RunCounter}_Ite${iteNum}.txt) <= 0.001") -eq 1   -a  $(bc <<< "$(awk 'NR==12{print $3}' fit_detail_${RunCounter}_Ite${iteNum}.txt) <= 0.001") -eq 1  ]; then
+			echo "Number of iteration taken to align detectors is $iteNum"
+			iterating=1
+	else
+	if [ $RunCounter -le 1117 ]; then
+		if [ $(bc <<< "$(awk 'NR==2{print $3}' fit_detail_${RunCounter}_Ite${iteNum}.txt) <= 0.001") -eq 1 -a  $(bc <<< "$(awk 'NR==3{print $3}' fit_detail_${RunCounter}_Ite${iteNum}.txt) <= 0.001") -eq 1 -a  $(bc <<< "$(awk 'NR==5{print $3}' fit_detail_${RunCounter}_Ite${iteNum}.txt) <= 0.001") -eq 1   -a  $(bc <<< "$(awk 'NR==6{print $3}' fit_detail_${RunCounter}_Ite${iteNum}.txt) <= 0.001") -eq 1   -a  $(bc <<< "$(awk 'NR==8{print $3}' fit_detail_${RunCounter}_Ite${iteNum}.txt) <= 0.001") -eq 1   -a  $(bc <<< "$(awk 'NR==9{print $3}' fit_detail_${RunCounter}_Ite${iteNum}.txt) <= 0.001") -eq 1   -a  $(bc <<< "$(awk 'NR==12{print $3}' fit_detail_${RunCounter}_Ite${iteNum}.txt) <= 0.001") -eq 1  ]; then
+			echo "Number of iteration taken to align detectors is $iteNum"
+			iterating=1
+		else  
+			if [ $(bc <<< "$(awk 'NR==2{print $3}' fit_detail_${RunCounter}_Ite${iteNum}.txt) <= 0.001") -eq 1 -a  $(bc <<< "$(awk 'NR==3{print $3}' fit_detail_${RunCounter}_Ite${iteNum}.txt) <= 0.001") -eq 1 -a  $(bc <<< "$(awk 'NR==5{print $3}' fit_detail_${RunCounter}_Ite${iteNum}.txt) <= 0.001") -eq 1   -a  $(bc <<< "$(awk 'NR==6{print $3}' fit_detail_${RunCounter}_Ite${iteNum}.txt) <= 0.001") -eq 1   -a  $(bc <<< "$(awk 'NR==8{print $3}' fit_detail_${RunCounter}_Ite${iteNum}.txt) <= 0.001") -eq 1   -a  $(bc <<< "$(awk 'NR==9{print $3}' fit_detail_${RunCounter}_Ite${iteNum}.txt) <= 0.001") -eq 1   -a  $(bc <<< "$(awk 'NR==12{print $3}' fit_detail_${RunCounter}_Ite${iteNum}.txt) <= 0.001") -eq 1  ]; then
+			echo "Number of iteration taken to align detectors is $iteNum"
+			iterating=1
+		fi
+	fi
+	iteNum=$((iteNum+1))
 	cd -
 	LC1=$(sed -n '/Loading the trees.../{n;n;n;n;n;p;}'	$PathOfOutPutData/$(basename $f)/Run${temp}_Analyzer.log | awk '{print $1}')
 	LC2=$(sed -n '/Loading the trees.../{n;n;n;n;p;  }' $PathOfOutPutData/$(basename $f)/Run${temp}_Analyzer.log | awk '{print $1}')
@@ -580,13 +598,6 @@ do
 	LC2_Err=$(sed -n '/Loading the trees.../{n;n;n;n;p;  }' $PathOfOutPutData/$(basename $f)/Run${temp}_Analyzer.log | awk '{print $2}')
 	LC3_Err=$(sed -n '/Loading the trees.../{n;n;n;p;    }' $PathOfOutPutData/$(basename $f)/Run${temp}_Analyzer.log | awk '{print $2}')  
 	echo -e "$(basename $f)_Ite${iteNum}\t $LC1+/-$LC1_Err \t $LC2+/-$LC2_Err \t $LC3+/-$LC3_Err" >> EfficiencyData_R${IRunNo}_R${FRunNo}_WithIteration.txt
-
-	#echo "cp EfficiencyData_R${RunCounter}_R${RunCounter}.txt   EfficiencyData_R${RunCounter}_R${RunCounter}_Ite${iteNum}.txt "
-	#cp EfficiencyData_R${RunCounter}_R${RunCounter}.txt   EfficiencyData_R${RunCounter}_R${RunCounter}_Ite${iteNum}.txt
-	#if [ $? -ne 0 ]
-	#then
-	#	error_exit "Could not copy Efficiency file to right place"
-	#fi
 	fi
 	done
 ################################################################################3
