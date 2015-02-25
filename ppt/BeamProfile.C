@@ -467,6 +467,9 @@ o_file3<<name<<"\t("<<Profile_Tracker_1->GetXaxis()->GetBinCenter(binx)<<","<<Pr
 
 	canvas_prof->SaveAs(Form("Space_Resolution_For_Run%d.pdf",name));
 	canvas_prof->Clear();
+	delete gDirectory->FindObject("GE11_IV_GIF");
+	delete gDirectory->FindObject("GE11_IV");
+	delete gDirectory->FindObject("GE11_V");
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //		Offset Plots
 //
@@ -538,6 +541,10 @@ o_file3<<name<<"\t("<<Profile_Tracker_1->GetXaxis()->GetBinCenter(binx)<<","<<Pr
 	o_file2<<name<<"\t"<<Trk1_Trk2->GetMean()<<"\t"<<Trk1_Trk3->GetMean()<<"\t"<<Trk2_Trk3->GetMean();  
 	canvas_prof->SaveAs(Form("X_Offset_For_Run%d.pdf",name));
 	canvas_prof->Clear();
+
+	delete gDirectory->FindObject("Trk1_Trk2");
+	delete gDirectory->FindObject("Trk1_Trk3");
+	delete gDirectory->FindObject("Trk2_Trk3");
 
 	canvas_prof->Divide(3,2);
 
@@ -667,6 +674,14 @@ o_file3<<name<<"\t("<<Profile_Tracker_1->GetXaxis()->GetBinCenter(binx)<<","<<Pr
 	canvas_prof->SaveAs(Form("Y_Offset_For_Run%d.pdf",name));
 	canvas_prof->Clear();
 
+	delete gDirectory->FindObject("Trk1_Trk2");
+	delete gDirectory->FindObject("Trk1_Trk3");
+	delete gDirectory->FindObject("Trk2_Trk3");
+	delete gDirectory->FindObject("Trk1_GE11_IV_GIF");
+	delete gDirectory->FindObject("Trk1_GE11_IV");
+	delete gDirectory->FindObject("Trk1_GE11_V");
+
+
 	canvas_prof->Divide(3,1);
 
 	canvas_prof->cd(1);
@@ -689,65 +704,148 @@ o_file3<<name<<"\t("<<Profile_Tracker_1->GetXaxis()->GetBinCenter(binx)<<","<<Pr
 
 	canvas_prof->SaveAs(Form("GEM_Offsets_For_Run%d.pdf",name));
 	canvas_prof->Clear();
+
+	delete gDirectory->FindObject("Offset1");
+	delete gDirectory->FindObject("Offset2");
+	delete gDirectory->FindObject("Offset3");
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //		CORRELATION PLOTS
 //
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 const Int_t nbranch = 15;
-char *bnames[nbranch]={	"g2xcl.geoposX:g1xcl.geoposX",	"g3xcl.geoposX:g1xcl.geoposX", "g3xcl.geoposX:g2xcl.geoposX",
-			"g2ycl.geoposY:g1ycl.geoposY",	"g3ycl.geoposY:g1ycl.geoposY",	"g3ycl.geoposY:g2ycl.geoposY",
+char *bnames[nbranch]={	"g2xcl.geoposX:g1xcl.geoposX",	"g2ycl.geoposY:g1ycl.geoposY",  
+			"g3xcl.geoposX:g1xcl.geoposX",	"g3ycl.geoposY:g1ycl.geoposY",	
 			"sCMSNS2LC1.geoposY:g1ycl.geoposY",	"sCMSNS2LC2.geoposY:g1ycl.geoposY",
+			"sCMSNS2LC3.geoposY:g1ycl.geoposY",	
+
+			"g3ycl.geoposY:g2ycl.geoposY",	"g3xcl.geoposX:g2xcl.geoposX",
 			"sCMSNS2LC1.geoposY:g1xcl.geoposX",	"sCMSNS2LC2.geoposY:g1xcl.geoposX",
-			"sCMSNS2LC3.geoposY:g1ycl.geoposY",	"sCMSNS2LC3.geoposY:g1xcl.geoposX",
-			"sCMSNS2LC2.geoposY:sCMSNS2LC1.geoposY", "sCMSNS2LC3.geoposY:sCMSNS2LC1.geoposY",
-			"sCMSNS2LC3.geoposY:sCMSNS2LC2.geoposY"
+			"sCMSNS2LC3.geoposY:g1xcl.geoposX",	
+
+			"sCMSNS2LC2.geoposY:sCMSNS2LC1.geoposY",	"sCMSNS2LC3.geoposY:sCMSNS2LC1.geoposY",
+			"sCMSNS2LC3.geoposY:sCMSNS2LC2.geoposY",
 			};
 
-char *fnames[nbranch] = {"Trk1_X_vs_Trk2_X",	"Trk1_X_vs_Trk3_X", "Trk2_X_vs_Trk3_X",
-			"Trk1_Y_vs_Trk2_Y",	"Trk1_Y_vs_Trk3_Y",	"Trk2_Y_vs_Trk3_Y",
+char *fnames[nbranch] = {"Trk1_X_vs_Trk2_X",	"Trk1_Y_vs_Trk2_Y",
+			"Trk1_X_vs_Trk3_X",	"Trk1_Y_vs_Trk3_Y",
 			"Trk1_Y_vs_GE11_IV_GIF",	"Trk1_Y_vs_GE11_IV",
+			"Trk1_Y_vs_GE11_V",		
+			
+			"Trk2_Y_vs_Trk3_Y",	"Trk2_X_vs_Trk3_X",
 			"Trk1_X_vs_GE11_IV_GIF",	"Trk1_X_vs_GE11_IV",
-			"Trk1_Y_vs_GE11_V",	"Trk1_X_vs_GE11_V",
+			"Trk1_X_vs_GE11_V",
+
 			"GE11_IV_GIF_vs_GE11_IV",	"GE11_IV_GIF_vs_GE11_V",
 			"GE11_IV_vs_GE11_V"
 			};
-const Float_t range[4*nbranch] ={0,100,0,100,		0,100,0,100,		0,100,0,100,
-				0,100,0,100,		0,100,0,100,		0,100,0,100,
+
+char *xyAxisName[2*nbranch] =	{"Tracker1 X-Hit Position (mm)",	   "Tracker2 X-Hit Position (mm)",	"Tracker1 Y-Hit Position (mm)",     "Tracker2 Y-Hit Position (mm)",
+				"Tracker1 X-Hit Position (mm)",     "Tracker3 X-Hit Position (mm)",	"Tracker1 Y-Hit Position (mm)",     "Tracker3 Y-Hit Position (mm)",
+				"Tracker1 Y-Hit Position (mm)",     "GE11_IV_GIF Y-Hit Position (mm)",	"Tracker1 Y-Hit Position (mm)",     "GE11_IV Y-Hit Position (mm)",
+				"Tracker1 Y-Hit Position (mm)",     "GE11_V Y-Hit Position (mm)",
+
+				"Tracker2 Y-Hit Position (mm)",     "Tracker3 Y-Hit Position (mm)",	"Tracker2 X-Hit Position (mm)",     "Tracker3 X-Hit Position (mm)",
+				"Tracker1 X-Hit Position (mm)",     "GE11_IV_GIF Y-Hit Position (mm)",	"Tracker1 X-Hit Position (mm)",     "GE11_IV Y-Hit Position (mm)",
+				"Tracker1 X-Hit Position (mm)",     "GE11_V Y-Hit Position (mm)",
+
+				"GE11_IV_GIF Y-Hit Position (mm)",     "GE11_IV Y-Hit Position (mm)",	"GE11_IV_GIF Y-Hit Position (mm)",     "GE11_V Y-Hit Position (mm)",
+				"GE11_IV Y-Hit Position (mm)",     "GE11_V Y-Hit Position (mm)"
+				};
+const Float_t range[4*nbranch] ={0,100,0,100,		0,100,0,100,		
+				0,100,0,100,		0,100,0,100,		
 				0,100,0,100,		0,100,0,100,
-				0,100,0,100,		0,100,0,100,
-				0,100,0,100,		0,100,0,100,
+				0,100,0,100,		
+				
+				0,100,0,100,		0,100,0,100,		
+				0,100,0,100,		0,100,0,100,		
+				0,100,0,100,
+
 				0,100,0,100,            0,100,0,100,
 				0,100,0,100
 				};
 
 TH2F * hist[nbranch];
 TProfile * hprofile[nbranch];
-TCanvas *Canvas[nbranch];
+bool CanOldNew = 1;
+#if CanOldNew
+	TCanvas *Canvas[nbranch];
+#else
+	cout<<"Canvas is defined already"<<endl;
+#endif
 TF1 *function[nbranch];
 
 Char_t message[80];
 vector<int> vecm,vecn; 
 Double_t fit_Low, fit_High;
 Int_t k=0;
+Int_t l=0;
 
 ofstream o_file;
 o_file.open(Form("fit_detail_%d.txt",name));
 
 gStyle->SetOptStat("ne");
 
-o_file<<"NAME_OF_PROFILE_PLOT\t\t\tChi-sqr/NDF\tINTERCEPT(P0)\tINTERCEPT_ERROR\t\tSLOPE(P1)\tSLOPE_ERROR"<<endl;
+o_file<<"NAME_OF_PROFILE_PLOT\tChi2/NDF\tINT.(P0)\tINT.ERR.\tSLOPE(P1)\tSLOPE_ERROR"<<endl;
 for(Int_t i=0;i<nbranch;i++){
 	k=i*4;
-	Canvas[i] = new TCanvas(Form("Canvas%d",i));
-	Canvas[i]->Divide(2,1);
-	Canvas[i]->cd(1);
+	l=i*2;
+	#if CanOldNew
+		Canvas[i] = new TCanvas(Form("Canvas%d",i));
+		Canvas[i]->Divide(2,1);
+		Canvas[i]->cd(1);
+	#else
+		#ifndef canvas_proff
+			canvas_proff = new TCanvas("canvas_proff","canvas_proff",1);
+			cout<<"Not defined : Canvas is defined ramkrishna"<<endl;
+		#else
+			cout<<"Canvas is defined ramkrishna"<<endl;
+		#endif
+		canvas_proff->Divide(2,1);
+		canvas_proff->cd(1);
+	#endif
 
-	hist[i] = new TH2F(TString("H_")+TString(fnames[i]),TString(bnames[i]),100,range[k],range[k+1],100,range[k+2],range[k+3]);
+	hist[i] = new TH2F(TString("H_")+TString(fnames[i]),"",100,range[k],range[k+1],100,range[k+2],range[k+3]);
 	tmpTree->Draw(TString(bnames[i])+TString(">>H_")+TString(fnames[i]),"trackx@.GetEntries()==1 && tracky@.GetEntries()==1 ","colz");
+	hist[i]->GetXaxis()->SetTitle(xyAxisName[l]);
+	hist[i]->GetYaxis()->SetTitle(xyAxisName[l+1]);
+	#if CanOldNew
+		cout<<"nope....................."<<endl;
+		//Canvas[i]->Modified(); Canvas[i]->Update();
+		//TPaveStats *stats =(TPaveStats*)Canvas[i]->GetPrimitive("stats");
+		////stats->SetName(TString(fnames[i]));
+		//stats->SetX1NDC(.65);
+		//stats->SetX2NDC(.9);
+		//stats->SetY1NDC(.975);
+		//stats->SetY2NDC(.75);
+		//stats->SetTextColor(2);
+		//TPaveStats *title =(TPaveStats*)Canvas[i]->GetPrimitive("title");
+		//title->SetX1NDC(.35);
+		//title->SetX2NDC(.65);
+		//title->SetY1NDC(.9);
+		//title->SetY2NDC(.975);
+		//title->SetTextColor(2);
+	#else
+		canvas_proff_1->Modified(); canvas_proff_1->Update();
+		TPaveStats *stats =(TPaveStats*)canvas_proff_1->GetPrimitive("stats");
+		stats->SetName(TString(fnames[i]));
+		stats->SetX1NDC(.65);
+		stats->SetX2NDC(.9);
+		stats->SetY1NDC(.975);
+		stats->SetY2NDC(.75);
+		stats->SetTextColor(2);
+		TPaveStats *title =(TPaveStats*)canvas_proff_1->GetPrimitive("title");
+		title->SetX1NDC(.35);
+		title->SetX2NDC(.65);
+		title->SetY1NDC(.9);
+		title->SetY2NDC(.975);
+		title->SetTextColor(2);
+	#endif
 
-	hprofile[i] = new TProfile(TString("P_")+TString(fnames[i]),TString(bnames[i]),100,range[k],range[k+1],range[k+2],range[k+3]);
+	hprofile[i] = new TProfile(TString("P_")+TString(fnames[i]),"",100,range[k],range[k+1],range[k+2],range[k+3]);
 	tmpTree->Draw(TString(bnames[i])+TString(">>P_")+TString(fnames[i]),"trackx@.GetEntries()==1 && tracky@.GetEntries()==1 ");
+	hprofile[i]->GetXaxis()->SetTitle(xyAxisName[l]);
+	hprofile[i]->GetYaxis()->SetTitle(xyAxisName[l+1]);
 
 	for (int m=0; m<100; m++)
 	for (int n=0; n<100; n++)
@@ -765,10 +863,15 @@ for(Int_t i=0;i<nbranch;i++){
 	hprofile[i]->GetXaxis()->SetRangeUser(0,100);
 //	hprofile[i]->SetMinimum(fit_Low);
 	hprofile[i]->SetStats(0);
-	hist[i]->SetStats(1);
+	hist[i]->SetStats(0);
 	hist[i]->Draw("colz");
 
-	Canvas[i]->cd(2);
+	#if CanOldNew
+		Canvas[i]->cd(2);
+	#else
+		canvas_proff->cd(2);
+	#endif
+
 	hprofile[i]->Draw();
 
 	function[i] = new TF1("f1","[0]+([1]*x)",fit_Low,fit_High);
@@ -785,8 +888,10 @@ for(Int_t i=0;i<nbranch;i++){
 	//cout<<"##############################################################"<<endl;
 	//cout<<"chi-sqr = "<<fun->GetChisquare()<<endl;
 	//cout<<"NDF = "<<fun->GetNDF()<<endl;
-	o_file<<TString(fnames[i])<<"\t\t"<<setprecision(3)<<fixed<<fun->GetChisquare()/fun->GetNDF()<<"\t\t"<<fun->GetParameter(0)<<"\t\t"<<fun->GetParError(0)<<"\t\t\t"<<fun->GetParameter(1)<<"\t\t"<<fun->GetParError(1)<<endl; 
+	o_file<<TString(fnames[i])<<"\t"<<setprecision(3)<<fixed<<fun->GetChisquare()/fun->GetNDF()<<"\t"<<fun->GetParameter(0)<<"\t"<<fun->GetParError(0)<<"\t"<<fun->GetParameter(1)<<"\t"<<fun->GetParError(1)<<endl; 
 	//cout<<"##############################################################"<<endl;
+	sprintf(message,"Entry = %i ",hist[i]->GetEntries());
+	legend2->AddEntry(fun,message);
 	sprintf(message,"#chi^{2}/NDF = %.3f",fun->GetChisquare()/fun->GetNDF());
 	legend2->AddEntry(fun,message);
 	sprintf(message,"p0 = %.3f #pm  %.3f",fun->GetParameter(0),fun->GetParError(0));
@@ -797,11 +902,22 @@ for(Int_t i=0;i<nbranch;i++){
 
 
 
+	#if CanOldNew
+		//	Canvas[i]->SaveAs("Correlation_"+TString(fnames[i])+".png");
+		//	Canvas[i]->SaveAs("Correlation_"+TString(fnames[i])+".pdf");
+		Canvas[i]->SaveAs(Form("Correlation_%s_Run%d.pdf",fnames[i],name));
+	#else
+		canvas_proff->SaveAs(Form("Correlation_%s_Run%d.pdf",fnames[i],name));
+		cout<<"Delete the canvas"<<endl;
+		canvas_proff->Clear();
+		cout<<"Delete the canvas"<<endl;
+	#endif
+		cout<<"Deleting  the histograms"<<endl;
+	//delete gDirectory->FindObject(hprofile[i]);
+	//delete gDirectory->FindObject(hist[i]);
+		cout<<"Deleting the histograms"<<endl;
 
-//	Canvas[i]->SaveAs("Correlation_"+TString(fnames[i])+".png");
-//	Canvas[i]->SaveAs("Correlation_"+TString(fnames[i])+".pdf");
-	Canvas[i]->SaveAs(Form("Correlation_%s_Run%d.pdf",fnames[i],name));
-
+	
 }
 
 o_file.close();
