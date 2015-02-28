@@ -575,19 +575,22 @@ do
 	cat fit_detail_${RunCounter}_Ite${iteNum}.txt
 	echo "##########################################################################RAM###################################"
 	if [ $RunCounter -le 103 ]; then
-		if [ $(bc <<< "$(awk 'NR==2{print $3}' fit_detail_${RunCounter}_Ite${iteNum}.txt) <= 0.001") -eq 1 -a  $(bc <<< "$(awk 'NR==3{print $3}' fit_detail_${RunCounter}_Ite${iteNum}.txt) <= 0.001") -eq 1 -a  $(bc <<< "$(awk 'NR==5{print $3}' fit_detail_${RunCounter}_Ite${iteNum}.txt) <= 0.001") -eq 1   -a  $(bc <<< "$(awk 'NR==6{print $3}' fit_detail_${RunCounter}_Ite${iteNum}.txt) <= 0.001") -eq 1   -a  $(bc <<< "$(awk 'NR==8{print $3}' fit_detail_${RunCounter}_Ite${iteNum}.txt) <= 0.001") -eq 1   -a  $(bc <<< "$(awk 'NR==9{print $3}' fit_detail_${RunCounter}_Ite${iteNum}.txt) <= 0.001") -eq 1   -a  $(bc <<< "$(awk 'NR==12{print $3}' fit_detail_${RunCounter}_Ite${iteNum}.txt) <= 0.001") -eq 1  ]; then
-			echo "Number of iteration taken to align detectors is $iteNum"
-			iterating=1
-	else
-	if [ $RunCounter -le 1117 ]; then
-		if [ $(bc <<< "$(awk 'NR==2{print $3}' fit_detail_${RunCounter}_Ite${iteNum}.txt) <= 0.001") -eq 1 -a  $(bc <<< "$(awk 'NR==3{print $3}' fit_detail_${RunCounter}_Ite${iteNum}.txt) <= 0.001") -eq 1 -a  $(bc <<< "$(awk 'NR==5{print $3}' fit_detail_${RunCounter}_Ite${iteNum}.txt) <= 0.001") -eq 1   -a  $(bc <<< "$(awk 'NR==6{print $3}' fit_detail_${RunCounter}_Ite${iteNum}.txt) <= 0.001") -eq 1   -a  $(bc <<< "$(awk 'NR==8{print $3}' fit_detail_${RunCounter}_Ite${iteNum}.txt) <= 0.001") -eq 1   -a  $(bc <<< "$(awk 'NR==9{print $3}' fit_detail_${RunCounter}_Ite${iteNum}.txt) <= 0.001") -eq 1   -a  $(bc <<< "$(awk 'NR==12{print $3}' fit_detail_${RunCounter}_Ite${iteNum}.txt) <= 0.001") -eq 1  ]; then
-			echo "Number of iteration taken to align detectors is $iteNum"
-			iterating=1
-		else  
-			if [ $(bc <<< "$(awk 'NR==2{print $3}' fit_detail_${RunCounter}_Ite${iteNum}.txt) <= 0.001") -eq 1 -a  $(bc <<< "$(awk 'NR==3{print $3}' fit_detail_${RunCounter}_Ite${iteNum}.txt) <= 0.001") -eq 1 -a  $(bc <<< "$(awk 'NR==5{print $3}' fit_detail_${RunCounter}_Ite${iteNum}.txt) <= 0.001") -eq 1   -a  $(bc <<< "$(awk 'NR==6{print $3}' fit_detail_${RunCounter}_Ite${iteNum}.txt) <= 0.001") -eq 1   -a  $(bc <<< "$(awk 'NR==8{print $3}' fit_detail_${RunCounter}_Ite${iteNum}.txt) <= 0.001") -eq 1   -a  $(bc <<< "$(awk 'NR==9{print $3}' fit_detail_${RunCounter}_Ite${iteNum}.txt) <= 0.001") -eq 1   -a  $(bc <<< "$(awk 'NR==12{print $3}' fit_detail_${RunCounter}_Ite${iteNum}.txt) <= 0.001") -eq 1  ]; then
+		if [ $(bc <<< "$(awk 'NR==2{print $3}' fit_detail_${RunCounter}_Ite${iteNum}.txt) <= 0.001") -eq 1 -a  $(bc <<< "$(awk 'NR==3{print $3}' fit_detail_${RunCounter}_Ite${iteNum}.txt) <= 0.001") -eq 1 -a  $(bc <<< "$(awk 'NR==4{print $3}' fit_detail_${RunCounter}_Ite${iteNum}.txt) <= 0.001") -eq 1   -a  $(bc <<< "$(awk 'NR==5{print $3}' fit_detail_${RunCounter}_Ite${iteNum}.txt) <= 0.001") -eq 1   -a  $(bc <<< "$(awk 'NR==6{print $3}' fit_detail_${RunCounter}_Ite${iteNum}.txt) <= 0.001") -eq 1   -a  $(bc <<< "$(awk 'NR==7{print $3}' fit_detail_${RunCounter}_Ite${iteNum}.txt) <= 0.001") -eq 1   -a  $(bc <<< "$(awk 'NR==8{print $3}' fit_detail_${RunCounter}_Ite${iteNum}.txt) <= 0.001") -eq 1  ]; then
 			echo "Number of iteration taken to align detectors is $iteNum"
 			iterating=1
 		fi
+	else
+	if [ $RunCounter -le 1117 ]; then
+		if [ $(bc <<< "$(awk 'NR==2{print $3}' fit_detail_${RunCounter}_Ite${iteNum}.txt) <= 0.001") -eq 1 -a  $(bc <<< "$(awk 'NR==3{print $3}' fit_detail_${RunCounter}_Ite${iteNum}.txt) <= 0.001") -eq 1 -a  $(bc <<< "$(awk 'NR==4{print $3}' fit_detail_${RunCounter}_Ite${iteNum}.txt) <= 0.001") -eq 1   -a  $(bc <<< "$(awk 'NR==5{print $3}' fit_detail_${RunCounter}_Ite${iteNum}.txt) <= 0.001") -eq 1   -a  $(bc <<< "$(awk 'NR==6{print $3}' fit_detail_${RunCounter}_Ite${iteNum}.txt) <= 0.001") -eq 1   -a  $(bc <<< "$(awk 'NR==7{print $3}' fit_detail_${RunCounter}_Ite${iteNum}.txt) <= 0.001") -eq 1   -a  $(bc <<< "$(awk 'NR==8{print $3}' fit_detail_${RunCounter}_Ite${iteNum}.txt) <= 0.001") -eq 1  ]; then
+			echo "Number of iteration taken to align detectors is $iteNum"
+			iterating=1
+		fi
+	else  
+		if [ $(bc <<< "$(awk 'NR==2{print $3}' fit_detail_${RunCounter}_Ite${iteNum}.txt) <= 0.001") -eq 1 -a  $(bc <<< "$(awk 'NR==3{print $3}' fit_detail_${RunCounter}_Ite${iteNum}.txt) <= 0.001") -eq 1 -a  $(bc <<< "$(awk 'NR==4{print $3}' fit_detail_${RunCounter}_Ite${iteNum}.txt) <= 0.001") -eq 1   -a  $(bc <<< "$(awk 'NR==5{print $3}' fit_detail_${RunCounter}_Ite${iteNum}.txt) <= 0.001") -eq 1   -a  $(bc <<< "$(awk 'NR==6{print $3}' fit_detail_${RunCounter}_Ite${iteNum}.txt) <= 0.001") -eq 1   -a  $(bc <<< "$(awk 'NR==7{print $3}' fit_detail_${RunCounter}_Ite${iteNum}.txt) <= 0.001") -eq 1   -a  $(bc <<< "$(awk 'NR==8{print $3}' fit_detail_${RunCounter}_Ite${iteNum}.txt) <= 0.001") -eq 1  ]; then
+			echo "Number of iteration taken to align detectors is $iteNum"
+			iterating=1
+		fi
+	fi
 	fi
 	iteNum=$((iteNum+1))
 	cd -
@@ -598,7 +601,6 @@ do
 	LC2_Err=$(sed -n '/Loading the trees.../{n;n;n;n;p;  }' $PathOfOutPutData/$(basename $f)/Run${temp}_Analyzer.log | awk '{print $2}')
 	LC3_Err=$(sed -n '/Loading the trees.../{n;n;n;p;    }' $PathOfOutPutData/$(basename $f)/Run${temp}_Analyzer.log | awk '{print $2}')  
 	echo -e "$(basename $f)_Ite${iteNum}\t $LC1+/-$LC1_Err \t $LC2+/-$LC2_Err \t $LC3+/-$LC3_Err" >> EfficiencyData_R${IRunNo}_R${FRunNo}_WithIteration.txt
-	fi
 	done
 ################################################################################3
 ##
