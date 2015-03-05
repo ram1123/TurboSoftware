@@ -11,6 +11,6 @@ awk -v OFS="\t" 'NR==FNR && NR==4 {a=$3} NR==FNR {next} FNR==8 	{$2=$2-a} {print
 awk -v OFS="\t" 'NR==FNR && NR==5 {a=$3} NR==FNR {next} FNR==9 	{$3=$3-a} {print}' fit_detail_$1.txt OffsetFlip_EventBuilderVFAT_Oct2014_H2_Run0103AndBelow.conf.buffer1 > OffsetFlip_EventBuilderVFAT_Oct2014_H2_Run0103AndBelow.conf.buffer2
 awk -v OFS="\t" 'NR==FNR && NR==6 {a=$3} NR==FNR {next} FNR==10 {$3=$3-a} {print}' fit_detail_$1.txt OffsetFlip_EventBuilderVFAT_Oct2014_H2_Run0103AndBelow.conf.buffer2 > OffsetFlip_EventBuilderVFAT_Oct2014_H2_Run0103AndBelow.conf.buffer1
 awk -v OFS="\t" 'NR==FNR && NR==7 {a=$3} NR==FNR {next} FNR==11 {$3=$3-a} {print}' fit_detail_$1.txt OffsetFlip_EventBuilderVFAT_Oct2014_H2_Run0103AndBelow.conf.buffer1 > OffsetFlip_EventBuilderVFAT_Oct2014_H2_Run0103AndBelow.conf.buffer2
-awk -v OFS="\t" 'NR==FNR && NR==8 {a=$3} NR==FNR {next} FNR==14{$3=$3-a} {print}' fit_detail_$1.txt OffsetFlip_EventBuilderVFAT_Oct2014_H2_Run0103AndBelow.conf.buffer2 > OffsetFlip_EventBuilderVFAT_Oct2014_H2_Run0103AndBelow.conf_Run$1_Ite$2
+awk -v OFS="\t" 'NR==FNR && NR==8 {a=$3} NR==FNR {next} FNR==12{$3=$3-a} {print}' fit_detail_$1.txt OffsetFlip_EventBuilderVFAT_Oct2014_H2_Run0103AndBelow.conf.buffer2 > OffsetFlip_EventBuilderVFAT_Oct2014_H2_Run0103AndBelow.conf_Run$1_Ite$2
 rm OffsetFlip_EventBuilderVFAT_Oct2014_H2_Run0103AndBelow.conf.buffer1
 rm OffsetFlip_EventBuilderVFAT_Oct2014_H2_Run0103AndBelow.conf.buffer2

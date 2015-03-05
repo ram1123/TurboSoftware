@@ -232,6 +232,11 @@ while getopts ":hrpgm" opt; do
 			fi
 			if [ "$IRunNo" -gt "$FRunNo" ]; then 
 				error_exit "Initial Run Number should be Less then or equal to Final Run Number"
+			fi
+			echo -n "Do you need each plots on single canvas (N0(0)/Yes(1)) Default(0) :" 
+			read Plot
+			if [ "$Plot" == "" ]; then
+				Plot=0
 			fi;;
 		p )	echo -n "Enter path of Ntuples : " 
 			read PathOfInputNtuple
@@ -283,7 +288,7 @@ fi
 ############################################################################################
 
 
-./ProducePlots.sh $IRunNo $FRunNo  $PathOfInputNtuple	 # comment this line for remote uses
+./ProducePlots.sh $IRunNo $FRunNo  $PathOfInputNtuple $Plot	 # comment this line for remote uses
 	if [ "$?" = "0" ]; then
 		echo "File processed on remote mechine"
 	else

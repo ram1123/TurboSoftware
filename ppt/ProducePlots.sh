@@ -37,7 +37,7 @@ do
   	echo -e "\n\n\tName of ROOT files:\n"
   	echo -e "\n\n\t$RootFile"
   	echo -e "\n\n\t$RecoFile"
-  	root -b -l -q 'BeamProfile.C("'$RootFile'","'$RecoFile'",'$RunCounter')'
+  	root -b -l -q 'BeamProfile.C("'$RootFile'","'$RecoFile'",'$RunCounter','$4')'
        done
      #fi
   done   

@@ -478,7 +478,7 @@ do
 ################################################################################3
 	iterating=0
 	iteNum=0
-	while [ $iterating -lt 1 ]
+	while [ $iterating -lt 1 -a $iteNum -le 10 ]
 	do
 	if [ "$run" == 0 -o "$run" == 1 ]; then
 		if [ "$DeleteRootFile" == 1 ]; then
@@ -506,8 +506,8 @@ do
 		echo -e "\n\n\t\tAnalyzer Done\n\n"
 	fi
 	cd ../ppt
-	echo "./ProducePlots.sh $IRunNo $FRunNo  $PathOfOutPutData"
-	./ProducePlots.sh $IRunNo $FRunNo  $PathOfOutPutData
+	echo "./ProducePlots.sh $RunCounter $RunCounter  $PathOfOutPutData 1"
+	./ProducePlots.sh $RunCounter $RunCounter  $PathOfOutPutData 1
 
 	# Copies the right Modification configuration file for the present run
 	if [ $RunCounter -le 103 ]; then
@@ -602,6 +602,10 @@ do
 	LC3_Err=$(sed -n '/Loading the trees.../{n;n;n;p;    }' $PathOfOutPutData/$(basename $f)/Run${temp}_Analyzer.log | awk '{print $2}')  
 	echo -e "$(basename $f)_Ite${iteNum}\t $LC1+/-$LC1_Err \t $LC2+/-$LC2_Err \t $LC3+/-$LC3_Err" >> EfficiencyData_R${IRunNo}_R${FRunNo}_WithIteration.txt
 	done
+
+	if [ $iteNum == 11 ]; then
+		echo "${temp}" >> ProblematicRunForIterativeAlingment_R${IRunNo}_R${FRunNo}.txt
+	fi
 ################################################################################3
 ##
 ##		END OF ITERATION LOOP

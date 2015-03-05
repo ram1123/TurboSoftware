@@ -30,7 +30,7 @@
 #include "TH1F.h"
 #include "TH2F.h"
 
-int BeamProfile(TString RootFile,TString RecoFile, Int_t name)
+int BeamProfile(TString RootFile,TString RecoFile, Int_t name, Int_t Plot)
 {
 	gROOT->SetStyle("Plain");
     	gStyle->SetOptFit(1111);
@@ -65,8 +65,6 @@ int BeamProfile(TString RootFile,TString RecoFile, Int_t name)
         gStyle->SetCanvasDefW(700);
 //	gStyle->SetTitleAlign(33);
 	
-	canvas_prof->Divide(2,2);
-	canvas_prof->cd(1);
 
 	ofstream o_file2,o_file3;//,o_file3;
   	//o_file1.open("hits_details.txt",std::fstream::in | std::fstream::out | std::fstream::app);
@@ -86,8 +84,18 @@ int BeamProfile(TString RootFile,TString RecoFile, Int_t name)
         cmsprem = new TLatex(0,101,"CMS Preliminary");
         cmsprem->SetTextSize(0.04);
 	
-	gStyle->SetOptStat("nem");
+	gStyle->SetOptStat("ne");
 
+	//int Plot = 0;
+	if (Plot){
+	canvas_prof->Divide(2,2);
+	canvas_prof->cd(1);
+	}
+	else
+	{
+	canvas_prof->Divide(1,1);
+	canvas_prof->cd(1);
+	}
 	canvas_prof_1->SetLogz();
 	TH2F *Profile_Tracker_1 = new TH2F("Profile_Tracker_1","", 32,0.,100.,32,0.,100.);
 	//Profile_Tracker_1->SetStats(0);
@@ -101,10 +109,10 @@ int BeamProfile(TString RootFile,TString RecoFile, Int_t name)
 	stats->SetX1NDC(.7);
 	stats->SetX2NDC(.9);
 	stats->SetY1NDC(.95);
-	stats->SetY2NDC(.75);
-	stats->SetTextColor(2);
+	stats->SetY2NDC(.85);
+	stats->SetTextColor(1);
         cmsprem->Draw();   
-
+	
 
    // Highlight the maximum
    Int_t bin = Profile_Tracker_1->GetMaximumBin();
@@ -125,22 +133,44 @@ int BeamProfile(TString RootFile,TString RecoFile, Int_t name)
    b.SetLineColor(kBlue);
    b.Draw();
 
+	if (!Plot){
+	canvas_prof->SaveAs(Form("profile_plots_for_First_Tracker_Run%d.pdf",name));
+	canvas_prof->SaveAs(Form("profile_plots_for_First_Tracker_Run%d.gif",name));
+	canvas_prof->SaveAs(Form("profile_plots_for_First_Tracker_Run%d.C",name));
+	canvas_prof->Clear();
+	}
 
+	if (Plot){
 	canvas_prof->cd(2);
 	canvas_prof_2->SetLogz();
+	}
+	else
+	{
+	canvas_prof->Divide(1,1);
+	canvas_prof->cd(1);
+	canvas_prof_1->SetLogz();
+	}
 	TH2F *Profile_Tracker_2 = new TH2F("Profile_Tracker_2","", 32,0.,100.,32,0.,100.);
 	Profile_Tracker_2->GetZaxis()->SetRangeUser(0,450);
 	tmpTree->Draw("g2ycl.geoposY:g2xcl.geoposX>>Profile_Tracker_2","g2ycl@.GetEntries()==1 && g2xcl@.GetEntries()==1 && trackx.q>0 && tracky.q>0","colz");
 	Profile_Tracker_2->GetXaxis()->SetTitle("x position in mm");
 	Profile_Tracker_2->GetYaxis()->SetTitle("y position in mm");
+	if (Plot)
+	{
 	canvas_prof_2->Modified(); canvas_prof_2->Update();
 	TPaveStats *stats =(TPaveStats*)canvas_prof_2->GetPrimitive("stats");
+	}
+	else
+	{
+	canvas_prof_1->Modified(); canvas_prof_1->Update();
+	TPaveStats *stats =(TPaveStats*)canvas_prof_1->GetPrimitive("stats");
+	}
 	stats->SetName("Profile_Tracker_2");
 	stats->SetX1NDC(.7);
 	stats->SetX2NDC(.9);
 	stats->SetY1NDC(.95);
-	stats->SetY2NDC(.75);
-	stats->SetTextColor(2);
+	stats->SetY2NDC(.85);
+	stats->SetTextColor(1);
 	
        cmsprem->Draw();   
 
@@ -167,22 +197,45 @@ int BeamProfile(TString RootFile,TString RecoFile, Int_t name)
    e.Draw();
 	
 	
+	if (!Plot){
+	canvas_prof->SaveAs(Form("profile_plots_for_Second_Tracker_Run%d.pdf",name));
+	canvas_prof->SaveAs(Form("profile_plots_for_Second_Tracker_Run%d.gif",name));
+	canvas_prof->SaveAs(Form("profile_plots_for_Second_Tracker_Run%d.C",name));
+	canvas_prof->Clear();
+	}
 
+	if (Plot)
+	{
 	canvas_prof->cd(3);
 	canvas_prof_3->SetLogz();
+	}
+	else
+	{
+	canvas_prof->Divide(1,1);
+	canvas_prof->cd(1);
+	canvas_prof_1->SetLogz();
+	}
 	TH2F *Profile_Tracker_3 = new TH2F("Profile_Tracker_3","", 32,0.,100.,32,0.,100.);
 	Profile_Tracker_3->GetZaxis()->SetRangeUser(0,450);
 	tmpTree->Draw("g3ycl.geoposY:g3xcl.geoposX>>Profile_Tracker_3","g3ycl@.GetEntries()==1 && g3xcl@.GetEntries()==1 && trackx.q>0 && tracky.q>0","colz");
 	Profile_Tracker_3->GetXaxis()->SetTitle("x position in mm");
 	Profile_Tracker_3->GetYaxis()->SetTitle("y position in mm");
+	if (Plot)
+	{
 	canvas_prof_3->Modified(); canvas_prof_3->Update();
 	TPaveStats *stats =(TPaveStats*)canvas_prof_3->GetPrimitive("stats");
+	}
+	else
+	{
+	canvas_prof_1->Modified(); canvas_prof_1->Update();
+	TPaveStats *stats =(TPaveStats*)canvas_prof_1->GetPrimitive("stats");
+	}
 	stats->SetName("Profile_Tracker_3");
 	stats->SetX1NDC(.7);
 	stats->SetX2NDC(.9);
 	stats->SetY1NDC(.95);
-	stats->SetY2NDC(.75);
-	stats->SetTextColor(2);
+	stats->SetY2NDC(.85);
+	stats->SetTextColor(1);
         cmsprem->Draw();   
 
    // Highlight the maximum
@@ -203,13 +256,19 @@ int BeamProfile(TString RootFile,TString RecoFile, Int_t name)
    c.SetLineWidth(2);
    c.SetLineColor(kBlue);
    c.Draw();
+	if (!Plot){
+	canvas_prof->SaveAs(Form("profile_plots_for_Third_Tracker_Run%d.pdf",name));
+	canvas_prof->SaveAs(Form("profile_plots_for_Third_Tracker_Run%d.gif",name));
+	canvas_prof->SaveAs(Form("profile_plots_for_Third_Tracker_Run%d.C",name));
+	canvas_prof->Clear();
+	}
 
 o_file3<<name<<"\t("<<Profile_Tracker_1->GetXaxis()->GetBinCenter(binx)<<","<<Profile_Tracker_1->GetYaxis()->GetBinCenter(biny)<<")\t("<<Profile_Tracker_2->GetXaxis()->GetBinCenter(binx)<<","<<Profile_Tracker_2->GetYaxis()->GetBinCenter(biny)<<")\t("<<Profile_Tracker_3->GetXaxis()->GetBinCenter(binx)<<","<<Profile_Tracker_3->GetYaxis()->GetBinCenter(biny)<<")"<<endl;
 
-
+	if (Plot){
 	canvas_prof->SaveAs(Form("profile_plots_for_Trackers_Run%d.pdf",name));
 	canvas_prof->Clear();
-
+	}
 	delete gDirectory->FindObject("Profile_Tracker_1");
 	delete gDirectory->FindObject("Profile_Tracker_2");
 	delete gDirectory->FindObject("Profile_Tracker_3");
@@ -237,7 +296,7 @@ o_file3<<name<<"\t("<<Profile_Tracker_1->GetXaxis()->GetBinCenter(binx)<<","<<Pr
 	stats->SetX2NDC(.9);
 	stats->SetY1NDC(.975);
 	stats->SetY2NDC(.75);
-	stats->SetTextColor(2);
+	stats->SetTextColor(1);
 	cmsprem->Draw();
 
 	canvas_prof->cd(2);
@@ -253,7 +312,7 @@ o_file3<<name<<"\t("<<Profile_Tracker_1->GetXaxis()->GetBinCenter(binx)<<","<<Pr
 	stats->SetX2NDC(.9);
 	stats->SetY1NDC(.975);
 	stats->SetY2NDC(.75);
-	stats->SetTextColor(2);
+	stats->SetTextColor(1);
 	cmsprem->Draw();
 
 	canvas_prof->cd(3);
@@ -269,7 +328,7 @@ o_file3<<name<<"\t("<<Profile_Tracker_1->GetXaxis()->GetBinCenter(binx)<<","<<Pr
 	stats->SetX2NDC(.9);
 	stats->SetY1NDC(.975);
 	stats->SetY2NDC(.75);
-	stats->SetTextColor(2);
+	stats->SetTextColor(1);
 	cmsprem->Draw();
 
         cmsprem = new TLatex(0,251,"CMS Preliminary");
@@ -288,7 +347,7 @@ o_file3<<name<<"\t("<<Profile_Tracker_1->GetXaxis()->GetBinCenter(binx)<<","<<Pr
 	stats->SetX2NDC(.9);
 	stats->SetY1NDC(.975);
 	stats->SetY2NDC(.75);
-	stats->SetTextColor(2);
+	stats->SetTextColor(1);
 	cmsprem->Draw();
 
 	canvas_prof->cd(5);
@@ -304,7 +363,7 @@ o_file3<<name<<"\t("<<Profile_Tracker_1->GetXaxis()->GetBinCenter(binx)<<","<<Pr
 	stats->SetX2NDC(.9);
 	stats->SetY1NDC(.975);
 	stats->SetY2NDC(.75);
-	stats->SetTextColor(2);
+	stats->SetTextColor(1);
 	cmsprem->Draw();
 
 	canvas_prof->cd(6);
@@ -320,7 +379,7 @@ o_file3<<name<<"\t("<<Profile_Tracker_1->GetXaxis()->GetBinCenter(binx)<<","<<Pr
 	stats->SetX2NDC(.9);
 	stats->SetY1NDC(.975);
 	stats->SetY2NDC(.75);
-	stats->SetTextColor(2);
+	stats->SetTextColor(1);
 	cmsprem->Draw();
 
 	canvas_prof->SaveAs(Form("Tracker_Hit_position_Run%d.pdf",name));
@@ -352,7 +411,7 @@ o_file3<<name<<"\t("<<Profile_Tracker_1->GetXaxis()->GetBinCenter(binx)<<","<<Pr
 	stats->SetX2NDC(.9);
 	stats->SetY1NDC(.975);
 	stats->SetY2NDC(.75);
-	stats->SetTextColor(2);
+	stats->SetTextColor(1);
 	cmsprem->Draw();
 
 	canvas_prof->cd(2);
@@ -368,7 +427,7 @@ o_file3<<name<<"\t("<<Profile_Tracker_1->GetXaxis()->GetBinCenter(binx)<<","<<Pr
 	stats->SetX2NDC(.9);
 	stats->SetY1NDC(.975);
 	stats->SetY2NDC(.75);
-	stats->SetTextColor(2);
+	stats->SetTextColor(1);
 	cmsprem->Draw();
 
 	canvas_prof->cd(3);
@@ -384,7 +443,7 @@ o_file3<<name<<"\t("<<Profile_Tracker_1->GetXaxis()->GetBinCenter(binx)<<","<<Pr
 	stats->SetX2NDC(.9);
 	stats->SetY1NDC(.975);
 	stats->SetY2NDC(.75);
-	stats->SetTextColor(2);
+	stats->SetTextColor(1);
 	cmsprem->Draw();
 
 	canvas_prof->SaveAs(Form("GEM_Hit_position_Run%d.pdf",name));
@@ -414,13 +473,13 @@ o_file3<<name<<"\t("<<Profile_Tracker_1->GetXaxis()->GetBinCenter(binx)<<","<<Pr
 	stats->SetX2NDC(.9);
 	stats->SetY1NDC(.975);
 	stats->SetY2NDC(.75);
-	stats->SetTextColor(2);
+	stats->SetTextColor(1);
 	TPaveStats *title =(TPaveStats*)canvas_prof_1->GetPrimitive("title");
 	title->SetX1NDC(.35);
 	title->SetX2NDC(.65);
 	title->SetY1NDC(.9);
 	title->SetY2NDC(.975);
-	title->SetTextColor(2);
+	title->SetTextColor(1);
 //	cmsprem->Draw();
 
 	canvas_prof->cd(2);
@@ -435,13 +494,13 @@ o_file3<<name<<"\t("<<Profile_Tracker_1->GetXaxis()->GetBinCenter(binx)<<","<<Pr
 	stats->SetX2NDC(.9);
 	stats->SetY1NDC(.975);
 	stats->SetY2NDC(.75);
-	stats->SetTextColor(2);
+	stats->SetTextColor(1);
 	TPaveStats *title =(TPaveStats*)canvas_prof_2->GetPrimitive("title");
 	title->SetX1NDC(.35);
 	title->SetX2NDC(.65);
 	title->SetY1NDC(.9);
 	title->SetY2NDC(.975);
-	title->SetTextColor(2);
+	title->SetTextColor(1);
 //	cmsprem->Draw();
 
 	canvas_prof->cd(3);
@@ -456,13 +515,13 @@ o_file3<<name<<"\t("<<Profile_Tracker_1->GetXaxis()->GetBinCenter(binx)<<","<<Pr
 	stats->SetX2NDC(.9);
 	stats->SetY1NDC(.975);
 	stats->SetY2NDC(.75);
-	stats->SetTextColor(2);
+	stats->SetTextColor(1);
 	TPaveStats *title =(TPaveStats*)canvas_prof_3->GetPrimitive("title");
 	title->SetX1NDC(.35);
 	title->SetX2NDC(.65);
 	title->SetY1NDC(.9);
 	title->SetY2NDC(.975);
-	title->SetTextColor(2);
+	title->SetTextColor(1);
 	//cmsprem->Draw();
 
 	canvas_prof->SaveAs(Form("Space_Resolution_For_Run%d.pdf",name));
@@ -490,13 +549,13 @@ o_file3<<name<<"\t("<<Profile_Tracker_1->GetXaxis()->GetBinCenter(binx)<<","<<Pr
 	stats->SetX2NDC(.9);
 	stats->SetY1NDC(.975);
 	stats->SetY2NDC(.75);
-	stats->SetTextColor(2);
+	stats->SetTextColor(1);
 	TPaveStats *title =(TPaveStats*)canvas_prof_1->GetPrimitive("title");
 	title->SetX1NDC(.35);
 	title->SetX2NDC(.65);
 	title->SetY1NDC(.9);
 	title->SetY2NDC(.975);
-	title->SetTextColor(2);
+	title->SetTextColor(1);
 
 	canvas_prof->cd(2);
 	TH1F *Trk1_Trk3 = new TH1F("Trk1_Trk3","X - Offset",50,-4,4);
@@ -510,13 +569,13 @@ o_file3<<name<<"\t("<<Profile_Tracker_1->GetXaxis()->GetBinCenter(binx)<<","<<Pr
 	stats->SetX2NDC(.9);
 	stats->SetY1NDC(.975);
 	stats->SetY2NDC(.75);
-	stats->SetTextColor(2);
+	stats->SetTextColor(1);
 	TPaveStats *title =(TPaveStats*)canvas_prof_2->GetPrimitive("title");
 	title->SetX1NDC(.35);
 	title->SetX2NDC(.65);
 	title->SetY1NDC(.9);
 	title->SetY2NDC(.975);
-	title->SetTextColor(2);
+	title->SetTextColor(1);
 
 	canvas_prof->cd(3);
 	TH1F *Trk2_Trk3 = new TH1F("Trk2_Trk3","X - Offset",50,-4,4);
@@ -530,13 +589,13 @@ o_file3<<name<<"\t("<<Profile_Tracker_1->GetXaxis()->GetBinCenter(binx)<<","<<Pr
 	stats->SetX2NDC(.9);
 	stats->SetY1NDC(.975);
 	stats->SetY2NDC(.75);
-	stats->SetTextColor(2);
+	stats->SetTextColor(1);
 	TPaveStats *title =(TPaveStats*)canvas_prof_3->GetPrimitive("title");
 	title->SetX1NDC(.35);
 	title->SetX2NDC(.65);
 	title->SetY1NDC(.9);
 	title->SetY2NDC(.975);
-	title->SetTextColor(2);
+	title->SetTextColor(1);
 
 	o_file2<<name<<"\t"<<Trk1_Trk2->GetMean()<<"\t"<<Trk1_Trk3->GetMean()<<"\t"<<Trk2_Trk3->GetMean();  
 	canvas_prof->SaveAs(Form("X_Offset_For_Run%d.pdf",name));
@@ -560,13 +619,13 @@ o_file3<<name<<"\t("<<Profile_Tracker_1->GetXaxis()->GetBinCenter(binx)<<","<<Pr
 	stats->SetX2NDC(.9);
 	stats->SetY1NDC(.975);
 	stats->SetY2NDC(.75);
-	stats->SetTextColor(2);
+	stats->SetTextColor(1);
 	TPaveStats *title =(TPaveStats*)canvas_prof_1->GetPrimitive("title");
 	title->SetX1NDC(.35);
 	title->SetX2NDC(.65);
 	title->SetY1NDC(.9);
 	title->SetY2NDC(.975);
-	title->SetTextColor(2);
+	title->SetTextColor(1);
 
 	canvas_prof->cd(2);
 	TH1F *Trk1_Trk3 = new TH1F("Trk1_Trk3","Y - Offset",50,-4,4);
@@ -580,13 +639,13 @@ o_file3<<name<<"\t("<<Profile_Tracker_1->GetXaxis()->GetBinCenter(binx)<<","<<Pr
 	stats->SetX2NDC(.9);
 	stats->SetY1NDC(.975);
 	stats->SetY2NDC(.75);
-	stats->SetTextColor(2);
+	stats->SetTextColor(1);
 	TPaveStats *title =(TPaveStats*)canvas_prof_2->GetPrimitive("title");
 	title->SetX1NDC(.35);
 	title->SetX2NDC(.65);
 	title->SetY1NDC(.9);
 	title->SetY2NDC(.975);
-	title->SetTextColor(2);
+	title->SetTextColor(1);
 
 	canvas_prof->cd(3);
 	TH1F *Trk2_Trk3 = new TH1F("Trk2_Trk3","Y - Offset",50,-4,4);
@@ -600,13 +659,13 @@ o_file3<<name<<"\t("<<Profile_Tracker_1->GetXaxis()->GetBinCenter(binx)<<","<<Pr
 	stats->SetX2NDC(.9);
 	stats->SetY1NDC(.975);
 	stats->SetY2NDC(.75);
-	stats->SetTextColor(2);
+	stats->SetTextColor(1);
 	TPaveStats *title =(TPaveStats*)canvas_prof_3->GetPrimitive("title");
 	title->SetX1NDC(.35);
 	title->SetX2NDC(.65);
 	title->SetY1NDC(.9);
 	title->SetY2NDC(.975);
-	title->SetTextColor(2);
+	title->SetTextColor(1);
 
 
 	canvas_prof->cd(4);
@@ -621,13 +680,13 @@ o_file3<<name<<"\t("<<Profile_Tracker_1->GetXaxis()->GetBinCenter(binx)<<","<<Pr
 	stats->SetX2NDC(.9);
 	stats->SetY1NDC(.975);
 	stats->SetY2NDC(.75);
-	stats->SetTextColor(2);
+	stats->SetTextColor(1);
 	TPaveStats *title =(TPaveStats*)canvas_prof_4->GetPrimitive("title");
 	title->SetX1NDC(.35);
 	title->SetX2NDC(.65);
 	title->SetY1NDC(.9);
 	title->SetY2NDC(.975);
-	title->SetTextColor(2);
+	title->SetTextColor(1);
 
 	canvas_prof->cd(5);
 	TH1F *Trk1_GE11_IV = new TH1F("Trk1_GE11_IV","Y - Offset",50,-20,20);
@@ -641,13 +700,13 @@ o_file3<<name<<"\t("<<Profile_Tracker_1->GetXaxis()->GetBinCenter(binx)<<","<<Pr
 	stats->SetX2NDC(.9);
 	stats->SetY1NDC(.975);
 	stats->SetY2NDC(.75);
-	stats->SetTextColor(2);
+	stats->SetTextColor(1);
 	TPaveStats *title =(TPaveStats*)canvas_prof_5->GetPrimitive("title");
 	title->SetX1NDC(.35);
 	title->SetX2NDC(.65);
 	title->SetY1NDC(.9);
 	title->SetY2NDC(.975);
-	title->SetTextColor(2);
+	title->SetTextColor(1);
 
 	canvas_prof->cd(6);
 	TH1F *Trk1_GE11_V = new TH1F("Trk1_GE11_V","Y - Offset",50,-20,20);
@@ -661,13 +720,13 @@ o_file3<<name<<"\t("<<Profile_Tracker_1->GetXaxis()->GetBinCenter(binx)<<","<<Pr
 	stats->SetX2NDC(.9);
 	stats->SetY1NDC(.975);
 	stats->SetY2NDC(.75);
-	stats->SetTextColor(2);
+	stats->SetTextColor(1);
 	TPaveStats *title =(TPaveStats*)canvas_prof_3->GetPrimitive("title");
 	title->SetX1NDC(.35);
 	title->SetX2NDC(.65);
 	title->SetY1NDC(.9);
 	title->SetY2NDC(.975);
-	title->SetTextColor(2);
+	title->SetTextColor(1);
 
 	o_file2<<"\t"<<Trk2_Trk3->GetMean()<<"\t"<<Trk1_Trk2->GetMean()<<"\t"<<Trk1_Trk3->GetMean()<<"\t"<<Trk1_GE11_IV_GIF->GetMean()<<"\t"<<Trk1_GE11_IV->GetMean()<<"\t"<<Trk1_GE11_V->GetMean()<<endl;
 	
@@ -818,13 +877,13 @@ for(Int_t i=0;i<nbranch;i++){
 		//stats->SetX2NDC(.9);
 		//stats->SetY1NDC(.975);
 		//stats->SetY2NDC(.75);
-		//stats->SetTextColor(2);
+		//stats->SetTextColor(1);
 		//TPaveStats *title =(TPaveStats*)Canvas[i]->GetPrimitive("title");
 		//title->SetX1NDC(.35);
 		//title->SetX2NDC(.65);
 		//title->SetY1NDC(.9);
 		//title->SetY2NDC(.975);
-		//title->SetTextColor(2);
+		//title->SetTextColor(1);
 	#else
 		canvas_proff_1->Modified(); canvas_proff_1->Update();
 		TPaveStats *stats =(TPaveStats*)canvas_proff_1->GetPrimitive("stats");
@@ -833,13 +892,13 @@ for(Int_t i=0;i<nbranch;i++){
 		stats->SetX2NDC(.9);
 		stats->SetY1NDC(.975);
 		stats->SetY2NDC(.75);
-		stats->SetTextColor(2);
+		stats->SetTextColor(1);
 		TPaveStats *title =(TPaveStats*)canvas_proff_1->GetPrimitive("title");
 		title->SetX1NDC(.35);
 		title->SetX2NDC(.65);
 		title->SetY1NDC(.9);
 		title->SetY2NDC(.975);
-		title->SetTextColor(2);
+		title->SetTextColor(1);
 	#endif
 
 	hprofile[i] = new TProfile(TString("P_")+TString(fnames[i]),"",100,range[k],range[k+1],range[k+2],range[k+3]);
