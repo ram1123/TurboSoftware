@@ -501,6 +501,7 @@ do
     if [ "$JustTextFile" == 0 ]; then
 	make_dir "OutPutData"
 	make_dir "TextFiles"
+	make_dir "TextFiles"
 	CheckOutPutDir
 ################################################################################3
 ##
@@ -536,6 +537,8 @@ do
 		echo -e "\n\n\t\tAnalyzer Done\n\n"
 	fi
 	cd ../ppt
+	make_dir "LogFiles"
+	make_dir "LogFiles/${RunCounter}"
 	echo "./ProducePlots.sh $RunCounter $RunCounter  $PathOfOutPutData 1"
 	./ProducePlots.sh $RunCounter $RunCounter  $PathOfOutPutData 1
 
@@ -613,6 +616,7 @@ do
 	fi
 	echo "##########################################################################RAM###################################"
 	cat fit_detail_${RunCounter}_Ite${iteNum}.txt
+	mv *.txt OffsetFlip* LogFiles/${RunCounter}/
 	echo "##########################################################################RAM###################################"
 	if [ $RunCounter -le 103 ]; then
 		if [ $(bc <<< "$(awk 'NR==2{print $3 < 0 ? -$3 : $3}' fit_detail_${RunCounter}_Ite${iteNum}.txt) <= 0.001") -eq 1 -a  $(bc <<< "$(awk 'NR==3{print $3 < 0 ? -$3 : $3}' fit_detail_${RunCounter}_Ite${iteNum}.txt) <= 0.001") -eq 1 -a  $(bc <<< "$(awk 'NR==4{print $3 < 0 ? -$3 : $3}' fit_detail_${RunCounter}_Ite${iteNum}.txt) <= 0.001") -eq 1   -a  $(bc <<< "$(awk 'NR==5{print $3 < 0 ? -$3 : $3}' fit_detail_${RunCounter}_Ite${iteNum}.txt) <= 0.001") -eq 1   -a  $(bc <<< "$(awk 'NR==6{print $3 < 0 ? -$3 : $3}' fit_detail_${RunCounter}_Ite${iteNum}.txt) <= 0.001") -eq 1   -a  $(bc <<< "$(awk 'NR==7{print $3 < 0 ? -$3 : $3}' fit_detail_${RunCounter}_Ite${iteNum}.txt) <= 0.001") -eq 1   -a  $(bc <<< "$(awk 'NR==8{print $3 < 0 ? -$3 : $3}' fit_detail_${RunCounter}_Ite${iteNum}.txt) <= 0.001") -eq 1  ]; then
@@ -634,24 +638,24 @@ do
 	fi
 	if [ ${MakePPt} == 1 ]; then
 	make_dir "TexFiles"
+	make_dir "TexFiles/${RunCounter}_Iteration"
 	make_dir "PPTs"
-        cp test.tex TexFiles/ppt_R${RunCounter}_I${iteNum}.tex     # $1 reads the 1st argument
-	cp cern.jpeg cmsLogo.jpeg logo_du.jpeg TexFiles/
+	make_dir "PPTs/${RunCounter}_Iteration"
+
+        cp test.tex TexFiles/${RunCounter}_Iteration/ppt_R${RunCounter}_I${iteNum}.tex     # $1 reads the 1st argument
+	cp cern.jpeg cmsLogo.jpeg logo_du.jpeg TexFiles/${RunCounter}_Iteration
         for plots in Plots/pdf/${RunCounter}/*.pdf; do
             TexFileName=$(basename  "$plots")
             TexFileName=${TexFileName%.*}
             TexFileName=${TexFileName//_/ }
-            echo $TexFileName
-            echo $plots
             perl -spe 's/intime_mean_pu.pdf/$a/;s/TitleFrame/$b/' < fig.tex -- -a="$plots" -b="$TexFileName" > "fig_temp.tex"
             #sed -i "/Pointer-rk/r fig_temp.tex" "ppt_R${IRunNo}_R${FRunNo}.tex"
-            sed -i "/Pointer-rk/r fig_temp.tex" "TexFiles/ppt_R${RunCounter}_I${iteNum}.tex"
+            sed -i "/Pointer-rk/r fig_temp.tex" "TexFiles/${RunCounter}_Iteration/ppt_R${RunCounter}_I${iteNum}.tex"
         done
-	pdflatex TexFiles/ppt_R${RunCounter}_I${iteNum}.tex
-	pdflatex TexFiles/ppt_R${RunCounter}_I${iteNum}.tex
-	mv ppt_R${RunCounter}_I${iteNum}.pdf PPTs/ppt_R${RunCounter}_I${iteNum}.pdf
-	#rm ppt_R${RunCounter}.tex
-	#rm fig_temp.tex  ppt_R${RunCounter}_I${iteNum}.toc ppt_R${RunCounter}_I${iteNum}.snm ppt_R${RunCounter}_I${iteNum}.out ppt_R${RunCounter}_I${iteNum}.nav ppt_R${RunCounter}_I${iteNum}.auxt_R${RunCounter}.log
+	pdflatex TexFiles/${RunCounter}_Iteration/ppt_R${RunCounter}_I${iteNum}.tex
+	pdflatex TexFiles/${RunCounter}_Iteration/ppt_R${RunCounter}_I${iteNum}.tex
+	mv ppt_R${RunCounter}_I${iteNum}.pdf PPTs/${RunCounter}_Iteration/ppt_R${RunCounter}_I${iteNum}.pdf
+	rm ppt_R* fig_temp.tex
 	fi	# if [ ${MakePPt} == 1 ]; then
 	iteNum=$((iteNum+1))
 	cd -
