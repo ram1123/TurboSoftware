@@ -7,6 +7,18 @@
 #	Author: 2014, Ramkrishna Sharma,,, <ramkrishna.sharma71@gmail.com>.
 #
 
+function make_dir
+{
+
+	if [ -d "${1}" ]; then
+		echo "Directory ${1} Exists......."
+	else
+		mkdir ${1}
+		echo "Directory ${1} Created................."
+	fi
+}
+
+
 RunCounter=$1
 while [ $RunCounter -le $2 ]
 do
@@ -20,9 +32,18 @@ do
   	file=0$RunCounter
   else
 	file=$RunCounter
-  fi
-  fi
-  fi
+  fi		# 999
+  fi		# 99
+  fi		# 9
+	make_dir "Plots"
+	make_dir "Plots/pdf"
+	make_dir "Plots/pdf/${RunCounter}"
+	make_dir "Plots/gif"
+	make_dir "Plots/gif/${RunCounter}"
+	make_dir "Plots/C"
+	make_dir "Plots/C/${RunCounter}"
+	make_dir "LogFiles/${RunCounter}"
+
   for Dir in $3/Run$file*
   do
      temp=$(echo $Dir | sed 's/.*Run//' | sed 's/.//5g')

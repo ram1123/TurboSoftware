@@ -57,6 +57,7 @@ function clean_up
 #		No arguments
 #	-----------------------------------------------------------------------
 
+	#rm *.pdf *.gif
 	rm -f ${TEMP_FILE1}
 }
 
@@ -113,6 +114,16 @@ function signal_exit
 	esac
 }
 
+function make_dir
+{
+
+	if [ -d "${1}" ]; then
+		echo "Directory ${1} Exists......."
+	else
+		mkdir ${1}
+		echo "Directory ${1} Created................."
+	fi
+}
 
 function make_temp_files
 {
@@ -124,10 +135,10 @@ function make_temp_files
 
 	# Use user's local tmp directory if it exists
 
-	if [ -d ~/tmp ]; then
-		TEMP_DIR=~/tmp
+	if [ -d ~/tmp/$USER ]; then
+		TEMP_DIR=~/tmp/$USER
 	else
-		TEMP_DIR=/tmp
+		TEMP_DIR=/tmp/$USER
 	fi
 
 	# Temp file for this script, using paranoid method of creation to
@@ -263,20 +274,24 @@ if [ "$#" == "0" ]; then
 	error_exit "Please enter atleast one arguments from above."
 fi
 # CREATE A BACKUP DIRECTORY IF NOT EXISTS. THEN REMOVE SOME OF UNWNATED THINGS AND KEEP SOME USEFUL THINGS IN BACKUP DIRECTORY.
-	if [ -d "Backup" ]; then
-		echo "Directory Backup Exists......."
-	else
-		mkdir Backup
-		echo "Directory Backup Created................."
-	fi
+make_dir "Backup"
+make_dir "Plots"
+make_dir "Plots/pdf"
+make_dir "Plots/gif"
+make_dir "Plots/C"
+make_dir "LogFiles"
+make_dir "TexFiles"
+make_dir "PPTs"
+make_dir "TextFiles"
+
 	if ls *.pdf; then 
 	        mv *.pdf Backup/
 	fi
 	if ls *.txt; then 
 	        mv *.txt Backup/
 	fi
-	if ls ppt*.tex; then 
-	        rm ppt*.tex
+	if ls TexFiles/ppt*.tex; then 
+	        rm TexFiles/ppt*.tex
 	fi
 ############################################################################################
 #
@@ -299,42 +314,68 @@ fi
 
 
 # BELOW PATCH HELPS TO MAKE PPT
-cp test.tex ppt_R${IRunNo}_R${FRunNo}.tex	# $1 reads the 1st argument
-	count=1
-	for f in *.pdf; do
+#cp test.tex ppt_R${IRunNo}_R${FRunNo}.tex	# $1 reads the 1st argument
+
+RunCounter=${IRunNo}
+while [ ${RunCounter} -le ${FRunNo} ]
+do
+	cp test.tex TexFiles/ppt_R${RunCounter}.tex	# $1 reads the 1st argument
+	for f in Plots/pdf/${RunCounter}/*.pdf; do
 	    filename=$(basename  "$f")
 	    filename=${filename%.*}
 	    filename=${filename//_/ }
 	    echo $filename
 	    echo $f
-	    perl -spe 's/intime_mean_pu.pdf/$a/;s/TitleFrame/$b/' < fig.tex -- -a="$f" -b="$filename" > "fig_${count}.tex"
-	    sed -i "/Pointer-rk/r fig_${count}.tex" "ppt_R${IRunNo}_R${FRunNo}.tex"
-	    ((++count))
+	    perl -spe 's/intime_mean_pu.pdf/$a/;s/TitleFrame/$b/' < fig.tex -- -a="$f" -b="$filename" > "fig_temp.tex"
+	    #sed -i "/Pointer-rk/r fig_temp.tex" "ppt_R${IRunNo}_R${FRunNo}.tex"
+	    sed -i "/Pointer-rk/r fig_temp.tex" "TexFiles/ppt_R${RunCounter}.tex"
 	done
+	if [ "$getppt" == "1" ]; then
+		pdflatex TexFiles/ppt_R${RunCounter}.tex
+		pdflatex TexFiles/ppt_R${RunCounter}.tex
+		mv ppt_R${RunCounter}.pdf PPTs/ppt_R${RunCounter}.pdf
+		#rm ppt_R${RunCounter}.tex
+		rm fig_temp.tex  ppt_R${RunCounter}.toc ppt_R${RunCounter}.snm ppt_R${RunCounter}.out ppt_R${RunCounter}.nav ppt_R${RunCounter}.aux ppt_R${RunCounter}.log
+		#gnome-open ppt_R${RunCounter}.pdf 
+	fi	
+	
+	if [ "$mail" == 1 ]; then
+	cat<<EOF >message.log
+	Hi $(basename $email),
+	This mail is sent automatically sent from the script ${0}.
+EOF
+	echo "mailing the ppt file.... "
+	mail -a PPTs/ppt_R${RunCounter}.pdf  -s "ppt file for run number ${RunCounter}" $email < message.log
+	echo "mail sent"
+	fi	
+	RunCounter=$[$RunCounter+1]
+done 
+
+mv *.txt TextFiles/
 #	awk '{print $1}' EfficiencyData_R$1_R$2.txt > tmp.txt
 #	awk '{print $2}' EfficiencyData_R$1_R$2.txt >> tmp.txt
 #	awk '{print $3}' EfficiencyData_R$1_R$2.txt >> tmp.txt
 #	awk '{print $4}' EfficiencyData_R$1_R$2.txt >> tmp.txt
 #	sed -i "/begin{verbatim}/r tmp.txt" "ppt_R$1_R$2.tex"
 	
-if [ "$getppt" == "1" ]; then
-	pdflatex ppt_R${IRunNo}_R${FRunNo}.tex
-	pdflatex ppt_R${IRunNo}_R${FRunNo}.tex
-	#rm ppt_R${IRunNo}_R${FRunNo}.tex
-	rm fig_*.tex  ppt_R${IRunNo}_R${FRunNo}.toc ppt_R${IRunNo}_R${FRunNo}.snm ppt_R${IRunNo}_R${FRunNo}.out ppt_R${IRunNo}_R${FRunNo}.nav ppt_R${IRunNo}_R${FRunNo}.aux ppt_R${IRunNo}_R${FRunNo}.log
-	#gnome-open ppt_R${IRunNo}_R${FRunNo}.pdf 
-fi	
-
-
-if [ "$mail" == 1 ]; then
-cat<<EOF >message.log
-Hi $(basename $email),
-This mail is sent automatically sent from the script ${0}.
-EOF
-echo "mailing the ppt file.... "
-mail -a ppt_R${IRunNo}_R${FRunNo}.pdf  -s "ppt file from RunNumber ${IRunNo} to ${FRunNo}" $email < message.log
-echo "mail sent"
-fi	
+#if [ "$getppt" == "1" ]; then
+#	pdflatex ppt_R${IRunNo}_R${FRunNo}.tex
+#	pdflatex ppt_R${IRunNo}_R${FRunNo}.tex
+#	#rm ppt_R${IRunNo}_R${FRunNo}.tex
+#	rm fig_temp.tex  ppt_R${IRunNo}_R${FRunNo}.toc ppt_R${IRunNo}_R${FRunNo}.snm ppt_R${IRunNo}_R${FRunNo}.out ppt_R${IRunNo}_R${FRunNo}.nav ppt_R${IRunNo}_R${FRunNo}.aux ppt_R${IRunNo}_R${FRunNo}.log
+#	#gnome-open ppt_R${IRunNo}_R${FRunNo}.pdf 
+#fi	
+#
+#
+#if [ "$mail" == 1 ]; then
+#cat<<EOF >message.log
+#Hi $(basename $email),
+#This mail is sent automatically sent from the script ${0}.
+#EOF
+#echo "mailing the ppt file.... "
+#mail -a ppt_R${IRunNo}_R${FRunNo}.pdf  -s "ppt file from RunNumber ${IRunNo} to ${FRunNo}" $email < message.log
+#echo "mail sent"
+#fi	
 echo "Finished."
 graceful_exit
 

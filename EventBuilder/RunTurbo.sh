@@ -1,5 +1,8 @@
 #!/bin/bash 
 
+(
+echo start
+
 #	-------------------------------------------------------------------
 #
 #	Shell program to Run the full chain of TURBO software and creates the 
@@ -169,6 +172,23 @@ function make_temp_files
 	fi
 }
 
+
+function make_dir
+{
+
+#	------------------------------------------------------------------------
+#	It Checks IF the output data directory exists or not
+#	No Arguments
+#	------------------------------------------------------------------------
+
+	if [ -d "${1}" ]; then
+		echo "Directory ${1} Exists......."
+	else
+		mkdir ${1}
+		echo "Directory ${1} Created................."
+	fi
+}	# end of make_dir
+
 function CheckOutPutDir
 {
 
@@ -322,7 +342,7 @@ if [ "$1" = "--help" ]; then
 	graceful_exit
 fi
 
-while getopts ":hrlfemi" opt; do
+while getopts ":hrlfemias" opt; do
 	case $opt in
 		r )	echo "Enter Run number between 33 and 1587."
 			echo -n "Initial Run Number (IRunNo) = " 
@@ -338,6 +358,9 @@ while getopts ":hrlfemi" opt; do
 			if [ "$IRunNo" -gt "$FRunNo" ]; then 
 				error_exit "Initial Run Number should be Less then or equal to Final Run Number"
 			fi
+			InitialiteNum=0
+			NoIteration=1
+			MakePPt=0
 			#echo -n "Enter Number of iteration to be done (default value 0) = "
 			#read NoOfIte
 			#if [ "$NoOfIte" == "" ]; then
@@ -349,6 +372,11 @@ while getopts ":hrlfemi" opt; do
 			if [ "$IRunNo" -gt 1586 ] || [ "$FRunNo" -gt 1586 ]; then
 				error_exit "Maximum allowed Run Number is 1586."
 			fi;;
+		a )	echo "No Iteration to be done"
+			NoIteration=0
+			InitialiteNum=10;;
+		s )	echo "Make PPT at each stage of iteration"
+			MakePPt=1;;			
 		l )	echo -n "Initial Latency (ILat) = "
 			read ILat
 			echo -n "Final Latency (FLat) = "
@@ -438,6 +466,7 @@ do
   fi
   fi
 
+  iteNum=${InitialiteNum}
   # Copies the right configuration file for the present run
   if [ $RunCounter -le 103 ]; then
     cp Setting_EventBuilderVFAT_Run0103AndBelow.conf Setting_EventBuilderVFAT.conf
@@ -470,6 +499,8 @@ do
 		error_exit "Not able of extract Run number. ${temp} is not a number."
 	fi	
     if [ "$JustTextFile" == 0 ]; then
+	make_dir "OutPutData"
+	make_dir "TextFiles"
 	CheckOutPutDir
 ################################################################################3
 ##
@@ -477,7 +508,6 @@ do
 ##
 ################################################################################3
 	iterating=0
-	iteNum=0
 	while [ $iterating -lt 1 -a $iteNum -le 10 ]
 	do
 	if [ "$run" == 0 -o "$run" == 1 ]; then
@@ -513,31 +543,41 @@ do
 	if [ $RunCounter -le 103 ]; then
 		echo "./ModifyConfig_Run0103AndBelow.sh ${RunCounter} $iteNum"
 		./ModifyConfig_Run0103AndBelow.sh ${RunCounter} $iteNum
+		if [ $NoIteration != 0 ]
+		then
 		echo "cp OffsetFlip_EventBuilderVFAT_Oct2014_H2_Run0103AndBelow.conf_Run${RunCounter}_Ite${iteNum} ../EventBuilder/OffsetFlip_EventBuilderVFAT_Oct2014_H2_Run0103AndBelow.conf"
 		cp OffsetFlip_EventBuilderVFAT_Oct2014_H2_Run0103AndBelow.conf_Run${RunCounter}_Ite${iteNum} ../EventBuilder/ConfigFiles/OffsetFlip_EventBuilderVFAT_Oct2014_H2_Run0103AndBelow.conf
 		if [ $? -ne 0 ]
 		then
 			error_exit "Could not copy config file to right place"
 		fi
+		fi	#if [ $NoIteration != 0 ]
 	else
 	if [ $RunCounter -le 1117 ]; then
 		echo "./ModifyConfig_Run0103_to_Run1117.sh ${RunCounter} $iteNum"
 		./ModifyConfig_Run0103_to_Run1117.sh ${RunCounter} $iteNum
+		if [ $NoIteration != 0 ]
+		then
 		echo "cp OffsetFlip_EventBuilderVFAT_Oct2014_H2.conf_Run${RunCounter}_Ite${iteNum} ../EventBuilder/ConfigFiles/OffsetFlip_EventBuilderVFAT_Oct2014_H2.conf"
 		cp OffsetFlip_EventBuilderVFAT_Oct2014_H2.conf_Run${RunCounter}_Ite${iteNum} ../EventBuilder/ConfigFiles/OffsetFlip_EventBuilderVFAT_Oct2014_H2.conf
 		if [ $? -ne 0 ]
 		then
 			error_exit "Could not copy config file to right place"
 		fi
+		fi	#if [ $NoIteration != 0 ]
 	else  
 		echo "./ModifyConfig_Run1118AndUp.sh ${RunCounter} $iteNum"
 		./ModifyConfig_Run1118AndUp.sh ${RunCounter} $iteNum
-		echo "cp OffsetFlip_EventBuilderVFAT_Oct2014_H2_Run1118AndUp.conf_Run${RunCounter}_Ite${iteNum} ../EventBuilder/ConfigFiles/OffsetFlip_EventBuilderVFAT_Oct2014_H2_Run1118AndUp.conf"
-		cp OffsetFlip_EventBuilderVFAT_Oct2014_H2_Run1118AndUp.conf_Run${RunCounter}_Ite${iteNum} ../EventBuilder/ConfigFiles/OffsetFlip_EventBuilderVFAT_Oct2014_H2_Run1118AndUp.conf
+		echo "$NoIteration"
+		if [ $NoIteration != 0 ]
+		then
+			echo "cp OffsetFlip_EventBuilderVFAT_Oct2014_H2_Run1118AndUp.conf_Run${RunCounter}_Ite${iteNum} ../EventBuilder/ConfigFiles/OffsetFlip_EventBuilderVFAT_Oct2014_H2_Run1118AndUp.conf"
+			cp OffsetFlip_EventBuilderVFAT_Oct2014_H2_Run1118AndUp.conf_Run${RunCounter}_Ite${iteNum} ../EventBuilder/ConfigFiles/OffsetFlip_EventBuilderVFAT_Oct2014_H2_Run1118AndUp.conf
 		if [ $? -ne 0 ]
 		then
 			error_exit "Could not copy config file to right place"
 		fi
+		fi	#if [ $NoIteration != 0 ]
 	fi 
 	fi
 	
@@ -575,23 +615,44 @@ do
 	cat fit_detail_${RunCounter}_Ite${iteNum}.txt
 	echo "##########################################################################RAM###################################"
 	if [ $RunCounter -le 103 ]; then
-		if [ $(bc <<< "$(awk 'NR==2{print $3}' fit_detail_${RunCounter}_Ite${iteNum}.txt) <= 0.001") -eq 1 -a  $(bc <<< "$(awk 'NR==3{print $3}' fit_detail_${RunCounter}_Ite${iteNum}.txt) <= 0.001") -eq 1 -a  $(bc <<< "$(awk 'NR==4{print $3}' fit_detail_${RunCounter}_Ite${iteNum}.txt) <= 0.001") -eq 1   -a  $(bc <<< "$(awk 'NR==5{print $3}' fit_detail_${RunCounter}_Ite${iteNum}.txt) <= 0.001") -eq 1   -a  $(bc <<< "$(awk 'NR==6{print $3}' fit_detail_${RunCounter}_Ite${iteNum}.txt) <= 0.001") -eq 1   -a  $(bc <<< "$(awk 'NR==7{print $3}' fit_detail_${RunCounter}_Ite${iteNum}.txt) <= 0.001") -eq 1   -a  $(bc <<< "$(awk 'NR==8{print $3}' fit_detail_${RunCounter}_Ite${iteNum}.txt) <= 0.001") -eq 1  ]; then
+		if [ $(bc <<< "$(awk 'NR==2{print $3 < 0 ? -$3 : $3}' fit_detail_${RunCounter}_Ite${iteNum}.txt) <= 0.001") -eq 1 -a  $(bc <<< "$(awk 'NR==3{print $3 < 0 ? -$3 : $3}' fit_detail_${RunCounter}_Ite${iteNum}.txt) <= 0.001") -eq 1 -a  $(bc <<< "$(awk 'NR==4{print $3 < 0 ? -$3 : $3}' fit_detail_${RunCounter}_Ite${iteNum}.txt) <= 0.001") -eq 1   -a  $(bc <<< "$(awk 'NR==5{print $3 < 0 ? -$3 : $3}' fit_detail_${RunCounter}_Ite${iteNum}.txt) <= 0.001") -eq 1   -a  $(bc <<< "$(awk 'NR==6{print $3 < 0 ? -$3 : $3}' fit_detail_${RunCounter}_Ite${iteNum}.txt) <= 0.001") -eq 1   -a  $(bc <<< "$(awk 'NR==7{print $3 < 0 ? -$3 : $3}' fit_detail_${RunCounter}_Ite${iteNum}.txt) <= 0.001") -eq 1   -a  $(bc <<< "$(awk 'NR==8{print $3 < 0 ? -$3 : $3}' fit_detail_${RunCounter}_Ite${iteNum}.txt) <= 0.001") -eq 1  ]; then
 			echo "Number of iteration taken to align detectors is $iteNum"
 			iterating=1
 		fi
 	else
 	if [ $RunCounter -le 1117 ]; then
-		if [ $(bc <<< "$(awk 'NR==2{print $3}' fit_detail_${RunCounter}_Ite${iteNum}.txt) <= 0.001") -eq 1 -a  $(bc <<< "$(awk 'NR==3{print $3}' fit_detail_${RunCounter}_Ite${iteNum}.txt) <= 0.001") -eq 1 -a  $(bc <<< "$(awk 'NR==4{print $3}' fit_detail_${RunCounter}_Ite${iteNum}.txt) <= 0.001") -eq 1   -a  $(bc <<< "$(awk 'NR==5{print $3}' fit_detail_${RunCounter}_Ite${iteNum}.txt) <= 0.001") -eq 1   -a  $(bc <<< "$(awk 'NR==6{print $3}' fit_detail_${RunCounter}_Ite${iteNum}.txt) <= 0.001") -eq 1   -a  $(bc <<< "$(awk 'NR==7{print $3}' fit_detail_${RunCounter}_Ite${iteNum}.txt) <= 0.001") -eq 1   -a  $(bc <<< "$(awk 'NR==8{print $3}' fit_detail_${RunCounter}_Ite${iteNum}.txt) <= 0.001") -eq 1  ]; then
+		if [ $(bc <<< "$(awk 'NR==2{print $3 < 0 ? -$3 : $3}' fit_detail_${RunCounter}_Ite${iteNum}.txt) <= 0.001") -eq 1 -a  $(bc <<< "$(awk 'NR==3{print $3 < 0 ? -$3 : $3}' fit_detail_${RunCounter}_Ite${iteNum}.txt) <= 0.001") -eq 1 -a  $(bc <<< "$(awk 'NR==4{print $3 < 0 ? -$3 : $3}' fit_detail_${RunCounter}_Ite${iteNum}.txt) <= 0.001") -eq 1   -a  $(bc <<< "$(awk 'NR==5{print $3 < 0 ? -$3 : $3}' fit_detail_${RunCounter}_Ite${iteNum}.txt) <= 0.001") -eq 1   -a  $(bc <<< "$(awk 'NR==6{print $3 < 0 ? -$3 : $3}' fit_detail_${RunCounter}_Ite${iteNum}.txt) <= 0.001") -eq 1   -a  $(bc <<< "$(awk 'NR==7{print $3 < 0 ? -$3 : $3}' fit_detail_${RunCounter}_Ite${iteNum}.txt) <= 0.001") -eq 1   -a  $(bc <<< "$(awk 'NR==8{print $3 < 0 ? -$3 : $3}' fit_detail_${RunCounter}_Ite${iteNum}.txt) <= 0.001") -eq 1  ]; then
 			echo "Number of iteration taken to align detectors is $iteNum"
 			iterating=1
 		fi
 	else  
-		if [ $(bc <<< "$(awk 'NR==2{print $3}' fit_detail_${RunCounter}_Ite${iteNum}.txt) <= 0.001") -eq 1 -a  $(bc <<< "$(awk 'NR==3{print $3}' fit_detail_${RunCounter}_Ite${iteNum}.txt) <= 0.001") -eq 1 -a  $(bc <<< "$(awk 'NR==4{print $3}' fit_detail_${RunCounter}_Ite${iteNum}.txt) <= 0.001") -eq 1   -a  $(bc <<< "$(awk 'NR==5{print $3}' fit_detail_${RunCounter}_Ite${iteNum}.txt) <= 0.001") -eq 1   -a  $(bc <<< "$(awk 'NR==6{print $3}' fit_detail_${RunCounter}_Ite${iteNum}.txt) <= 0.001") -eq 1   -a  $(bc <<< "$(awk 'NR==7{print $3}' fit_detail_${RunCounter}_Ite${iteNum}.txt) <= 0.001") -eq 1   -a  $(bc <<< "$(awk 'NR==8{print $3}' fit_detail_${RunCounter}_Ite${iteNum}.txt) <= 0.001") -eq 1  ]; then
+		if [ $(bc <<< "$(awk 'NR==2{print $3 < 0 ? -$3 : $3}' fit_detail_${RunCounter}_Ite${iteNum}.txt) <= 0.001") -eq 1 -a  $(bc <<< "$(awk 'NR==3{print $3 < 0 ? -$3 : $3}' fit_detail_${RunCounter}_Ite${iteNum}.txt) <= 0.001") -eq 1 -a  $(bc <<< "$(awk 'NR==4{print $3 < 0 ? -$3 : $3}' fit_detail_${RunCounter}_Ite${iteNum}.txt) <= 0.001") -eq 1   -a  $(bc <<< "$(awk 'NR==5{print $3 < 0 ? -$3 : $3}' fit_detail_${RunCounter}_Ite${iteNum}.txt) <= 0.001") -eq 1   -a  $(bc <<< "$(awk 'NR==6{print $3 < 0 ? -$3 : $3}' fit_detail_${RunCounter}_Ite${iteNum}.txt) <= 0.001") -eq 1   -a  $(bc <<< "$(awk 'NR==7{print $3 < 0 ? -$3 : $3}' fit_detail_${RunCounter}_Ite${iteNum}.txt) <= 0.001") -eq 1   -a  $(bc <<< "$(awk 'NR==8{print $3 < 0 ? -$3 : $3}' fit_detail_${RunCounter}_Ite${iteNum}.txt) <= 0.001") -eq 1  ]; then
 			echo "Number of iteration taken to align detectors is $iteNum"
 			iterating=1
 		fi
 	fi
 	fi
+	if [ ${MakePPt} == 1 ]; then
+	make_dir "TexFiles"
+	make_dir "PPTs"
+        cp test.tex TexFiles/ppt_R${RunCounter}_I${iteNum}.tex     # $1 reads the 1st argument
+	cp cern.jpeg cmsLogo.jpeg logo_du.jpeg TexFiles/
+        for plots in Plots/pdf/${RunCounter}/*.pdf; do
+            TexFileName=$(basename  "$plots")
+            TexFileName=${TexFileName%.*}
+            TexFileName=${TexFileName//_/ }
+            echo $TexFileName
+            echo $plots
+            perl -spe 's/intime_mean_pu.pdf/$a/;s/TitleFrame/$b/' < fig.tex -- -a="$plots" -b="$TexFileName" > "fig_temp.tex"
+            #sed -i "/Pointer-rk/r fig_temp.tex" "ppt_R${IRunNo}_R${FRunNo}.tex"
+            sed -i "/Pointer-rk/r fig_temp.tex" "TexFiles/ppt_R${RunCounter}_I${iteNum}.tex"
+        done
+	pdflatex TexFiles/ppt_R${RunCounter}_I${iteNum}.tex
+	pdflatex TexFiles/ppt_R${RunCounter}_I${iteNum}.tex
+	mv ppt_R${RunCounter}_I${iteNum}.pdf PPTs/ppt_R${RunCounter}_I${iteNum}.pdf
+	#rm ppt_R${RunCounter}.tex
+	#rm fig_temp.tex  ppt_R${RunCounter}_I${iteNum}.toc ppt_R${RunCounter}_I${iteNum}.snm ppt_R${RunCounter}_I${iteNum}.out ppt_R${RunCounter}_I${iteNum}.nav ppt_R${RunCounter}_I${iteNum}.auxt_R${RunCounter}.log
+	fi	# if [ ${MakePPt} == 1 ]; then
 	iteNum=$((iteNum+1))
 	cd -
 	LC1=$(sed -n '/Loading the trees.../{n;n;n;n;n;p;}'	$PathOfOutPutData/$(basename $f)/Run${temp}_Analyzer.log | awk '{print $1}')
@@ -670,4 +731,10 @@ fi
 
 echo "To Make Efficiency Curves Execute In Terminal:"
 echo "./analyzeEff.sh"
+mv *.txt TextFiles/
 graceful_exit
+
+echo end
+) | tee OutPut.log
+
+
