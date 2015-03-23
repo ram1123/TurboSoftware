@@ -266,6 +266,10 @@ function helptext
 			${tab}1. First  : Initial Run Number
 			${tab}2. Second : Final Run Number
 
+	-a		If You do not want to do iteration: use this
+
+	-s		Make PPt at each stage of iteration; with basic plots	
+
 	-l		This option ask you to enter the two numbers:
 			${tab}1. First : Initial Latency 
 			${tab}2. Second : Final Latency
