@@ -619,8 +619,7 @@ do
 		grep "${RunCounter}" beam_profile_details_${RunCounter}.txt >> beam_profile_details_${RunCounter}_Final.txt
 	fi
 	echo "##########################################################################RAM###################################"
-	cat fit_detail_${RunCounter}_Ite${iteNum}.txt
-	mv *.txt OffsetFlip* LogFiles/${RunCounter}/
+	cat  fit_detail_${RunCounter}_Ite${iteNum}.txt
 	echo "##########################################################################RAM###################################"
 	if [ $RunCounter -le 103 ]; then
 		if [ $(bc <<< "$(awk 'NR==2{print $3 < 0 ? -$3 : $3}' fit_detail_${RunCounter}_Ite${iteNum}.txt) <= 0.001") -eq 1 -a  $(bc <<< "$(awk 'NR==3{print $3 < 0 ? -$3 : $3}' fit_detail_${RunCounter}_Ite${iteNum}.txt) <= 0.001") -eq 1 -a  $(bc <<< "$(awk 'NR==4{print $3 < 0 ? -$3 : $3}' fit_detail_${RunCounter}_Ite${iteNum}.txt) <= 0.001") -eq 1   -a  $(bc <<< "$(awk 'NR==5{print $3 < 0 ? -$3 : $3}' fit_detail_${RunCounter}_Ite${iteNum}.txt) <= 0.001") -eq 1   -a  $(bc <<< "$(awk 'NR==6{print $3 < 0 ? -$3 : $3}' fit_detail_${RunCounter}_Ite${iteNum}.txt) <= 0.001") -eq 1   -a  $(bc <<< "$(awk 'NR==7{print $3 < 0 ? -$3 : $3}' fit_detail_${RunCounter}_Ite${iteNum}.txt) <= 0.001") -eq 1   -a  $(bc <<< "$(awk 'NR==8{print $3 < 0 ? -$3 : $3}' fit_detail_${RunCounter}_Ite${iteNum}.txt) <= 0.001") -eq 1  ]; then
@@ -640,6 +639,7 @@ do
 		fi
 	fi
 	fi
+	mv *.txt OffsetFlip* LogFiles/${RunCounter}/
 	if [ ${MakePPt} == 1 ]; then
 	make_dir "TexFiles"
 	make_dir "TexFiles/${RunCounter}_Iteration"
