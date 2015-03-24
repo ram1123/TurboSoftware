@@ -220,9 +220,14 @@ function DeleteIfFileExists
 	if [ "$1" = "" ]; then 
 		error_exit "DeleteIfFileExists: missing argument 1"
 	else
-		rm $1
-		echo "File ${1} deleted."
-	fi
+	if [ -f $1 ]; then
+		rm -v $1
+	else
+	if [ -d $1 ]; then
+		rm -v -r $1
+	fi	### if [ -d $1 ]; then
+	fi	### if [ -f $1 ]; then
+	fi	### if [ "$1" = "" ]; then
 
 	return
 
@@ -365,14 +370,6 @@ while getopts ":hrlfemias" opt; do
 			InitialiteNum=0
 			NoIteration=1
 			MakePPt=0
-			#echo -n "Enter Number of iteration to be done (default value 0) = "
-			#read NoOfIte
-			#if [ "$NoOfIte" == "" ]; then
-			#	NoOfIte=0
-			#fi
-			#if ask_yes_no "Want to checkout Configuration file from GitHub... [y/n] "; then
-			#	checkOutConfig=1
-			#fi
 			if [ "$IRunNo" -gt 1586 ] || [ "$FRunNo" -gt 1586 ]; then
 				error_exit "Maximum allowed Run Number is 1586."
 			fi;;
@@ -470,6 +467,10 @@ do
   fi
   fi
 
+DeleteIfFileExists "../ppt/TexFiles/${RunCounter}_Iteration"
+DeleteIfFileExists ../ppt/PPTs/${RunCounter}_Iteration/
+DeleteIfFileExists ../ppt/LogFiles/${RunCounter}/
+
   iteNum=${InitialiteNum}
   # Copies the right configuration file for the present run
   if [ $RunCounter -le 103 ]; then
@@ -518,7 +519,7 @@ do
 	if [ "$run" == 0 -o "$run" == 1 ]; then
 		if [ "$DeleteRootFile" == 1 ]; then
 			echo -e "\n\n\tls  ${PathOfOutPutData}/$(basename $f)/*.root\n\n"
-			rm $PathOfOutPutData/$(basename $f)/*.root
+			DeleteIfFileExists $PathOfOutPutData/$(basename $f)/*.root
 			echo -e "\n\n\t\tROOT FILE IS REMOVED\n\n\n"
 		fi
 		echo -e "\n\n\t\tCleaning Presetn Directory\n\n"
@@ -674,7 +675,7 @@ do
 
 	if [ $iteNum == 11 ]; then
 		echo "${temp}" >> ProblematicRunForIterativeAlingment_R${IRunNo}_R${FRunNo}.txt
-	fi
+	fi 	### if [ $iteNum == 11 ]; then
 ################################################################################3
 ##
 ##		END OF ITERATION LOOP

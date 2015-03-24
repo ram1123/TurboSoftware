@@ -78,6 +78,34 @@ function error_exit
 }
 
 
+function DeleteIfFileExists           
+{                                  
+                                   
+#       ------------------------------------------------------------------------
+#       It deletes a file if it exists
+#               Arguments:          
+#                       1       Name of File (required)
+#       ------------------------------------------------------------------------
+                                   
+        # Fatal error if required arguments are missing
+                                   
+        if [ "$1" = "" ]; then        
+                error_exit "DeleteIfFileExists: missing argument 1"
+        else                       
+        if [ -f $1 ]; then          
+                rm -v $1           
+        else                       
+        if [ -d $1 ]; then         
+                rm -v -r $1           
+        fi      ### if [ -d $1 ]; then
+        fi      ### if [ -f $1 ]; then
+        fi      ### if [ "$1" = "" ]; then
+                                   
+        return                     
+                                   
+}       # end of DeleteIfFileExists   
+
+
 function graceful_exit
 {
 
@@ -284,15 +312,6 @@ make_dir "TexFiles"
 make_dir "PPTs"
 make_dir "TextFiles"
 
-	if ls *.pdf; then 
-	        mv *.pdf Backup/
-	fi
-	if ls *.txt; then 
-	        mv *.txt Backup/
-	fi
-	if ls TexFiles/ppt*.tex; then 
-	        rm TexFiles/ppt*.tex
-	fi
 ############################################################################################
 #
 #	To run remotely uncomment below lines
