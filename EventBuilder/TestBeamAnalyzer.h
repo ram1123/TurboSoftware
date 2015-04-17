@@ -37,6 +37,7 @@
 #include "TH1F.h"
 #include "TLatex.h"
 #include "TLegend.h"
+#include "TMath.h"
 #include "TMultiGraph.h"
 #include "TPaveText.h"
 #include "Rtypes.h"
@@ -76,14 +77,16 @@ public:
         float gain;         //Gain
         float gain_sigma;   //Gain Uncertainty
         
+        float thresh;         //Threshold
+        
         int icomp;
         int latency;        //Latency
         int pulseLen;       //Length of the Mono-stable pulse
-        int thresh;         //Threshold
         
         string name;        //Name of the Detector
         
         TDCMeasurements TDC;
+        TDCMeasurements TDCDeconvo;
     };
     
     //Comparison operator for std::map<string,X> for non-standard X
@@ -125,13 +128,33 @@ public:
     
 	//Setters - Methods that Set Something
     //------------------------------------------------------------------------------------------------------------------------------------------
-	virtual void setFilesEff(string inputFile, string inputFile_LatSpecific);
+    virtual void setEffFitDraw(bool input = false){ drawFit = input; return;};
+    //virtual void setEffFitFormula(string input = "(1+exp([0]*(x+[1])))^(-1)"){fitEff_Formula = input; return;};
+    virtual void setEffFitFormula(string input = "0.5*(1.+TMath::Erf((x*[0]-[1])+0.5*[2]))"){fitEff_Formula = input; return;};
+    virtual void setEffFitOption(string inputOption = "R"){ fitEff_Option = inputOption; return;};
+    
+    virtual void setFilesEff(string inputFile, string inputFile_LatSpecific);
     virtual void setFilesEff(string inputFile, std::vector<string> inputFile_LatSpecific);
     virtual void setFilesTDC(string inputFile){fileName_TDC_Master = inputFile; return;} //File Format expects tab delimited list, each line should be "<Root File Name> <Channel Mapping File Name>"
+    
+    //Sets the equivalent resistance of the HV Divider in Ohms
+    virtual void setREquiv(float input = (1.125e6 + 563e3 + 438e3 + 550e3 + 875e3 + 525e3 + 625e3 ) ){fREquiv = input; return;};
     
     //virtual void setRunParams();                                                              //Get's the run parameters for all stored runs
     virtual void setRunParamEff(string input, std::vector<std::pair<float,float> > vec_eff);      //Get's teh run parameters for a specific run
     virtual void setRunParamTDC(string input, std::vector<TH1F*> inputHistos);
+    
+    //Set's the Formula for transforming Convoluted to Deconvoluted Time Response
+    //virtual void setTransformFormula(string input = "sqrt( ( ( x-[0] )/ [1] )^2 - [2] )"){timeResp_Convo2Deconvo_Formula = input; return;};
+    virtual void setTransformFormula(string input = "sqrt( ( ( x-[0] )/ [1] )^2 - [2] )"){
+        func_TimeResp_ConvoToPure = new TF1("func_TimeResp_ConvoToPure",input.c_str(),0,100 );
+        return;
+    };
+    //virtual void setTransformParameters(std::vector<float> input){timeResp_Convo2Deconvo_Parameters = input; return;};
+    virtual void setTransformParameters(std::vector<float> input){
+        for (int i=0; i < input.size(); i++) {func_TimeResp_ConvoToPure->SetParameter(i,input[i]);}
+        return;
+    };
     
     virtual void setTDCAutoRangingFit(bool inputOption){ fitTDC_AutoRanging = inputOption; return;}
     virtual void setTDCFitOption(string inputOption){ fitTDC_Option = inputOption; return;}
@@ -140,6 +163,7 @@ public:
     virtual void setTDCNoiseThreshold(float inputThresh){ noiseThresh_TDC = inputThresh; return;}
     virtual void setTDCRebinFactor(int input){ rebinFactor_TDC = input; return;}
     
+    virtual void setVFATThreshConversion(float input = 0.08){fVFAT_thresh2fC = input; return;};
     
 	//Getters - Methods that Get Something
     //------------------------------------------------------------------------------------------------------------------------------------------
@@ -181,12 +205,15 @@ public:
 private:
     
 	//Data Members
+    bool drawFit;
     bool detNamesSet;
     bool fitTDC_AutoRanging;
     bool meas_TDC_ClockScan;
     bool meas_TDC_TimeRes;
     
     float noiseThresh_TDC;
+    float fREquiv;
+    float fVFAT_thresh2fC;
     
     int rebinFactor_TDC;
     
@@ -194,6 +221,12 @@ private:
     
     string fileName_Eff_Master;
     string fileName_TDC_Master;
+    
+    //string timeResp_Convo2Deconvo_Formula;
+    
+    string fitEff_Formula;
+    string fitEff_Option;
+    
     string fitTDC_Option;
     
     string peakKey_Delta;   //Key For peakInfo Maps Referencing Peak "Delta"
@@ -202,6 +235,10 @@ private:
     string peakKey_Pos;     //Key For peakInfo Maps Referencing Peak "Position"
     string peakKey_PosTime; //Key for peakInfo Maps Referencing Peak "TemporalPos"
     string peakKey_UprBd;   //Key for peakInfo Maps Referencing Peak "UpperBound"
+    
+    TF1 *func_TimeResp_ConvoToPure;
+    
+    //std::vector<float> timeResp_Convo2Deconvo_Parameters;
     
     std::vector<string> files_Eff_LatSpecific;
     
@@ -232,23 +269,34 @@ private:
     //Container Storing Relevant Info for each delay value
     struct InfoPerDelay{ //struct InforPerDelay
         float nEvt;         //Integral Considered of Histogram Taken at this delay
+        float thresh;         //Threshold
         
         int latency;
         int pulseLen;
         int run_final;
         int run_initial;
-        int thresh;
         
         string beamType;
         
         vector<float> currScan;
         vector<float> effs;
         vector<float> sigma_effs;
+        
         vector<bool> vec_fitPerformed;
+        vector<bool> vec_fitPerformed_Deconvo;
+        
         vector<float> vec_rawRMS;
+        vector<float> vec_rawRMS_Deconvo;
+        
         vector<float> vec_rawRMSErr;    //Error on the Numeric Estimation of the RMS
+        vector<float> vec_rawRMSErr_Deconvo;    //Error on the Numeric Estimation of the RMS
+        
         vector<float> vec_rawMeans;
+        vector<float> vec_rawMeans_Deconvo;
+        
         vector<float> vec_rawMeansErr;  //Error on the Numeric Estimation of the Mean (different from RMS and std. dev.)
+        vector<float> vec_rawMeansErr_Deconvo;  //Error on the Numeric Estimation of the Mean (different from RMS and std. dev.)
+        
         vector<float> vec_totalTrigs;
         
         vector<vector<std::map<string, float> > > vec_allPeakInfo;
@@ -266,17 +314,21 @@ private:
         TLatex *texInfo_lat;
         
         vector<TF1*> vec_timeResFits;
+        vector<TF1*> vec_timeResFits_Deconvo;
+        
         vector<TH1F*> vec_timeResHistos;        //Fitted Histograms
         vector<TH1F*> vec_timeResHistoOverFits;  //Ratio of Histogram Divided by Fit at Bin Midpoint
+        vector<TH1F*> vec_timeResHistoOverFits_Deconvo;  //Ratio of Histogram Divided by Fit at Bin Midpoint
     }; //End struct InforPerDelay
     
     //Container Storing Relevant info for each latency value
     struct InfoPerLat{ //struct InfoPerLat
+        float thresh;         //Threshold
+        
         int delay;
         int pulseLen;
         int run_final;
         int run_initial;
-        int thresh;
         
         string beamType;
         
@@ -292,9 +344,14 @@ private:
         vector<vector<std::map<string, float> > > vec_allPeakInfo;
         
         //Root Members
+        TF1 *fit_DetEff_v_Curr;
+        TF1 *fit_DetEff_v_HVDrift;
+        
         TGraphErrors *graph_DetEff_v_Curr;
+        TGraphErrors *graph_DetEff_v_HVDrift;
         
         TCanvas *canvas_DetEff_v_Curr;
+        TCanvas *canvas_DetEff_v_HVDrift;
         
         TLatex *texInfo_beam;
         TLatex *texInfo_delay;
@@ -312,13 +369,13 @@ private:
         bool infoMatch_DLY;     //Flag that evaluates to False if latency, beamType or pulseLen are not the same for each run considered
         
         float max_eff;      //Maximum Efficiency
+        float thresh;
         
         int delay;
         int latAtMaxEff;    //Latency Value max_eff is at
         int pulseLen;
         int run_final;
         int run_initial;
-        int thresh;
         
         string beamType;
         
@@ -326,11 +383,27 @@ private:
         std::map<int,InfoPerLat,cmp_int> Scan_Lat;
         
         TGraphErrors *graph_MaxTrigEff_v_Delay;
+        
         TGraphErrors *graph_RMS_TimeRes_v_Curr; //Time Resolution Calculated from Histogram RMS
         TGraphErrors *graph_Fit_TimeRes_v_Curr; //Time Resolution Calculated from Gaussian Fits
         TGraphErrors *graph_Fit_normChi2_v_Curr;//Normalized Chi^2 value for each Gaussian Fit
         
+        TGraphErrors *graph_RMS_Deconvo_TimeRes_v_Curr; //Deconvoluted Time Res from Histo RMS Based on Convolution Model
+        TGraphErrors *graph_Fit_Deconvo_TimeRes_v_Curr; //Deconvoluted Time Res from Erf Fits Based on Convolution Model
+        TGraphErrors *graph_Fit_Deconvo_normChi2_v_Curr;//Normalized Chi^2 value for each Erf Fit
+        
+        TGraphErrors *graph_RMS_TimeRes_v_HVDrift; //Time Resolution Calculated from Histogram RMS
+        TGraphErrors *graph_Fit_TimeRes_v_HVDrift; //Time Resolution Calculated from Gaussian Fits
+        TGraphErrors *graph_Fit_normChi2_v_HVDrift;//Normalized Chi^2 value for each Gaussian Fit
+        
+        TGraphErrors *graph_RMS_Deconvo_TimeRes_v_HVDrift; //Deconvoluted Time Res from Histo RMS Based on Convolution Model
+        TGraphErrors *graph_Fit_Deconvo_TimeRes_v_HVDrift; //Deconvoluted Time Res from Erf Fits Based on Convolution Model
+        TGraphErrors *graph_Fit_Deconvo_normChi2_v_HVDrift;//Normalized Chi^2 value for each Erf Fit
+        
+        
         TCanvas *canvas_DetEff_v_Curr;
+        TCanvas *canvas_DetEff_v_HVDrift;
+        
         TCanvas *canvas_MaxTrigEff_v_Delay;
         TCanvas *canvas_Fit_normChi2_v_Curr;
         TCanvas *canvas_Fit_TimeRes_v_Curr;
@@ -348,6 +421,7 @@ private:
         TLegend *leg_Info;
         
         TMultiGraph *mGraph_AllLatPlots;
+        TMultiGraph *mGraph_AllLatPlots_HVDrift;
     }; //End struct DetResults
     
     std::map<string,DetResults,cmp_str> results;
@@ -356,16 +430,19 @@ private:
         bool infoMatch_Lat;     //Flag that evaluates to False if delay, beamType, or pulseLen are not the same for each curve considered
         bool infoMatch_DLY;     //Flag that evaluates to False if latency, beamType, or pulseLen are not the same for each curve considered
         
+        float thresh;
+        
         int delay;
         int pulseLen;
         int run_final;
         int run_initial;
-        int thresh;
         
         string beamType;
         
         //TCanvas's
         TCanvas *canvas_AllDet_DetEff_v_Curr;   //Comparison of the Efficiency Curves from All Detectors
+        TCanvas *canvas_AllDet_DetEff_v_HVDrift;   //Comparison of the Efficiency Curves from All Detectors
+        
         TCanvas *canvas_AllDet_MaxTrigEff_v_Curr;
         TCanvas *canvas_AllDet_MaxTrigEff_v_Delay;
         TCanvas *canvas_AllDet_TimeResFit_v_Curr;
@@ -398,6 +475,8 @@ private:
         
         //TMultiGraph's
         TMultiGraph *mGraph_AllDet_DetEff_v_Curr;
+        TMultiGraph *mGraph_AllDet_DetEff_v_HVDrift;
+        
         TMultiGraph *mGraph_AllDet_MaxTrigEff_v_Curr;
         TMultiGraph *mGraph_AllDet_MaxTrigEff_v_Delay;
         TMultiGraph *mGraph_AllDet_TimeResFit_v_Curr;

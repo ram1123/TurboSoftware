@@ -279,7 +279,7 @@ while getopts ":hrpgm" opt; do
 			fi;;
 		p )	echo -n "Enter path of Ntuples : " 
 			read PathOfInputNtuple
-			if [ ! -f $PathOfInputNtuple ]; then
+			if [ ! -d $PathOfInputNtuple ]; then
 				error_exit "Path ${PathOfInputNtuple} does not exits"
 			fi;;
 		m )	echo "The ppt file will be sent to the mail that you will provide."			

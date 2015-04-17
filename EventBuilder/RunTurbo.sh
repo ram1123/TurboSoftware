@@ -419,7 +419,7 @@ while getopts ":hrlfemias" opt; do
 				if [ "$JustTextFile" == 1 ]; then
 					echo -n "Enter the path where the log file present : "
 					read PathOfOutPutData
-					if [ ! -f $PathOfOutPutData ]; then
+					if [ ! -d $PathOfOutPutData ]; then
 						error_exit "Path ${PathOfOutPutData} does not exits"
 					fi
 				fi

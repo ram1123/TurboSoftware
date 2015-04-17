@@ -88,6 +88,7 @@ int Correlation_Prob_troubleshoot()
   Canvas1->Divide(2,2);
   Canvas1->cd(1);
   h20->Draw("colz");
+  h20->GetXaxis()->SetTitle("xaxis");
   Canvas1->cd(2);
   h2->Draw("colz");
   TH1D * projh2X = h2->ProjectionX();

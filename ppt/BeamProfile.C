@@ -84,7 +84,8 @@ int BeamProfile(TString RootFile,TString RecoFile, Int_t name, Int_t Plot)
         cmsprem = new TLatex(0,101,"CMS Preliminary");
         cmsprem->SetTextSize(0.04);
 	
-	gStyle->SetOptStat("ne");
+	//gStyle->SetOptStat("ne");
+	gStyle->SetOptStat(1111);
 
 	//int Plot = 0;
 	if (Plot){
@@ -538,8 +539,8 @@ o_file3<<name<<"\t("<<BeamProfile_Tracker_1->GetXaxis()->GetBinCenter(binx)<<","
 
 
 	canvas_prof->cd(1);
-	TH1F *Trk1_Trk2 = new TH1F("Trk1_Trk2","X - Offset",50,-4,4);
-	tmpTree->Draw("g1xcl.geoposX-g2xcl.geoposX>>Trk1_Trk2","trackx@.GetEntries()==1 && tracky@.GetEntries()==1 && trackx.q>0 && tracky.q>0");
+	TH1F *Trk1_Trk2 = new TH1F("Trk1_Trk2","X - Offset",40,-4,4);
+	tmpTree->Draw("g1xcl.geoposX-g2xcl.geoposX>>Trk1_Trk2","trackx@.GetEntries()==1 && tracky@.GetEntries()==1 && trackx.q>0 && tracky.q>0 && trackx.chi2<20 && tracky.chi2<20");
 	Trk1_Trk2->GetXaxis()->SetTitle("#Delta x in mm");
 	Trk1_Trk2->GetYaxis()->SetTitle("Number of entries");
 	canvas_prof_1->Modified(); canvas_prof_1->Update();
@@ -670,7 +671,7 @@ o_file3<<name<<"\t("<<BeamProfile_Tracker_1->GetXaxis()->GetBinCenter(binx)<<","
 
 	canvas_prof->cd(4);
 	TH1F *Trk1_GE11_IV_GIF = new TH1F("Trk1_GE11_IV_GIF","Y - Offset",50,-20,20);
-	tmpTree->Draw("g1ycl.geoposY-sCMSNS2LC1.geoposY>>Trk1_GE11_IV_GIF","trackx@.GetEntries()==1 && tracky@.GetEntries()==1 && trackx.q>0 && tracky.q>0");
+	tmpTree->Draw("g1ycl.geoposY-sCMSNS2LC1.geoposY>>Trk1_GE11_IV_GIF","trackx@.GetEntries()==1 && tracky@.GetEntries()==1 && trackx.q>0 && tracky.q>0 && trackx.chi2<20 && tracky.chi2<20");
 	Trk1_GE11_IV_GIF->GetXaxis()->SetTitle("#Delta y in mm");
 	Trk1_GE11_IV_GIF->GetYaxis()->SetTitle("Number of entries");
 	canvas_prof_4->Modified(); canvas_prof_4->Update();
@@ -890,7 +891,7 @@ for(Int_t i=0;i<nbranch;i++){
 	#endif
 
 	hist[i] = new TH2F(TString("H_")+TString(fnames[i]),"",100,range[k],range[k+1],100,range[k+2],range[k+3]);
-	tmpTree->Draw(TString(bnames[i])+TString(">>H_")+TString(fnames[i]),"trackx@.GetEntries()==1 && tracky@.GetEntries()==1 ","colz");
+	tmpTree->Draw(TString(bnames[i])+TString(">>H_")+TString(fnames[i]),"","colz");
 	printf("correl factor = %g\n",hist[i]->GetCorrelationFactor());
 	hist[i]->GetXaxis()->SetTitle(xyAxisName[l]);
 	hist[i]->GetYaxis()->SetTitle(xyAxisName[l+1]);

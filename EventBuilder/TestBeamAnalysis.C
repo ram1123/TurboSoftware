@@ -49,9 +49,12 @@ int main (){
         
         counter++;
     } while (!dataInput.eof());
-    
+
     //Detection Efficiency
     myAnalyzer.setFilesEff(masterFileName,vec_latFiles);
+    myAnalyzer.setEffFitDraw(true);	//Draws the fit on the canvas if true
+    myAnalyzer.setEffFitFormula(/* string argument */); //Takes string formula, default is hard-coded to "(1+exp([0]*(x+[1])))^(-1)" may require some "play"
+    myAnalyzer.setEffFitOption("R");
     myAnalyzer.analyzeRunsEff();
     myAnalyzer.makeDetLogEff();
     myAnalyzer.makeHistogramsEff("EffPlots.root","RECREATE");

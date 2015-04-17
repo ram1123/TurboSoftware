@@ -44,12 +44,18 @@ TestBeamAnalyzer::TestBeamAnalyzer(){
     
     paramType.microAmps     = "uA";
     
+    //Draw fits to efficiency curves?
+    drawFit                 = true;
+    
     //Flag Detector Names as Not Set
     detNamesSet             = false;
     
     //Type of Measurement for TDC
     meas_TDC_ClockScan      = false;
     meas_TDC_TimeRes        = false;
+    
+    //Sets the equivalent resistance of the HV Divider
+    fREquiv = (1.125e6 + 563e3 + 438e3 + 550e3 + 875e3 + 525e3 + 625e3 );
     
     //Noise Threshold for TDC measurements
     noiseThresh_TDC         = 0.;
@@ -58,8 +64,14 @@ TestBeamAnalyzer::TestBeamAnalyzer(){
     rebinFactor_TDC         = 1;
     
     //Initialize Fit Setup for Async TDC Fits
+    fitEff_Formula          = "(1+exp([0]*(x+[1])))^(-1)";
+    fitEff_Option           = "R";
+    
     fitTDC_AutoRanging      = false;
     fitTDC_Option           = "R";
+    
+    //Setup Conversion from VFAT Units to Real Units
+    fVFAT_thresh2fC         = 0.08;
     
     //Initialize Key Holders for peakInfo Map
     peakKey_Delta           = "Delta";
@@ -77,6 +89,8 @@ TestBeamAnalyzer::TestBeamAnalyzer(){
     comparison.run_final    = 0;
     
     comparison.canvas_AllDet_DetEff_v_Curr = new TCanvas("Plot_AllDet_DetEff_v_Curr","AllDet_DetEff_v_Curr",700,700);
+    comparison.canvas_AllDet_DetEff_v_HVDrift = new TCanvas("Plot_AllDet_DetEff_v_HVDrift","AllDet_DetEff_v_HVDrift",700,700);
+    
     comparison.canvas_AllDet_MaxTrigEff_v_Curr = new TCanvas("Plot_AllDet_MaxTrigEff_v_Curr","AllDet_MaxTrigEff_v_Curr",700,700);
     comparison.canvas_AllDet_MaxTrigEff_v_Delay = new TCanvas("Plot_AllDet_MaxTrigEff_v_Delay","AllDet_MaxTrigEff_v_Delay",700,700);
     comparison.canvas_AllDet_TimeResFit_v_Curr = new TCanvas("Plot_AllDet_TimeResFit_v_Curr","AllDet_TimeResFit_v_Curr",700,700);
@@ -89,6 +103,8 @@ TestBeamAnalyzer::TestBeamAnalyzer(){
     comparison.texInfo_thresh   = new TLatex();  comparison.texInfo_thresh->SetTextSize(0.03);
     
     comparison.mGraph_AllDet_DetEff_v_Curr = new TMultiGraph("MultiGraph_AllDet_DetEff_v_Curr"," ;Current Supplied to HV Divider #left(#muA#right);Efficiency");
+    comparison.mGraph_AllDet_DetEff_v_HVDrift = new TMultiGraph("MultiGraph_AllDet_DetEff_v_HVDrift"," ;HV_{Drift} #left(V#right);Efficiency");
+    
     comparison.mGraph_AllDet_MaxTrigEff_v_Curr = new TMultiGraph("MultiGraph_AllDet_MaxTrigEff_v_Curr", " ;Current Supplied to HV Divider #left(#muA#right);Efficiency to Trigger in One Clock Cycle");
     comparison.mGraph_AllDet_MaxTrigEff_v_Delay = new TMultiGraph("MultiGraph_AllDet_MaxTrigEff_v_Delay", " ;Added Delay #left(ns#right);Efficiency to Trigger in One Clock Cycle");
     comparison.mGraph_AllDet_TimeResFit_v_Curr = new TMultiGraph("MultiGraph_AllDet_TimeResFit_v_Curr"," ;Current Supplied to HV Divider #left(#muA#right);Time Resolution #sigma_{#font[12]{t}}^{Fit} #left(ns#right)");
@@ -124,8 +140,8 @@ TestBeamAnalyzer::RunParam TestBeamAnalyzer::getRun(string input){
     TestBeamAnalyzer::RunParam ret_Run;
     
     vector<float> vec_current;
+    vector<float> vec_thresh;
     
-    vector<int> vec_thresh;
     vector<int> vec_lat;
     vector<int> vec_pulseLen;
     vector<int> vec_icomp;
@@ -232,6 +248,16 @@ TestBeamAnalyzer::RunParam TestBeamAnalyzer::getRun(string input){
                 
                 found_latency = true;
             } //End Case: Latency
+            else if( vec_params[i].compare(0,4,paramType.beam_mu) == 0 ){ //Case: Beam Type - Muon
+                ret_Run.beamType = vec_params[i];
+                
+                found_beamType = true;
+            } //End Case: Beam Type - Muon
+            else if( vec_params[i].compare(0,4,paramType.beam_pi) == 0 ){ //Case: Beam Type - Pion
+                ret_Run.beamType = vec_params[i];
+                
+                found_beamType = true;
+            } //End Case: Beam Type - Pion
         } //End Case: length >= 5 and not considered above
         else if (vec_params[i].length() >= 4 ) { //Case: length >= 4 and not considered above
             if( vec_params[i].compare(0,4,paramType.beam_mu) == 0 ){ //Case: Beam Type - Muon
@@ -262,7 +288,7 @@ TestBeamAnalyzer::RunParam TestBeamAnalyzer::getRun(string input){
                 found_numEvt = true;
             } //End Case: Event Number (2-Digit)
             else if( vec_params[i].compare(0,1,paramType.thresh)==0 && !(vec_params[i].compare(0,3,paramType.TDC)==0) ){ //Case: Threshold (2-Digit)
-                vec_thresh.push_back( atoi( (vec_params[i].substr(1,vec_params[i].length()-1)).c_str() ) );
+                vec_thresh.push_back( atof( (vec_params[i].substr(1,vec_params[i].length()-1)).c_str() ) * fVFAT_thresh2fC);
                 
                 found_thresh = true;
             } //End Case: Threshold (2-Digit)
@@ -274,7 +300,7 @@ TestBeamAnalyzer::RunParam TestBeamAnalyzer::getRun(string input){
                 found_beamType = true;
             } //End Case: Beam Type - Electron
             else if( vec_params[i].compare(0,1,paramType.thresh)==0 && !(vec_params[i].compare(0,3,paramType.TDC.substr(0,2))==0) ){ //Case: Threshold (1-Digit)
-                vec_thresh.push_back( atoi( (vec_params[i].substr(1,1)).c_str() ) );
+                vec_thresh.push_back( atof( (vec_params[i].substr(1,1)).c_str() ) * fVFAT_thresh2fC );
                 
                 found_thresh = true;
             } //End Case: Threshold (1-Digit)
@@ -370,6 +396,7 @@ void TestBeamAnalyzer::setRunParamEff(string input, std::vector<std::pair<float,
     
     //Debugging
     //cout<<"TestBeamAnalyzer::setRunParamEff - No Fault 2" << endl;
+    //cout<<"TestBeamAnalyzer::setRunParamEff - specificRunParam.beamType = " << specificRunParam.beamType << endl;
     
     //Assign the detector specific parameters to the detector structure map
     //It is understood that vec_detNames has the same ordering as what appears in the file name
@@ -398,6 +425,7 @@ void TestBeamAnalyzer::setRunParamEff(string input, std::vector<std::pair<float,
                     cout<<"Warning Pulse Length Changed Mid Run"<<endl;
                     cout<<"Detector = " << vec_detNames[i] << " Latency = " << gem.latency << endl;
                     cout<<"Expect MSPL = " << results[vec_detNames[i]].Scan_Lat[gem.latency].pulseLen << " Current MSPL = " << gem.pulseLen << endl;
+                    cout<<"PLEASE CROSS CHECK RUN: " << specificRunParam.numRun << endl;
                     
                     results[vec_detNames[i]].infoMatch_Lat = false;
                 } //End Case: MSPL Check
@@ -418,6 +446,7 @@ void TestBeamAnalyzer::setRunParamEff(string input, std::vector<std::pair<float,
                     cout<<"Warning Threshold Changed Mid Run"<<endl;
                     cout<<"Detector = " << vec_detNames[i] << " Latency = " << gem.latency << endl;
                     cout<<"Expect Thresh = " << results[vec_detNames[i]].Scan_Lat[gem.latency].thresh << " Current Thresh = " << gem.thresh << endl;
+                    cout<<"PLEASE CROSS CHECK RUN: " << specificRunParam.numRun << endl;
                     
                     results[vec_detNames[i]].infoMatch_Lat = false;
                 } //End Case: Threshold Check
@@ -428,6 +457,7 @@ void TestBeamAnalyzer::setRunParamEff(string input, std::vector<std::pair<float,
                     cout<<"Warning Beam Type Changed Mid Run"<<endl;
                     cout<<"Detector = " << vec_detNames[i] << " Latency = " << gem.latency << endl;
                     cout<<"Expect Beam = " << results[vec_detNames[i]].Scan_Lat[gem.latency].beamType << " Current Beam = " << specificRunParam.beamType << endl;
+                    cout<<"PLEASE CROSS CHECK RUN: " << specificRunParam.numRun << endl;
                     
                     results[vec_detNames[i]].infoMatch_Lat = false;
                 } //End Case: MSPL Check
@@ -460,6 +490,7 @@ void TestBeamAnalyzer::setRunParamEff(string input, std::vector<std::pair<float,
                     cout<<"Warning Information Changed Mid Run for Detector " << vec_detNames[i] <<endl;
                     cout<<"Pulse Length, Trigger Mode/Delay, or Beam Type does not match Expectation"<<endl;
                     cout<<"Please Cross-check input runs"<<endl;
+                    cout<<"PLEASE CROSS CHECK RUN: " << specificRunParam.numRun << endl;
                     
                     results[vec_detNames[i]].infoMatch_Lat = false;
                 } //End Case: Check Info Matches for all latency curves for this detector match!
@@ -708,7 +739,7 @@ void TestBeamAnalyzer::setRunParamTDC(string input, vector<TH1F*> inputHistos){
                 //Set Range on Histogram
                 inputHistos[i]->GetXaxis()->SetRangeUser( peakInfo[peakKey_LwrBd], peakInfo[peakKey_UprBd] );
                 
-                //Prepare Fit
+                //Prepare Fit - Before Deconvolution
                 //could have put "gaus" instead of formula, but ROOT and C++ sometimes don't get along for preset things like this
                 TF1 *fit_Gaus = new TF1("fit_Gaus","[0]*exp(-0.5*((x-[1])/[2])**2)",0,1000);
                 
@@ -723,7 +754,7 @@ void TestBeamAnalyzer::setRunParamTDC(string input, vector<TH1F*> inputHistos){
                     inputHistos[i]->Fit(fit_Gaus, fitTDC_Option.c_str() );
                 } //End Case: Fit Using Fully Histogram Range
                 
-                //Store Information
+                //Store Information - Before Deconvolution
                 specificRunParam.detectors[vec_detNames[i]].TDC.fitPerformed= true;
                 
                 specificRunParam.detectors[vec_detNames[i]].TDC.raw_Mean    = inputHistos[i]->GetMean();
@@ -734,9 +765,31 @@ void TestBeamAnalyzer::setRunParamTDC(string input, vector<TH1F*> inputHistos){
                 
                 specificRunParam.detectors[vec_detNames[i]].TDC.timeResFit = (TF1*) fit_Gaus->Clone(Form("%s_TimeRes_Fit_%s_R%s", vec_detNames[i].c_str(), getString( floor(specificRunParam.detectors[vec_detNames[i]].current) ).c_str(), getString(specificRunParam.numRun).c_str() ) );
                 specificRunParam.detectors[vec_detNames[i]].TDC.timeResHisto = (TH1F*)inputHistos[i]->Clone(Form("%s_TimeRes_Histo_%s_R%s", vec_detNames[i].c_str(), getString( floor(specificRunParam.detectors[vec_detNames[i]].current) ).c_str(), getString(specificRunParam.numRun).c_str() ) );
+                
+                //Prepare Fit - Convoluted Result, Allows direct access to deconvoluted time resp w/o deconvolution.
+                TF1 *func_Erf_Convo = new TF1("func_Erf_Convo","[2]*[0]*sqrt(TMath::Pi()/2.)*(TMath::Erf( (12.5 + (x-[3])) / ([0] * sqrt(2.) ) ) - TMath::Erf( ((x-[3]) - 12.5) / ([0] * sqrt(2.) ) ) )",0,1000);
+                
+                func_Erf_Convo->SetParameter(0, inputHistos[i]->GetRMS() );
+                //func_Erf_Convo->SetParameter(1, fClkLengthOver2);
+                func_Erf_Convo->SetParameter(2, inputHistos[i]->GetMaximum() );
+                func_Erf_Convo->SetParameter(3, inputHistos[i]->GetMean() );
+                
+                //For now use it EXACTLY like we did for the model
+                inputHistos[i]->Fit(func_Erf_Convo,"N","",inputHistos[i]->GetMean() - 4. * inputHistos[i]->GetRMS(), inputHistos[i]->GetMean() + 4. * inputHistos[i]->GetRMS() );
+                
+                //Store Information - Deconvolution
+                specificRunParam.detectors[vec_detNames[i]].TDCDeconvo.fitPerformed= true;
+                
+                specificRunParam.detectors[vec_detNames[i]].TDCDeconvo.raw_Mean    = inputHistos[i]->GetMean();
+                specificRunParam.detectors[vec_detNames[i]].TDCDeconvo.raw_MeanErr = inputHistos[i]->GetMeanError();
+                specificRunParam.detectors[vec_detNames[i]].TDCDeconvo.raw_RMS     = func_TimeResp_ConvoToPure->Eval(inputHistos[i]->GetRMS() );
+                //specificRunParam.detectors[vec_detNames[i]].TDCDeconvo.raw_RMSErr  = inputHistos[i]->GetRMSError();
+                specificRunParam.detectors[vec_detNames[i]].TDCDeconvo.raw_RMSErr  = 0; //Set For Now
+                
+                specificRunParam.detectors[vec_detNames[i]].TDCDeconvo.timeResFit = (TF1*) func_Erf_Convo->Clone(Form("%s_TimeRes_Fit_Deconvo_%s_R%s", vec_detNames[i].c_str(), getString( floor(specificRunParam.detectors[vec_detNames[i]].current) ).c_str(), getString(specificRunParam.numRun).c_str() ) );
             } //End Case: Peak Found!
             else{ //Case: Peak Not Found or Below the Noise
-                //Store Information (Non Fit Specific)
+                //Store Information (Non Fit Specific) - Before Deconvolution
                 specificRunParam.detectors[vec_detNames[i]].TDC.fitPerformed= false;
                 
                 specificRunParam.detectors[vec_detNames[i]].TDC.raw_Mean    = inputHistos[i]->GetMean();
@@ -745,6 +798,15 @@ void TestBeamAnalyzer::setRunParamTDC(string input, vector<TH1F*> inputHistos){
                 specificRunParam.detectors[vec_detNames[i]].TDC.raw_RMSErr  = inputHistos[i]->GetRMSError();
                 
                 specificRunParam.detectors[vec_detNames[i]].TDC.timeResHisto = (TH1F*)inputHistos[i]->Clone(Form("%s_TimeRes_Histo_%s_R%s", vec_detNames[i].c_str(), getString( floor(specificRunParam.detectors[vec_detNames[i]].current) ).c_str(), getString(specificRunParam.numRun).c_str() ) );
+                
+                //Store Information (Non Fit Specific) - Deconvolution
+                specificRunParam.detectors[vec_detNames[i]].TDCDeconvo.fitPerformed= false;
+                
+                specificRunParam.detectors[vec_detNames[i]].TDCDeconvo.raw_Mean    = inputHistos[i]->GetMean();
+                specificRunParam.detectors[vec_detNames[i]].TDCDeconvo.raw_MeanErr = inputHistos[i]->GetMeanError();
+                specificRunParam.detectors[vec_detNames[i]].TDCDeconvo.raw_RMS     = func_TimeResp_ConvoToPure->Eval(inputHistos[i]->GetRMS() );
+                //specificRunParam.detectors[vec_detNames[i]].TDCDeconvo.raw_RMSErr  = inputHistos[i]->GetRMSError();
+                specificRunParam.detectors[vec_detNames[i]].TDCDeconvo.raw_RMSErr  = 0; //Set For Now
             } //End Case: Peak Not Found or Below the Noise
          
             //clear peak info
@@ -840,11 +902,12 @@ void TestBeamAnalyzer::setRunParamTDC(string input, vector<TH1F*> inputHistos){
                     
                     //Cyclic Storage
                     //results[vec_detNames[i]].Scan_DLY[specificRunParam.delay+25].vec_totalTrigs.push_back(gem.TDC.nEvt);
-                    results[vec_detNames[i]].Scan_DLY[specificRunParam.delay+25].vec_totalTrigs.push_back(specificRunParam.numEvt);
-                    results[vec_detNames[i]].Scan_DLY[specificRunParam.delay+25].vec_allPeakInfo.push_back(gem.TDC.peakInfo);
-                    results[vec_detNames[i]].Scan_DLY[specificRunParam.delay+25].vec_timeResHistos.push_back(gem.TDC.timeResHisto); //This now stores more than just time res
+                    //results[vec_detNames[i]].Scan_DLY[specificRunParam.delay+25].vec_totalTrigs.push_back(specificRunParam.numEvt);
+                    //results[vec_detNames[i]].Scan_DLY[specificRunParam.delay+25].vec_allPeakInfo.push_back(gem.TDC.peakInfo);
+                    //results[vec_detNames[i]].Scan_DLY[specificRunParam.delay+25].vec_timeResHistos.push_back(gem.TDC.timeResHisto); //This now stores more than just time res
                 } //End Case: Clock Scan
                 if(meas_TDC_TimeRes) { //Case: Time Resolution
+                    //Before Deconvolution
                     results[vec_detNames[i]].Scan_DLY[specificRunParam.delay].vec_allPeakInfo.push_back(gem.TDC.peakInfo);
                     results[vec_detNames[i]].Scan_DLY[specificRunParam.delay].vec_fitPerformed.push_back(gem.TDC.fitPerformed);
                     results[vec_detNames[i]].Scan_DLY[specificRunParam.delay].vec_rawRMS.push_back(gem.TDC.raw_RMS);
@@ -853,6 +916,12 @@ void TestBeamAnalyzer::setRunParamTDC(string input, vector<TH1F*> inputHistos){
                     results[vec_detNames[i]].Scan_DLY[specificRunParam.delay].vec_rawMeansErr.push_back(gem.TDC.raw_MeanErr);
                     results[vec_detNames[i]].Scan_DLY[specificRunParam.delay].vec_timeResFits.push_back(gem.TDC.timeResFit);
                     results[vec_detNames[i]].Scan_DLY[specificRunParam.delay].vec_timeResHistos.push_back(gem.TDC.timeResHisto);
+                    
+                    //After Deconvolution
+                    results[vec_detNames[i]].Scan_DLY[specificRunParam.delay].vec_fitPerformed_Deconvo.push_back(gem.TDCDeconvo.fitPerformed);
+                    results[vec_detNames[i]].Scan_DLY[specificRunParam.delay].vec_rawRMS_Deconvo.push_back(gem.TDCDeconvo.raw_RMS);
+                    results[vec_detNames[i]].Scan_DLY[specificRunParam.delay].vec_rawRMSErr_Deconvo.push_back(gem.TDCDeconvo.raw_RMSErr);
+                    results[vec_detNames[i]].Scan_DLY[specificRunParam.delay].vec_timeResFits_Deconvo.push_back(gem.TDCDeconvo.timeResFit);
                 } //End Case: Time Resolution
             } //End Case: Delay for this Detector Exists
             else{ //Case: Delay for this Detector Does Not Exist
@@ -875,6 +944,7 @@ void TestBeamAnalyzer::setRunParamTDC(string input, vector<TH1F*> inputHistos){
                     firstDelayOccurence.vec_timeResHistos.push_back(gem.TDC.timeResHisto); //This now stores more than just time res
                 } //End Case: Clock Scan
                 if(meas_TDC_TimeRes){ //Case: Time Resolution
+                    //Before Deconvolution
                     firstDelayOccurence.vec_allPeakInfo.push_back(gem.TDC.peakInfo);
                     firstDelayOccurence.vec_fitPerformed.push_back(gem.TDC.fitPerformed);
                     firstDelayOccurence.vec_rawRMS.push_back(gem.TDC.raw_RMS);
@@ -883,6 +953,12 @@ void TestBeamAnalyzer::setRunParamTDC(string input, vector<TH1F*> inputHistos){
                     firstDelayOccurence.vec_rawMeansErr.push_back(gem.TDC.raw_MeanErr);
                     firstDelayOccurence.vec_timeResFits.push_back(gem.TDC.timeResFit);
                     firstDelayOccurence.vec_timeResHistos.push_back(gem.TDC.timeResHisto);
+                    
+                    //After Deconvolution
+                    firstDelayOccurence.vec_fitPerformed_Deconvo.push_back(gem.TDCDeconvo.fitPerformed);
+                    firstDelayOccurence.vec_rawRMS_Deconvo.push_back(gem.TDCDeconvo.raw_RMS);
+                    firstDelayOccurence.vec_rawRMSErr_Deconvo.push_back(gem.TDCDeconvo.raw_RMSErr);
+                    firstDelayOccurence.vec_timeResFits_Deconvo.push_back(gem.TDCDeconvo.timeResFit);
                 } //End Case: Time Resolution
                 
                 //Check that Info Matches Previous Information
@@ -916,7 +992,7 @@ void TestBeamAnalyzer::setRunParamTDC(string input, vector<TH1F*> inputHistos){
                 results[vec_detNames[i]].Scan_DLY[specificRunParam.delay] = firstDelayOccurence;
                 
                 //Cyclic Storage
-                results[vec_detNames[i]].Scan_DLY[specificRunParam.delay+25] = firstDelayOccurence;
+                //results[vec_detNames[i]].Scan_DLY[specificRunParam.delay+25] = firstDelayOccurence;
             } //End Case: Latency for this Detector Does Not Exist
         } //End Case: Detector Exists
         else{ //Case: Detector Does Not Exist
@@ -941,6 +1017,7 @@ void TestBeamAnalyzer::setRunParamTDC(string input, vector<TH1F*> inputHistos){
                 firstDelayOccurence.vec_timeResHistos.push_back(gem.TDC.timeResHisto); //This now stores more than time res
             } //End Case: Clock Scan
             if(meas_TDC_TimeRes){ //Case: Time Resolution
+                //Before Deconvolution
                 firstDelayOccurence.vec_allPeakInfo.push_back(gem.TDC.peakInfo);
                 firstDelayOccurence.vec_fitPerformed.push_back(gem.TDC.fitPerformed);
                 firstDelayOccurence.vec_rawRMS.push_back(gem.TDC.raw_RMS);
@@ -949,13 +1026,19 @@ void TestBeamAnalyzer::setRunParamTDC(string input, vector<TH1F*> inputHistos){
                 firstDelayOccurence.vec_rawMeansErr.push_back(gem.TDC.raw_MeanErr);
                 firstDelayOccurence.vec_timeResFits.push_back(gem.TDC.timeResFit);
                 firstDelayOccurence.vec_timeResHistos.push_back(gem.TDC.timeResHisto);
+                
+                //After Deconvolution
+                firstDelayOccurence.vec_fitPerformed_Deconvo.push_back(gem.TDCDeconvo.fitPerformed);
+                firstDelayOccurence.vec_rawRMS_Deconvo.push_back(gem.TDCDeconvo.raw_RMS);
+                firstDelayOccurence.vec_rawRMSErr_Deconvo.push_back(gem.TDCDeconvo.raw_RMSErr);
+                firstDelayOccurence.vec_timeResFits_Deconvo.push_back(gem.TDCDeconvo.timeResFit);
             } //End Case: Time Resolution
             
             //Put Info Per Delay into info per detector
             firstDetOccurrence.Scan_DLY[specificRunParam.delay] = firstDelayOccurence;
             
             //Cyclic Storage
-            firstDetOccurrence.Scan_DLY[specificRunParam.delay+25] = firstDelayOccurence;
+            //firstDetOccurrence.Scan_DLY[specificRunParam.delay+25] = firstDelayOccurence;
             
             //store delay, pulseLen, and beamType (This is for Easier Access to the Information)
             firstDetOccurrence.infoMatch_DLY= true; //Initialize to true, only after looking at the others will we know this should be false
@@ -968,8 +1051,6 @@ void TestBeamAnalyzer::setRunParamTDC(string input, vector<TH1F*> inputHistos){
             //results[inputHistos[i]->GetName()] = firstDetOccurrence;
         } //End Case: Detector Not Exist
     } //End Loop Over vec_detNames
-    
-    
     
     //Debugging
     //cout<<"TestBeamAnalyzer::setRunParamTDC() - No Fault 4"<<endl;
@@ -1660,7 +1741,7 @@ void TestBeamAnalyzer::makeHistogramsEff(){
             ((*latIter).second).texInfo_lat         = new TLatex();     ((*latIter).second).texInfo_lat->SetTextSize(0.03);
             
             ((*latIter).second).texInfo_run->DrawLatex(paintPos_X, 0.9,Form("Runs %s - %s",(getString(((*latIter).second).run_initial)).c_str(),(getString(((*latIter).second).run_final)).c_str() ) );
-            ((*latIter).second).texInfo_beam->DrawLatex(paintPos_X,0.85,Form("%s-Beam",((*latIter).second).beamType.c_str()));
+            ((*latIter).second).texInfo_beam->DrawLatex(paintPos_X,0.85,Form("Beam: %s",((*latIter).second).beamType.c_str()));
             ((*latIter).second).texInfo_pulseLen->DrawLatex(paintPos_X,0.8,Form("MSPL%s",(getString(((*latIter).second).pulseLen)).c_str()));
             
             if(((*latIter).second).delay > -1){ //Case: Sync Mode
@@ -1670,7 +1751,7 @@ void TestBeamAnalyzer::makeHistogramsEff(){
                 ((*latIter).second).texInfo_delay->DrawLatex(paintPos_X,0.75,"Async. Mode");
             } //End Case: Async Mode
             
-            ((*latIter).second).texInfo_thresh->DrawLatex(paintPos_X,0.7,Form("VFAT Thresh. = %s",(getString(((*latIter).second).thresh).c_str())));
+            ((*latIter).second).texInfo_thresh->DrawLatex(paintPos_X,0.7,Form("VFAT Thresh. = %s fC",(getString(((*latIter).second).thresh).c_str())));
             ((*latIter).second).texInfo_lat->DrawLatex(paintPos_X,0.65,Form("VFAT Lat. = %s",(getString(((*latIter).first)).c_str())));
             
         } //End Loop Over Latencies for Each Detector
@@ -1683,6 +1764,7 @@ void TestBeamAnalyzer::makeHistogramsEff(){
 void TestBeamAnalyzer::makeHistogramsEff(string input, string option){
     //Variable Declaration
     float paintPos_X = 1e5;
+    float fHVDrift  = 0.;
     
     std::map<string,DetResults,cmp_str>::iterator detIter;
     
@@ -1697,7 +1779,7 @@ void TestBeamAnalyzer::makeHistogramsEff(string input, string option){
     //string info_run, info_beam, info_pulseLen, info_delay, info_thresh, info_lat;
     
     //Debugging
-    //cout<<"TestBeamAnalyzer::makeHistogramsEff - No Fault 1" <<endl;
+    cout<<"TestBeamAnalyzer::makeHistogramsEff - No Fault 1" <<endl;
     
     //Check if File Exists Already
     if( option.compare("RECREATE") == 0 || option.compare("CREATE") == 0){ //Case: TFOutput Does Not Exist, Create File Structure
@@ -1713,7 +1795,7 @@ void TestBeamAnalyzer::makeHistogramsEff(string input, string option){
     } //End Case: TFOutput Exists, get Previously Created File Structure
     
     //Debugging
-    //cout<<"TestBeamAnalyzer::makeHistogramsEff - No Fault 2" <<endl;
+    cout<<"TestBeamAnalyzer::makeHistogramsEff - No Fault 2" <<endl;
     
     //Setup Legend - All Detectors
     comparison.leg_AllDet_DetEff = new TLegend(0.15,0.55-0.05*(float)results.size(),0.45,0.60);
@@ -1722,8 +1804,9 @@ void TestBeamAnalyzer::makeHistogramsEff(string input, string option){
     
     for(detIter = results.begin(); detIter != results.end(); detIter++){ //Loop Over Detectors
         //Debugging
-        //cout<<"TestBeamAnalyzer::makeHistogramsEff - No Fault 2_a" <<endl;
+        cout<<"TestBeamAnalyzer::makeHistogramsEff - No Fault 2_a" <<endl;
         
+        cout<<"((*detIter).first).c_str() = " << ((*detIter).first).c_str() << endl;
         TDirectory *dir_ThisDet = dir_Detectors->mkdir( ((*detIter).first).c_str() );
         
         map<int,InfoPerLat,cmp_int>::iterator latIter;
@@ -1743,10 +1826,19 @@ void TestBeamAnalyzer::makeHistogramsEff(string input, string option){
             Form("MultiGraph_%s_LatAll_DetEff_v_Curr_R%s_R%s",((*detIter).first).c_str(), getString( ((*detIter).second).run_initial ).c_str(), getString( ((*detIter).second).run_final ).c_str() ),
             " ;Current Supplied to HV Divider #left(#muA#right); Efficiency");
         
+        ((*detIter).second).mGraph_AllLatPlots_HVDrift = new TMultiGraph(
+            Form("MultiGraph_%s_LatAll_DetEff_v_HVDrift_R%s_R%s",((*detIter).first).c_str(), getString( ((*detIter).second).run_initial ).c_str(), getString( ((*detIter).second).run_final ).c_str() ),
+            " ;HV_{Drift} #left(V#right); Efficiency");
+        
         //Initialize the canvas - All Latencies
         ((*detIter).second).canvas_DetEff_v_Curr = new TCanvas(
             Form("Plot_%s_LatAll_DetEff_v_Curr_R%s_R%s",((*detIter).first).c_str(), getString( ((*detIter).second).run_initial ).c_str(), getString( ((*detIter).second).run_final ).c_str() ),
             Form("%s_LatAll_DetEff_v_Curr_R%s_R%s",((*detIter).first).c_str(), getString( ((*detIter).second).run_initial ).c_str(), getString( ((*detIter).second).run_final ).c_str() ),
+            700,700);
+        
+        ((*detIter).second).canvas_DetEff_v_HVDrift = new TCanvas(
+            Form("Plot_%s_LatAll_DetEff_v_HVDrift_R%s_R%s",((*detIter).first).c_str(), getString( ((*detIter).second).run_initial ).c_str(), getString( ((*detIter).second).run_final ).c_str() ),
+            Form("%s_LatAll_DetEff_v_HVDrift_R%s_R%s",((*detIter).first).c_str(), getString( ((*detIter).second).run_initial ).c_str(), getString( ((*detIter).second).run_final ).c_str() ),
             700,700);
         
         //Setup Legend - All Latencies
@@ -1758,24 +1850,33 @@ void TestBeamAnalyzer::makeHistogramsEff(string input, string option){
         ((*detIter).second).max_eff = 0.;
         
         //Debugging
-        //cout<<"TestBeamAnalyzer::makeHistogramsEff - No Fault 2_b" <<endl;
+        cout<<"TestBeamAnalyzer::makeHistogramsEff - No Fault 2_b" <<endl;
         
         for(latIter=((*detIter).second).Scan_Lat.begin(); latIter!=((*detIter).second).Scan_Lat.end(); latIter++){ //Loop Over Latencies for Each Detector
             //Debugging
-            //cout<<"TestBeamAnalyzer::makeHistogramsEff - No Fault 2_b_i" <<endl;
+            cout<<"TestBeamAnalyzer::makeHistogramsEff - No Fault 2_b_i" <<endl;
             
             //Initialize TGraphErrors
             ((*latIter).second).graph_DetEff_v_Curr = new TGraphErrors( ((*latIter).second).currScan.size() );
             ((*latIter).second).graph_DetEff_v_Curr->SetName(Form("%s_Lat%s_DetEff_v_Curr_R%s_R%s", ((*detIter).first).c_str(), (getString((*latIter).first ) ).c_str(), getString( ((*detIter).second).run_initial ).c_str(), getString( ((*detIter).second).run_final ).c_str() ) );
+            
+            //Initialize TGraphErrors
+            ((*latIter).second).graph_DetEff_v_HVDrift = new TGraphErrors( ((*latIter).second).currScan.size() );
+            ((*latIter).second).graph_DetEff_v_HVDrift->SetName(Form("%s_Lat%s_DetEff_v_HVDrift_R%s_R%s", ((*detIter).first).c_str(), (getString((*latIter).first ) ).c_str(), getString( ((*detIter).second).run_initial ).c_str(), getString( ((*detIter).second).run_final ).c_str() ) );
             
             //Set Efficiencies
             for(unsigned int i=0;i<((*latIter).second).currScan.size(); i++){ //Loop Over Eff Data
                 //Determine Paint Position
                 if ( ((*latIter).second).currScan[i] < paintPos_X ) { paintPos_X = ((*latIter).second).currScan[i]; }
                 
-                //Set TGraphError Points
+                //Set TGraphError Points - Versus Current
                 ((*latIter).second).graph_DetEff_v_Curr->SetPoint(i,((*latIter).second).currScan[i],((*latIter).second).effs[i]);
                 ((*latIter).second).graph_DetEff_v_Curr->SetPointError(i,0,((*latIter).second).sigma_effs[i]);
+                
+                //Set TGraphError Points - Versus HVDrift
+                fHVDrift = ((*latIter).second).currScan[i] * 1e-6 * fREquiv;
+                ((*latIter).second).graph_DetEff_v_HVDrift->SetPoint(i,fHVDrift,((*latIter).second).effs[i]);
+                ((*latIter).second).graph_DetEff_v_HVDrift->SetPointError(i,0,((*latIter).second).sigma_effs[i]);
                 
                 //Log Which Latency Value Produces Eff Plateau (Crude Method to determine this)
                 if ( ((*latIter).second).effs[i] > ((*detIter).second).max_eff ) { //Check of Max Eff
@@ -1785,9 +1886,20 @@ void TestBeamAnalyzer::makeHistogramsEff(string input, string option){
             } //End Loop Over Eff Data
             
             //Debugging
-            //cout<<"TestBeamAnalyzer::makeHistogramsEff - No Fault 2_b_ii" <<endl;
+            cout<<"TestBeamAnalyzer::makeHistogramsEff - No Fault 2_b_ii" <<endl;
             
-            //Plot The Curve - One Latency
+            //Fit The Curve - One Latency (Current)
+            //======================================================
+            TGraphErrors *tempEffCurve_Curr = (TGraphErrors *) ((*latIter).second).graph_DetEff_v_Curr->Clone("tempEffCurve_Curr");
+            
+            ((*latIter).second).fit_DetEff_v_Curr = new TF1(Form("Fit_%s_Lat%s_DetEff_v_Curr_R%s_R%s",((*detIter).first).c_str(), (getString((*latIter).first)).c_str(), getString( ((*detIter).second).run_initial ).c_str(), getString( ((*detIter).second).run_final ).c_str()  ), fitEff_Formula.c_str(), *std::min_element(((*latIter).second).currScan.begin(),((*latIter).second).currScan.end() ), *std::max_element(((*latIter).second).currScan.begin(),((*latIter).second).currScan.end() ) );
+            
+            tempEffCurve_Curr->Fit(((*latIter).second).fit_DetEff_v_Curr, fitEff_Option.c_str() );
+            
+            //Debugging
+            cout<<"TestBeamAnalyzer::makeHistogramsEff - No Fault 2_b_ii_1" <<endl;
+            
+            //Plot The Curve - One Latency (Current)
             //======================================================
             //Initialize the canvas - Single Latency
             TCanvas *canvas_DetEff_v_Curr = new TCanvas(
@@ -1795,9 +1907,12 @@ void TestBeamAnalyzer::makeHistogramsEff(string input, string option){
                 Form("%s_Lat%s_DetEff_v_Curr_R%s_R%s",((*detIter).first).c_str(), (getString((*latIter).first)).c_str(), getString( ((*detIter).second).run_initial ).c_str(), getString( ((*detIter).second).run_final ).c_str() ),
                 700,700);
             
+            //Debugging
+            cout<<"TestBeamAnalyzer::makeHistogramsEff - No Fault 2_b_ii_2" <<endl;
+            
             //Determine Paint Position
             //for (unsigned int i=0; i < ((*latIter).second).currScan.size(); i++) {
-                //if ( ((*latIter).second).currScan[i] < paintPos_X ) { paintPos_X = ((*latIter).second).currScan[i]; }
+            //if ( ((*latIter).second).currScan[i] < paintPos_X ) { paintPos_X = ((*latIter).second).currScan[i]; }
             //}
             //Note the commented section below doesn't work if the runs are not taken in either increasing or decreasing order
             /*if(((*latIter).second).currScan[0] > ((*latIter).second).currScan.back()){ //Case: 0^th Member Highest Point
@@ -1826,13 +1941,22 @@ void TestBeamAnalyzer::makeHistogramsEff(string input, string option){
             ((*latIter).second).graph_DetEff_v_Curr->SetMarkerSize(1.);
             ((*latIter).second).graph_DetEff_v_Curr->SetLineWidth(2.);
             ((*latIter).second).graph_DetEff_v_Curr->Draw("ap");
+            if (drawFit) ((*latIter).second).fit_DetEff_v_Curr->Draw("same");
+            
+            //Debugging
+            cout<<"TestBeamAnalyzer::makeHistogramsEff - No Fault 2_b_ii_3" <<endl;
             
             //Draw Legend - SingleLat
-            TLegend *leg_DetEff_SingleLat = new TLegend(0.15,0.55,0.35,0.60);
+            //TLegend *leg_DetEff_SingleLat = new TLegend(0.15,0.55,0.35,0.60);
+            TLegend *leg_DetEff_SingleLat = new TLegend(0.15,0.50,0.35,0.60);
             leg_DetEff_SingleLat->SetLineColor(0);
             leg_DetEff_SingleLat->SetFillColor(0);
             leg_DetEff_SingleLat->AddEntry(((*latIter).second).graph_DetEff_v_Curr, getParsedDetName( ((*detIter).first) ).c_str(),"LP");
+            if (drawFit) leg_DetEff_SingleLat->AddEntry(((*latIter).second).fit_DetEff_v_Curr, "Fit", "L");
             leg_DetEff_SingleLat->Draw("same");
+            
+            //Debugging
+            cout<<"TestBeamAnalyzer::makeHistogramsEff - No Fault 2_b_ii_4" <<endl;
             
             //Draw Info Panel
             ((*latIter).second).texInfo_run         = new TLatex();     ((*latIter).second).texInfo_run->SetTextSize(0.03);
@@ -1845,7 +1969,7 @@ void TestBeamAnalyzer::makeHistogramsEff(string input, string option){
             cmsPrelim->DrawLatex(paintPos_X-5,1.01,"CMS Preliminary");
             
             ((*latIter).second).texInfo_run->DrawLatex(paintPos_X, 0.9,Form("Runs %s - %s",(getString(((*latIter).second).run_initial)).c_str(),(getString(((*latIter).second).run_final)).c_str() ) );
-            ((*latIter).second).texInfo_beam->DrawLatex(paintPos_X,0.85,Form("%s-Beam",((*latIter).second).beamType.c_str()));
+            ((*latIter).second).texInfo_beam->DrawLatex(paintPos_X,0.85,Form("Beam: %s",((*latIter).second).beamType.c_str()));
             ((*latIter).second).texInfo_pulseLen->DrawLatex(paintPos_X,0.8,Form("MSPL%s",(getString(((*latIter).second).pulseLen)).c_str()));
             
             if(((*latIter).second).delay > 0){ //Case: Sync Mode
@@ -1855,44 +1979,141 @@ void TestBeamAnalyzer::makeHistogramsEff(string input, string option){
                 ((*latIter).second).texInfo_delay->DrawLatex(paintPos_X,0.75,"Async. Mode");
             } //End Case: Async Mode
             
-            ((*latIter).second).texInfo_thresh->DrawLatex(paintPos_X,0.7,Form("VFAT Thresh. = %s",(getString(((*latIter).second).thresh).c_str())));
+            ((*latIter).second).texInfo_thresh->DrawLatex(paintPos_X,0.7,Form("VFAT Thresh. = %s fC",(getString(((*latIter).second).thresh).c_str())));
             ((*latIter).second).texInfo_lat->DrawLatex(paintPos_X,0.65,Form("VFAT Lat. = %s",(getString(((*latIter).first)).c_str())));
             
+            //Debugging
+            cout<<"TestBeamAnalyzer::makeHistogramsEff - No Fault 2_b_ii_5" <<endl;
+            
             //Write
+            cout<<"ptr ref dir_ThisDet = " << dir_ThisDet << endl;
+            
             TDirectory *dir_ThisLat = dir_ThisDet->mkdir( Form("Lat%s", (getString((*latIter).first)).c_str()) );
             
-            TDirectory *dir_RawGraphs   = dir_ThisLat->mkdir("RawGraphs");
+            TDirectory *dir_Fits        = dir_ThisLat->mkdir("Fits");
             TDirectory *dir_Plots       = dir_ThisLat->mkdir("PremadePlots");
+            TDirectory *dir_RawGraphs   = dir_ThisLat->mkdir("RawGraphs");
             
-            dir_RawGraphs->cd();
-            ((*latIter).second).graph_DetEff_v_Curr->Write();
+            dir_Fits->cd();
+            cout<<"ptr ref ((*latIter).second).fit_DetEff_v_Curr = " << ((*latIter).second).fit_DetEff_v_Curr << endl;
+            ((*latIter).second).fit_DetEff_v_Curr->Write();
             
             dir_Plots->cd();
+            cout<<"ptr ref canvas_DetEff_v_Curr = " << canvas_DetEff_v_Curr << endl;
             canvas_DetEff_v_Curr->Write();
-
+            
+            dir_RawGraphs->cd();
+            cout<<"ptr ref ((*latIter).second).graph_DetEff_v_Curr = " << ((*latIter).second).graph_DetEff_v_Curr << endl;
+            ((*latIter).second).graph_DetEff_v_Curr->Write();
+            
             //Debugging
-            //cout<<"TestBeamAnalyzer::makeHistogramsEff - No Fault 2_b_iii" <<endl;
+            cout<<"TestBeamAnalyzer::makeHistogramsEff - No Fault 2_b_ii_6" <<endl;
+            
+            //Fit The Curve - One Latency (HVDrift)
+            //======================================================
+            TGraphErrors *tempEffCurve_HVDrift = (TGraphErrors *) ((*latIter).second).graph_DetEff_v_HVDrift->Clone("tempEffCurve_HVDrift");
+            
+            ((*latIter).second).fit_DetEff_v_HVDrift = new TF1(Form("Fit_%s_Lat%s_DetEff_v_HVDrift_R%s_R%s",((*detIter).first).c_str(), (getString((*latIter).first)).c_str(), getString( ((*detIter).second).run_initial ).c_str(), getString( ((*detIter).second).run_final ).c_str()  ), fitEff_Formula.c_str(), 0, 5000. );
+            
+            tempEffCurve_HVDrift->Fit(((*latIter).second).fit_DetEff_v_HVDrift, fitEff_Option.c_str() );
+            
+            //Plot The Curve - One Latency (HVDrift)
+            //======================================================
+            //Initialize the canvas - Single Latency
+            TCanvas *canvas_DetEff_v_HVDrift = new TCanvas(
+                Form("Plot_%s_Lat%s_DetEff_v_HVDrift_R%s_R%s",((*detIter).first).c_str(), (getString((*latIter).first)).c_str(), getString( ((*detIter).second).run_initial ).c_str(), getString( ((*detIter).second).run_final ).c_str() ),
+                Form("%s_Lat%s_DetEff_v_HVDrift_R%s_R%s",((*detIter).first).c_str(), (getString((*latIter).first)).c_str(), getString( ((*detIter).second).run_initial ).c_str(), getString( ((*detIter).second).run_final ).c_str() ),
+                700,700);
+            
+            //Go To Active Canvas & Draw Plot
+            canvas_DetEff_v_HVDrift->cd();
+            canvas_DetEff_v_HVDrift->SetTicky();
+            canvas_DetEff_v_HVDrift->SetTickx();
+            ((*latIter).second).graph_DetEff_v_HVDrift->SetTitle("");
+            ((*latIter).second).graph_DetEff_v_HVDrift->GetYaxis()->SetRangeUser(0.,1.);
+            ((*latIter).second).graph_DetEff_v_HVDrift->GetYaxis()->SetDecimals(true);
+            ((*latIter).second).graph_DetEff_v_HVDrift->GetYaxis()->SetTitle("Efficiency");
+            ((*latIter).second).graph_DetEff_v_HVDrift->GetYaxis()->SetTitleOffset(1.20);
+            ((*latIter).second).graph_DetEff_v_HVDrift->GetXaxis()->SetTitle("HV_{Drift} #left(V#right)");
+            ((*latIter).second).graph_DetEff_v_HVDrift->GetXaxis()->SetTitleOffset(1.10);
+            ((*latIter).second).graph_DetEff_v_HVDrift->SetMarkerStyle(21);
+            ((*latIter).second).graph_DetEff_v_HVDrift->SetMarkerSize(1.);
+            ((*latIter).second).graph_DetEff_v_HVDrift->SetLineWidth(2.);
+            ((*latIter).second).graph_DetEff_v_HVDrift->Draw("ap");
+            if (drawFit) ((*latIter).second).fit_DetEff_v_HVDrift->Draw("same");
+            
+            //Draw Legend - SingleLat
+            leg_DetEff_SingleLat->Draw("same");
+            
+            //Debugging
+            cout<<"TestBeamAnalyzer::makeHistogramsEff - No Fault 2_b_ii_7" <<endl;
+            
+            //Draw Info Panel
+            ((*latIter).second).texInfo_run         = new TLatex();     ((*latIter).second).texInfo_run->SetTextSize(0.03);
+            ((*latIter).second).texInfo_beam        = new TLatex();     ((*latIter).second).texInfo_beam->SetTextSize(0.03);
+            ((*latIter).second).texInfo_pulseLen    = new TLatex();     ((*latIter).second).texInfo_pulseLen->SetTextSize(0.03);
+            ((*latIter).second).texInfo_delay       = new TLatex();     ((*latIter).second).texInfo_delay->SetTextSize(0.03);
+            ((*latIter).second).texInfo_thresh      = new TLatex();     ((*latIter).second).texInfo_thresh->SetTextSize(0.03);
+            ((*latIter).second).texInfo_lat         = new TLatex();     ((*latIter).second).texInfo_lat->SetTextSize(0.03);
+            
+            cmsPrelim->DrawLatex( (paintPos_X-5) * 1e-6 * fREquiv,1.01,"CMS Preliminary");
+            
+            ((*latIter).second).texInfo_run->DrawLatex(paintPos_X * 1e-6 * fREquiv, 0.9,Form("Runs %s - %s",(getString(((*latIter).second).run_initial)).c_str(),(getString(((*latIter).second).run_final)).c_str() ) );
+            ((*latIter).second).texInfo_beam->DrawLatex(paintPos_X * 1e-6 * fREquiv,0.85,Form("Beam: %s",((*latIter).second).beamType.c_str()));
+            ((*latIter).second).texInfo_pulseLen->DrawLatex(paintPos_X * 1e-6 * fREquiv,0.8,Form("MSPL%s",(getString(((*latIter).second).pulseLen)).c_str()));
+            
+            if(((*latIter).second).delay > 0){ //Case: Sync Mode
+                ((*latIter).second).texInfo_delay->DrawLatex(paintPos_X * 1e-6 * fREquiv,0.75,Form("Sync. Mode; DLY = %sns",(getString(((*latIter).second).delay)).c_str()));
+            } //End Case: Sync Mode
+            else{ //Case: Async Mode
+                ((*latIter).second).texInfo_delay->DrawLatex(paintPos_X * 1e-6 * fREquiv,0.75,"Async. Mode");
+            } //End Case: Async Mode
+            
+            ((*latIter).second).texInfo_thresh->DrawLatex(paintPos_X * 1e-6 * fREquiv,0.7,Form("VFAT Thresh. = %s fC",(getString(((*latIter).second).thresh).c_str())));
+            ((*latIter).second).texInfo_lat->DrawLatex(paintPos_X * 1e-6 * fREquiv,0.65,Form("VFAT Lat. = %s",(getString(((*latIter).first)).c_str())));
+            
+            //Write
+            dir_Fits->cd();
+            ((*latIter).second).fit_DetEff_v_HVDrift->Write();
+            
+            dir_Plots->cd();
+            canvas_DetEff_v_HVDrift->Write();
+            
+            dir_RawGraphs->cd();
+            ((*latIter).second).graph_DetEff_v_HVDrift->Write();
+            
+            //Debugging
+            cout<<"TestBeamAnalyzer::makeHistogramsEff - No Fault 2_b_iii" <<endl;
             
             //Store the Curves - All Latencies for One Detector
             //======================================================
-            //Set the Style
-            //((*detIter).second).canvas_DetEff_v_Curr->cd();
+            //Set the Style (Current)
             ((*latIter).second).graph_DetEff_v_Curr->SetMarkerStyle( getCyclicMarkerStyle(std::distance(((*detIter).second).Scan_Lat.begin(),latIter) + 2 * std::distance(results.begin(),detIter) ) );
             ((*latIter).second).graph_DetEff_v_Curr->SetMarkerColor( getCyclicColor(std::distance(((*detIter).second).Scan_Lat.begin(),latIter) + 2 * std::distance(results.begin(),detIter) ) );
             ((*latIter).second).graph_DetEff_v_Curr->SetLineColor( getCyclicColor(std::distance(((*detIter).second).Scan_Lat.begin(),latIter) + 2 * std::distance(results.begin(),detIter) ) );
+            ((*latIter).second).fit_DetEff_v_Curr->SetLineColor( getCyclicColor(std::distance(((*detIter).second).Scan_Lat.begin(),latIter) + 2 * std::distance(results.begin(),detIter) ) );
             
-            //Store in MultiGraph
+            //Set the Style (HVDrift)
+            ((*latIter).second).graph_DetEff_v_HVDrift->SetMarkerStyle( getCyclicMarkerStyle(std::distance(((*detIter).second).Scan_Lat.begin(),latIter) + 2 * std::distance(results.begin(),detIter) ) );
+            ((*latIter).second).graph_DetEff_v_HVDrift->SetMarkerColor( getCyclicColor(std::distance(((*detIter).second).Scan_Lat.begin(),latIter) + 2 * std::distance(results.begin(),detIter) ) );
+            ((*latIter).second).graph_DetEff_v_HVDrift->SetLineColor( getCyclicColor(std::distance(((*detIter).second).Scan_Lat.begin(),latIter) + 2 * std::distance(results.begin(),detIter) ) );
+            ((*latIter).second).fit_DetEff_v_HVDrift->SetLineColor( getCyclicColor(std::distance(((*detIter).second).Scan_Lat.begin(),latIter) + 2 * std::distance(results.begin(),detIter) ) );
+            
+            //Store in MultiGraph (Current)
             ((*detIter).second).mGraph_AllLatPlots->Add(((*latIter).second).graph_DetEff_v_Curr, "P");
+            
+            //Store in MultiGraph (HVDrift)
+            ((*detIter).second).mGraph_AllLatPlots_HVDrift->Add(((*latIter).second).graph_DetEff_v_HVDrift, "P");
             
             //Setup Legend
             leg_DetEff_AllLat->AddEntry(((*latIter).second).graph_DetEff_v_Curr, Form("Latency %s", (getString((*latIter).first)).c_str() ), "LP" );
             
             //Debugging
-            //cout<<"TestBeamAnalyzer::makeHistogramsEff - No Fault 2_b_iv - LOOP" <<endl;
+            cout<<"TestBeamAnalyzer::makeHistogramsEff - No Fault 2_b_iv - LOOP" <<endl;
         } //End Loop Over Latencies for Each Detector
         
         //Debugging
-        //cout<<"TestBeamAnalyzer::makeHistogramsEff - No Fault 2_c" <<endl;
+        cout<<"TestBeamAnalyzer::makeHistogramsEff - No Fault 2_c" <<endl;
         
         //Store the Curves - Max Efficiency for Each Detector
         for(latIter = ((*detIter).second).Scan_Lat.begin(); latIter != ((*detIter).second).Scan_Lat.end(); latIter++ ){ //Loop Over Latencies
@@ -1936,7 +2157,7 @@ void TestBeamAnalyzer::makeHistogramsEff(string input, string option){
             } //End Case: Max Found!
         } //End Loop Over Latencies
         
-        //Plot The Curve - All Latencies for One Detector
+        //Plot The Curve - All Latencies for One Detector (Current)
         //======================================================
         //Switch to the canvas - All Latencies
         ((*detIter).second).canvas_DetEff_v_Curr->cd();
@@ -1966,7 +2187,7 @@ void TestBeamAnalyzer::makeHistogramsEff(string input, string option){
         ((*detIter).second).texInfo_run->DrawLatex(paintPos_X, 0.9,Form("Runs %s - %s",(getString(((*detIter).second).run_initial)).c_str(),(getString(((*detIter).second).run_final)).c_str() ) );
         
         if( ((*detIter).second).infoMatch_Lat){ //Case: Info Same For All Latency Values
-            ((*detIter).second).texInfo_beam->DrawLatex(paintPos_X,0.85,Form("%s-Beam",((*detIter).second).beamType.c_str()));
+            ((*detIter).second).texInfo_beam->DrawLatex(paintPos_X,0.85,Form("Beam: %s",((*detIter).second).beamType.c_str()));
             ((*detIter).second).texInfo_pulseLen->DrawLatex(paintPos_X,0.8,Form("MSPL%s",(getString(((*detIter).second).pulseLen)).c_str()));
             
             if(((*detIter).second).delay > 0){ //Case: Sync Mode
@@ -1976,25 +2197,76 @@ void TestBeamAnalyzer::makeHistogramsEff(string input, string option){
                 ((*detIter).second).texInfo_delay->DrawLatex(paintPos_X,0.75,"Async. Mode");
             } //End Case: Async Mode
             
-            ((*detIter).second).texInfo_thresh->DrawLatex(paintPos_X,0.7,Form("VFAT Thresh. = %s",(getString(((*detIter).second).thresh).c_str())));
+            ((*detIter).second).texInfo_thresh->DrawLatex(paintPos_X,0.7,Form("VFAT Thresh. = %s fC",(getString(((*detIter).second).thresh).c_str())));
         } //End Case: Info Same For All Latency Values
         
         //Debugging
-        //cout<<"TestBeamAnalyzer::makeHistogramsEff - No Fault 2_d" <<endl;
+        cout<<"TestBeamAnalyzer::makeHistogramsEff - No Fault 2_d" <<endl;
         
         //Write
         dir_ThisDet->cd();
         ((*detIter).second).mGraph_AllLatPlots->Write();
         ((*detIter).second).canvas_DetEff_v_Curr->Write();
         
+        //Plot The Curve - All Latencies for One Detector (HVDrift)
+        //======================================================
+        //Switch to the canvas - All Latencies
+        ((*detIter).second).canvas_DetEff_v_HVDrift->cd();
+        ((*detIter).second).canvas_DetEff_v_HVDrift->SetTicky();
+        ((*detIter).second).canvas_DetEff_v_HVDrift->SetTickx();
+        ((*detIter).second).mGraph_AllLatPlots_HVDrift->Draw("a");  //Do this the first time to make TMultiGraph::GetHistogram() for this object valid
+        ((*detIter).second).mGraph_AllLatPlots_HVDrift->GetHistogram()->SetTitleOffset(1.20,"Y");
+        ((*detIter).second).mGraph_AllLatPlots_HVDrift->GetHistogram()->GetYaxis()->SetRangeUser(0.,1.);
+        ((*detIter).second).mGraph_AllLatPlots_HVDrift->GetHistogram()->GetYaxis()->SetDecimals(true);
+        ((*detIter).second).mGraph_AllLatPlots_HVDrift->GetHistogram()->SetTitleOffset(1.10,"X");
+        ((*detIter).second).mGraph_AllLatPlots_HVDrift->Draw("a");  //Do this the second time to draw again the plot with the above formatting
+        
+        //Draw Legend
+        leg_DetEff_AllLat->Draw("same");
+        
+        //Draw Info Panel
+        ((*detIter).second).texInfo_run         = new TLatex();     ((*detIter).second).texInfo_run->SetTextSize(0.03);
+        ((*detIter).second).texInfo_beam        = new TLatex();     ((*detIter).second).texInfo_beam->SetTextSize(0.03);
+        ((*detIter).second).texInfo_name        = new TLatex();     ((*detIter).second).texInfo_name->SetTextSize(0.03);
+        ((*detIter).second).texInfo_pulseLen    = new TLatex();     ((*detIter).second).texInfo_pulseLen->SetTextSize(0.03);
+        ((*detIter).second).texInfo_delay       = new TLatex();     ((*detIter).second).texInfo_delay->SetTextSize(0.03);
+        ((*detIter).second).texInfo_thresh      = new TLatex();     ((*detIter).second).texInfo_thresh->SetTextSize(0.03);
+        
+        cmsPrelim->DrawLatex( (paintPos_X-5) * 1e-6 * fREquiv,1.01,"CMS Preliminary");
+        
+        ((*detIter).second).texInfo_name->DrawLatex(paintPos_X * 1e-6 * fREquiv, 0.95, getParsedDetName((*detIter).first).c_str() );
+        ((*detIter).second).texInfo_run->DrawLatex(paintPos_X * 1e-6 * fREquiv, 0.9,Form("Runs %s - %s",(getString(((*detIter).second).run_initial)).c_str(),(getString(((*detIter).second).run_final)).c_str() ) );
+        
+        if( ((*detIter).second).infoMatch_Lat){ //Case: Info Same For All Latency Values
+            ((*detIter).second).texInfo_beam->DrawLatex(paintPos_X * 1e-6 * fREquiv,0.85,Form("Beam: %s",((*detIter).second).beamType.c_str()));
+            ((*detIter).second).texInfo_pulseLen->DrawLatex(paintPos_X * 1e-6 * fREquiv,0.8,Form("MSPL%s",(getString(((*detIter).second).pulseLen)).c_str()));
+            
+            if(((*detIter).second).delay > 0){ //Case: Sync Mode
+                ((*detIter).second).texInfo_delay->DrawLatex(paintPos_X * 1e-6 * fREquiv,0.75,Form("Sync. Mode; DLY = %sns",(getString(((*detIter).second).delay)).c_str()));
+            } //End Case: Sync Mode
+            else{ //Case: Async Mode
+                ((*detIter).second).texInfo_delay->DrawLatex(paintPos_X * 1e-6 * fREquiv,0.75,"Async. Mode");
+            } //End Case: Async Mode
+            
+            ((*detIter).second).texInfo_thresh->DrawLatex(paintPos_X * 1e-6 * fREquiv,0.7,Form("VFAT Thresh. = %s fC",(getString(((*detIter).second).thresh).c_str())));
+        } //End Case: Info Same For All Latency Values
+        
+        //Debugging
+        cout<<"TestBeamAnalyzer::makeHistogramsEff - No Fault 2_d" <<endl;
+        
+        //Write
+        dir_ThisDet->cd();
+        ((*detIter).second).mGraph_AllLatPlots_HVDrift->Write();
+        ((*detIter).second).canvas_DetEff_v_HVDrift->Write();
+        
         //Check to see if info matches across runs
         if(!((*detIter).second).infoMatch_Lat) comparison.infoMatch_Lat = ((*detIter).second).infoMatch_Lat;
         
         //Debugging
-        //cout<<"TestBeamAnalyzer::makeHistogramsEff - No Fault 2_e - LOOP" <<endl;
+        cout<<"TestBeamAnalyzer::makeHistogramsEff - No Fault 2_e - LOOP" <<endl;
     } //End Loop Over Detectors
     
-    //Plot The Curve - Highest Efficiencies for Each Detector
+    //Plot The Curve - Highest Efficiencies for Each Detector (Current)
     //======================================================
     //Append The Name to Include The Runs!
     tempHistoName = ((string)comparison.canvas_AllDet_DetEff_v_Curr->GetName() ) + "_R" + getString( comparison.run_initial ) + "_R" + getString( comparison.run_final );
@@ -2013,6 +2285,13 @@ void TestBeamAnalyzer::makeHistogramsEff(string input, string option){
         comparison.mGraph_AllDet_DetEff_v_Curr->GetHistogram()->GetYaxis()->SetDecimals(true);
         comparison.mGraph_AllDet_DetEff_v_Curr->GetHistogram()->SetTitleOffset(1.10,"X");
         comparison.mGraph_AllDet_DetEff_v_Curr->Draw("a");  //Do this the second time to draw again the plot with the above formatting
+        
+        //Plot Fit
+        if (drawFit) { //Case: Draw Fit
+            for (unsigned int i=0; i < vec_detNames.size(); i++) { //Loop Over vec_detNames
+                results[vec_detNames[i]].Scan_Lat[results[vec_detNames[i]].latAtMaxEff].fit_DetEff_v_Curr->Draw("same");
+            } //End Loop Over vec_detNames
+        } //End Case: Draw Fit
     } //End Case: Valid Pointer To Histogram
     else { //Case: No Valid Pointer To Histogram, CHEAT!
         float minCurr = (*min_element( results[vec_detNames[0]].Scan_Lat[results[vec_detNames[0]].latAtMaxEff].currScan.begin(), results[vec_detNames[0]].Scan_Lat[results[vec_detNames[0]].latAtMaxEff].currScan.end() ) );
@@ -2049,6 +2328,8 @@ void TestBeamAnalyzer::makeHistogramsEff(string input, string option){
         //This hack is so dumb...The statements under the if portion work perfectly for me on lxplus; but they do not work on cms904fast and cause a crash...suspect differing versions of ROOT
         for (unsigned int i=0; i < vec_detNames.size(); i++) { //Loop Over vec_detNames
             results[vec_detNames[i]].Scan_Lat[results[vec_detNames[i]].latAtMaxEff].graph_DetEff_v_Curr->Draw("sameP");
+            
+            if (drawFit) results[vec_detNames[i]].Scan_Lat[results[vec_detNames[i]].latAtMaxEff].fit_DetEff_v_Curr->Draw("same");
         } //End Loop Over vec_detNames
     } //End Case: No Valid Pointer To Histogram, CHEAT!
     
@@ -2063,7 +2344,7 @@ void TestBeamAnalyzer::makeHistogramsEff(string input, string option){
     comparison.texInfo_run->DrawLatex(paintPos_X, 0.9,Form("Runs %s - %s",(getString(comparison.run_initial)).c_str(),(getString(comparison.run_final)).c_str() ) );
     
     if( comparison.infoMatch_Lat){ //Case: Info Same For All Latency Values
-        comparison.texInfo_beam->DrawLatex(paintPos_X,0.85,Form("%s-Beam",comparison.beamType.c_str()));
+        comparison.texInfo_beam->DrawLatex(paintPos_X,0.85,Form("Beam: %s",comparison.beamType.c_str()));
         comparison.texInfo_pulseLen->DrawLatex(paintPos_X,0.8,Form("MSPL%s",(getString(comparison.pulseLen)).c_str()));
         
         if( comparison.delay > 0){ //Case: Sync Mode
@@ -2080,8 +2361,104 @@ void TestBeamAnalyzer::makeHistogramsEff(string input, string option){
     comparison.mGraph_AllDet_DetEff_v_Curr->Write();
     comparison.canvas_AllDet_DetEff_v_Curr->Write();
     
+    //Plot The Curve - Highest Efficiencies for Each Detector (HVDrift)
+    //======================================================
+    //Append The Name to Include The Runs!
+    tempHistoName = ((string)comparison.canvas_AllDet_DetEff_v_HVDrift->GetName() ) + "_R" + getString( comparison.run_initial ) + "_R" + getString( comparison.run_final );
+    comparison.canvas_AllDet_DetEff_v_HVDrift->SetName(tempHistoName.c_str() );
+    
+    //Go To Active Canvas & Draw Plot
+    comparison.canvas_AllDet_DetEff_v_HVDrift->cd();
+    comparison.canvas_AllDet_DetEff_v_HVDrift->SetTicky();
+    comparison.canvas_AllDet_DetEff_v_HVDrift->SetTickx();
+    comparison.mGraph_AllDet_DetEff_v_HVDrift->Draw("a");  //Do this the first time to make TMultiGraph::GetHistogram() for this object valid
+    
+    //Prevents Weird ROOT Shenanigans
+    if (comparison.mGraph_AllDet_DetEff_v_HVDrift->GetHistogram() ) { //Case: Valid Pointer To Histogram
+        comparison.mGraph_AllDet_DetEff_v_HVDrift->GetHistogram()->SetTitleOffset(1.20,"Y");
+        comparison.mGraph_AllDet_DetEff_v_HVDrift->GetHistogram()->GetYaxis()->SetRangeUser(0.,1.);
+        comparison.mGraph_AllDet_DetEff_v_HVDrift->GetHistogram()->GetYaxis()->SetDecimals(true);
+        comparison.mGraph_AllDet_DetEff_v_HVDrift->GetHistogram()->SetTitleOffset(1.10,"X");
+        comparison.mGraph_AllDet_DetEff_v_HVDrift->Draw("a");  //Do this the second time to draw again the plot with the above formatting
+        
+        //Plot Fits
+        if (drawFit) { //Case: Draw Fit
+            for (unsigned int i=0; i < vec_detNames.size(); i++) { //Loop Over vec_detNames
+                results[vec_detNames[i]].Scan_Lat[results[vec_detNames[i]].latAtMaxEff].fit_DetEff_v_HVDrift->Draw("same");
+            } //End Loop Over vec_detNames
+        } //End Case: Draw Fit
+    } //End Case: Valid Pointer To Histogram
+    else { //Case: No Valid Pointer To Histogram, CHEAT!
+        float minCurr = (*min_element( results[vec_detNames[0]].Scan_Lat[results[vec_detNames[0]].latAtMaxEff].currScan.begin(), results[vec_detNames[0]].Scan_Lat[results[vec_detNames[0]].latAtMaxEff].currScan.end() ) );
+        float maxCurr = (*max_element( results[vec_detNames[0]].Scan_Lat[results[vec_detNames[0]].latAtMaxEff].currScan.begin(), results[vec_detNames[0]].Scan_Lat[results[vec_detNames[0]].latAtMaxEff].currScan.end() ) );
+        
+        //Convert to HVDrift
+        float minHVDrift = minCurr * 1e-6 * fREquiv;
+        float maxHVDrift = maxCurr * 1e-6 * fREquiv;
+        
+        //Ensure minHVDrift is a whole number divisible by 100
+        if ( ( ( (int)floor(minHVDrift) ) % 100 ) == 0 ) {
+            minHVDrift = floor(minHVDrift) - 100;
+        }
+        else{
+            minHVDrift = floor(minHVDrift) - ( ( (int) floor(minHVDrift) ) % 100 );
+        }
+        
+        //Ensure maxHVDrift is a whole number divisible by 100
+        if ( ( ( (int)ceil(maxHVDrift) ) % 100 ) == 0 ) {
+            maxHVDrift = ceil(maxHVDrift) + 100;
+        }
+        else {
+            maxHVDrift = ceil(maxHVDrift) + (100 - ( (int) ceil(maxHVDrift) ) % 100 );
+        }
+        
+        TH1F *tempHisto_HV = new TH1F("tempHisto_HV","",maxHVDrift-minHVDrift,minHVDrift,maxHVDrift);
+        tempHisto_HV->SetStats(false);
+        tempHisto_HV->SetTitleOffset(1.20,"Y");
+        tempHisto_HV->SetTitleOffset(1.10,"X");
+        tempHisto_HV->GetYaxis()->SetDecimals(true);
+        tempHisto_HV->GetYaxis()->SetRangeUser(0.,1.);
+        tempHisto_HV->GetYaxis()->SetTitle("Efficiency");
+        tempHisto_HV->GetXaxis()->SetTitle("HV_{Drift} #left(V#right)");
+        tempHisto_HV->GetXaxis()->SetLabelOffset(0.012);
+        tempHisto_HV->Draw();
+        
+        //This hack is so dumb...The statements under the if portion work perfectly for me on lxplus; but they do not work on cms904fast and cause a crash...suspect differing versions of ROOT
+        for (unsigned int i=0; i < vec_detNames.size(); i++) { //Loop Over vec_detNames
+            results[vec_detNames[i]].Scan_Lat[results[vec_detNames[i]].latAtMaxEff].graph_DetEff_v_HVDrift->Draw("sameP");
+            
+            if (drawFit) results[vec_detNames[i]].Scan_Lat[results[vec_detNames[i]].latAtMaxEff].fit_DetEff_v_HVDrift->Draw("same");
+        } //End Loop Over vec_detNames
+    } //End Case: No Valid Pointer To Histogram, CHEAT!
+    
+    //Draw Legend
+    comparison.leg_AllDet_DetEff->Draw("same");
+    
+    //Draw Info Panel
+    cmsPrelim->DrawLatex( (paintPos_X-5) * 1e-6 * fREquiv,1.01,"CMS Preliminary");
+    
+    comparison.texInfo_run->DrawLatex(paintPos_X * 1e-6 * fREquiv, 0.9,Form("Runs %s - %s",(getString(comparison.run_initial)).c_str(),(getString(comparison.run_final)).c_str() ) );
+    
+    if( comparison.infoMatch_Lat){ //Case: Info Same For All Latency Values
+        comparison.texInfo_beam->DrawLatex(paintPos_X * 1e-6 * fREquiv,0.85,Form("Beam: %s",comparison.beamType.c_str()));
+        comparison.texInfo_pulseLen->DrawLatex(paintPos_X * 1e-6 * fREquiv,0.8,Form("MSPL%s",(getString(comparison.pulseLen)).c_str()));
+        
+        if( comparison.delay > 0){ //Case: Sync Mode
+            comparison.texInfo_delay->DrawLatex(paintPos_X * 1e-6 * fREquiv,0.75,Form("Sync. Mode; DLY = %sns",(getString(comparison.delay)).c_str()));
+        } //End Case: Sync Mode
+        else{ //Case: Async Mode
+            comparison.texInfo_delay->DrawLatex(paintPos_X * 1e-6 * fREquiv,0.75,"Async. Mode");
+        } //End Case: Async Mode
+    } //End Case: Info Same For All Latency Values
+    
+    //Write
+    dir_Comp->cd();
+    
+    comparison.mGraph_AllDet_DetEff_v_HVDrift->Write();
+    comparison.canvas_AllDet_DetEff_v_HVDrift->Write();
+    
     //Debugging
-    //cout<<"TestBeamAnalyzer::makeHistogramsEff - No Fault End" <<endl;
+    cout<<"TestBeamAnalyzer::makeHistogramsEff - No Fault End" <<endl;
     
     return;
 } //End TestBeamAnalyzer::makeHistogramsEff()
@@ -2089,6 +2466,8 @@ void TestBeamAnalyzer::makeHistogramsEff(string input, string option){
 void TestBeamAnalyzer::makeHistogramsTDC(string input, string option){
     //Variable Declaration
     float curr_max      = 0;
+    
+    float fHVDrift      = 0;
     
     float maxPeakInt    = 0;
     
@@ -2410,10 +2789,10 @@ void TestBeamAnalyzer::makeHistogramsTDC(string input, string option){
                 ((*dlyIter).second).texInfo_run->DrawLatex(paintPos_Curr, 0.9,Form("Runs %s - %s",(getString(((*dlyIter).second).run_initial)).c_str(),(getString(((*dlyIter).second).run_final)).c_str() ) );
                 
                 if ( ((*detIter).second).infoMatch_DLY ) { //Case: Info Matches
-                    ((*dlyIter).second).texInfo_beam->DrawLatex(paintPos_Curr,0.85,Form("%s-Beam",((*dlyIter).second).beamType.c_str()));
+                    ((*dlyIter).second).texInfo_beam->DrawLatex(paintPos_Curr,0.85,Form("Beam: %s",((*dlyIter).second).beamType.c_str()));
                     ((*dlyIter).second).texInfo_pulseLen->DrawLatex(paintPos_Curr,0.8,Form("MSPL%s",(getString(((*dlyIter).second).pulseLen)).c_str()));
                     ((*dlyIter).second).texInfo_delay->DrawLatex(paintPos_Curr,0.75,Form("Sync. Mode; DLY = %sns",(getString((*dlyIter).first).c_str())));
-                    ((*dlyIter).second).texInfo_thresh->DrawLatex(paintPos_Curr,0.7,Form("VFAT Thresh. = %s",(getString(((*dlyIter).second).thresh).c_str())));
+                    ((*dlyIter).second).texInfo_thresh->DrawLatex(paintPos_Curr,0.7,Form("VFAT Thresh. = %s fC",(getString(((*dlyIter).second).thresh).c_str())));
                 } //End Case: Info Matches
                 
                 //Write
@@ -2454,24 +2833,51 @@ void TestBeamAnalyzer::makeHistogramsTDC(string input, string option){
                 
                 //Initialize TGraphErrors for This Delay - Time Resolution from RMS
                 ((*detIter).second).graph_RMS_TimeRes_v_Curr = new TGraphErrors( ( (*dlyIter).second).currScan.size() );
+                ((*detIter).second).graph_RMS_TimeRes_v_HVDrift = new TGraphErrors( ( (*dlyIter).second).currScan.size() );
+                
+                ((*detIter).second).graph_RMS_Deconvo_TimeRes_v_Curr = new TGraphErrors( ( (*dlyIter).second).currScan.size() );
+                ((*detIter).second).graph_RMS_Deconvo_TimeRes_v_HVDrift = new TGraphErrors( ( (*dlyIter).second).currScan.size() );
                 
                 ((*detIter).second).graph_RMS_TimeRes_v_Curr->SetName(Form("%s_RMS_TimeRes_v_Curr_R%s_R%s", ((*detIter).first).c_str(), getString( ((*detIter).second).run_initial ).c_str(), getString( ((*detIter).second).run_final ).c_str() ) );
+                ((*detIter).second).graph_RMS_TimeRes_v_HVDrift->SetName(Form("%s_RMS_TimeRes_v_HVDrift_R%s_R%s", ((*detIter).first).c_str(), getString( ((*detIter).second).run_initial ).c_str(), getString( ((*detIter).second).run_final ).c_str() ) );
+                
+                ((*detIter).second).graph_RMS_Deconvo_TimeRes_v_Curr->SetName(Form("%s_RMS_Deconvo_TimeRes_v_Curr_R%s_R%s", ((*detIter).first).c_str(), getString( ((*detIter).second).run_initial ).c_str(), getString( ((*detIter).second).run_final ).c_str() ) );
+                ((*detIter).second).graph_RMS_Deconvo_TimeRes_v_HVDrift->SetName(Form("%s_RMS_Deconvo_TimeRes_v_HVDrift_R%s_R%s", ((*detIter).first).c_str(), getString( ((*detIter).second).run_initial ).c_str(), getString( ((*detIter).second).run_final ).c_str() ) );
                 
                 //Initialize TGraphErrors for This Delay - Time Resolution from Fit
                 ((*detIter).second).graph_Fit_TimeRes_v_Curr = new TGraphErrors( ( (*dlyIter).second).currScan.size() );
+                ((*detIter).second).graph_Fit_TimeRes_v_HVDrift = new TGraphErrors( ( (*dlyIter).second).currScan.size() );
+                
+                ((*detIter).second).graph_Fit_Deconvo_TimeRes_v_Curr = new TGraphErrors( ( (*dlyIter).second).currScan.size() );
+                ((*detIter).second).graph_Fit_Deconvo_TimeRes_v_HVDrift = new TGraphErrors( ( (*dlyIter).second).currScan.size() );
                 
                 ((*detIter).second).graph_Fit_TimeRes_v_Curr->SetName(Form("%s_Fit_TimeRes_v_Curr_R%s_R%s", ((*detIter).first).c_str(), getString( ((*detIter).second).run_initial ).c_str(), getString( ((*detIter).second).run_final ).c_str() ) );
+                ((*detIter).second).graph_Fit_TimeRes_v_HVDrift->SetName(Form("%s_Fit_TimeRes_v_HVDrift_R%s_R%s", ((*detIter).first).c_str(), getString( ((*detIter).second).run_initial ).c_str(), getString( ((*detIter).second).run_final ).c_str() ) );
+                
+                ((*detIter).second).graph_Fit_Deconvo_TimeRes_v_Curr->SetName(Form("%s_Fit_Deconvo_TimeRes_v_Curr_R%s_R%s", ((*detIter).first).c_str(), getString( ((*detIter).second).run_initial ).c_str(), getString( ((*detIter).second).run_final ).c_str() ) );
+                ((*detIter).second).graph_Fit_Deconvo_TimeRes_v_HVDrift->SetName(Form("%s_Fit_Deconvo_TimeRes_v_HVDrift_R%s_R%s", ((*detIter).first).c_str(), getString( ((*detIter).second).run_initial ).c_str(), getString( ((*detIter).second).run_final ).c_str() ) );
                 
                 //Initialize TGraphErrors for This Delay - Chi^2 / NDF
                 ((*detIter).second).graph_Fit_normChi2_v_Curr = new TGraphErrors( ( (*dlyIter).second).currScan.size() );
+                ((*detIter).second).graph_Fit_normChi2_v_HVDrift = new TGraphErrors( ( (*dlyIter).second).currScan.size() );
+                
+                ((*detIter).second).graph_Fit_Deconvo_normChi2_v_Curr = new TGraphErrors( ( (*dlyIter).second).currScan.size() );
+                ((*detIter).second).graph_Fit_Deconvo_normChi2_v_HVDrift = new TGraphErrors( ( (*dlyIter).second).currScan.size() );
                 
                 ((*detIter).second).graph_Fit_normChi2_v_Curr->SetName(Form("%s_Fit_normChi2_v_Curr_R%s_R%s", ((*detIter).first).c_str(), getString( ((*detIter).second).run_initial ).c_str(), getString( ((*detIter).second).run_final ).c_str() ) );
+                ((*detIter).second).graph_Fit_normChi2_v_HVDrift->SetName(Form("%s_Fit_normChi2_v_HVDrift_R%s_R%s", ((*detIter).first).c_str(), getString( ((*detIter).second).run_initial ).c_str(), getString( ((*detIter).second).run_final ).c_str() ) );
+                
+                ((*detIter).second).graph_Fit_Deconvo_normChi2_v_Curr->SetName(Form("%s_Fit_Deconvo_normChi2_v_Curr_R%s_R%s", ((*detIter).first).c_str(), getString( ((*detIter).second).run_initial ).c_str(), getString( ((*detIter).second).run_final ).c_str() ) );
+                ((*detIter).second).graph_Fit_Deconvo_normChi2_v_HVDrift->SetName(Form("%s_Fit_Deconvo_normChi2_v_HVDrift_R%s_R%s", ((*detIter).first).c_str(), getString( ((*detIter).second).run_initial ).c_str(), getString( ((*detIter).second).run_final ).c_str() ) );
                 
                 //Debugging
                 //cout<<"TestBeamAnalyzer::makeHistogramsTDC() - No Fault 3_c_ii_2" << endl;
                 
                 //Loop Over Currents
                 for (unsigned int i=0; i < ((*dlyIter).second).currScan.size(); i++) { //Loop Over Currents
+                    //Determine HV_Drift
+                    fHVDrift = ((*dlyIter).second).currScan[i] * 1e-6 * fREquiv;
+                    
                     //Determine Paint Position - Current
                     if ( ((*dlyIter).second).currScan[i] < paintPos_Curr ) { paintPos_Curr = ((*dlyIter).second).currScan[i]; }
                     
@@ -2488,9 +2894,19 @@ void TestBeamAnalyzer::makeHistogramsTDC(string input, string option){
                     ((*detIter).second).graph_RMS_TimeRes_v_Curr->SetPoint(i,((*dlyIter).second).currScan[i], ((*dlyIter).second).vec_rawRMS[i] );
                     ((*detIter).second).graph_RMS_TimeRes_v_Curr->SetPointError(i,0, ((*dlyIter).second).vec_rawRMSErr[i] );
                     
+                    ((*detIter).second).graph_RMS_TimeRes_v_HVDrift->SetPoint(i,fHVDrift, ((*dlyIter).second).vec_rawRMS[i] );
+                    ((*detIter).second).graph_RMS_TimeRes_v_Curr->SetPointError(i,0, ((*dlyIter).second).vec_rawRMSErr[i] );
+                    
+                    ((*detIter).second).graph_RMS_Deconvo_TimeRes_v_Curr->SetPoint(i,((*dlyIter).second).currScan[i], ((*dlyIter).second).vec_rawRMS_Deconvo[i] );
+                    ((*detIter).second).graph_RMS_Deconvo_TimeRes_v_Curr->SetPointError(i,0, ((*dlyIter).second).vec_rawRMSErr_Deconvo[i] );
+                    
+                    ((*detIter).second).graph_RMS_Deconvo_TimeRes_v_HVDrift->SetPoint(i,fHVDrift, ((*dlyIter).second).vec_rawRMS_Deconvo[i] );
+                    ((*detIter).second).graph_RMS_Deconvo_TimeRes_v_Curr->SetPointError(i,0, ((*dlyIter).second).vec_rawRMSErr_Deconvo[i] );
+                    
                     //Debugging
                     //cout<<"TestBeamAnalyzer::makeHistogramsTDC() - No Fault 3_c_ii_2_b" << endl;
                     
+                    //Check if Fit Performed - Before Deconvolution
                     if (((*dlyIter).second).vec_fitPerformed[i]) { //Case: i^th Peak Above the Noise
                         //Determine Paint Position - Time
                         //If the Fit was not performed this was initialized to 10
@@ -2501,9 +2917,15 @@ void TestBeamAnalyzer::makeHistogramsTDC(string input, string option){
                         ((*detIter).second).graph_Fit_TimeRes_v_Curr->SetPoint(i,((*dlyIter).second).currScan[i], ((*dlyIter).second).vec_timeResFits[i]->GetParameter(2) );
                         ((*detIter).second).graph_Fit_TimeRes_v_Curr->SetPointError(i,0, ((*dlyIter).second).vec_timeResFits[i]->GetParError(2) );
                         
+                        ((*detIter).second).graph_Fit_TimeRes_v_HVDrift->SetPoint(i,fHVDrift, ((*dlyIter).second).vec_timeResFits[i]->GetParameter(2) );
+                        ((*detIter).second).graph_Fit_TimeRes_v_HVDrift->SetPointError(i,0, ((*dlyIter).second).vec_timeResFits[i]->GetParError(2) );
+                        
                         //Set Fit Chi^2 / nDoF
                         ((*detIter).second).graph_Fit_normChi2_v_Curr->SetPoint(i,((*dlyIter).second).currScan[i], ((*dlyIter).second).vec_timeResFits[i]->GetChisquare() / ((*dlyIter).second).vec_timeResFits[i]->GetNDF() );
                         //((*detIter).second).graph_Fit_TimeRes_v_Curr->SetPointError(i,0, ??? );
+                        
+                        ((*detIter).second).graph_Fit_normChi2_v_HVDrift->SetPoint(i,fHVDrift, ((*dlyIter).second).vec_timeResFits[i]->GetChisquare() / ((*dlyIter).second).vec_timeResFits[i]->GetNDF() );
+                        //((*detIter).second).graph_Fit_TimeRes_v_HVDrift->SetPointError(i,0, ??? );
                         
                         //Set Data/Fit Ratio
                         tempHistoName = ((string)((*dlyIter).second).vec_timeResHistos[i]->GetName()) + "_Ratio";
@@ -2545,6 +2967,64 @@ void TestBeamAnalyzer::makeHistogramsTDC(string input, string option){
                         //Delete Pointer
                         delete canvas_TimeResPlotRatio;
                         delete temp_TDC_histo;
+                    } //End Case: i^th Peak Above the Noise
+                    
+                    //Check if Fit Performed - After Deconvolution
+                    if (((*dlyIter).second).vec_fitPerformed_Deconvo[i]) { //Case: i^th Peak Above the Noise
+                        //Set Time Resolution - Fit
+                        ((*detIter).second).graph_Fit_Deconvo_TimeRes_v_Curr->SetPoint(i,((*dlyIter).second).currScan[i], ((*dlyIter).second).vec_timeResFits_Deconvo[i]->GetParameter(0) );
+                        ((*detIter).second).graph_Fit_Deconvo_TimeRes_v_Curr->SetPointError(i,0, ((*dlyIter).second).vec_timeResFits_Deconvo[i]->GetParError(0) );
+                        
+                        ((*detIter).second).graph_Fit_Deconvo_TimeRes_v_HVDrift->SetPoint(i,fHVDrift, ((*dlyIter).second).vec_timeResFits_Deconvo[i]->GetParameter(0) );
+                        ((*detIter).second).graph_Fit_Deconvo_TimeRes_v_HVDrift->SetPointError(i,0, ((*dlyIter).second).vec_timeResFits_Deconvo[i]->GetParError(0) );
+                        
+                        //Set Fit Chi^2 / nDoF
+                        ((*detIter).second).graph_Fit_Deconvo_normChi2_v_Curr->SetPoint(i,((*dlyIter).second).currScan[i], ((*dlyIter).second).vec_timeResFits_Deconvo[i]->GetChisquare() / ((*dlyIter).second).vec_timeResFits_Deconvo[i]->GetNDF() );
+                        //((*detIter).second).graph_Fit_Deconvo_TimeRes_v_Curr->SetPointError(i,0, ??? );
+                        
+                        ((*detIter).second).graph_Fit_Deconvo_normChi2_v_HVDrift->SetPoint(i,fHVDrift, ((*dlyIter).second).vec_timeResFits_Deconvo[i]->GetChisquare() / ((*dlyIter).second).vec_timeResFits_Deconvo[i]->GetNDF() );
+                        //((*detIter).second).graph_Fit_Deconvo_TimeRes_v_HVDrift->SetPointError(i,0, ??? );
+                        
+                        //Set Data/Fit Ratio
+                        tempHistoName = ((string)((*dlyIter).second).vec_timeResHistos[i]->GetName()) + "_Deconvo_Ratio";
+                        TH1F *temp_TDC_histo_Deconvo = (TH1F*) ((*dlyIter).second).vec_timeResHistos[i]->Clone( tempHistoName.c_str() );
+                        temp_TDC_histo_Deconvo->Divide(((*dlyIter).second).vec_timeResFits_Deconvo[i], 1.);
+                        ((*dlyIter).second).vec_timeResHistoOverFits_Deconvo.push_back(temp_TDC_histo_Deconvo);
+                        
+                        //Plot Data Over Fit
+                        TCanvas *canvas_TimeResPlotRatio_Deconvo = new TCanvas(
+                            Form("Plot_%s_TimeRes_Deconvo_Ratio_%s", ((*dlyIter).second).vec_timeResHistos[i]->GetName(), getString( floor(((*dlyIter).second).currScan[i]) ).c_str() ),
+                            Form("%s Time Res. Data/Fit (Deconvo) for Current: %suA", ((*dlyIter).second).vec_timeResHistos[i]->GetName(), getString( floor(((*dlyIter).second).currScan[i]) ).c_str() ),
+                            700,350);
+                        
+                        canvas_TimeResPlotRatio_Deconvo->cd();
+                        canvas_TimeResPlotRatio_Deconvo->SetTicky();
+                        canvas_TimeResPlotRatio_Deconvo->SetTickx();
+                        //((*dlyIter).second).vec_timeResHistoOverFits[i]->SetMarkerStyle(21);
+                        //((*dlyIter).second).vec_timeResHistoOverFits[i]->SetMarkerSize(1.);
+                        //((*dlyIter).second).vec_timeResHistoOverFits[i]->SetLineWidth(2.);
+                        //((*dlyIter).second).vec_timeResHistoOverFits[i]->GetYaxis()->SetRangeUser(0,2.);
+                        //((*dlyIter).second).vec_timeResHistoOverFits[i]->Draw("E1");
+                        
+                        temp_TDC_histo_Deconvo->SetMarkerStyle(21);
+                        temp_TDC_histo_Deconvo->SetMarkerSize(1.);
+                        temp_TDC_histo_Deconvo->SetLineWidth(2.);
+                        temp_TDC_histo_Deconvo->GetYaxis()->SetRangeUser(0,2.);
+                        temp_TDC_histo_Deconvo->Draw("E1");
+                        
+                        cmsPrelim->DrawLatex(paintPos_Time,2.02,"CMS Preliminary");
+                        
+                        //Write
+                        dir_ThisCurr->cd();
+                        
+                        //((*dlyIter).second).vec_timeResHistoOverFits[i]->Write();
+                        temp_TDC_histo_Deconvo->Write();
+                        
+                        canvas_TimeResPlotRatio_Deconvo->Write();
+                        
+                        //Delete Pointer
+                        delete canvas_TimeResPlotRatio_Deconvo;
+                        delete temp_TDC_histo_Deconvo;
                     } //End Case: i^th Peak Above the Noise
                     
                     //Debugging
@@ -2613,7 +3093,7 @@ void TestBeamAnalyzer::makeHistogramsTDC(string input, string option){
                     TLatex *texInfo_thresh      = new TLatex();     texInfo_thresh->SetTextSize(0.03);
                     
                     texInfo_run->DrawLatex(paintPos_Time, 900, Form("Runs %s - %s",(getString(((*dlyIter).second).run_initial)).c_str(),(getString(((*dlyIter).second).run_final)).c_str() ) );
-                    texInfo_beam->DrawLatex(paintPos_Time, 850, Form("%s-Beam",((*dlyIter).second).beamType.c_str() ) );
+                    texInfo_beam->DrawLatex(paintPos_Time, 850, Form("Beam: %s",((*dlyIter).second).beamType.c_str() ) );
                     texInfo_pulseLen->DrawLatex(paintPos_Time, 800,Form("MSPL%s",(getString(((*dlyIter).second).pulseLen)).c_str()));
                     
                     //Debugging
@@ -2626,8 +3106,13 @@ void TestBeamAnalyzer::makeHistogramsTDC(string input, string option){
                     dir_ThisCurr->cd();
                     
                     ((*dlyIter).second).vec_timeResHistos[i]->Write();
+                    
                     if (((*dlyIter).second).vec_fitPerformed[i]) { //Case: i^th Peak Above the Noise
                         ((*dlyIter).second).vec_timeResFits[i]->Write();
+                    } //End Case: i^th Peak Above the Noise
+                    
+                    if (((*dlyIter).second).vec_fitPerformed_Deconvo[i]) { //Case: i^th Peak Above the Noise
+                        ((*dlyIter).second).vec_timeResFits_Deconvo[i]->Write();
                     } //End Case: i^th Peak Above the Noise
                     
                     canvas_TimeResPlot->Write();
@@ -2689,10 +3174,10 @@ void TestBeamAnalyzer::makeHistogramsTDC(string input, string option){
                 ((*dlyIter).second).texInfo_run->DrawLatex(paintPos_Curr, 25*0.48,Form("Runs %s - %s",(getString(((*dlyIter).second).run_initial)).c_str(),(getString(((*dlyIter).second).run_final)).c_str() ) );
                 
                 if ( ((*detIter).second).infoMatch_DLY ) { //Case: Info Matches
-                    ((*dlyIter).second).texInfo_beam->DrawLatex(paintPos_Curr,25*0.44,Form("%s-Beam",((*dlyIter).second).beamType.c_str()));
+                    ((*dlyIter).second).texInfo_beam->DrawLatex(paintPos_Curr,25*0.44,Form("Beam: %s",((*dlyIter).second).beamType.c_str()));
                     ((*dlyIter).second).texInfo_pulseLen->DrawLatex(paintPos_Curr,25*0.40,Form("MSPL%s",(getString(((*dlyIter).second).pulseLen)).c_str()));
                     ((*dlyIter).second).texInfo_delay->DrawLatex(paintPos_Curr,25*0.36,"Async. Mode");
-                    ((*dlyIter).second).texInfo_thresh->DrawLatex(paintPos_Curr,25*0.32,Form("VFAT Thresh. = %s",(getString(((*dlyIter).second).thresh).c_str())));
+                    ((*dlyIter).second).texInfo_thresh->DrawLatex(paintPos_Curr,25*0.32,Form("VFAT Thresh. = %s fC",(getString(((*dlyIter).second).thresh).c_str())));
                 } //End Case: Info Matches
                 
                 //Plot The Curve - One Delay : Fit Sigma vs Imon
@@ -2729,10 +3214,10 @@ void TestBeamAnalyzer::makeHistogramsTDC(string input, string option){
                 ((*dlyIter).second).texInfo_run->DrawLatex(paintPos_Curr, 25*0.48,Form("Runs %s - %s",(getString(((*dlyIter).second).run_initial)).c_str(),(getString(((*dlyIter).second).run_final)).c_str() ) );
                 
                 if ( ((*detIter).second).infoMatch_DLY ) { //Case: Info Matches
-                    ((*dlyIter).second).texInfo_beam->DrawLatex(paintPos_Curr,25*0.44,Form("%s-Beam",((*dlyIter).second).beamType.c_str()));
+                    ((*dlyIter).second).texInfo_beam->DrawLatex(paintPos_Curr,25*0.44,Form("Beam: %s",((*dlyIter).second).beamType.c_str()));
                     ((*dlyIter).second).texInfo_pulseLen->DrawLatex(paintPos_Curr,25*0.40,Form("MSPL%s",(getString(((*dlyIter).second).pulseLen)).c_str()));
                     ((*dlyIter).second).texInfo_delay->DrawLatex(paintPos_Curr,25*0.36,"Async. Mode");
-                    ((*dlyIter).second).texInfo_thresh->DrawLatex(paintPos_Curr,25*0.32,Form("VFAT Thresh. = %s",(getString(((*dlyIter).second).thresh).c_str())));
+                    ((*dlyIter).second).texInfo_thresh->DrawLatex(paintPos_Curr,25*0.32,Form("VFAT Thresh. = %s fC",(getString(((*dlyIter).second).thresh).c_str())));
                 } //End Case: Info Matches
                 
                 //Plot The Curve - One Delay : Fit normChi2 vs Imon
@@ -2774,6 +3259,18 @@ void TestBeamAnalyzer::makeHistogramsTDC(string input, string option){
                 ((*detIter).second).graph_RMS_TimeRes_v_Curr->Write();
                 ((*detIter).second).graph_Fit_TimeRes_v_Curr->Write();
                 ((*detIter).second).graph_Fit_normChi2_v_Curr->Write();
+                
+                ((*detIter).second).graph_RMS_TimeRes_v_HVDrift->Write();
+                ((*detIter).second).graph_Fit_TimeRes_v_HVDrift->Write();
+                ((*detIter).second).graph_Fit_normChi2_v_HVDrift->Write();
+                
+                ((*detIter).second).graph_RMS_Deconvo_TimeRes_v_Curr->Write();
+                ((*detIter).second).graph_Fit_Deconvo_TimeRes_v_Curr->Write();
+                ((*detIter).second).graph_Fit_Deconvo_normChi2_v_Curr->Write();
+                
+                ((*detIter).second).graph_RMS_Deconvo_TimeRes_v_HVDrift->Write();
+                ((*detIter).second).graph_Fit_Deconvo_TimeRes_v_HVDrift->Write();
+                ((*detIter).second).graph_Fit_Deconvo_normChi2_v_HVDrift->Write();
                 
                 ((*detIter).second).canvas_RMS_TimeRes_v_Curr->Write();
                 ((*detIter).second).canvas_Fit_TimeRes_v_Curr->Write();
@@ -2822,10 +3319,10 @@ void TestBeamAnalyzer::makeHistogramsTDC(string input, string option){
             ((*detIter).second).texInfo_run->DrawLatex(paintPos_Dly, 0.4,Form("Runs %s - %s",(getString(((*detIter).second).run_initial)).c_str(),(getString(((*detIter).second).run_final)).c_str() ) );
             
             if ( ((*detIter).second).infoMatch_DLY ) { //Case: Info Matches
-                ((*detIter).second).texInfo_beam->DrawLatex(paintPos_Dly,0.35,Form("%s-Beam",((*detIter).second).beamType.c_str()));
+                ((*detIter).second).texInfo_beam->DrawLatex(paintPos_Dly,0.35,Form("Beam: %s",((*detIter).second).beamType.c_str()));
                 ((*detIter).second).texInfo_pulseLen->DrawLatex(paintPos_Dly,0.3,Form("MSPL%s",(getString(((*detIter).second).pulseLen)).c_str()));
                 ((*detIter).second).texInfo_delay->DrawLatex(paintPos_Dly,0.25,"Sync. Mode");
-                ((*detIter).second).texInfo_thresh->DrawLatex(paintPos_Dly,0.2,Form("VFAT Thresh. = %s",(getString(((*detIter).second).thresh).c_str())));
+                ((*detIter).second).texInfo_thresh->DrawLatex(paintPos_Dly,0.2,Form("VFAT Thresh. = %s fC",(getString(((*detIter).second).thresh).c_str())));
             } //End Case: Info Matches
             
             //Write
@@ -2892,10 +3389,10 @@ void TestBeamAnalyzer::makeHistogramsTDC(string input, string option){
             cmsPrelim->DrawLatex(paintPos_Curr-10,25.25,"CMS Preliminary");
             
             ((*detIter).second).texInfo_run->DrawLatex(paintPos_Curr, 25*0.48,Form("Runs %s - %s",(getString(((*detIter).second).run_initial)).c_str(),(getString(((*detIter).second).run_final)).c_str() ) );
-            ((*detIter).second).texInfo_beam->DrawLatex(paintPos_Curr,25*0.44,Form("%s-Beam",((*detIter).second).beamType.c_str()));
+            ((*detIter).second).texInfo_beam->DrawLatex(paintPos_Curr,25*0.44,Form("Beam: %s",((*detIter).second).beamType.c_str()));
             ((*detIter).second).texInfo_pulseLen->DrawLatex(paintPos_Curr,25*0.40,Form("MSPL%s",(getString(((*detIter).second).pulseLen)).c_str()));
             ((*detIter).second).texInfo_delay->DrawLatex(paintPos_Curr,25*0.36,"Async. Mode");
-            ((*detIter).second).texInfo_thresh->DrawLatex(paintPos_Curr,25*0.32,Form("VFAT Thresh. = %s",(getString(((*detIter).second).thresh).c_str())));
+            ((*detIter).second).texInfo_thresh->DrawLatex(paintPos_Curr,25*0.32,Form("VFAT Thresh. = %s fC",(getString(((*detIter).second).thresh).c_str())));
             
             //Write
             dir_ThisDet->cd();
@@ -2973,10 +3470,10 @@ void TestBeamAnalyzer::makeHistogramsTDC(string input, string option){
         comparison.texInfo_run->DrawLatex(paintPos_Curr, 0.9,Form("Runs %s - %s",(getString(comparison.run_initial)).c_str(),(getString(comparison.run_final)).c_str() ) );
         
         if (comparison.infoMatch_DLY){ //Case: Info Same For All Detectors
-            comparison.texInfo_beam->DrawLatex(paintPos_Curr,0.85,Form("%s-Beam",(comparison.beamType.c_str())));
+            comparison.texInfo_beam->DrawLatex(paintPos_Curr,0.85,Form("Beam: %s",(comparison.beamType.c_str())));
             comparison.texInfo_pulseLen->DrawLatex(paintPos_Curr,0.8,Form("MSPL%s",(getString(comparison.pulseLen)).c_str()));
             comparison.texInfo_delay->DrawLatex(paintPos_Curr,0.75,Form("Sync. Mode; DLY = %sns",(getString(comparison.delay).c_str())));
-            comparison.texInfo_thresh->DrawLatex(paintPos_Curr,0.7,Form("VFAT Thresh. = %s",(getString(comparison.thresh).c_str())));
+            comparison.texInfo_thresh->DrawLatex(paintPos_Curr,0.7,Form("VFAT Thresh. = %s fC",(getString(comparison.thresh).c_str())));
         } //End Case: Info Same For All Detectors
         
         //Write
@@ -3011,10 +3508,10 @@ void TestBeamAnalyzer::makeHistogramsTDC(string input, string option){
         comparison.texInfo_run->DrawLatex(paintPos_Dly, 0.4,Form("Runs %s - %s",(getString(comparison.run_initial)).c_str(),(getString(comparison.run_final)).c_str() ) );
         
         if (comparison.infoMatch_DLY){ //Case: Info Same For All Detectors
-            comparison.texInfo_beam->DrawLatex(paintPos_Dly,0.35,Form("%s-Beam",(comparison.beamType.c_str())));
+            comparison.texInfo_beam->DrawLatex(paintPos_Dly,0.35,Form("Beam: %s",(comparison.beamType.c_str())));
             comparison.texInfo_pulseLen->DrawLatex(paintPos_Dly,0.3,Form("MSPL%s",(getString(comparison.pulseLen)).c_str()));
             comparison.texInfo_delay->DrawLatex(paintPos_Dly,0.25,"Sync. Mode");
-            comparison.texInfo_thresh->DrawLatex(paintPos_Dly,0.2,Form("VFAT Thresh. = %s",(getString(comparison.thresh).c_str())));
+            comparison.texInfo_thresh->DrawLatex(paintPos_Dly,0.2,Form("VFAT Thresh. = %s fC",(getString(comparison.thresh).c_str())));
         } //End Case: Info Same For All Detectors
 
         //Write
@@ -3078,10 +3575,10 @@ void TestBeamAnalyzer::makeHistogramsTDC(string input, string option){
         comparison.texInfo_run->DrawLatex(paintPos_Curr, 25*0.48,Form("Runs %s - %s",(getString(comparison.run_initial)).c_str(),(getString(comparison.run_final)).c_str() ) );
         
         if (comparison.infoMatch_DLY) { //Case: Info Same For All Detectors
-            comparison.texInfo_beam->DrawLatex(paintPos_Curr,25*0.44,Form("%s-Beam",comparison.beamType.c_str()));
+            comparison.texInfo_beam->DrawLatex(paintPos_Curr,25*0.44,Form("Beam: %s",comparison.beamType.c_str()));
             comparison.texInfo_pulseLen->DrawLatex(paintPos_Curr,25*0.40,Form("MSPL%s",(getString(comparison.pulseLen)).c_str()));
             comparison.texInfo_delay->DrawLatex(paintPos_Curr,25*0.36,"Async. Mode");
-            comparison.texInfo_thresh->DrawLatex(paintPos_Curr,25*0.32,Form("VFAT Thresh. = %s",(getString(comparison.thresh).c_str())));
+            comparison.texInfo_thresh->DrawLatex(paintPos_Curr,25*0.32,Form("VFAT Thresh. = %s fC",(getString(comparison.thresh).c_str())));
         } //End Case: Info Same For All Detectors
         
         //Plot The Curve - Comparison of Time Res from All Detectors (Fit)
@@ -3111,10 +3608,10 @@ void TestBeamAnalyzer::makeHistogramsTDC(string input, string option){
         comparison.texInfo_run->DrawLatex(paintPos_Curr, 25*0.48,Form("Runs %s - %s",(getString(comparison.run_initial)).c_str(),(getString(comparison.run_final)).c_str() ) );
         
         if (comparison.infoMatch_DLY) { //Case: Info Same For All Detectors
-            comparison.texInfo_beam->DrawLatex(paintPos_Curr,25*0.44,Form("%s-Beam",comparison.beamType.c_str()));
+            comparison.texInfo_beam->DrawLatex(paintPos_Curr,25*0.44,Form("Beam: %s",comparison.beamType.c_str()));
             comparison.texInfo_pulseLen->DrawLatex(paintPos_Curr,25*0.40,Form("MSPL%s",(getString(comparison.pulseLen)).c_str()));
             comparison.texInfo_delay->DrawLatex(paintPos_Curr,25*0.36,"Async. Mode");
-            comparison.texInfo_thresh->DrawLatex(paintPos_Curr,25*0.32,Form("VFAT Thresh. = %s",(getString(comparison.thresh).c_str())));
+            comparison.texInfo_thresh->DrawLatex(paintPos_Curr,25*0.32,Form("VFAT Thresh. = %s fC",(getString(comparison.thresh).c_str())));
         } //End Case: Info Same For All Detectors
         
         //Write
