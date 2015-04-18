@@ -53,7 +53,9 @@ int main (){
     //Detection Efficiency
     myAnalyzer.setFilesEff(masterFileName,vec_latFiles);
     myAnalyzer.setEffFitDraw(true);	//Draws the fit on the canvas if true
-    myAnalyzer.setEffFitFormula(/* string argument */); //Takes string formula, default is hard-coded to "(1+exp([0]*(x+[1])))^(-1)" may require some "play"
+    //myAnalyzer.setEffFitFormula(/* string argument */); //Takes string formula, default is hard-coded to "(1+exp([0]*(x+[1])))^(-1)" may require some "play"
+    myAnalyzer.setEffFitFormula("TMath::Sqrt2()/TMath::Sqrt(TMath::Pi())*(1+TMath::Erf((x*[0]-[1])+[2]))+[3]*TMath::Sqrt(TMath::Pi())*(1+TMath::Erf((x*[0]-[1])+[2]))"); // Function Provided by Patrizia	//Takes string formula, default is hard-coded to "(1+exp([0]*(x+[1])))^(-1)" may require some "play"
+//    virtual void setEffFitFormula(string input = "TMath::Sqrt2()/TMath::Sqrt(TMath::Pi())*(1+TMath::Erf((x*[0]-[1])+[2]))+[3]*TMath::Sqrt(TMath::Pi())*(1+TMath::Erf((x*[0]-[1])+[2]))"){fitEff_Formula = input; return;};
     myAnalyzer.setEffFitOption("R");
     myAnalyzer.analyzeRunsEff();
     myAnalyzer.makeDetLogEff();
