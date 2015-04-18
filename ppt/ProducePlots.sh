@@ -55,10 +55,12 @@ do
   	echo $RootFile
   	RecoFile=$(basename $RootFile)
   	RecoFile=${RootFile//CRC/RECO-CRC}
+  	ANFile=${RootFile//CRC/AN-CRC}
   	echo -e "\n\n\tName of ROOT files:\n"
   	echo -e "\n\n\t$RootFile"
   	echo -e "\n\n\t$RecoFile"
-  	root -b -l -q 'BeamProfile.C("'$RootFile'","'$RecoFile'",'$RunCounter','$4')'
+  	echo -e "\n\n\t$ANFile"
+  	root -b -l -q 'BeamProfile.C("'$RootFile'","'$RecoFile'","'$ANFile'",'$RunCounter','$4')'
        done
      #fi
   done   
