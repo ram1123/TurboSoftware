@@ -44,6 +44,10 @@ do
 	make_dir "Plots/C/${RunCounter}"
 	make_dir "LogFiles/${RunCounter}"
 
+##	if [ -f "ClusterSize_${1}_${2}.txt" ]; then
+##		rm ClusterSize_${1}_${2}.txt
+##	fi
+
   for Dir in $3/Run$file*
   do
      temp=$(echo $Dir | sed 's/.*Run//' | sed 's/.//5g')
@@ -61,6 +65,10 @@ do
   	echo -e "\n\n\t$RecoFile"
   	echo -e "\n\n\t$ANFile"
   	root -b -l -q 'BeamProfile.C("'$RootFile'","'$RecoFile'","'$ANFile'",'$RunCounter','$4')'
+	echo -e "\n\n\n####################################################\n\n\n"
+	cat Current_vs_ClusterSize.txt
+	cat Current_vs_ClusterSize.txt >> ClusterSize_${1}_${2}.txt
+	echo -e "\n\n\n####################################################\n\n\n"
        done
      #fi
   done   

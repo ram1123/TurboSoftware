@@ -56,6 +56,68 @@ int BeamProfile(TString RootFile,TString RecoFile, TString ANFile, Int_t name, I
 	const Int_t NumOfFiles = InputFiles.size();
 	//cout<<"Num of FIles = "<<NumOfFiles<<endl;
 
+//#####################################################################################################
+//		Start of Read the cluster size
+//#####################################################################################################
+cout<<"\n\n\n-----------------------"<<endl;
+
+      
+
+	ofstream myfile;
+
+	std::vector<TFile*> InputFiles1;
+	InputFiles1.clear();
+	
+	InputFiles1.push_back(TFile::Open(ANFile));
+//      	TFile f(TString(ANFile));
+        //if (f.IsZombie()) {
+        //cout << "Error opening file" << endl;
+        //exit(-1);
+        //}
+
+        TCanvas *c1 = new TCanvas("c1","c1",1);
+
+        c1->Divide(3,2);
+
+        const Int_t nbranch = 3;
+
+        char* branches[nbranch]={"hsCMSNS2LC1_CLS_Eff","hsCMSNS2LC2_CLS_Eff","hsCMSNS2LC3_CLS_Eff"};   
+
+        
+
+           myfile.open ("Current_vs_ClusterSize.txt");
+	for(unsigned int j = 0; j < InputFiles1.size(); ++j ) {
+        for(int i=0;i<nbranch;i++)
+        {
+
+           //myfile.open ("Current_vs_ClusterSize_"+TString(branches[i])+".txt");
+
+           //TH1F *HT = (TH1F*)ANFile.TString(branches[i]);
+	TH1F *HT = (TH1F*)InputFiles1.at(j)->Get(TString(branches[i]));
+	cout<<"INput files = "<<InputFiles1.at(j)<<endl;
+           HT->SetAxisRange(0,10);
+           HT->GetXaxis()->SetTitle("Cluster Size");
+	   HT->SetTitle("Cluster Size For Run 60");	
+	   myfile<<"\t "<<HT->GetMean(1)<<"+/-"<<HT->GetMeanError(1);
+	   cout<<"\t "<<HT->GetMean(1)<<"+/-"<<HT->GetMeanError(1);
+	   //cout<<"\t "<<HT->GetMean(1);
+	   HT->Draw();
+           c1->SaveAs(TString(branches[i])+".pdf");
+         }
+	 myfile<<endl;
+         myfile.close();
+}
+
+
+
+
+
+       	cout<<"\n\n\n-----------------------"<<endl;
+
+//#####################################################################################################
+//		End of Read the cluster size
+//#####################################################################################################
+/*
 	for(unsigned int j = 0; j < InputFiles.size(); ++j ) {
 	TTree * tmpTree = (TTree*)InputFiles.at(j)->Get("rd51tbgeo");
 	tmpTree->AddFriend("trackertree",RecoFile);       
@@ -395,7 +457,7 @@ o_file3<<name<<"\t("<<BeamProfile_Tracker_1->GetXaxis()->GetBinCenter(binx)<<","
 
 	canvas_prof->Divide(2,2);
 
-        cmsprem = new TLatex(0,552,"CMS Preliminary");
+        cmsprem = new TLatex(0,652,"CMS Preliminary");
         cmsprem->SetTextSize(0.05);
 
 
@@ -404,7 +466,7 @@ o_file3<<name<<"\t("<<BeamProfile_Tracker_1->GetXaxis()->GetBinCenter(binx)<<","
 	tmpTree->Draw("sCMSNS2LC1.geoposY>>Y_Hit_GE11_IV_GIF","trackx@.GetEntries()==1 && tracky@.GetEntries()==1 && trackx.q>0 && tracky.q>0");
 	Y_Hit_GE11_IV_GIF->GetXaxis()->SetTitle("Y position in mm");
 	Y_Hit_GE11_IV_GIF->GetYaxis()->SetTitle("Number of Hits");
-	Y_Hit_GE11_IV_GIF->GetYaxis()->SetRangeUser(0,550);
+	Y_Hit_GE11_IV_GIF->GetYaxis()->SetRangeUser(0,650);
 	canvas_prof_1->Modified(); canvas_prof_1->Update();
 	TPaveStats *stats =(TPaveStats*)canvas_prof_1->GetPrimitive("stats");
 	stats->SetName("Y_Hit_GE11_IV_GIF");
@@ -420,7 +482,7 @@ o_file3<<name<<"\t("<<BeamProfile_Tracker_1->GetXaxis()->GetBinCenter(binx)<<","
 	tmpTree->Draw("sCMSNS2LC2.geoposY>>Y_Hit_GE11_IV","trackx@.GetEntries()==1 && tracky@.GetEntries()==1 && trackx.q>0 && tracky.q>0");
 	Y_Hit_GE11_IV->GetXaxis()->SetTitle("Y position in mm");
 	Y_Hit_GE11_IV->GetYaxis()->SetTitle("Number of Hits");
-	Y_Hit_GE11_IV->GetYaxis()->SetRangeUser(0,550);
+	Y_Hit_GE11_IV->GetYaxis()->SetRangeUser(0,650);
 	canvas_prof_2->Modified(); canvas_prof_2->Update();
 	TPaveStats *stats =(TPaveStats*)canvas_prof_2->GetPrimitive("stats");
 	stats->SetName("Y_Hit_GE11_IV");
@@ -436,7 +498,7 @@ o_file3<<name<<"\t("<<BeamProfile_Tracker_1->GetXaxis()->GetBinCenter(binx)<<","
 	tmpTree->Draw("sCMSNS2LC3.geoposY>>Y_Hit_GE11_V","trackx@.GetEntries()==1 && tracky@.GetEntries()==1 && trackx.q>0 && tracky.q>0");
 	Y_Hit_GE11_V->GetXaxis()->SetTitle("Y position in mm");
 	Y_Hit_GE11_V->GetYaxis()->SetTitle("Number of Hits");
-	Y_Hit_GE11_V->GetYaxis()->SetRangeUser(0,550);
+	Y_Hit_GE11_V->GetYaxis()->SetRangeUser(0,650);
 	canvas_prof_3->Modified(); canvas_prof_3->Update();
 	TPaveStats *stats =(TPaveStats*)canvas_prof_3->GetPrimitive("stats");
 	stats->SetName("Y_Hit_GE11_V");
@@ -1017,4 +1079,5 @@ o_file3.close();
 o_file2.close();
 	
 	}
+*/
 	}
