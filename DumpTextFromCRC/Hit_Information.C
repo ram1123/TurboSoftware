@@ -3,8 +3,8 @@
  *
  *       Filename:  Hit_Information.C
  *
- *    Description:  This code creates a text file in which there is hit information 
- *    		    For trackers and GEM detectors
+ *    Description:  This code creates dumps the hits information of hits in tracker 
+ *    		    and GE1/1 prototypes as per Aiwu's code demand
  *
  *        Version:  1.0
  *        Created:  Wednesday 28 January 2015 07:20:03  CET
@@ -45,112 +45,114 @@ int Hit_Information()
   rd51tbgeo->SetBranchAddress("g1xcl", &g1xcl_);
   
   Float_t geoposX1[(_MAX_POSSIBLE_G1XCL_)];
-  rd51tbgeo->SetBranchStatus("g1xcl.geoposX", 1); // activate "g1xcl.geoposX"
-  rd51tbgeo->SetBranchAddress("g1xcl.geoposX", geoposX1);
+  rd51tbgeo->SetBranchStatus("g1xcl.geoposch", 1); // activate "g1xcl.geoposch"
+  rd51tbgeo->SetBranchAddress("g1xcl.geoposch", geoposX1);
   
   Int_t g2xcl_ = -1;
-  rd51tbgeo->SetBranchStatus("g2xcl", 1); // activate "g1xcl"
+  rd51tbgeo->SetBranchStatus("g2xcl", 1); // activate "g2xcl"
   rd51tbgeo->SetBranchAddress("g2xcl", &g2xcl_);
   
   Float_t geoposX2[(_MAX_POSSIBLE_G1XCL_)];
-  rd51tbgeo->SetBranchStatus("g2xcl.geoposX", 1); // activate "g1xcl.geoposX"
-  rd51tbgeo->SetBranchAddress("g2xcl.geoposX", geoposX2);
+  rd51tbgeo->SetBranchStatus("g2xcl.geoposch", 1); // activate "g2xcl.geoposch"
+  rd51tbgeo->SetBranchAddress("g2xcl.geoposch", geoposX2);
   
   Int_t g3xcl_ = -1;
-  rd51tbgeo->SetBranchStatus("g3xcl", 1); // activate "g1xcl"
+  rd51tbgeo->SetBranchStatus("g3xcl", 1); // activate "g3xcl"
   rd51tbgeo->SetBranchAddress("g3xcl", &g3xcl_);
   
   Float_t geoposX3[(_MAX_POSSIBLE_G1XCL_)];
-  rd51tbgeo->SetBranchStatus("g3xcl.geoposX", 1); // activate "g1xcl.geoposX"
-  rd51tbgeo->SetBranchAddress("g3xcl.geoposX", geoposX3);
+  rd51tbgeo->SetBranchStatus("g3xcl.geoposch", 1); // activate "g3xcl.geoposch"
+  rd51tbgeo->SetBranchAddress("g3xcl.geoposch", geoposX3);
   
   Int_t g1ycl_ = -1;
   rd51tbgeo->SetBranchStatus("g1ycl", 1); // activate "g1ycl"
   rd51tbgeo->SetBranchAddress("g1ycl", &g1ycl_);
   
   Float_t geoposY1[(_MAX_POSSIBLE_G1XCL_)];
-  rd51tbgeo->SetBranchStatus("g1ycl.geoposY", 1); // activate "g1ycl.geoposY"
-  rd51tbgeo->SetBranchAddress("g1ycl.geoposY", geoposY1);
+  rd51tbgeo->SetBranchStatus("g1ycl.geoposch", 1); // activate "g1ycl.geoposch"
+  rd51tbgeo->SetBranchAddress("g1ycl.geoposch", geoposY1);
   
   Int_t g2ycl_ = -1;
-  rd51tbgeo->SetBranchStatus("g2ycl", 1); // activate "g1ycl"
+  rd51tbgeo->SetBranchStatus("g2ycl", 1); // activate "g2ycl"
   rd51tbgeo->SetBranchAddress("g2ycl", &g2ycl_);
   
   Float_t geoposY2[(_MAX_POSSIBLE_G1XCL_)];
-  rd51tbgeo->SetBranchStatus("g2ycl.geoposY", 1); // activate "g1ycl.geoposY"
-  rd51tbgeo->SetBranchAddress("g2ycl.geoposY", geoposY2);
+  rd51tbgeo->SetBranchStatus("g2ycl.geoposch", 1); // activate "g2ycl.geoposch"
+  rd51tbgeo->SetBranchAddress("g2ycl.geoposch", geoposY2);
   
   Int_t g3ycl_ = -1;
-  rd51tbgeo->SetBranchStatus("g3ycl", 1); // activate "g1ycl"
+  rd51tbgeo->SetBranchStatus("g3ycl", 1); // activate "g3ycl"
   rd51tbgeo->SetBranchAddress("g3ycl", &g3ycl_);
   
   Float_t geoposY3[(_MAX_POSSIBLE_G1XCL_)];
-  rd51tbgeo->SetBranchStatus("g3ycl.geoposY", 1); // activate "g1ycl.geoposY"
-  rd51tbgeo->SetBranchAddress("g3ycl.geoposY", geoposY3);
+  rd51tbgeo->SetBranchStatus("g3ycl.geoposch", 1); // activate "g3ycl.geoposch"
+  rd51tbgeo->SetBranchAddress("g3ycl.geoposch", geoposY3);
   
   Int_t sCMSNS2LC1_ = -1;
-  rd51tbgeo->SetBranchStatus("sCMSNS2LC1", 1); // activate "g1ycl"
+  rd51tbgeo->SetBranchStatus("sCMSNS2LC1", 1); // activate "sCMSNS2LC1"
   rd51tbgeo->SetBranchAddress("sCMSNS2LC1", &sCMSNS2LC1_);
   
   Float_t LC1geoposY[(_MAX_POSSIBLE_G1XCL_)];
-  rd51tbgeo->SetBranchStatus("sCMSNS2LC1.geoposY", 1); // activate "g1ycl.geoposY"
-  rd51tbgeo->SetBranchAddress("sCMSNS2LC1.geoposY", LC1geoposY);
+  rd51tbgeo->SetBranchStatus("sCMSNS2LC1.geoposch", 1); // activate "sCMSNS2LC1.geoposch"
+  rd51tbgeo->SetBranchAddress("sCMSNS2LC1.geoposch", LC1geoposY);
 
   Int_t sCMSNS2LC2_ = -1;
-  rd51tbgeo->SetBranchStatus("sCMSNS2LC2", 1); // activate "g1ycl"
+  rd51tbgeo->SetBranchStatus("sCMSNS2LC2", 1); // activate "sCMSNS2LC2"
   rd51tbgeo->SetBranchAddress("sCMSNS2LC2", &sCMSNS2LC2_);
   
   Float_t LC2geoposY[(_MAX_POSSIBLE_G1XCL_)];
-  rd51tbgeo->SetBranchStatus("sCMSNS2LC2.geoposY", 1); // activate "g1ycl.geoposY"
-  rd51tbgeo->SetBranchAddress("sCMSNS2LC2.geoposY", LC2geoposY);
+  rd51tbgeo->SetBranchStatus("sCMSNS2LC2.geoposch", 1); // activate "sCMSNS2LC2.geoposch"
+  rd51tbgeo->SetBranchAddress("sCMSNS2LC2.geoposch", LC2geoposY);
 
   Int_t sCMSNS2LC3_ = -1;
-  rd51tbgeo->SetBranchStatus("sCMSNS2LC3", 1); // activate "g1ycl"
+  rd51tbgeo->SetBranchStatus("sCMSNS2LC3", 1); // activate "sCMSNS2LC3"
   rd51tbgeo->SetBranchAddress("sCMSNS2LC3", &sCMSNS2LC3_);
   
   Float_t LC3geoposY[(_MAX_POSSIBLE_G1XCL_)];
-  rd51tbgeo->SetBranchStatus("sCMSNS2LC3.geoposY", 1); // activate "g1ycl.geoposY"
-  rd51tbgeo->SetBranchAddress("sCMSNS2LC3.geoposY", LC3geoposY);
+  rd51tbgeo->SetBranchStatus("sCMSNS2LC3.geoposch", 1); // activate "sCMSNS2LC3.geoposch"
+  rd51tbgeo->SetBranchAddress("sCMSNS2LC3.geoposch", LC3geoposY);
 
 
   Long64_t nevent = rd51tbgeo->GetEntries();
   
   std::cout << "####### nevent = " << nevent << std::endl;
   
-  // create a card
+  // create a text file
   std::ofstream file_out("Hit_Position_Info.txt");
   if (!file_out){
 	std::cout << "error: Could not open the file Hit_Position_Info.txt" << std::endl;
   }
 //  file_out.open("Hit_Position_Info.txt");
-	file_out<<"\t| \t\tTrackers\t\t\t|\tGEM"<<std::endl;
-	file_out<<"\t----------------------------------------------------------------------"<<std::endl;
-	file_out<<"\tx\tx\tx\ty\ty\ty\ty\ty\ty"<<std::endl;
-	file_out<<"Event No Trk1\tTrk2\tTrk3\tTrk1\tTrk2\tTrk3\tGEM1\tGEM2\tGEM3"<<std::endl;
-	file_out<<"--------------------------------------------------------------------------------------"<<std::endl;
-	file_out<<"--------------------------------------------------------------------------------------"<<std::endl;
+//	file_out<<"\t| \t\tTrackers\t\t\t|\tGEM"<<std::endl;
+//	file_out<<"\t----------------------------------------------------------------------"<<std::endl;
+//	file_out<<"\tx\tx\tx\ty\ty\ty\ty\ty\ty"<<std::endl;
+//	file_out<<"Event No Trk1\tTrk2\tTrk3\tTrk1\tTrk2\tTrk3\tGEM1\tGEM2\tGEM3"<<std::endl;
+//	file_out<<"--------------------------------------------------------------------------------------"<<std::endl;
+//	file_out<<"--------------------------------------------------------------------------------------"<<std::endl;
 
-bool hit;
-std::cout<<"Want text file corresponding to only one hit or all: ";
-std::cin>>hit;
+//bool hit;
+//std::cout<<"Want text file corresponding to only one hit or all: ";
+//std::cin>>hit;
 //if(hit) std::cout<<"ramkrishna"<<std::endl;
 //else std::cout<<"sharma"<<std::endl;
   for (Long64_t i = 0; i < nevent; i++) {
+//  for (Long64_t i = 0; i < 10; i++) {
+  file_out<<"EventNb\t"<<i+1<<endl;
 //  for (Long64_t i = 0; i < 3; i++) {
     rd51tbgeo->GetEntry(i);
     vector<Int_t> PosSort;
     PosSort.clear();
     PosSort.push_back(g1xcl_);
-    PosSort.push_back(g2xcl_);
-    PosSort.push_back(g3xcl_);
     PosSort.push_back(g1ycl_);
+    PosSort.push_back(g2xcl_);
     PosSort.push_back(g2ycl_);
+    PosSort.push_back(g3xcl_);
     PosSort.push_back(g3ycl_);
     PosSort.push_back(sCMSNS2LC1_);
     PosSort.push_back(sCMSNS2LC2_);
     PosSort.push_back(sCMSNS2LC3_);
     
-    std::sort(PosSort.begin(), PosSort.end());
+//    std::sort(PosSort.begin(), PosSort.end());
 //    cout << "DEBUG after : a = (";
 //      for (size_t k = 0; k != PosSort.size(); ++k) {
 //       cout << PosSort.at(k);
@@ -160,6 +162,110 @@ std::cin>>hit;
 //        cout << ")" << endl;
 //
 //    cout<<"Last element = "<<PosSort.back()<<endl;
+//    cout<<"Last element = "<<PosSort.size()<<endl;
+
+  for (Int_t j=0; j<PosSort.size();j++){
+  	if (j==0)
+	{
+	file_out<<"g1x\t"	<<g1xcl_	<<"\t"<<1.0<<"\t";
+	if(g1xcl_>0)
+	{
+	for(Int_t HitNum=0; HitNum<g1xcl_;HitNum++)
+	{
+		file_out<<geoposX1[HitNum]<<"\t"<<1.0<<"\t";
+	}
+	}
+	}
+  	if (j==1)
+	{
+	file_out<<"g1y\t"	<<g1ycl_	<<"\t"<<1.0<<"\t";
+	if(g1ycl_>0)
+	{
+	for(Int_t HitNum=0; HitNum<g1ycl_;HitNum++)
+	{
+		file_out<<geoposY1[HitNum]<<"\t"<<1.0<<"\t";
+	}
+	}
+	}
+  	if (j==2)
+	{
+	file_out<<"g2x\t"	<<g2xcl_	<<"\t"<<1.0<<"\t";
+	if(g2xcl_>0)
+	{
+	for(Int_t HitNum=0; HitNum<g2xcl_;HitNum++)
+	{
+		file_out<<geoposX2[HitNum]<<"\t"<<1.0<<"\t";
+	}
+	}
+	}
+  	if (j==3)
+	{
+	file_out<<"g2y\t"	<<g2ycl_	<<"\t"<<1.0<<"\t";
+	if(g2ycl_>0)
+	{
+	for(Int_t HitNum=0; HitNum<g2ycl_;HitNum++)
+	{
+		file_out<<geoposY2[HitNum]<<"\t"<<1.0<<"\t";
+	}
+	}
+	}
+  	if (j==4)
+	{
+	file_out<<"g3x\t"	<<g3xcl_	<<"\t"<<1.0<<"\t";
+	if(g3xcl_>0)
+	{
+	for(Int_t HitNum=0; HitNum<g3xcl_;HitNum++)
+	{
+		file_out<<geoposX3[HitNum]<<"\t"<<1.0<<"\t";
+	}
+	}
+	}
+  	if (j==5)
+	{
+	file_out<<"g3y\t"	<<g3ycl_	<<"\t"<<1.0<<"\t";
+	if(g3ycl_>0)
+	{
+	for(Int_t HitNum=0; HitNum<g3ycl_;HitNum++)
+	{
+		file_out<<geoposY3[HitNum]<<"\t"<<1.0<<"\t";
+	}
+	}
+	}
+  	if (j==6)
+	{
+	file_out<<"sCMSLC1\t"<<sCMSNS2LC1_	<<"\t"<<1.0<<"\t";
+	if(sCMSNS2LC1_>0)
+	{
+	for(Int_t HitNum=0; HitNum<sCMSNS2LC1_;HitNum++)
+	{
+		file_out<<LC1geoposY[HitNum]<<"\t"<<1.0<<"\t";
+	}
+	}
+	}
+  	if (j==7)
+	{
+	file_out<<"sCMSLC2\t"<<sCMSNS2LC2_	<<"\t"<<1.0<<"\t";
+	if(sCMSNS2LC2_>0)
+	{
+	for(Int_t HitNum=0; HitNum<sCMSNS2LC2_;HitNum++)
+	{
+		file_out<<LC2geoposY[HitNum]<<"\t"<<1.0<<"\t";
+	}
+	}
+	}
+  	if (j==8)
+	{
+	file_out<<"sCMSLC3\t"<<sCMSNS2LC3_	<<"\t"<<1.0<<"\t";
+	if(sCMSNS2LC3_ > 0 )
+	for(Int_t HitNum=0; HitNum<sCMSNS2LC3_;HitNum++)
+	{
+		file_out<<LC3geoposY[HitNum]<<"\t"<<1.0<<"\t";
+	}
+	}
+	file_out<<endl;
+  }
+
+/*    
     if (hit)
     if ((g1xcl_==0 || g1xcl_>1)|| ( g2xcl_ == 0 || g2xcl_ >1) || (g3xcl_ == 0 || g3xcl_ >1)|| (g1ycl_==0 || g1ycl_>1)|| ( g2ycl_ == 0 || g2ycl_ >1) || (g3ycl_ == 0 || g3ycl_ >1)) continue;
         file_out<<i<<"\t";
@@ -214,8 +320,9 @@ std::cin>>hit;
 	}
 	file_out<<std::endl;
     }
-	file_out<<std::endl;
-	file_out<<"--------------------------------------------------------------------------------------"<<std::endl;
+    */
+//	file_out<<std::endl;
+//	file_out<<"--------------------------------------------------------------------------------------"<<std::endl;
 /* 
     std::cout << "###################################################################### " << std::endl;
     std::cout << "i = " << i << std::endl;
@@ -261,7 +368,7 @@ std::cin>>hit;
   
   rd51tbgeo->ResetBranchAddresses(); // "detach" from local variables
   
-//  file_out.close();
+  file_out.close();
 
   delete CRC; // it will automatically delete "rd51tbgeo", too
   return 0;
