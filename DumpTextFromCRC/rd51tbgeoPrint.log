@@ -1,0 +1,626 @@
+******************************************************************************
+*Tree    :rd51tbgeo : RD51 test beam geometry                                *
+*Entries :    10326 : Total =        14937127 bytes  File  Size =    3699440 *
+*        :          : Tree compression factor =   4.03                       *
+******************************************************************************
+*Br    0 :EventInfo : EventNumber/I:TriggerNumber/I:TimeStamp/I:             *
+*         | BunchCounter/I:EventCounter/I                                    *
+*Entries :    10326 : Total  Size=     207989 bytes  File Size  =     109369 *
+*Baskets :        7 : Basket Size=      32000 bytes  Compression=   1.89     *
+*............................................................................*
+*Br    1 :g1xcl     : Int_t g1xcl_                                           *
+*Entries :    10326 : Total  Size=      91351 bytes  File Size  =      19401 *
+*Baskets :        4 : Basket Size=      32000 bytes  Compression=   4.28     *
+*............................................................................*
+*Br    2 :g1xcl.ngeoch : Int_t ngeoch[g1xcl_]                                *
+*Entries :    10326 : Total  Size=      76558 bytes  File Size  =      19689 *
+*Baskets :        4 : Basket Size=      32000 bytes  Compression=   3.86     *
+*............................................................................*
+*Br    3 :g1xcl.geoch : Int_t geoch[g1xcl_]                                  *
+*Entries :    10326 : Total  Size=     124780 bytes  File Size  =      49792 *
+*Baskets :        6 : Basket Size=      32000 bytes  Compression=   2.49     *
+*............................................................................*
+*Br    4 :g1xcl.geoX : Float_t geoX[g1xcl_]                                  *
+*Entries :    10326 : Total  Size=     124770 bytes  File Size  =      51405 *
+*Baskets :        6 : Basket Size=      32000 bytes  Compression=   2.42     *
+*............................................................................*
+*Br    5 :g1xcl.geoY : Float_t geoY[g1xcl_]                                  *
+*Entries :    10326 : Total  Size=     124770 bytes  File Size  =      29163 *
+*Baskets :        6 : Basket Size=      32000 bytes  Compression=   4.26     *
+*............................................................................*
+*Br    6 :g1xcl.geoZ : Float_t geoZ[g1xcl_]                                  *
+*Entries :    10326 : Total  Size=     124770 bytes  File Size  =      29163 *
+*Baskets :        6 : Basket Size=      32000 bytes  Compression=   4.26     *
+*............................................................................*
+*Br    7 :g1xcl.geoR : Float_t geoR[g1xcl_]                                  *
+*Entries :    10326 : Total  Size=     124770 bytes  File Size  =      29163 *
+*Baskets :        6 : Basket Size=      32000 bytes  Compression=   4.26     *
+*............................................................................*
+*Br    8 :g1xcl.geoPhi : Float_t geoPhi[g1xcl_]                              *
+*Entries :    10326 : Total  Size=     124790 bytes  File Size  =      29188 *
+*Baskets :        6 : Basket Size=      32000 bytes  Compression=   4.26     *
+*............................................................................*
+*Br    9 :g1xcl.geoposch : Float_t geoposch[g1xcl_]                          *
+*Entries :    10326 : Total  Size=      76574 bytes  File Size  =      31057 *
+*Baskets :        4 : Basket Size=      32000 bytes  Compression=   2.45     *
+*............................................................................*
+*Br   10 :g1xcl.geoposX : Float_t geoposX[g1xcl_]                            *
+*Entries :    10326 : Total  Size=      76566 bytes  File Size  =      32144 *
+*Baskets :        4 : Basket Size=      32000 bytes  Compression=   2.36     *
+*............................................................................*
+*Br   11 :g1xcl.geoposY : Float_t geoposY[g1xcl_]                            *
+*Entries :    10326 : Total  Size=      76566 bytes  File Size  =      12669 *
+*Baskets :        4 : Basket Size=      32000 bytes  Compression=   6.00     *
+*............................................................................*
+*Br   12 :g1xcl.geoposZ : Float_t geoposZ[g1xcl_]                            *
+*Entries :    10326 : Total  Size=      76566 bytes  File Size  =      12669 *
+*Baskets :        4 : Basket Size=      32000 bytes  Compression=   6.00     *
+*............................................................................*
+*Br   13 :g1xcl.geoposR : Float_t geoposR[g1xcl_]                            *
+*Entries :    10326 : Total  Size=      76566 bytes  File Size  =      12669 *
+*Baskets :        4 : Basket Size=      32000 bytes  Compression=   6.00     *
+*............................................................................*
+*Br   14 :g1xcl.geoposPhi : Float_t geoposPhi[g1xcl_]                        *
+*Entries :    10326 : Total  Size=      76582 bytes  File Size  =      12682 *
+*Baskets :        4 : Basket Size=      32000 bytes  Compression=   5.99     *
+*............................................................................*
+*Br   15 :g1ycl     : Int_t g1ycl_                                           *
+*Entries :    10326 : Total  Size=      91351 bytes  File Size  =      18933 *
+*Baskets :        4 : Basket Size=      32000 bytes  Compression=   4.38     *
+*............................................................................*
+*Br   16 :g1ycl.ngeoch : Int_t ngeoch[g1ycl_]                                *
+*Entries :    10326 : Total  Size=      78430 bytes  File Size  =      20269 *
+*Baskets :        4 : Basket Size=      32000 bytes  Compression=   3.84     *
+*............................................................................*
+*Br   17 :g1ycl.geoch : Int_t geoch[g1ycl_]                                  *
+*Entries :    10326 : Total  Size=     129280 bytes  File Size  =      50972 *
+*Baskets :        6 : Basket Size=      32000 bytes  Compression=   2.52     *
+*............................................................................*
+*Br   18 :g1ycl.geoX : Float_t geoX[g1ycl_]                                  *
+*Entries :    10326 : Total  Size=     129270 bytes  File Size  =      30180 *
+*Baskets :        6 : Basket Size=      32000 bytes  Compression=   4.26     *
+*............................................................................*
+*Br   19 :g1ycl.geoY : Float_t geoY[g1ycl_]                                  *
+*Entries :    10326 : Total  Size=     129270 bytes  File Size  =      52969 *
+*Baskets :        6 : Basket Size=      32000 bytes  Compression=   2.43     *
+*............................................................................*
+*Br   20 :g1ycl.geoZ : Float_t geoZ[g1ycl_]                                  *
+*Entries :    10326 : Total  Size=     129270 bytes  File Size  =      30180 *
+*Baskets :        6 : Basket Size=      32000 bytes  Compression=   4.26     *
+*............................................................................*
+*Br   21 :g1ycl.geoR : Float_t geoR[g1ycl_]                                  *
+*Entries :    10326 : Total  Size=     129270 bytes  File Size  =      30180 *
+*Baskets :        6 : Basket Size=      32000 bytes  Compression=   4.26     *
+*............................................................................*
+*Br   22 :g1ycl.geoPhi : Float_t geoPhi[g1ycl_]                              *
+*Entries :    10326 : Total  Size=     129290 bytes  File Size  =      30211 *
+*Baskets :        6 : Basket Size=      32000 bytes  Compression=   4.26     *
+*............................................................................*
+*Br   23 :g1ycl.geoposch : Float_t geoposch[g1ycl_]                          *
+*Entries :    10326 : Total  Size=      78446 bytes  File Size  =      32089 *
+*Baskets :        4 : Basket Size=      32000 bytes  Compression=   2.43     *
+*............................................................................*
+*Br   24 :g1ycl.geoposX : Float_t geoposX[g1ycl_]                            *
+*Entries :    10326 : Total  Size=      78438 bytes  File Size  =      12902 *
+*Baskets :        4 : Basket Size=      32000 bytes  Compression=   6.03     *
+*............................................................................*
+*Br   25 :g1ycl.geoposY : Float_t geoposY[g1ycl_]                            *
+*Entries :    10326 : Total  Size=      78438 bytes  File Size  =      32846 *
+*Baskets :        4 : Basket Size=      32000 bytes  Compression=   2.37     *
+*............................................................................*
+*Br   26 :g1ycl.geoposZ : Float_t geoposZ[g1ycl_]                            *
+*Entries :    10326 : Total  Size=      78438 bytes  File Size  =      12902 *
+*Baskets :        4 : Basket Size=      32000 bytes  Compression=   6.03     *
+*............................................................................*
+*Br   27 :g1ycl.geoposR : Float_t geoposR[g1ycl_]                            *
+*Entries :    10326 : Total  Size=      78438 bytes  File Size  =      12902 *
+*Baskets :        4 : Basket Size=      32000 bytes  Compression=   6.03     *
+*............................................................................*
+*Br   28 :g1ycl.geoposPhi : Float_t geoposPhi[g1ycl_]                        *
+*Entries :    10326 : Total  Size=      78454 bytes  File Size  =      12914 *
+*Baskets :        4 : Basket Size=      32000 bytes  Compression=   6.03     *
+*............................................................................*
+*Br   29 :g2xcl     : Int_t g2xcl_                                           *
+*Entries :    10326 : Total  Size=      91351 bytes  File Size  =      16265 *
+*Baskets :        4 : Basket Size=      32000 bytes  Compression=   5.10     *
+*............................................................................*
+*Br   30 :g2xcl.ngeoch : Int_t ngeoch[g2xcl_]                                *
+*Entries :    10326 : Total  Size=      83198 bytes  File Size  =      23174 *
+*Baskets :        4 : Basket Size=      32000 bytes  Compression=   3.57     *
+*............................................................................*
+*Br   31 :g2xcl.geoch : Int_t geoch[g2xcl_]                                  *
+*Entries :    10326 : Total  Size=     177543 bytes  File Size  =      69553 *
+*Baskets :        7 : Basket Size=      32000 bytes  Compression=   2.54     *
+*............................................................................*
+*Br   32 :g2xcl.geoX : Float_t geoX[g2xcl_]                                  *
+*Entries :    10326 : Total  Size=     177532 bytes  File Size  =      65393 *
+*Baskets :        7 : Basket Size=      32000 bytes  Compression=   2.71     *
+*............................................................................*
+*Br   33 :g2xcl.geoY : Float_t geoY[g2xcl_]                                  *
+*Entries :    10326 : Total  Size=     177532 bytes  File Size  =      37728 *
+*Baskets :        7 : Basket Size=      32000 bytes  Compression=   4.69     *
+*............................................................................*
+*Br   34 :g2xcl.geoZ : Float_t geoZ[g2xcl_]                                  *
+*Entries :    10326 : Total  Size=     177532 bytes  File Size  =      37728 *
+*Baskets :        7 : Basket Size=      32000 bytes  Compression=   4.69     *
+*............................................................................*
+*Br   35 :g2xcl.geoR : Float_t geoR[g2xcl_]                                  *
+*Entries :    10326 : Total  Size=     177532 bytes  File Size  =      37728 *
+*Baskets :        7 : Basket Size=      32000 bytes  Compression=   4.69     *
+*............................................................................*
+*Br   36 :g2xcl.geoPhi : Float_t geoPhi[g2xcl_]                              *
+*Entries :    10326 : Total  Size=     177554 bytes  File Size  =      37741 *
+*Baskets :        7 : Basket Size=      32000 bytes  Compression=   4.69     *
+*............................................................................*
+*Br   37 :g2xcl.geoposch : Float_t geoposch[g2xcl_]                          *
+*Entries :    10326 : Total  Size=      83214 bytes  File Size  =      35115 *
+*Baskets :        4 : Basket Size=      32000 bytes  Compression=   2.35     *
+*............................................................................*
+*Br   38 :g2xcl.geoposX : Float_t geoposX[g2xcl_]                            *
+*Entries :    10326 : Total  Size=      83206 bytes  File Size  =      37548 *
+*Baskets :        4 : Basket Size=      32000 bytes  Compression=   2.20     *
+*............................................................................*
+*Br   39 :g2xcl.geoposY : Float_t geoposY[g2xcl_]                            *
+*Entries :    10326 : Total  Size=      83206 bytes  File Size  =      13349 *
+*Baskets :        4 : Basket Size=      32000 bytes  Compression=   6.19     *
+*............................................................................*
+*Br   40 :g2xcl.geoposZ : Float_t geoposZ[g2xcl_]                            *
+*Entries :    10326 : Total  Size=      83206 bytes  File Size  =      13349 *
+*Baskets :        4 : Basket Size=      32000 bytes  Compression=   6.19     *
+*............................................................................*
+*Br   41 :g2xcl.geoposR : Float_t geoposR[g2xcl_]                            *
+*Entries :    10326 : Total  Size=      83206 bytes  File Size  =      13349 *
+*Baskets :        4 : Basket Size=      32000 bytes  Compression=   6.19     *
+*............................................................................*
+*Br   42 :g2xcl.geoposPhi : Float_t geoposPhi[g2xcl_]                        *
+*Entries :    10326 : Total  Size=      83222 bytes  File Size  =      13365 *
+*Baskets :        4 : Basket Size=      32000 bytes  Compression=   6.18     *
+*............................................................................*
+*Br   43 :g2ycl     : Int_t g2ycl_                                           *
+*Entries :    10326 : Total  Size=      91351 bytes  File Size  =      16394 *
+*Baskets :        4 : Basket Size=      32000 bytes  Compression=   5.06     *
+*............................................................................*
+*Br   44 :g2ycl.ngeoch : Int_t ngeoch[g2ycl_]                                *
+*Entries :    10326 : Total  Size=      82966 bytes  File Size  =      22597 *
+*Baskets :        4 : Basket Size=      32000 bytes  Compression=   3.65     *
+*............................................................................*
+*Br   45 :g2ycl.geoch : Int_t geoch[g2ycl_]                                  *
+*Entries :    10326 : Total  Size=     164353 bytes  File Size  =      64156 *
+*Baskets :        7 : Basket Size=      32000 bytes  Compression=   2.55     *
+*............................................................................*
+*Br   46 :g2ycl.geoX : Float_t geoX[g2ycl_]                                  *
+*Entries :    10326 : Total  Size=     164342 bytes  File Size  =      36173 *
+*Baskets :        7 : Basket Size=      32000 bytes  Compression=   4.53     *
+*............................................................................*
+*Br   47 :g2ycl.geoY : Float_t geoY[g2ycl_]                                  *
+*Entries :    10326 : Total  Size=     164342 bytes  File Size  =      62724 *
+*Baskets :        7 : Basket Size=      32000 bytes  Compression=   2.61     *
+*............................................................................*
+*Br   48 :g2ycl.geoZ : Float_t geoZ[g2ycl_]                                  *
+*Entries :    10326 : Total  Size=     164342 bytes  File Size  =      36173 *
+*Baskets :        7 : Basket Size=      32000 bytes  Compression=   4.53     *
+*............................................................................*
+*Br   49 :g2ycl.geoR : Float_t geoR[g2ycl_]                                  *
+*Entries :    10326 : Total  Size=     164342 bytes  File Size  =      36173 *
+*Baskets :        7 : Basket Size=      32000 bytes  Compression=   4.53     *
+*............................................................................*
+*Br   50 :g2ycl.geoPhi : Float_t geoPhi[g2ycl_]                              *
+*Entries :    10326 : Total  Size=     164364 bytes  File Size  =      36203 *
+*Baskets :        7 : Basket Size=      32000 bytes  Compression=   4.52     *
+*............................................................................*
+*Br   51 :g2ycl.geoposch : Float_t geoposch[g2ycl_]                          *
+*Entries :    10326 : Total  Size=      82982 bytes  File Size  =      34842 *
+*Baskets :        4 : Basket Size=      32000 bytes  Compression=   2.36     *
+*............................................................................*
+*Br   52 :g2ycl.geoposX : Float_t geoposX[g2ycl_]                            *
+*Entries :    10326 : Total  Size=      82974 bytes  File Size  =      13332 *
+*Baskets :        4 : Basket Size=      32000 bytes  Compression=   6.18     *
+*............................................................................*
+*Br   53 :g2ycl.geoposY : Float_t geoposY[g2ycl_]                            *
+*Entries :    10326 : Total  Size=      82974 bytes  File Size  =      36654 *
+*Baskets :        4 : Basket Size=      32000 bytes  Compression=   2.25     *
+*............................................................................*
+*Br   54 :g2ycl.geoposZ : Float_t geoposZ[g2ycl_]                            *
+*Entries :    10326 : Total  Size=      82974 bytes  File Size  =      13332 *
+*Baskets :        4 : Basket Size=      32000 bytes  Compression=   6.18     *
+*............................................................................*
+*Br   55 :g2ycl.geoposR : Float_t geoposR[g2ycl_]                            *
+*Entries :    10326 : Total  Size=      82974 bytes  File Size  =      13332 *
+*Baskets :        4 : Basket Size=      32000 bytes  Compression=   6.18     *
+*............................................................................*
+*Br   56 :g2ycl.geoposPhi : Float_t geoposPhi[g2ycl_]                        *
+*Entries :    10326 : Total  Size=      82990 bytes  File Size  =      13346 *
+*Baskets :        4 : Basket Size=      32000 bytes  Compression=   6.17     *
+*............................................................................*
+*Br   57 :g3xcl     : Int_t g3xcl_                                           *
+*Entries :    10326 : Total  Size=      91351 bytes  File Size  =      18840 *
+*Baskets :        4 : Basket Size=      32000 bytes  Compression=   4.40     *
+*............................................................................*
+*Br   58 :g3xcl.ngeoch : Int_t ngeoch[g3xcl_]                                *
+*Entries :    10326 : Total  Size=      77706 bytes  File Size  =      20347 *
+*Baskets :        4 : Basket Size=      32000 bytes  Compression=   3.79     *
+*............................................................................*
+*Br   59 :g3xcl.geoch : Int_t geoch[g3xcl_]                                  *
+*Entries :    10326 : Total  Size=     134151 bytes  File Size  =      53463 *
+*Baskets :        6 : Basket Size=      32000 bytes  Compression=   2.50     *
+*............................................................................*
+*Br   60 :g3xcl.geoX : Float_t geoX[g3xcl_]                                  *
+*Entries :    10326 : Total  Size=     134141 bytes  File Size  =      53152 *
+*Baskets :        6 : Basket Size=      32000 bytes  Compression=   2.51     *
+*............................................................................*
+*Br   61 :g3xcl.geoY : Float_t geoY[g3xcl_]                                  *
+*Entries :    10326 : Total  Size=     134141 bytes  File Size  =      30652 *
+*Baskets :        6 : Basket Size=      32000 bytes  Compression=   4.36     *
+*............................................................................*
+*Br   62 :g3xcl.geoZ : Float_t geoZ[g3xcl_]                                  *
+*Entries :    10326 : Total  Size=     134141 bytes  File Size  =      30652 *
+*Baskets :        6 : Basket Size=      32000 bytes  Compression=   4.36     *
+*............................................................................*
+*Br   63 :g3xcl.geoR : Float_t geoR[g3xcl_]                                  *
+*Entries :    10326 : Total  Size=     134141 bytes  File Size  =      30652 *
+*Baskets :        6 : Basket Size=      32000 bytes  Compression=   4.36     *
+*............................................................................*
+*Br   64 :g3xcl.geoPhi : Float_t geoPhi[g3xcl_]                              *
+*Entries :    10326 : Total  Size=     134161 bytes  File Size  =      30673 *
+*Baskets :        6 : Basket Size=      32000 bytes  Compression=   4.35     *
+*............................................................................*
+*Br   65 :g3xcl.geoposch : Float_t geoposch[g3xcl_]                          *
+*Entries :    10326 : Total  Size=      77722 bytes  File Size  =      31606 *
+*Baskets :        4 : Basket Size=      32000 bytes  Compression=   2.44     *
+*............................................................................*
+*Br   66 :g3xcl.geoposX : Float_t geoposX[g3xcl_]                            *
+*Entries :    10326 : Total  Size=      77714 bytes  File Size  =      33519 *
+*Baskets :        4 : Basket Size=      32000 bytes  Compression=   2.30     *
+*............................................................................*
+*Br   67 :g3xcl.geoposY : Float_t geoposY[g3xcl_]                            *
+*Entries :    10326 : Total  Size=      77714 bytes  File Size  =      12871 *
+*Baskets :        4 : Basket Size=      32000 bytes  Compression=   5.99     *
+*............................................................................*
+*Br   68 :g3xcl.geoposZ : Float_t geoposZ[g3xcl_]                            *
+*Entries :    10326 : Total  Size=      77714 bytes  File Size  =      12871 *
+*Baskets :        4 : Basket Size=      32000 bytes  Compression=   5.99     *
+*............................................................................*
+*Br   69 :g3xcl.geoposR : Float_t geoposR[g3xcl_]                            *
+*Entries :    10326 : Total  Size=      77714 bytes  File Size  =      12871 *
+*Baskets :        4 : Basket Size=      32000 bytes  Compression=   5.99     *
+*............................................................................*
+*Br   70 :g3xcl.geoposPhi : Float_t geoposPhi[g3xcl_]                        *
+*Entries :    10326 : Total  Size=      77730 bytes  File Size  =      12886 *
+*Baskets :        4 : Basket Size=      32000 bytes  Compression=   5.99     *
+*............................................................................*
+*Br   71 :g3ycl     : Int_t g3ycl_                                           *
+*Entries :    10326 : Total  Size=      91351 bytes  File Size  =      19041 *
+*Baskets :        4 : Basket Size=      32000 bytes  Compression=   4.36     *
+*............................................................................*
+*Br   72 :g3ycl.ngeoch : Int_t ngeoch[g3ycl_]                                *
+*Entries :    10326 : Total  Size=      77114 bytes  File Size  =      19836 *
+*Baskets :        4 : Basket Size=      32000 bytes  Compression=   3.86     *
+*............................................................................*
+*Br   73 :g3ycl.geoch : Int_t geoch[g3ycl_]                                  *
+*Entries :    10326 : Total  Size=     127639 bytes  File Size  =      49746 *
+*Baskets :        6 : Basket Size=      32000 bytes  Compression=   2.55     *
+*............................................................................*
+*Br   74 :g3ycl.geoX : Float_t geoX[g3ycl_]                                  *
+*Entries :    10326 : Total  Size=     127629 bytes  File Size  =      29475 *
+*Baskets :        6 : Basket Size=      32000 bytes  Compression=   4.31     *
+*............................................................................*
+*Br   75 :g3ycl.geoY : Float_t geoY[g3ycl_]                                  *
+*Entries :    10326 : Total  Size=     127629 bytes  File Size  =      50544 *
+*Baskets :        6 : Basket Size=      32000 bytes  Compression=   2.51     *
+*............................................................................*
+*Br   76 :g3ycl.geoZ : Float_t geoZ[g3ycl_]                                  *
+*Entries :    10326 : Total  Size=     127629 bytes  File Size  =      29475 *
+*Baskets :        6 : Basket Size=      32000 bytes  Compression=   4.31     *
+*............................................................................*
+*Br   77 :g3ycl.geoR : Float_t geoR[g3ycl_]                                  *
+*Entries :    10326 : Total  Size=     127629 bytes  File Size  =      29475 *
+*Baskets :        6 : Basket Size=      32000 bytes  Compression=   4.31     *
+*............................................................................*
+*Br   78 :g3ycl.geoPhi : Float_t geoPhi[g3ycl_]                              *
+*Entries :    10326 : Total  Size=     127649 bytes  File Size  =      29475 *
+*Baskets :        6 : Basket Size=      32000 bytes  Compression=   4.31     *
+*............................................................................*
+*Br   79 :g3ycl.geoposch : Float_t geoposch[g3ycl_]                          *
+*Entries :    10326 : Total  Size=      77130 bytes  File Size  =      31277 *
+*Baskets :        4 : Basket Size=      32000 bytes  Compression=   2.45     *
+*............................................................................*
+*Br   80 :g3ycl.geoposX : Float_t geoposX[g3ycl_]                            *
+*Entries :    10326 : Total  Size=      77122 bytes  File Size  =      12790 *
+*Baskets :        4 : Basket Size=      32000 bytes  Compression=   5.98     *
+*............................................................................*
+*Br   81 :g3ycl.geoposY : Float_t geoposY[g3ycl_]                            *
+*Entries :    10326 : Total  Size=      77122 bytes  File Size  =      32664 *
+*Baskets :        4 : Basket Size=      32000 bytes  Compression=   2.34     *
+*............................................................................*
+*Br   82 :g3ycl.geoposZ : Float_t geoposZ[g3ycl_]                            *
+*Entries :    10326 : Total  Size=      77122 bytes  File Size  =      12790 *
+*Baskets :        4 : Basket Size=      32000 bytes  Compression=   5.98     *
+*............................................................................*
+*Br   83 :g3ycl.geoposR : Float_t geoposR[g3ycl_]                            *
+*Entries :    10326 : Total  Size=      77122 bytes  File Size  =      12790 *
+*Baskets :        4 : Basket Size=      32000 bytes  Compression=   5.98     *
+*............................................................................*
+*Br   84 :g3ycl.geoposPhi : Float_t geoposPhi[g3ycl_]                        *
+*Entries :    10326 : Total  Size=      77138 bytes  File Size  =      12806 *
+*Baskets :        4 : Basket Size=      32000 bytes  Compression=   5.98     *
+*............................................................................*
+*Br   85 :sCMSNS2LC1 : Int_t sCMSNS2LC1_                                     *
+*Entries :    10326 : Total  Size=      91661 bytes  File Size  =      20406 *
+*Baskets :        4 : Basket Size=      32000 bytes  Compression=   4.07     *
+*............................................................................*
+*Br   86 :sCMSNS2LC1.ngeoch : Int_t ngeoch[sCMSNS2LC1_]                      *
+*Entries :    10326 : Total  Size=      78560 bytes  File Size  =      19825 *
+*Baskets :        4 : Basket Size=      32000 bytes  Compression=   3.93     *
+*............................................................................*
+*Br   87 :sCMSNS2LC1.geoch : Int_t geoch[sCMSNS2LC1_]                        *
+*Entries :    10326 : Total  Size=     123232 bytes  File Size  =      45046 *
+*Baskets :        6 : Basket Size=      32000 bytes  Compression=   2.72     *
+*............................................................................*
+*Br   88 :sCMSNS2LC1.geoX : Float_t geoX[sCMSNS2LC1_]                        *
+*Entries :    10326 : Total  Size=     123222 bytes  File Size  =      28953 *
+*Baskets :        6 : Basket Size=      32000 bytes  Compression=   4.23     *
+*............................................................................*
+*Br   89 :sCMSNS2LC1.geoY : Float_t geoY[sCMSNS2LC1_]                        *
+*Entries :    10326 : Total  Size=     123222 bytes  File Size  =      45126 *
+*Baskets :        6 : Basket Size=      32000 bytes  Compression=   2.72     *
+*............................................................................*
+*Br   90 :sCMSNS2LC1.geoZ : Float_t geoZ[sCMSNS2LC1_]                        *
+*Entries :    10326 : Total  Size=     123222 bytes  File Size  =      28953 *
+*Baskets :        6 : Basket Size=      32000 bytes  Compression=   4.23     *
+*............................................................................*
+*Br   91 :sCMSNS2LC1.geoR : Float_t geoR[sCMSNS2LC1_]                        *
+*Entries :    10326 : Total  Size=     123222 bytes  File Size  =      28953 *
+*Baskets :        6 : Basket Size=      32000 bytes  Compression=   4.23     *
+*............................................................................*
+*Br   92 :sCMSNS2LC1.geoPhi : Float_t geoPhi[sCMSNS2LC1_]                    *
+*Entries :    10326 : Total  Size=     123242 bytes  File Size  =      28972 *
+*Baskets :        6 : Basket Size=      32000 bytes  Compression=   4.23     *
+*............................................................................*
+*Br   93 :sCMSNS2LC1.geoposch : Float_t geoposch[sCMSNS2LC1_]                *
+*Entries :    10326 : Total  Size=      78576 bytes  File Size  =      29694 *
+*Baskets :        4 : Basket Size=      32000 bytes  Compression=   2.63     *
+*............................................................................*
+*Br   94 :sCMSNS2LC1.geoposX : Float_t geoposX[sCMSNS2LC1_]                  *
+*Entries :    10326 : Total  Size=      78568 bytes  File Size  =      12698 *
+*Baskets :        4 : Basket Size=      32000 bytes  Compression=   6.14     *
+*............................................................................*
+*Br   95 :sCMSNS2LC1.geoposY : Float_t geoposY[sCMSNS2LC1_]                  *
+*Entries :    10326 : Total  Size=      78568 bytes  File Size  =      32331 *
+*Baskets :        4 : Basket Size=      32000 bytes  Compression=   2.41     *
+*............................................................................*
+*Br   96 :sCMSNS2LC1.geoposZ : Float_t geoposZ[sCMSNS2LC1_]                  *
+*Entries :    10326 : Total  Size=      78568 bytes  File Size  =      12698 *
+*Baskets :        4 : Basket Size=      32000 bytes  Compression=   6.14     *
+*............................................................................*
+*Br   97 :sCMSNS2LC1.geoposR : Float_t geoposR[sCMSNS2LC1_]                  *
+*Entries :    10326 : Total  Size=      78568 bytes  File Size  =      12698 *
+*Baskets :        4 : Basket Size=      32000 bytes  Compression=   6.14     *
+*............................................................................*
+*Br   98 :sCMSNS2LC1.geoposPhi : Float_t geoposPhi[sCMSNS2LC1_]              *
+*Entries :    10326 : Total  Size=      78584 bytes  File Size  =      12695 *
+*Baskets :        4 : Basket Size=      32000 bytes  Compression=   6.14     *
+*............................................................................*
+*Br   99 :sCMSNS2LC2 : Int_t sCMSNS2LC2_                                     *
+*Entries :    10326 : Total  Size=      91661 bytes  File Size  =      21286 *
+*Baskets :        4 : Basket Size=      32000 bytes  Compression=   3.90     *
+*............................................................................*
+*Br  100 :sCMSNS2LC2.ngeoch : Int_t ngeoch[sCMSNS2LC2_]                      *
+*Entries :    10326 : Total  Size=      86124 bytes  File Size  =      24452 *
+*Baskets :        4 : Basket Size=      32000 bytes  Compression=   3.50     *
+*............................................................................*
+*Br  101 :sCMSNS2LC2.geoch : Int_t geoch[sCMSNS2LC2_]                        *
+*Entries :    10326 : Total  Size=     200723 bytes  File Size  =      65645 *
+*Baskets :        8 : Basket Size=      32000 bytes  Compression=   3.05     *
+*............................................................................*
+*Br  102 :sCMSNS2LC2.geoX : Float_t geoX[sCMSNS2LC2_]                        *
+*Entries :    10326 : Total  Size=     200711 bytes  File Size  =      39484 *
+*Baskets :        8 : Basket Size=      32000 bytes  Compression=   5.07     *
+*............................................................................*
+*Br  103 :sCMSNS2LC2.geoY : Float_t geoY[sCMSNS2LC2_]                        *
+*Entries :    10326 : Total  Size=     200711 bytes  File Size  =      61735 *
+*Baskets :        8 : Basket Size=      32000 bytes  Compression=   3.24     *
+*............................................................................*
+*Br  104 :sCMSNS2LC2.geoZ : Float_t geoZ[sCMSNS2LC2_]                        *
+*Entries :    10326 : Total  Size=     200711 bytes  File Size  =      39484 *
+*Baskets :        8 : Basket Size=      32000 bytes  Compression=   5.07     *
+*............................................................................*
+*Br  105 :sCMSNS2LC2.geoR : Float_t geoR[sCMSNS2LC2_]                        *
+*Entries :    10326 : Total  Size=     200711 bytes  File Size  =      39484 *
+*Baskets :        8 : Basket Size=      32000 bytes  Compression=   5.07     *
+*............................................................................*
+*Br  106 :sCMSNS2LC2.geoPhi : Float_t geoPhi[sCMSNS2LC2_]                    *
+*Entries :    10326 : Total  Size=     200735 bytes  File Size  =      39494 *
+*Baskets :        8 : Basket Size=      32000 bytes  Compression=   5.07     *
+*............................................................................*
+*Br  107 :sCMSNS2LC2.geoposch : Float_t geoposch[sCMSNS2LC2_]                *
+*Entries :    10326 : Total  Size=      86140 bytes  File Size  =      34087 *
+*Baskets :        4 : Basket Size=      32000 bytes  Compression=   2.51     *
+*............................................................................*
+*Br  108 :sCMSNS2LC2.geoposX : Float_t geoposX[sCMSNS2LC2_]                  *
+*Entries :    10326 : Total  Size=      86132 bytes  File Size  =      13467 *
+*Baskets :        4 : Basket Size=      32000 bytes  Compression=   6.35     *
+*............................................................................*
+*Br  109 :sCMSNS2LC2.geoposY : Float_t geoposY[sCMSNS2LC2_]                  *
+*Entries :    10326 : Total  Size=      86132 bytes  File Size  =      37944 *
+*Baskets :        4 : Basket Size=      32000 bytes  Compression=   2.25     *
+*............................................................................*
+*Br  110 :sCMSNS2LC2.geoposZ : Float_t geoposZ[sCMSNS2LC2_]                  *
+*Entries :    10326 : Total  Size=      86132 bytes  File Size  =      13467 *
+*Baskets :        4 : Basket Size=      32000 bytes  Compression=   6.35     *
+*............................................................................*
+*Br  111 :sCMSNS2LC2.geoposR : Float_t geoposR[sCMSNS2LC2_]                  *
+*Entries :    10326 : Total  Size=      86132 bytes  File Size  =      13467 *
+*Baskets :        4 : Basket Size=      32000 bytes  Compression=   6.35     *
+*............................................................................*
+*Br  112 :sCMSNS2LC2.geoposPhi : Float_t geoposPhi[sCMSNS2LC2_]              *
+*Entries :    10326 : Total  Size=      86148 bytes  File Size  =      13434 *
+*Baskets :        4 : Basket Size=      32000 bytes  Compression=   6.37     *
+*............................................................................*
+*Br  113 :sCMSNS2LC2_R : Int_t sCMSNS2LC2_R_                                 *
+*Entries :    10326 : Total  Size=      91785 bytes  File Size  =      15881 *
+*Baskets :        4 : Basket Size=      32000 bytes  Compression=   5.22     *
+*............................................................................*
+*Br  114 :sCMSNS2LC2_R.ngeoch : Int_t ngeoch[sCMSNS2LC2_R_]                  *
+*Entries :    10326 : Total  Size=      45793 bytes  File Size  =       3611 *
+*Baskets :        3 : Basket Size=      32000 bytes  Compression=  12.51     *
+*............................................................................*
+*Br  115 :sCMSNS2LC2_R.geoch : Int_t geoch[sCMSNS2LC2_R_]                    *
+*Entries :    10326 : Total  Size=      53766 bytes  File Size  =       7024 *
+*Baskets :        3 : Basket Size=      32000 bytes  Compression=   7.57     *
+*............................................................................*
+*Br  116 :sCMSNS2LC2_R.geoX : Float_t geoX[sCMSNS2LC2_R_]                    *
+*Entries :    10326 : Total  Size=      53759 bytes  File Size  =       4459 *
+*Baskets :        3 : Basket Size=      32000 bytes  Compression=  11.92     *
+*............................................................................*
+*Br  117 :sCMSNS2LC2_R.geoY : Float_t geoY[sCMSNS2LC2_R_]                    *
+*Entries :    10326 : Total  Size=      53759 bytes  File Size  =       7268 *
+*Baskets :        3 : Basket Size=      32000 bytes  Compression=   7.31     *
+*............................................................................*
+*Br  118 :sCMSNS2LC2_R.geoZ : Float_t geoZ[sCMSNS2LC2_R_]                    *
+*Entries :    10326 : Total  Size=      53759 bytes  File Size  =       4459 *
+*Baskets :        3 : Basket Size=      32000 bytes  Compression=  11.92     *
+*............................................................................*
+*Br  119 :sCMSNS2LC2_R.geoR : Float_t geoR[sCMSNS2LC2_R_]                    *
+*Entries :    10326 : Total  Size=      53759 bytes  File Size  =       4459 *
+*Baskets :        3 : Basket Size=      32000 bytes  Compression=  11.92     *
+*............................................................................*
+*Br  120 :sCMSNS2LC2_R.geoPhi : Float_t geoPhi[sCMSNS2LC2_R_]                *
+*Entries :    10326 : Total  Size=      53773 bytes  File Size  =       4465 *
+*Baskets :        3 : Basket Size=      32000 bytes  Compression=  11.90     *
+*............................................................................*
+*Br  121 :sCMSNS2LC2_R.geoposch : Float_t geoposch[sCMSNS2LC2_R_]            *
+*Entries :    10326 : Total  Size=      45807 bytes  File Size  =       4506 *
+*Baskets :        3 : Basket Size=      32000 bytes  Compression=  10.03     *
+*............................................................................*
+*Br  122 :sCMSNS2LC2_R.geoposX : Float_t geoposX[sCMSNS2LC2_R_]              *
+*Entries :    10326 : Total  Size=      45800 bytes  File Size  =       2744 *
+*Baskets :        3 : Basket Size=      32000 bytes  Compression=  16.46     *
+*............................................................................*
+*Br  123 :sCMSNS2LC2_R.geoposY : Float_t geoposY[sCMSNS2LC2_R_]              *
+*Entries :    10326 : Total  Size=      45800 bytes  File Size  =       5474 *
+*Baskets :        3 : Basket Size=      32000 bytes  Compression=   8.25     *
+*............................................................................*
+*Br  124 :sCMSNS2LC2_R.geoposZ : Float_t geoposZ[sCMSNS2LC2_R_]              *
+*Entries :    10326 : Total  Size=      45800 bytes  File Size  =       2744 *
+*Baskets :        3 : Basket Size=      32000 bytes  Compression=  16.46     *
+*............................................................................*
+*Br  125 :sCMSNS2LC2_R.geoposR : Float_t geoposR[sCMSNS2LC2_R_]              *
+*Entries :    10326 : Total  Size=      45800 bytes  File Size  =       2744 *
+*Baskets :        3 : Basket Size=      32000 bytes  Compression=  16.46     *
+*............................................................................*
+*Br  126 :sCMSNS2LC2_R.geoposPhi : Float_t geoposPhi[sCMSNS2LC2_R_]          *
+*Entries :    10326 : Total  Size=      45814 bytes  File Size  =       2755 *
+*Baskets :        3 : Basket Size=      32000 bytes  Compression=  16.40     *
+*............................................................................*
+*Br  127 :sCMSNS2LC2_L : Int_t sCMSNS2LC2_L_                                 *
+*Entries :    10326 : Total  Size=      91785 bytes  File Size  =      13805 *
+*Baskets :        4 : Basket Size=      32000 bytes  Compression=   6.01     *
+*............................................................................*
+*Br  128 :sCMSNS2LC2_L.ngeoch : Int_t ngeoch[sCMSNS2LC2_L_]                  *
+*Entries :    10326 : Total  Size=      42733 bytes  File Size  =       1217 *
+*Baskets :        3 : Basket Size=      32000 bytes  Compression=  34.60     *
+*............................................................................*
+*Br  129 :sCMSNS2LC2_L.geoch : Int_t geoch[sCMSNS2LC2_L_]                    *
+*Entries :    10326 : Total  Size=      44061 bytes  File Size  =       1822 *
+*Baskets :        3 : Basket Size=      32000 bytes  Compression=  23.84     *
+*............................................................................*
+*Br  130 :sCMSNS2LC2_L.geoX : Float_t geoX[sCMSNS2LC2_L_]                    *
+*Entries :    10326 : Total  Size=      44054 bytes  File Size  =       1324 *
+*Baskets :        3 : Basket Size=      32000 bytes  Compression=  32.80     *
+*............................................................................*
+*Br  131 :sCMSNS2LC2_L.geoY : Float_t geoY[sCMSNS2LC2_L_]                    *
+*Entries :    10326 : Total  Size=      44054 bytes  File Size  =       2287 *
+*Baskets :        3 : Basket Size=      32000 bytes  Compression=  18.99     *
+*............................................................................*
+*Br  132 :sCMSNS2LC2_L.geoZ : Float_t geoZ[sCMSNS2LC2_L_]                    *
+*Entries :    10326 : Total  Size=      44054 bytes  File Size  =       1324 *
+*Baskets :        3 : Basket Size=      32000 bytes  Compression=  32.80     *
+*............................................................................*
+*Br  133 :sCMSNS2LC2_L.geoR : Float_t geoR[sCMSNS2LC2_L_]                    *
+*Entries :    10326 : Total  Size=      44054 bytes  File Size  =       1324 *
+*Baskets :        3 : Basket Size=      32000 bytes  Compression=  32.80     *
+*............................................................................*
+*Br  134 :sCMSNS2LC2_L.geoPhi : Float_t geoPhi[sCMSNS2LC2_L_]                *
+*Entries :    10326 : Total  Size=      44068 bytes  File Size  =       1324 *
+*Baskets :        3 : Basket Size=      32000 bytes  Compression=  32.81     *
+*............................................................................*
+*Br  135 :sCMSNS2LC2_L.geoposch : Float_t geoposch[sCMSNS2LC2_L_]            *
+*Entries :    10326 : Total  Size=      42747 bytes  File Size  =       1328 *
+*Baskets :        3 : Basket Size=      32000 bytes  Compression=  31.71     *
+*............................................................................*
+*Br  136 :sCMSNS2LC2_L.geoposX : Float_t geoposX[sCMSNS2LC2_L_]              *
+*Entries :    10326 : Total  Size=      42740 bytes  File Size  =       1053 *
+*Baskets :        3 : Basket Size=      32000 bytes  Compression=  39.99     *
+*............................................................................*
+*Br  137 :sCMSNS2LC2_L.geoposY : Float_t geoposY[sCMSNS2LC2_L_]              *
+*Entries :    10326 : Total  Size=      42740 bytes  File Size  =       1561 *
+*Baskets :        3 : Basket Size=      32000 bytes  Compression=  26.98     *
+*............................................................................*
+*Br  138 :sCMSNS2LC2_L.geoposZ : Float_t geoposZ[sCMSNS2LC2_L_]              *
+*Entries :    10326 : Total  Size=      42740 bytes  File Size  =       1053 *
+*Baskets :        3 : Basket Size=      32000 bytes  Compression=  39.99     *
+*............................................................................*
+*Br  139 :sCMSNS2LC2_L.geoposR : Float_t geoposR[sCMSNS2LC2_L_]              *
+*Entries :    10326 : Total  Size=      42740 bytes  File Size  =       1053 *
+*Baskets :        3 : Basket Size=      32000 bytes  Compression=  39.99     *
+*............................................................................*
+*Br  140 :sCMSNS2LC2_L.geoposPhi : Float_t geoposPhi[sCMSNS2LC2_L_]          *
+*Entries :    10326 : Total  Size=      42754 bytes  File Size  =       1065 *
+*Baskets :        3 : Basket Size=      32000 bytes  Compression=  39.55     *
+*............................................................................*
+*Br  141 :sCMSNS2LC3 : Int_t sCMSNS2LC3_                                     *
+*Entries :    10326 : Total  Size=      91661 bytes  File Size  =      21384 *
+*Baskets :        4 : Basket Size=      32000 bytes  Compression=   3.88     *
+*............................................................................*
+*Br  142 :sCMSNS2LC3.ngeoch : Int_t ngeoch[sCMSNS2LC3_]                      *
+*Entries :    10326 : Total  Size=      68752 bytes  File Size  =      14296 *
+*Baskets :        4 : Basket Size=      32000 bytes  Compression=   4.77     *
+*............................................................................*
+*Br  143 :sCMSNS2LC3.geoch : Int_t geoch[sCMSNS2LC3_]                        *
+*Entries :    10326 : Total  Size=      91592 bytes  File Size  =      29907 *
+*Baskets :        5 : Basket Size=      32000 bytes  Compression=   3.04     *
+*............................................................................*
+*Br  144 :sCMSNS2LC3.geoX : Float_t geoX[sCMSNS2LC3_]                        *
+*Entries :    10326 : Total  Size=      91583 bytes  File Size  =      18784 *
+*Baskets :        5 : Basket Size=      32000 bytes  Compression=   4.84     *
+*............................................................................*
+*Br  145 :sCMSNS2LC3.geoY : Float_t geoY[sCMSNS2LC3_]                        *
+*Entries :    10326 : Total  Size=      91583 bytes  File Size  =      30797 *
+*Baskets :        5 : Basket Size=      32000 bytes  Compression=   2.95     *
+*............................................................................*
+*Br  146 :sCMSNS2LC3.geoZ : Float_t geoZ[sCMSNS2LC3_]                        *
+*Entries :    10326 : Total  Size=      91583 bytes  File Size  =      18784 *
+*Baskets :        5 : Basket Size=      32000 bytes  Compression=   4.84     *
+*............................................................................*
+*Br  147 :sCMSNS2LC3.geoR : Float_t geoR[sCMSNS2LC3_]                        *
+*Entries :    10326 : Total  Size=      91583 bytes  File Size  =      18784 *
+*Baskets :        5 : Basket Size=      32000 bytes  Compression=   4.84     *
+*............................................................................*
+*Br  148 :sCMSNS2LC3.geoPhi : Float_t geoPhi[sCMSNS2LC3_]                    *
+*Entries :    10326 : Total  Size=      91601 bytes  File Size  =      18778 *
+*Baskets :        5 : Basket Size=      32000 bytes  Compression=   4.85     *
+*............................................................................*
+*Br  149 :sCMSNS2LC3.geoposch : Float_t geoposch[sCMSNS2LC3_]                *
+*Entries :    10326 : Total  Size=      68768 bytes  File Size  =      22199 *
+*Baskets :        4 : Basket Size=      32000 bytes  Compression=   3.07     *
+*............................................................................*
+*Br  150 :sCMSNS2LC3.geoposX : Float_t geoposX[sCMSNS2LC3_]                  *
+*Entries :    10326 : Total  Size=      68760 bytes  File Size  =      10160 *
+*Baskets :        4 : Basket Size=      32000 bytes  Compression=   6.71     *
+*............................................................................*
+*Br  151 :sCMSNS2LC3.geoposY : Float_t geoposY[sCMSNS2LC3_]                  *
+*Entries :    10326 : Total  Size=      68760 bytes  File Size  =      24217 *
+*Baskets :        4 : Basket Size=      32000 bytes  Compression=   2.81     *
+*............................................................................*
+*Br  152 :sCMSNS2LC3.geoposZ : Float_t geoposZ[sCMSNS2LC3_]                  *
+*Entries :    10326 : Total  Size=      68760 bytes  File Size  =      10160 *
+*Baskets :        4 : Basket Size=      32000 bytes  Compression=   6.71     *
+*............................................................................*
+*Br  153 :sCMSNS2LC3.geoposR : Float_t geoposR[sCMSNS2LC3_]                  *
+*Entries :    10326 : Total  Size=      68760 bytes  File Size  =      10160 *
+*Baskets :        4 : Basket Size=      32000 bytes  Compression=   6.71     *
+*............................................................................*
+*Br  154 :sCMSNS2LC3.geoposPhi : Float_t geoposPhi[sCMSNS2LC3_]              *
+*Entries :    10326 : Total  Size=      68776 bytes  File Size  =      10146 *
+*Baskets :        4 : Basket Size=      32000 bytes  Compression=   6.72     *
+*............................................................................*
