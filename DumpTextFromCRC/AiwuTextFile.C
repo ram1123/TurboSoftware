@@ -510,7 +510,47 @@ void AiwuTextFile::Loop()
       }
    //================================	END::	Reference Tracker 1 (g3ycl)   ======================================================    
       
-
+   //================================	Reference Tracker 1 (sCMSNS2LC1)   ======================================================
+      channelFired = 0;		//==== ERROR:: ERROR:: ERROR::  I have to forcefully put channelFired = 0 at two places. If not then it behaves strangly.
+      count_ngeoch_occ = 0;
+      if (NumCluster_g1x == 1 &&  NumCluster_g1y ==1 && NumCluster_g2x == 1 && NumCluster_g2y==1 && NumCluster_g3x ==1 && NumCluster_g3y == 1)
+      {
+          if (verbose)
+              cout<<"sCMSNS2LC1\t";
+          file_out<<"sCMSNS2LC1\t";
+	  channelFired = 0;
+	  for(Int_t nch=0;nch<12;nch++)
+	  {
+	      if (sCMSNS2LC1_ngeoch[nch]==0)
+		  break;
+	      channelFired +=sCMSNS2LC1_ngeoch[nch];
+	      //cout<<"Channel Fired = "<<channelFired<<endl;
+	  }
+	  if (verbose)
+	      std::cout<<channelFired<<"\t"<<channelFired<<"\t"<<sCMSNS2LC1_geoposY[0]<<"\t"<<sCMSNS2LC1_geoposch[0]<<"\t";
+	  file_out<<channelFired<<"\t"<<channelFired<<"\t"<<sCMSNS2LC1_geoposY[0]<<"\t"<<sCMSNS2LC1_geoposch[0]<<"\t";
+	  count_ngeoch_occ = 0;
+	  for(Int_t nch=0;nch<12;nch++)
+	  {
+	      if (sCMSNS2LC1_ngeoch[nch]==0)
+		  break;
+	      for (int chfird=0;chfird<sCMSNS2LC1_ngeoch[nch];chfird++)
+	      {
+		  if((sCMSNS2LC1_geoch)[count_ngeoch_occ][chfird] == 0)
+		      break;
+		  if (verbose)
+		      std::cout<<(sCMSNS2LC1_geoch)[count_ngeoch_occ][chfird]<<"\t"<<1<<"\t";
+		  //std::cout<<(sCMSNS2LC1_geoch)[count_ngeoch_occ][chfird]<<"\t"<<1<<"\t";
+		  file_out<<(sCMSNS2LC1_geoch)[count_ngeoch_occ][chfird]<<"\t"<<1<<"\t";
+	      }
+	      count_ngeoch_occ += 1;
+	  }
+	  if (verbose)
+	      std::cout<<std::endl;
+	  // std::cout<<std::endl;
+	  file_out<<std::endl;
+      }
+   //================================	END::	Reference Tracker 1 (sCMSNS2LC1)   ======================================================  
       //====================== Clear few arrays: Those behaving Strange.	===============================
    /*
     * Here we are clearing few arrays because somehow it is giving strange behaviour
@@ -528,18 +568,25 @@ void AiwuTextFile::Loop()
       std::fill_n(g2ycl_ngeoch,sizeof g2ycl_ngeoch/sizeof(g2ycl_ngeoch[0]),0);
       std::fill_n(g3xcl_ngeoch,sizeof g3xcl_ngeoch/sizeof(g3xcl_ngeoch[0]),0);
       std::fill_n(g3ycl_ngeoch,sizeof g3ycl_ngeoch/sizeof(g3ycl_ngeoch[0]),0);
+      std::fill_n(sCMSNS2LC1_ngeoch,sizeof sCMSNS2LC1_ngeoch/sizeof(sCMSNS2LC1_ngeoch[0]),0);
+      std::fill_n(sCMSNS2LC2_ngeoch,sizeof sCMSNS2LC2_ngeoch/sizeof(sCMSNS2LC2_ngeoch[0]),0);
+      std::fill_n(sCMSNS2LC3_ngeoch,sizeof sCMSNS2LC3_ngeoch/sizeof(sCMSNS2LC3_ngeoch[0]),0);
       std::fill_n(g1xcl_geoposch,sizeof g1xcl_geoposch/sizeof(g1xcl_geoposch[0]),0);
       std::fill_n(g1ycl_geoposch,sizeof g1ycl_geoposch/sizeof(g1ycl_geoposch[0]),0);
       std::fill_n(g2xcl_geoposch,sizeof g2xcl_geoposch/sizeof(g2xcl_geoposch[0]),0);
       std::fill_n(g2ycl_geoposch,sizeof g2ycl_geoposch/sizeof(g2ycl_geoposch[0]),0);
       std::fill_n(g3xcl_geoposch,sizeof g3xcl_geoposch/sizeof(g3xcl_geoposch[0]),0);
       std::fill_n(g3ycl_geoposch,sizeof g3ycl_geoposch/sizeof(g3ycl_geoposch[0]),0);
+      std::fill_n(sCMSNS2LC1_geoposch,sizeof sCMSNS2LC1_geoposch/sizeof(sCMSNS2LC1_geoposch[0]),0);
+      std::fill_n(sCMSNS2LC2_geoposch,sizeof sCMSNS2LC2_geoposch/sizeof(sCMSNS2LC2_geoposch[0]),0);
+      std::fill_n(sCMSNS2LC3_geoposch,sizeof sCMSNS2LC3_geoposch/sizeof(sCMSNS2LC3_geoposch[0]),0);
     //
     //Trying to use some shortcut method to delete the memory but did not succeed so apply simple method
     //
     //memset(g1xcl_geoch, 0, sizeof(g1xcl_geoch[0][0]) * count_ngeoch_occ * 12);
     //memset(g1xcl_geoch, sizeof(int)*count_ngeoch_occ*12);
     //delete[] g1xcl_geoch; g1xcl_geoch = NULL;
+    //================================
     count_ngeoch_occ = 0;
     for(Int_t nch=0;nch<12;nch++)
     {
@@ -566,6 +613,103 @@ void AiwuTextFile::Loop()
     }
     count_ngeoch_occ += 1;
     }    
+    //================================
+    count_ngeoch_occ = 0;
+    for(Int_t nch=0;nch<12;nch++)
+    {
+	if (g2xcl_ngeoch[nch]==0)
+	break;
+    for (int chfird=0;chfird<g2xcl_ngeoch[nch];chfird++)
+    {
+	if((g2xcl_geoch)[count_ngeoch_occ][chfird] == 0)
+	    break;
+	g2xcl_geoch[count_ngeoch_occ][chfird]= 0;
+    }
+    count_ngeoch_occ += 1;
+    }
+    count_ngeoch_occ = 0;
+    for(Int_t nch=0;nch<12;nch++)
+    {
+	if (g2ycl_ngeoch[nch]==0)
+	break;
+    for (int chfird=0;chfird<g2ycl_ngeoch[nch];chfird++)
+    {
+	if((g2ycl_geoch)[count_ngeoch_occ][chfird] == 0)
+	    break;
+	g2ycl_geoch[count_ngeoch_occ][chfird]= 0;
+    }
+    count_ngeoch_occ += 1;
+    }    
+    //================================
+    count_ngeoch_occ = 0;
+    for(Int_t nch=0;nch<12;nch++)
+    {
+	if (g3xcl_ngeoch[nch]==0)
+	break;
+    for (int chfird=0;chfird<g3xcl_ngeoch[nch];chfird++)
+    {
+	if((g3xcl_geoch)[count_ngeoch_occ][chfird] == 0)
+	    break;
+	g3xcl_geoch[count_ngeoch_occ][chfird]= 0;
+    }
+    count_ngeoch_occ += 1;
+    }
+    count_ngeoch_occ = 0;
+    for(Int_t nch=0;nch<12;nch++)
+    {
+	if (g3ycl_ngeoch[nch]==0)
+	break;
+    for (int chfird=0;chfird<g3ycl_ngeoch[nch];chfird++)
+    {
+	if((g3ycl_geoch)[count_ngeoch_occ][chfird] == 0)
+	    break;
+	g3ycl_geoch[count_ngeoch_occ][chfird]= 0;
+    }
+    count_ngeoch_occ += 1;
+    }    
+    //================================
+    //================================
+    count_ngeoch_occ = 0;
+    for(Int_t nch=0;nch<12;nch++)
+    {
+	if (sCMSNS2LC1_ngeoch[nch]==0)
+	break;
+    for (int chfird=0;chfird<sCMSNS2LC1_ngeoch[nch];chfird++)
+    {
+	if((sCMSNS2LC1_geoch)[count_ngeoch_occ][chfird] == 0)
+	    break;
+	sCMSNS2LC1_geoch[count_ngeoch_occ][chfird]= 0;
+    }
+    count_ngeoch_occ += 1;
+    }
+    count_ngeoch_occ = 0;
+    for(Int_t nch=0;nch<12;nch++)
+    {
+	if (sCMSNS2LC2_ngeoch[nch]==0)
+	break;
+    for (int chfird=0;chfird<sCMSNS2LC2_ngeoch[nch];chfird++)
+    {
+	if((sCMSNS2LC2_geoch)[count_ngeoch_occ][chfird] == 0)
+	    break;
+	sCMSNS2LC2_geoch[count_ngeoch_occ][chfird]= 0;
+    }
+    count_ngeoch_occ += 1;
+    }    
+    //================================
+    count_ngeoch_occ = 0;
+    for(Int_t nch=0;nch<12;nch++)
+    {
+	if (sCMSNS2LC3_ngeoch[nch]==0)
+	break;
+    for (int chfird=0;chfird<sCMSNS2LC3_ngeoch[nch];chfird++)
+    {
+	if((sCMSNS2LC3_geoch)[count_ngeoch_occ][chfird] == 0)
+	    break;
+	sCMSNS2LC3_geoch[count_ngeoch_occ][chfird]= 0;
+    }
+    count_ngeoch_occ += 1;
+    }    
+    //================================    
     //====================== END::  Clear few arrays: Those behaving Strange.	===============================	
    }
 }
