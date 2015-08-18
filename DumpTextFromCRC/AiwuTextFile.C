@@ -58,7 +58,8 @@ void AiwuTextFile::Loop()
     //cout<<"#Detector\tFired Strip\tTot Charge\tCls Pos(mm)\tCls Pos (stripno)\tStripNo\tCharge"<<endl;
    for (Long64_t jentry=0; jentry<nentries;jentry++) {
    //for (Long64_t jentry=0; jentry<33;jentry++) {
-	//if (jentry<11) continue;
+//	if (jentry>1193) continue;
+	//if (jentry>22) continue;
 
       Long64_t ientry = LoadTree(jentry);
       if (ientry < 0) break;
@@ -259,9 +260,9 @@ void AiwuTextFile::Loop()
       {
 	  EventNb += 1;
 	  if (verbose)
-	      cout<<"EventNb "<<EventNb<<endl;
+	      cout<<"EventNb "<<EventNb<<"\tActual EvtNumber = "<< jentry <<endl;
 	      //cout<<"EventNb "<<jentry<<endl;
-	  file_out<<"EventNb "<<EventNb<<endl;
+	  file_out<<"EventNb "<<EventNb<<"\tActual EvtNumber = "<< jentry <<endl;
       }      
       //
    //================================	Reference Tracker 1 (g1xcl)   ======================================================
@@ -527,6 +528,7 @@ void AiwuTextFile::Loop()
 	  channelFired = 0;
 	  for(Int_t nch=0;nch<12;nch++)
 	  {
+		  cout<<"sCMSNS2LC1_ngeoch[ "<<nch<<" ] = "<< sCMSNS2LC1_ngeoch[nch]<<endl;
 	      if (sCMSNS2LC1_ngeoch[nch]==0)
 		  break;
 	      channelFired +=sCMSNS2LC1_ngeoch[nch];
@@ -540,10 +542,14 @@ void AiwuTextFile::Loop()
 	  {
 	      if (sCMSNS2LC1_ngeoch[nch]==0)
 		  break;
+		  cout<<"sCMSNS2LC1_ngeoch[ "<<nch<<" ] = "<< sCMSNS2LC1_ngeoch[nch]<<endl;
+		  cout<<"jentry = "<<jentry<<endl;
+		  //cin.ignore();
 	      for (int chfird=0;chfird<sCMSNS2LC1_ngeoch[nch];chfird++)
 	      {
-		  if((sCMSNS2LC1_geoch)[count_ngeoch_occ][chfird] == 0)
-		      break;
+		  file_out<<"\n"<<sCMSNS2LC1_ngeoch[nch]<<"\t"<<"(sCMSNS2LC1_geoch)[ "<< count_ngeoch_occ << " ][ "<<chfird <<" ] = " << (sCMSNS2LC1_geoch)[count_ngeoch_occ][chfird]<<"\t"<<1<<"\t\n";
+		  //if((sCMSNS2LC1_geoch)[count_ngeoch_occ][chfird] == 0)
+		  //    break;
 		  if (verbose)
 		      std::cout<<(sCMSNS2LC1_geoch)[count_ngeoch_occ][chfird]<<"\t"<<1<<"\t";
 		  //std::cout<<(sCMSNS2LC1_geoch)[count_ngeoch_occ][chfird]<<"\t"<<1<<"\t";
@@ -630,7 +636,6 @@ void AiwuTextFile::Loop()
 		      break;
 		  if (verbose)
 		      std::cout<<(sCMSNS2LC3_geoch)[count_ngeoch_occ][chfird]<<"\t"<<1<<"\t";
-		  //std::cout<<(sCMSNS2LC3_geoch)[count_ngeoch_occ][chfird]<<"\t"<<1<<"\t";
 		  file_out<<(sCMSNS2LC3_geoch)[count_ngeoch_occ][chfird]<<"\t"<<1<<"\t";
 	      }
 	      count_ngeoch_occ += 1;
