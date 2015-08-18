@@ -75,7 +75,7 @@ void AiwuTextFile::Loop()
       //
       //
       int NumCluster_g1x = 0;
-      for(int nbcl=0;nbcl<12;nbcl++)
+      for(int nbcl=0;nbcl<kMaxg1xcl;nbcl++)
       {
 	  if (verbose)
 	      cout<<g1xcl_geoposch[nbcl]<<endl;
@@ -95,7 +95,7 @@ void AiwuTextFile::Loop()
       //
       //
       int NumCluster_g1y = 0;
-      for(int nbcl=0;nbcl<12;nbcl++)
+      for(int nbcl=0;nbcl<kMaxg1ycl;nbcl++)
       {
 	  if (verbose)
 	      cout<<g1ycl_geoposch[nbcl]<<endl;
@@ -115,7 +115,7 @@ void AiwuTextFile::Loop()
       //
       //
       int NumCluster_g2x = 0;
-      for(int nbcl=0;nbcl<12;nbcl++)
+      for(int nbcl=0;nbcl<kMaxg2xcl;nbcl++)
       {
 	  if (verbose)
 	      cout<<g2xcl_geoposch[nbcl]<<endl;
@@ -135,7 +135,7 @@ void AiwuTextFile::Loop()
       //
       //
       int NumCluster_g2y = 0;
-      for(int nbcl=0;nbcl<12;nbcl++)
+      for(int nbcl=0;nbcl<kMaxg2ycl;nbcl++)
       {
 	  if (verbose)
 	      cout<<g2ycl_geoposch[nbcl]<<endl;
@@ -155,7 +155,7 @@ void AiwuTextFile::Loop()
       //
       //
       int NumCluster_g3x = 0;
-      for(int nbcl=0;nbcl<12;nbcl++)
+      for(int nbcl=0;nbcl<kMaxg3xcl;nbcl++)
       {
 	  if (verbose)
 	      cout<<g3xcl_geoposch[nbcl]<<endl;
@@ -175,7 +175,7 @@ void AiwuTextFile::Loop()
       //
       //
       int NumCluster_g3y = 0;
-      for(int nbcl=0;nbcl<12;nbcl++)
+      for(int nbcl=0;nbcl<kMaxg3ycl;nbcl++)
       {
 	  if (verbose)
 	      cout<<g3ycl_geoposch[nbcl]<<endl;
@@ -196,7 +196,7 @@ void AiwuTextFile::Loop()
       //
       //
       int NumCluster_LC1 = 0;
-      for(int nbcl=0;nbcl<12;nbcl++)
+      for(int nbcl=0;nbcl<kMaxsCMSNS2LC1;nbcl++)
       {
 	  if (verbose)
 	      cout<<sCMSNS2LC1_geoposch[nbcl]<<endl;
@@ -216,7 +216,7 @@ void AiwuTextFile::Loop()
       //
       //
       int NumCluster_LC2 = 0;
-      for(int nbcl=0;nbcl<12;nbcl++)
+      for(int nbcl=0;nbcl<kMaxsCMSNS2LC2;nbcl++)
       {
 	  if (verbose)
 	      cout<<sCMSNS2LC2_geoposch[nbcl]<<endl;
@@ -236,7 +236,7 @@ void AiwuTextFile::Loop()
       //
       //
       int NumCluster_LC3 = 0;
-      for(int nbcl=0;nbcl<12;nbcl++)
+      for(int nbcl=0;nbcl<kMaxsCMSNS2LC3;nbcl++)
       {
 	  if (verbose)
 	      cout<<sCMSNS2LC3_geoposch[nbcl]<<endl;
@@ -260,9 +260,11 @@ void AiwuTextFile::Loop()
       {
 	  EventNb += 1;
 	  if (verbose)
-	      cout<<"EventNb "<<EventNb<<"\tActual EvtNumber = "<< jentry <<endl;
+	      cout<<"EventNb "<<EventNb<<endl;
+	      //cout<<"EventNb "<<EventNb<<"\tActual EvtNumber = "<< jentry <<endl;
 	      //cout<<"EventNb "<<jentry<<endl;
-	  file_out<<"EventNb "<<EventNb<<"\tActual EvtNumber = "<< jentry <<endl;
+	  file_out<<"EventNb "<<EventNb<<endl;
+	  //file_out<<"EventNb "<<EventNb<<"\tActual EvtNumber = "<< jentry <<endl;
       }      
       //
    //================================	Reference Tracker 1 (g1xcl)   ======================================================
@@ -274,7 +276,7 @@ void AiwuTextFile::Loop()
               cout<<"g1xcl\t";
           file_out<<"g1xcl\t";
 	  channelFired = 0;
-	  for(Int_t nch=0;nch<12;nch++)
+	  for(Int_t nch=0;nch<kMaxg1xcl;nch++)
 	  {
 	      if (g1xcl_ngeoch[nch]==0)
 		  break;
@@ -285,7 +287,7 @@ void AiwuTextFile::Loop()
 	      std::cout<<channelFired<<"\t"<<channelFired<<"\t"<<g1xcl_geoposX[0]<<"\t"<<g1xcl_geoposch[0]<<"\t";
 	  file_out<<channelFired<<"\t"<<channelFired<<"\t"<<g1xcl_geoposX[0]<<"\t"<<g1xcl_geoposch[0]<<"\t";
 	  count_ngeoch_occ = 0;
-	  for(Int_t nch=0;nch<12;nch++)
+	  for(Int_t nch=0;nch<kMaxg1xcl;nch++)
 	  {
 	      if (g1xcl_ngeoch[nch]==0)
 		  break;
@@ -316,7 +318,7 @@ void AiwuTextFile::Loop()
               cout<<"g1ycl\t";
           file_out<<"g1ycl\t";
 	  channelFired = 0;
-	  for(Int_t nch=0;nch<12;nch++)
+	  for(Int_t nch=0;nch<kMaxg1ycl;nch++)
 	  {
 	      if (g1ycl_ngeoch[nch]==0)
 		  break;
@@ -327,7 +329,7 @@ void AiwuTextFile::Loop()
 	      std::cout<<channelFired<<"\t"<<channelFired<<"\t"<<g1ycl_geoposY[0]<<"\t"<<g1ycl_geoposch[0]<<"\t";
 	  file_out<<channelFired<<"\t"<<channelFired<<"\t"<<g1ycl_geoposY[0]<<"\t"<<g1ycl_geoposch[0]<<"\t";
 	  count_ngeoch_occ = 0;
-	  for(Int_t nch=0;nch<12;nch++)
+	  for(Int_t nch=0;nch<kMaxg1xcl;nch++)
 	  {
 	      if (g1ycl_ngeoch[nch]==0)
 		  break;
@@ -358,7 +360,7 @@ void AiwuTextFile::Loop()
               cout<<"g2xcl\t";
           file_out<<"g2xcl\t";
 	  channelFired = 0;
-	  for(Int_t nch=0;nch<12;nch++)
+	  for(Int_t nch=0;nch<kMaxg2xcl;nch++)
 	  {
 	      if (g2xcl_ngeoch[nch]==0)
 		  break;
@@ -369,7 +371,7 @@ void AiwuTextFile::Loop()
 	      std::cout<<channelFired<<"\t"<<channelFired<<"\t"<<g2xcl_geoposX[0]<<"\t"<<g2xcl_geoposch[0]<<"\t";
 	  file_out<<channelFired<<"\t"<<channelFired<<"\t"<<g2xcl_geoposX[0]<<"\t"<<g2xcl_geoposch[0]<<"\t";
 	  count_ngeoch_occ = 0;
-	  for(Int_t nch=0;nch<12;nch++)
+	  for(Int_t nch=0;nch<kMaxg2xcl;nch++)
 	  {
 	      if (g2xcl_ngeoch[nch]==0)
 		  break;
@@ -400,7 +402,7 @@ void AiwuTextFile::Loop()
               cout<<"g2ycl\t";
           file_out<<"g2ycl\t";
 	  channelFired = 0;
-	  for(Int_t nch=0;nch<12;nch++)
+	  for(Int_t nch=0;nch<kMaxg2ycl;nch++)
 	  {
 	      if (g2ycl_ngeoch[nch]==0)
 		  break;
@@ -411,7 +413,7 @@ void AiwuTextFile::Loop()
 	      std::cout<<channelFired<<"\t"<<channelFired<<"\t"<<g2ycl_geoposY[0]<<"\t"<<g2ycl_geoposch[0]<<"\t";
 	  file_out<<channelFired<<"\t"<<channelFired<<"\t"<<g2ycl_geoposY[0]<<"\t"<<g2ycl_geoposch[0]<<"\t";
 	  count_ngeoch_occ = 0;
-	  for(Int_t nch=0;nch<12;nch++)
+	  for(Int_t nch=0;nch<kMaxg2ycl;nch++)
 	  {
 	      if (g2ycl_ngeoch[nch]==0)
 		  break;
@@ -442,7 +444,7 @@ void AiwuTextFile::Loop()
               cout<<"g3xcl\t";
           file_out<<"g3xcl\t";
 	  channelFired = 0;
-	  for(Int_t nch=0;nch<12;nch++)
+	  for(Int_t nch=0;nch<kMaxg3xcl;nch++)
 	  {
 	      if (g3xcl_ngeoch[nch]==0)
 		  break;
@@ -453,7 +455,7 @@ void AiwuTextFile::Loop()
 	      std::cout<<channelFired<<"\t"<<channelFired<<"\t"<<g3xcl_geoposX[0]<<"\t"<<g3xcl_geoposch[0]<<"\t";
 	  file_out<<channelFired<<"\t"<<channelFired<<"\t"<<g3xcl_geoposX[0]<<"\t"<<g3xcl_geoposch[0]<<"\t";
 	  count_ngeoch_occ = 0;
-	  for(Int_t nch=0;nch<12;nch++)
+	  for(Int_t nch=0;nch<kMaxg3xcl;nch++)
 	  {
 	      if (g3xcl_ngeoch[nch]==0)
 		  break;
@@ -484,7 +486,7 @@ void AiwuTextFile::Loop()
               cout<<"g3ycl\t";
           file_out<<"g3ycl\t";
 	  channelFired = 0;
-	  for(Int_t nch=0;nch<12;nch++)
+	  for(Int_t nch=0;nch<kMaxg3ycl;nch++)
 	  {
 	      if (g3ycl_ngeoch[nch]==0)
 		  break;
@@ -495,7 +497,7 @@ void AiwuTextFile::Loop()
 	      std::cout<<channelFired<<"\t"<<channelFired<<"\t"<<g3ycl_geoposY[0]<<"\t"<<g3ycl_geoposch[0]<<"\t";
 	  file_out<<channelFired<<"\t"<<channelFired<<"\t"<<g3ycl_geoposY[0]<<"\t"<<g3ycl_geoposch[0]<<"\t";
 	  count_ngeoch_occ = 0;
-	  for(Int_t nch=0;nch<12;nch++)
+	  for(Int_t nch=0;nch<kMaxg3ycl;nch++)
 	  {
 	      if (g3ycl_ngeoch[nch]==0)
 		  break;
@@ -526,9 +528,9 @@ void AiwuTextFile::Loop()
               cout<<"sCMSNS2LC1\t";
           file_out<<"sCMSNS2LC1\t";
 	  channelFired = 0;
-	  for(Int_t nch=0;nch<12;nch++)
+	  for(Int_t nch=0;nch<kMaxsCMSNS2LC1;nch++)
 	  {
-		  cout<<"sCMSNS2LC1_ngeoch[ "<<nch<<" ] = "<< sCMSNS2LC1_ngeoch[nch]<<endl;
+		  //cout<<"sCMSNS2LC1_ngeoch[ "<<nch<<" ] = "<< sCMSNS2LC1_ngeoch[nch]<<endl;
 	      if (sCMSNS2LC1_ngeoch[nch]==0)
 		  break;
 	      channelFired +=sCMSNS2LC1_ngeoch[nch];
@@ -538,7 +540,7 @@ void AiwuTextFile::Loop()
 	      std::cout<<channelFired<<"\t"<<channelFired<<"\t"<<sCMSNS2LC1_geoposY[0]<<"\t"<<sCMSNS2LC1_geoposch[0]<<"\t";
 	  file_out<<channelFired<<"\t"<<channelFired<<"\t"<<sCMSNS2LC1_geoposY[0]<<"\t"<<sCMSNS2LC1_geoposch[0]<<"\t";
 	  count_ngeoch_occ = 0;
-	  for(Int_t nch=0;nch<12;nch++)
+	  for(Int_t nch=0;nch<kMaxsCMSNS2LC1;nch++)
 	  {
 	      if (sCMSNS2LC1_ngeoch[nch]==0)
 		  break;
@@ -547,7 +549,7 @@ void AiwuTextFile::Loop()
 		  //cin.ignore();
 	      for (int chfird=0;chfird<sCMSNS2LC1_ngeoch[nch];chfird++)
 	      {
-		  file_out<<"\n"<<sCMSNS2LC1_ngeoch[nch]<<"\t"<<"(sCMSNS2LC1_geoch)[ "<< count_ngeoch_occ << " ][ "<<chfird <<" ] = " << (sCMSNS2LC1_geoch)[count_ngeoch_occ][chfird]<<"\t"<<1<<"\t\n";
+		  //file_out<<"\n"<<sCMSNS2LC1_ngeoch[nch]<<"\t"<<"(sCMSNS2LC1_geoch)[ "<< count_ngeoch_occ << " ][ "<<chfird <<" ] = " << (sCMSNS2LC1_geoch)[count_ngeoch_occ][chfird]<<"\t"<<1<<"\t\n";
 		  //if((sCMSNS2LC1_geoch)[count_ngeoch_occ][chfird] == 0)
 		  //    break;
 		  if (verbose)
@@ -573,7 +575,7 @@ void AiwuTextFile::Loop()
               cout<<"sCMSNS2LC2\t";
           file_out<<"sCMSNS2LC2\t";
 	  channelFired = 0;
-	  for(Int_t nch=0;nch<12;nch++)
+	  for(Int_t nch=0;nch<kMaxsCMSNS2LC2;nch++)
 	  {
 	      if (sCMSNS2LC2_ngeoch[nch]==0)
 		  break;
@@ -584,7 +586,7 @@ void AiwuTextFile::Loop()
 	      std::cout<<channelFired<<"\t"<<channelFired<<"\t"<<sCMSNS2LC2_geoposY[0]<<"\t"<<sCMSNS2LC2_geoposch[0]<<"\t";
 	  file_out<<channelFired<<"\t"<<channelFired<<"\t"<<sCMSNS2LC2_geoposY[0]<<"\t"<<sCMSNS2LC2_geoposch[0]<<"\t";
 	  count_ngeoch_occ = 0;
-	  for(Int_t nch=0;nch<12;nch++)
+	  for(Int_t nch=0;nch<kMaxsCMSNS2LC2;nch++)
 	  {
 	      if (sCMSNS2LC2_ngeoch[nch]==0)
 		  break;
@@ -615,7 +617,7 @@ void AiwuTextFile::Loop()
               cout<<"sCMSNS2LC3\t";
           file_out<<"sCMSNS2LC3\t";
 	  channelFired = 0;
-	  for(Int_t nch=0;nch<12;nch++)
+	  for(Int_t nch=0;nch<kMaxsCMSNS2LC3;nch++)
 	  {
 	      if (sCMSNS2LC3_ngeoch[nch]==0)
 		  break;
@@ -626,7 +628,7 @@ void AiwuTextFile::Loop()
 	      std::cout<<channelFired<<"\t"<<channelFired<<"\t"<<sCMSNS2LC3_geoposY[0]<<"\t"<<sCMSNS2LC3_geoposch[0]<<"\t";
 	  file_out<<channelFired<<"\t"<<channelFired<<"\t"<<sCMSNS2LC3_geoposY[0]<<"\t"<<sCMSNS2LC3_geoposch[0]<<"\t";
 	  count_ngeoch_occ = 0;
-	  for(Int_t nch=0;nch<12;nch++)
+	  for(Int_t nch=0;nch<kMaxsCMSNS2LC3;nch++)
 	  {
 	      if (sCMSNS2LC3_ngeoch[nch]==0)
 		  break;
@@ -692,7 +694,7 @@ void AiwuTextFile::Loop()
     //delete[] g1xcl_geoch; g1xcl_geoch = NULL;
     //================================
     count_ngeoch_occ = 0;
-    for(Int_t nch=0;nch<12;nch++)
+    for(Int_t nch=0;nch<kMaxg1xcl;nch++)
     {
 	if (g1xcl_ngeoch[nch]==0)
 	break;
@@ -705,7 +707,7 @@ void AiwuTextFile::Loop()
     count_ngeoch_occ += 1;
     }
     count_ngeoch_occ = 0;
-    for(Int_t nch=0;nch<12;nch++)
+    for(Int_t nch=0;nch<kMaxg1ycl;nch++)
     {
 	if (g1ycl_ngeoch[nch]==0)
 	break;
@@ -719,7 +721,7 @@ void AiwuTextFile::Loop()
     }    
     //================================
     count_ngeoch_occ = 0;
-    for(Int_t nch=0;nch<12;nch++)
+    for(Int_t nch=0;nch<kMaxg2xcl;nch++)
     {
 	if (g2xcl_ngeoch[nch]==0)
 	break;
@@ -732,7 +734,7 @@ void AiwuTextFile::Loop()
     count_ngeoch_occ += 1;
     }
     count_ngeoch_occ = 0;
-    for(Int_t nch=0;nch<12;nch++)
+    for(Int_t nch=0;nch<kMaxg2ycl;nch++)
     {
 	if (g2ycl_ngeoch[nch]==0)
 	break;
@@ -746,7 +748,7 @@ void AiwuTextFile::Loop()
     }    
     //================================
     count_ngeoch_occ = 0;
-    for(Int_t nch=0;nch<12;nch++)
+    for(Int_t nch=0;nch<kMaxg3xcl;nch++)
     {
 	if (g3xcl_ngeoch[nch]==0)
 	break;
@@ -759,7 +761,7 @@ void AiwuTextFile::Loop()
     count_ngeoch_occ += 1;
     }
     count_ngeoch_occ = 0;
-    for(Int_t nch=0;nch<12;nch++)
+    for(Int_t nch=0;nch<kMaxg3ycl;nch++)
     {
 	if (g3ycl_ngeoch[nch]==0)
 	break;
@@ -774,7 +776,7 @@ void AiwuTextFile::Loop()
     //================================
     //================================
     count_ngeoch_occ = 0;
-    for(Int_t nch=0;nch<12;nch++)
+    for(Int_t nch=0;nch<kMaxsCMSNS2LC1;nch++)
     {
 	if (sCMSNS2LC1_ngeoch[nch]==0)
 	break;
@@ -787,7 +789,7 @@ void AiwuTextFile::Loop()
     count_ngeoch_occ += 1;
     }
     count_ngeoch_occ = 0;
-    for(Int_t nch=0;nch<12;nch++)
+    for(Int_t nch=0;nch<kMaxsCMSNS2LC2;nch++)
     {
 	if (sCMSNS2LC2_ngeoch[nch]==0)
 	break;
@@ -801,7 +803,7 @@ void AiwuTextFile::Loop()
     }    
     //================================
     count_ngeoch_occ = 0;
-    for(Int_t nch=0;nch<12;nch++)
+    for(Int_t nch=0;nch<kMaxsCMSNS2LC1;nch++)
     {
 	if (sCMSNS2LC3_ngeoch[nch]==0)
 	break;

@@ -6,6 +6,10 @@ rd51tbgeo->Scan("EventNumber:g1xcl.ngeoch:g1xcl.geoch:g1xcl.geoX:g1xcl.geoposch:
 Attaching file CRC-Run0411_Muon_10k_MSPL2_HVScan_710pt1_710pt1_710pt0_T20_T20_T20_Lat22-141011_013955-0.root as _file0...
 (class TFile *) 0x23a4aa0
 			EventNumber	ngeoch	    geoch	geoX	geoposch    geoposX
+
+					stripsFired strip	pos of	pos of each pos of 
+					in each	    fired	each	strip of    cluster
+					cluster			strip	cluster	    in mm
 ***********************************************************************************************
 *    Row   * Instance * EventNumb * g1xcl.nge * g1xcl.geo * g1xcl.geo * g1xcl.geo * g1xcl.geo *
 ***********************************************************************************************
