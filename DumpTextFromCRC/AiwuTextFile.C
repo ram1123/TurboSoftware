@@ -590,6 +590,8 @@ void AiwuTextFile::Loop()
 	  {
 	      if (sCMSNS2LC2_ngeoch[nch]==0)
 		  break;
+		  cout<<"sCMSNS2LC2_ngeoch[ "<<nch<<" ] = "<< sCMSNS2LC2_ngeoch[nch]<<endl;
+		  cout<<"jentry = "<<jentry<<endl;
 	      for (int chfird=0;chfird<sCMSNS2LC2_ngeoch[nch];chfird++)
 	      {
 		  //if((sCMSNS2LC2_geoch)[count_ngeoch_occ][chfird] == 0)
@@ -630,12 +632,14 @@ void AiwuTextFile::Loop()
 	  count_ngeoch_occ = 0;
 	  for(Int_t nch=0;nch<kMaxsCMSNS2LC3;nch++)
 	  {
-	      //if (sCMSNS2LC3_ngeoch[nch]==0)
-		//  break;
+	      if (sCMSNS2LC3_ngeoch[nch]==0)
+		 break;
+		 cout<<"sCMSNS2LC3_ngeoch[ "<<nch<<" ] = "<< sCMSNS2LC3_ngeoch[nch]<<endl;
+		  cout<<"jentry = "<<jentry<<endl;
 	      for (int chfird=0;chfird<sCMSNS2LC3_ngeoch[nch];chfird++)
 	      {
-		  if((sCMSNS2LC3_geoch)[count_ngeoch_occ][chfird] == 0)
-		      break;
+		  //if((sCMSNS2LC3_geoch)[count_ngeoch_occ][chfird] == 0)
+		    //  break;
 		  if (verbose)
 		      std::cout<<(sCMSNS2LC3_geoch)[count_ngeoch_occ][chfird]<<"\t"<<1<<"\t";
 		  file_out<<(sCMSNS2LC3_geoch)[count_ngeoch_occ][chfird]<<"\t"<<1<<"\t";
