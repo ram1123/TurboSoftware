@@ -50,6 +50,8 @@ void AiwuTextFile::Loop()
 
    Long64_t nbytes = 0, nb = 0;
    bool verbose = 0;
+   bool g1x;
+   bool g1y;
 
    //================================	Event Loop Starts   ======================================================
     int count_ngeoch_occ = 0;
@@ -304,9 +306,11 @@ void AiwuTextFile::Loop()
 	  }
 	  if (verbose)
 	      std::cout<<std::endl;
+	  g1x = jentry;
 	  // std::cout<<std::endl;
 	  file_out<<std::endl;
-      }
+	   cout<<"effeciency_g1x "<<(float) jentry/ (float) nentries <<endl;
+	    }
    //================================	END::	Reference Tracker 1 (g1xcl)   ======================================================
    
    //================================	Reference Tracker 1 (g1ycl)   ======================================================
@@ -346,8 +350,12 @@ void AiwuTextFile::Loop()
 	  }
 	  if (verbose)
 	      std::cout<<std::endl;
+	      g1y = jentry;
+	   cout<<"effeciency_g1y "<<(float) jentry/ (float) nentries <<endl;
 	  // std::cout<<std::endl;
 	  file_out<<std::endl;
+	  if(!g1x && !g1y) continue ;
+ cout<<"effeciency_g1 "<<(float) jentry/ (float) nentries <<endl;
       }
    //================================	END::	Reference Tracker 1 (g1ycl)   ======================================================    
    
