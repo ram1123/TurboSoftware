@@ -40,7 +40,7 @@ void AiwuTextFile::Loop()
    if (fChain == 0) return;
 
    Long64_t nentries = fChain->GetEntriesFast();
-
+cout<< "Total "<<nentries<<endl;
    // create a text file
    //
    std::ofstream file_out("Hit_Position_Info.txt");
@@ -50,11 +50,17 @@ void AiwuTextFile::Loop()
 
    Long64_t nbytes = 0, nb = 0;
    bool verbose = 0;
-
    //================================	Event Loop Starts   ======================================================
     int count_ngeoch_occ = 0;
     int EventNb = 0;
-    //cout<<"#Detector\tFired Strip\tTot Charge\tCls Pos(mm)\tCls Pos (stripno)\tStripNo\tCharge"<<endl;
+    int g1x_Hit_count = 0 ;
+    int g1y_Hit_count = 0 ;
+    int g2x_Hit_count = 0 ;
+    int g2y_Hit_count = 0 ;
+    int g3x_Hit_count = 0 ;
+    int g3y_Hit_count = 0 ;
+    int g1_Hit_count = 0 ;   
+   //cout<<"#Detector\tFired Strip\tTot Charge\tCls Pos(mm)\tCls Pos (stripno)\tStripNo\tCharge"<<endl;
     //cout<<"#Detector\tFired Strip\tTot Charge\tCls Pos(mm)\tCls Pos (stripno)\tStripNo\tCharge"<<endl;
    for (Long64_t jentry=0; jentry<nentries;jentry++) {
    //for (Long64_t jentry=0; jentry<33;jentry++) {
@@ -82,7 +88,15 @@ void AiwuTextFile::Loop()
 	  if (g1xcl_geoposch[nbcl]==0)
 	      break;
 	  NumCluster_g1x += 1;
-      }
+      
+
+if (NumCluster_g1x !=0 ) 
+{
+           g1x_Hit_count++;
+cout<<"g1x_hits "<<g1x_Hit_count<<endl;
+cout<<"efficiency_g1x "<<(float) g1x_Hit_count/(float) nentries<<endl;
+}
+}
       if (verbose)
 	  cout<<"Actual number of clusters = "<<NumCluster_g1x<<endl;
 	// if (NumCluster_g1x != 1) 
@@ -102,7 +116,15 @@ void AiwuTextFile::Loop()
 	  if (g1ycl_geoposch[nbcl]==0)
 	      break;
 	  NumCluster_g1y += 1;
-      }
+
+if (NumCluster_g1y !=0 )
+{
+           g1y_Hit_count++;
+cout<<"g1y_hits "<<g1y_Hit_count<<endl;
+cout<<"efficiency_g1y "<<(float) g1y_Hit_count/(float) nentries<<endl;
+}
+
+     }
       if (verbose)
 	  cout<<"Actual number of clusters = "<<NumCluster_g1y<<endl;
 	// if (NumCluster_g1y != 1) 
@@ -122,6 +144,13 @@ void AiwuTextFile::Loop()
 	  if (g2xcl_geoposch[nbcl]==0)
 	      break;
 	  NumCluster_g2x += 1;
+
+if (NumCluster_g2x !=0 )
+{
+           g2x_Hit_count++;
+cout<<"g2x_hits "<<g2x_Hit_count<<endl;
+cout<<"efficiency_g2x "<<(float) g2x_Hit_count/(float) nentries<<endl;
+}
       }
       if (verbose)
 	  cout<<"Actual number of clusters = "<<NumCluster_g2x<<endl;
@@ -142,7 +171,14 @@ void AiwuTextFile::Loop()
 	  if (g2ycl_geoposch[nbcl]==0)
 	      break;
 	  NumCluster_g2y += 1;
-      }
+
+ if (NumCluster_g2y !=0 )
+{
+           g2y_Hit_count++;
+cout<<"g2y_hits "<<g2y_Hit_count<<endl;
+cout<<"efficiency_g2y "<<(float) g2y_Hit_count/(float) nentries<<endl;
+}
+     }
       if (verbose)
 	  cout<<"Actual number of clusters = "<<NumCluster_g2y<<endl;
 	// if (NumCluster_g2y != 1) 
@@ -162,6 +198,14 @@ void AiwuTextFile::Loop()
 	  if (g3xcl_geoposch[nbcl]==0)
 	      break;
 	  NumCluster_g3x += 1;
+
+
+if (NumCluster_g3x !=0 )
+{
+           g3x_Hit_count++;
+cout<<"g3x_hits "<<g3x_Hit_count<<endl;
+cout<<"efficiency_g3x "<<(float) g3x_Hit_count/(float) nentries<<endl;
+}
       }
       if (verbose)
 	  cout<<"Actual number of clusters = "<<NumCluster_g3x<<endl;
@@ -182,9 +226,24 @@ void AiwuTextFile::Loop()
 	  if (g3ycl_geoposch[nbcl]==0)
 	      break;
 	  NumCluster_g3y += 1;
-      }
+ if (NumCluster_g3y !=0 )
+{
+           g3y_Hit_count++;
+cout<<"g3y_hits "<<g3y_Hit_count<<endl;
+cout<<"efficiency_g3y "<<(float) g3y_Hit_count/(float) nentries<<endl;
+}
+     }
       if (verbose)
 	  cout<<"Actual number of clusters = "<<NumCluster_g3y<<endl;
+
+
+ if (NumCluster_g1x !=0 && NumCluster_g1y !=0 )
+{
+           g1_Hit_count++;
+cout<<"g1_hits "<<g1_Hit_count<<endl;
+cout<<"efficiency_g1 "<<(float) g1_Hit_count/(float) nentries<<endl;
+}
+
 	// if (NumCluster_g3y != 1) 
 	//  continue;
 
@@ -265,13 +324,15 @@ void AiwuTextFile::Loop()
 	      //cout<<"EventNb "<<jentry<<endl;
 	  file_out<<"EventNb "<<EventNb<<endl;
 	  //file_out<<"EventNb "<<EventNb<<"\tActual EvtNumber = "<< jentry <<endl;
-      }      
-      //
+      
+}
+
    //================================	Reference Tracker 1 (g1xcl)   ======================================================
       channelFired = 0;		//==== ERROR:: ERROR:: ERROR::  I have to forcefully put channelFired = 0 at two places. If not then it behaves strangly.
       count_ngeoch_occ = 0;
       if (NumCluster_g1x == 1 &&  NumCluster_g1y ==1 && NumCluster_g2x == 1 && NumCluster_g2y==1 && NumCluster_g3x ==1 && NumCluster_g3y == 1)
       {
+//cout<<"final "<<jentry<<endl;
           if (verbose)
               cout<<"g1xcl\t";
           file_out<<"g1xcl\t";
@@ -282,6 +343,7 @@ void AiwuTextFile::Loop()
 		  break;
 	      channelFired +=g1xcl_ngeoch[nch];
 	      //cout<<"Channel Fired = "<<channelFired<<endl;
+ //cout<<"effeciency "<<(float) jentry/ (float) nentries <<endl;
 	  }
 	  if (verbose)
 	      std::cout<<channelFired<<"\t"<<channelFired<<"\t"<<g1xcl_geoposX[0]<<"\t"<<g1xcl_geoposch[0]<<"\t";
@@ -299,14 +361,17 @@ void AiwuTextFile::Loop()
 		      std::cout<<(g1xcl_geoch)[count_ngeoch_occ][chfird]<<"\t"<<1<<"\t";
 		  //std::cout<<(g1xcl_geoch)[count_ngeoch_occ][chfird]<<"\t"<<1<<"\t";
 		  file_out<<(g1xcl_geoch)[count_ngeoch_occ][chfird]<<"\t"<<1<<"\t";
-	      }
+//	    cout<<"effeciency_1 "<<(float) jentry/ (float) nentries <<endl;
+   }
 	      count_ngeoch_occ += 1;
 	  }
 	  if (verbose)
 	      std::cout<<std::endl;
 	  // std::cout<<std::endl;
+g1x = jentry ;
 	  file_out<<std::endl;
-      }
+ cout<<"effeciency_g1x "<<(float) jentry/ (float) nentries <<endl;
+  }
    //================================	END::	Reference Tracker 1 (g1xcl)   ======================================================
    
    //================================	Reference Tracker 1 (g1ycl)   ======================================================
@@ -348,7 +413,9 @@ void AiwuTextFile::Loop()
 	      std::cout<<std::endl;
 	  // std::cout<<std::endl;
 	  file_out<<std::endl;
-      }
+ }
+
+
    //================================	END::	Reference Tracker 1 (g1ycl)   ======================================================    
    
    //================================	Reference Tracker 1 (g2xcl)   ======================================================
@@ -356,7 +423,7 @@ void AiwuTextFile::Loop()
       count_ngeoch_occ = 0;
       if (NumCluster_g1x == 1 &&  NumCluster_g1y ==1 && NumCluster_g2x == 1 && NumCluster_g2y==1 && NumCluster_g3x ==1 && NumCluster_g3y == 1)
       {
-          if (verbose)
+         if (verbose)
               cout<<"g2xcl\t";
           file_out<<"g2xcl\t";
 	  channelFired = 0;
@@ -390,7 +457,7 @@ void AiwuTextFile::Loop()
 	      std::cout<<std::endl;
 	  // std::cout<<std::endl;
 	  file_out<<std::endl;
-      }
+   }
    //================================	END::	Reference Tracker 1 (g2xcl)   ======================================================       
    
    //================================	Reference Tracker 1 (g2ycl)   ======================================================
@@ -432,7 +499,7 @@ void AiwuTextFile::Loop()
 	      std::cout<<std::endl;
 	  // std::cout<<std::endl;
 	  file_out<<std::endl;
-      }
+ }
    //================================	END::	Reference Tracker 1 (g2ycl)   ======================================================    
       
    //================================	Reference Tracker 1 (g3xcl)   ======================================================
@@ -474,7 +541,7 @@ void AiwuTextFile::Loop()
 	      std::cout<<std::endl;
 	  // std::cout<<std::endl;
 	  file_out<<std::endl;
-      }
+ }
    //================================	END::	Reference Tracker 1 (g3xcl)   ======================================================      
    
    //================================	Reference Tracker 1 (g3ycl)   ======================================================
@@ -516,7 +583,7 @@ void AiwuTextFile::Loop()
 	      std::cout<<std::endl;
 	  // std::cout<<std::endl;
 	  file_out<<std::endl;
-      }
+    }
    //================================	END::	Reference Tracker 1 (g3ycl)   ======================================================    
       
    //================================	GE1/1  1 (sCMSNS2LC1)   ======================================================
@@ -590,10 +657,12 @@ void AiwuTextFile::Loop()
 	  {
 	      if (sCMSNS2LC2_ngeoch[nch]==0)
 		  break;
+         cout<<"sCMSNS2LC2_ngeoch[ "<<nch<<" ] = "<< sCMSNS2LC2_ngeoch[nch]<<endl;
+		  cout<<"jentry = "<<jentry<<endl;
 	      for (int chfird=0;chfird<sCMSNS2LC2_ngeoch[nch];chfird++)
 	      {
-		  //if((sCMSNS2LC2_geoch)[count_ngeoch_occ][chfird] == 0)
-		  //    break;
+		 // if((sCMSNS2LC2_geoch)[count_ngeoch_occ][chfird] == 0)
+		    //  break;
 		  if (verbose)
 		      std::cout<<(sCMSNS2LC2_geoch)[count_ngeoch_occ][chfird]<<"\t"<<1<<"\t";
 		  //std::cout<<(sCMSNS2LC2_geoch)[count_ngeoch_occ][chfird]<<"\t"<<1<<"\t";
@@ -630,12 +699,14 @@ void AiwuTextFile::Loop()
 	  count_ngeoch_occ = 0;
 	  for(Int_t nch=0;nch<kMaxsCMSNS2LC3;nch++)
 	  {
-	      //if (sCMSNS2LC3_ngeoch[nch]==0)
-		//  break;
+	      if (sCMSNS2LC3_ngeoch[nch]==0)
+		  break;
+ cout<<"sCMSNS2LC3_ngeoch[ "<<nch<<" ] = "<< sCMSNS2LC3_ngeoch[nch]<<endl;
+		  cout<<"jentry = "<<jentry<<endl;
 	      for (int chfird=0;chfird<sCMSNS2LC3_ngeoch[nch];chfird++)
 	      {
-		  if((sCMSNS2LC3_geoch)[count_ngeoch_occ][chfird] == 0)
-		      break;
+		  //if((sCMSNS2LC3_geoch)[count_ngeoch_occ][chfird] == 0)
+		     // break;
 		  if (verbose)
 		      std::cout<<(sCMSNS2LC3_geoch)[count_ngeoch_occ][chfird]<<"\t"<<1<<"\t";
 		  file_out<<(sCMSNS2LC3_geoch)[count_ngeoch_occ][chfird]<<"\t"<<1<<"\t";
