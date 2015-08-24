@@ -60,7 +60,10 @@ cout<< "Total "<<nentries<<endl;
     int g3x_Hit_count = 0 ;
     int g3y_Hit_count = 0 ;
     int g1_Hit_count = 0 ;   
-   //cout<<"#Detector\tFired Strip\tTot Charge\tCls Pos(mm)\tCls Pos (stripno)\tStripNo\tCharge"<<endl;
+    int g2_Hit_count = 0 ;
+    int g3_Hit_count = 0 ;   
+
+//cout<<"#Detector\tFired Strip\tTot Charge\tCls Pos(mm)\tCls Pos (stripno)\tStripNo\tCharge"<<endl;
     //cout<<"#Detector\tFired Strip\tTot Charge\tCls Pos(mm)\tCls Pos (stripno)\tStripNo\tCharge"<<endl;
    for (Long64_t jentry=0; jentry<nentries;jentry++) {
    //for (Long64_t jentry=0; jentry<33;jentry++) {
@@ -88,15 +91,15 @@ cout<< "Total "<<nentries<<endl;
 	  if (g1xcl_geoposch[nbcl]==0)
 	      break;
 	  NumCluster_g1x += 1;
-      
+     } 
 
 if (NumCluster_g1x !=0 ) 
 {
            g1x_Hit_count++;
-cout<<"g1x_hits "<<g1x_Hit_count<<endl;
-cout<<"efficiency_g1x "<<(float) g1x_Hit_count/(float) nentries<<endl;
+//cout<<"g1x_hits "<<g1x_Hit_count<<endl;
+//cout<<"efficiency_g1x "<<(float) g1x_Hit_count/(float) nentries<<endl;
 }
-}
+
       if (verbose)
 	  cout<<"Actual number of clusters = "<<NumCluster_g1x<<endl;
 	// if (NumCluster_g1x != 1) 
@@ -116,15 +119,21 @@ cout<<"efficiency_g1x "<<(float) g1x_Hit_count/(float) nentries<<endl;
 	  if (g1ycl_geoposch[nbcl]==0)
 	      break;
 	  NumCluster_g1y += 1;
-
+}
 if (NumCluster_g1y !=0 )
 {
            g1y_Hit_count++;
-cout<<"g1y_hits "<<g1y_Hit_count<<endl;
-cout<<"efficiency_g1y "<<(float) g1y_Hit_count/(float) nentries<<endl;
+//cout<<"g1y_hits "<<g1y_Hit_count<<endl;
+//cout<<"efficiency_g1y "<<(float) g1y_Hit_count/(float) nentries<<endl;
+
 }
 
-     }
+
+
+if (NumCluster_g1x !=0 && NumCluster_g1y !=0)
+    {       g1_Hit_count++;
+}
+
       if (verbose)
 	  cout<<"Actual number of clusters = "<<NumCluster_g1y<<endl;
 	// if (NumCluster_g1y != 1) 
@@ -144,14 +153,14 @@ cout<<"efficiency_g1y "<<(float) g1y_Hit_count/(float) nentries<<endl;
 	  if (g2xcl_geoposch[nbcl]==0)
 	      break;
 	  NumCluster_g2x += 1;
-
+}
 if (NumCluster_g2x !=0 )
 {
            g2x_Hit_count++;
-cout<<"g2x_hits "<<g2x_Hit_count<<endl;
-cout<<"efficiency_g2x "<<(float) g2x_Hit_count/(float) nentries<<endl;
+//cout<<"g2x_hits "<<g2x_Hit_count<<endl;
+//cout<<"efficiency_g2x "<<(float) g2x_Hit_count/(float) nentries<<endl;
 }
-      }
+ 
       if (verbose)
 	  cout<<"Actual number of clusters = "<<NumCluster_g2x<<endl;
 	// if (NumCluster_g2x != 1) 
@@ -171,14 +180,18 @@ cout<<"efficiency_g2x "<<(float) g2x_Hit_count/(float) nentries<<endl;
 	  if (g2ycl_geoposch[nbcl]==0)
 	      break;
 	  NumCluster_g2y += 1;
-
+}
  if (NumCluster_g2y !=0 )
 {
            g2y_Hit_count++;
-cout<<"g2y_hits "<<g2y_Hit_count<<endl;
-cout<<"efficiency_g2y "<<(float) g2y_Hit_count/(float) nentries<<endl;
+//cout<<"g2y_hits "<<g2y_Hit_count<<endl;
+//cout<<"efficiency_g2y "<<(float) g2y_Hit_count/(float) nentries<<endl;
 }
-     }
+ 
+if (NumCluster_g2x !=0 && NumCluster_g2y !=0)
+    {       g2_Hit_count++;
+}
+
       if (verbose)
 	  cout<<"Actual number of clusters = "<<NumCluster_g2y<<endl;
 	// if (NumCluster_g2y != 1) 
@@ -199,14 +212,14 @@ cout<<"efficiency_g2y "<<(float) g2y_Hit_count/(float) nentries<<endl;
 	      break;
 	  NumCluster_g3x += 1;
 
-
+}
 if (NumCluster_g3x !=0 )
 {
            g3x_Hit_count++;
-cout<<"g3x_hits "<<g3x_Hit_count<<endl;
-cout<<"efficiency_g3x "<<(float) g3x_Hit_count/(float) nentries<<endl;
+//cout<<"g3x_hits "<<g3x_Hit_count<<endl;
+//cout<<"efficiency_g3x "<<(float) g3x_Hit_count/(float) nentries<<endl;
 }
-      }
+ 
       if (verbose)
 	  cout<<"Actual number of clusters = "<<NumCluster_g3x<<endl;
 	// if (NumCluster_g3x != 1) 
@@ -226,23 +239,28 @@ cout<<"efficiency_g3x "<<(float) g3x_Hit_count/(float) nentries<<endl;
 	  if (g3ycl_geoposch[nbcl]==0)
 	      break;
 	  NumCluster_g3y += 1;
+}
  if (NumCluster_g3y !=0 )
 {
            g3y_Hit_count++;
-cout<<"g3y_hits "<<g3y_Hit_count<<endl;
-cout<<"efficiency_g3y "<<(float) g3y_Hit_count/(float) nentries<<endl;
+//cout<<"g3y_hits "<<g3y_Hit_count<<endl;
+//cout<<"efficiency_g3y "<<(float) g3y_Hit_count/(float) nentries<<endl;
 }
-     }
+ if (NumCluster_g3x !=0 && NumCluster_g3y !=0)
+    {       g3_Hit_count++;
+}
+
       if (verbose)
 	  cout<<"Actual number of clusters = "<<NumCluster_g3y<<endl;
 
 
- if (NumCluster_g1x !=0 && NumCluster_g1y !=0 )
+/* if (NumCluster_g1x !=0 && NumCluster_g1y !=0 )
 {
            g1_Hit_count++;
-cout<<"g1_hits "<<g1_Hit_count<<endl;
-cout<<"efficiency_g1 "<<(float) g1_Hit_count/(float) nentries<<endl;
-}
+cout<<"NumCluster_g1x: "<<NumCluster_g1x<<"   "<<"NumCluster_g1y: "<<NumCluster_g1y<<endl;
+//cout<<"g1_hits "<<g1_Hit_count<<endl;
+//cout<<"efficiency_g1 "<<(float) g1_Hit_count/(float) nentries<<endl;
+}*/
 
 	// if (NumCluster_g3y != 1) 
 	//  continue;
@@ -888,5 +906,30 @@ g1x = jentry ;
     }    
     //================================    
     //====================== END::  Clear few arrays: Those behaving Strange.	===============================	
-   }
+
+  }
+cout<<"g1x_Hit=============> "<<g1x_Hit_count<<endl;
+cout<<"efficiency_g1x "<<(float) g1x_Hit_count* 100./(float) nentries<<endl;
+
+cout<<"g1y_Hits=============> "<<g1y_Hit_count<<endl;
+cout<<"efficiency_g1y "<<(float) g1y_Hit_count* 100./(float) nentries<<endl;
+
+cout<<"g2x_Hits=============> "<<g2x_Hit_count<<endl;
+cout<<"efficiency_g2x "<<(float) g2x_Hit_count* 100./(float) nentries<<endl;
+
+cout<<"g2y_Hits=============> "<<g2y_Hit_count<<endl;
+cout<<"efficiency_g2y "<<(float) g2y_Hit_count* 100./(float) nentries<<endl;
+cout<<"g3x_Hits=============> "<<g3x_Hit_count<<endl;
+cout<<"efficiency_g3x "<<(float) g3x_Hit_count* 100./(float) nentries<<endl;
+
+cout<<"g3y_Hits=============> "<<g3y_Hit_count<<endl;
+cout<<"efficiency_g3y "<<(float) g3y_Hit_count* 100./(float) nentries<<endl;
+cout<<"g1_Hits=============> "<<g1_Hit_count<<endl;
+cout<<"efficiency_g1 "<<(float) g1_Hit_count* 100./(float) nentries<<endl;
+cout<<"g2_Hits=============> "<<g2_Hit_count<<endl;
+cout<<"efficiency_g2 "<<(float) g2_Hit_count* 100./(float) nentries<<endl;
+cout<<"g3_Hits=============> "<<g3_Hit_count<<endl;
+cout<<"efficiency_g3 "<<(float) g3_Hit_count* 100./(float) nentries<<endl;
+//file_out<<(float) g1_Hit_count* 100./(float) nentries<<"\t";
+
 }
