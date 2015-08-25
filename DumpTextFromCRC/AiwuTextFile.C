@@ -62,6 +62,9 @@ cout<< "Total "<<nentries<<endl;
     int g1_Hit_count = 0 ;   
     int g2_Hit_count = 0 ;
     int g3_Hit_count = 0 ;   
+    int LC1_Hit_count = 0 ;
+    int LC2_Hit_count = 0 ;
+    int LC3_Hit_count = 0 ;
 
 //cout<<"#Detector\tFired Strip\tTot Charge\tCls Pos(mm)\tCls Pos (stripno)\tStripNo\tCharge"<<endl;
     //cout<<"#Detector\tFired Strip\tTot Charge\tCls Pos(mm)\tCls Pos (stripno)\tStripNo\tCharge"<<endl;
@@ -197,8 +200,7 @@ if (NumCluster_g2x !=0 && NumCluster_g2y !=0)
 	// if (NumCluster_g2y != 1) 
 	//  continue;
 
-      //
-      //
+
       //=========   END:: Check Number of Clusters For g2ycl	============================
       //=========   Check Number of Clusters For g3xcl	============================
       //
@@ -225,8 +227,6 @@ if (NumCluster_g3x !=0 )
 	// if (NumCluster_g3x != 1) 
 	//  continue;
 
-      //
-      //
       //=========   END:: Check Number of Clusters For g3xcl	============================
       //=========   Check Number of Clusters For g3ycl	============================
       //
@@ -265,10 +265,8 @@ cout<<"NumCluster_g1x: "<<NumCluster_g1x<<"   "<<"NumCluster_g1y: "<<NumCluster_
 	// if (NumCluster_g3y != 1) 
 	//  continue;
 
-      //
-      //
+
       //=========   END:: Check Number of Clusters For g3ycl	============================
-      /*
       //=========   Check Number of Clusters For sCMSNS2LC1	============================
       //
       //
@@ -281,17 +279,19 @@ cout<<"NumCluster_g1x: "<<NumCluster_g1x<<"   "<<"NumCluster_g1y: "<<NumCluster_
 	      break;
 	  NumCluster_LC1 += 1;
       }
+if (NumCluster_LC1 !=0)
+{
+  LC1_Hit_count++;
+} 
+
       if (verbose)
 	  cout<<"Actual number of clusters = "<<NumCluster_LC1<<endl;
 	// if (NumCluster_LC1 != 1) 
 	//  continue;
 
-      //
-      //
       //=========   END:: Check Number of Clusters For sCMSNS2LC1	============================
       //=========   Check Number of Clusters For sCMSNS2LC2	============================
-      //
-      //
+
       int NumCluster_LC2 = 0;
       for(int nbcl=0;nbcl<kMaxsCMSNS2LC2;nbcl++)
       {
@@ -301,17 +301,19 @@ cout<<"NumCluster_g1x: "<<NumCluster_g1x<<"   "<<"NumCluster_g1y: "<<NumCluster_
 	      break;
 	  NumCluster_LC2 += 1;
       }
+
+if (NumCluster_LC2 !=0)
+{
+  LC2_Hit_count++;
+}
+
       if (verbose)
 	  cout<<"Actual number of clusters = "<<NumCluster_LC2<<endl;
 	// if (NumCluster_LC2 != 1) 
 	//  continue;
 
-      //
-      //
       //=========   END:: Check Number of Clusters For sCMSNS2LC2	============================
       //=========   Check Number of Clusters For sCMSNS2LC3	============================
-      //
-      //
       int NumCluster_LC3 = 0;
       for(int nbcl=0;nbcl<kMaxsCMSNS2LC3;nbcl++)
       {
@@ -321,7 +323,12 @@ cout<<"NumCluster_g1x: "<<NumCluster_g1x<<"   "<<"NumCluster_g1y: "<<NumCluster_
 	      break;
 	  NumCluster_LC3 += 1;
       }
-      if (verbose)
+
+if (NumCluster_LC3 !=0)
+{
+  LC3_Hit_count++;
+}
+     if (verbose)
 	  cout<<"Actual number of clusters = "<<NumCluster_LC3<<endl;
 	// if (NumCluster_LC3 != 1) 
 	//  continue;
@@ -329,10 +336,8 @@ cout<<"NumCluster_g1x: "<<NumCluster_g1x<<"   "<<"NumCluster_g1y: "<<NumCluster_
       //
       //
       //=========   END:: Check Number of Clusters For sCMSNS2LC3	============================    
-      */
       //cout<<"EventNb "<<jentry<<endl;
-      //
-      //
+ 
       if (NumCluster_g1x == 1 &&  NumCluster_g1y ==1 && NumCluster_g2x == 1 && NumCluster_g2y==1 && NumCluster_g3x ==1 && NumCluster_g3y == 1)
       {
 	  EventNb += 1;
@@ -930,6 +935,11 @@ cout<<"g2_Hits=============> "<<g2_Hit_count<<endl;
 cout<<"efficiency_g2 "<<(float) g2_Hit_count* 100./(float) nentries<<endl;
 cout<<"g3_Hits=============> "<<g3_Hit_count<<endl;
 cout<<"efficiency_g3 "<<(float) g3_Hit_count* 100./(float) nentries<<endl;
-//file_out<<(float) g1_Hit_count* 100./(float) nentries<<"\t";
+cout<<"LC1_Hits=============> "<<LC1_Hit_count<<endl;
+cout<<"efficiency_LC1 "<<(float) LC1_Hit_count* 100./(float) nentries<<endl;
+cout<<"LC2_Hits=============> "<<LC2_Hit_count<<endl;
+cout<<"efficiency_LC2 "<<(float) LC2_Hit_count* 100./(float) nentries<<endl;
+cout<<"LC3_Hits=============> "<<LC3_Hit_count<<endl;
+cout<<"efficiency_LC3 "<<(float) LC3_Hit_count* 100./(float) nentries<<endl;
 
 }
