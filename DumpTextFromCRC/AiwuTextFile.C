@@ -338,7 +338,8 @@ if (NumCluster_LC3 !=0)
       //=========   END:: Check Number of Clusters For sCMSNS2LC3	============================    
       //cout<<"EventNb "<<jentry<<endl;
  
-      if (NumCluster_g1x == 1 &&  NumCluster_g1y ==1 && NumCluster_g2x == 1 && NumCluster_g2y==1 && NumCluster_g3x ==1 && NumCluster_g3y == 1)
+      //if (NumCluster_g1x == 1 &&  NumCluster_g1y ==1 && NumCluster_g2x == 1 && NumCluster_g2y==1 && NumCluster_g3x ==1 && NumCluster_g3y == 1)
+      if (NumCluster_g1x == 1 &&  NumCluster_g1y ==1 && NumCluster_g2x == 1 && NumCluster_g2y==1 && NumCluster_g3x ==1 && NumCluster_g3y == 1 && NumCluster_LC1 == 1 && NumCluster_LC2 == 1 && NumCluster_LC3 == 1)
       {
 	  EventNb += 1;
 	  if (verbose)
@@ -353,7 +354,8 @@ if (NumCluster_LC3 !=0)
    //================================	Reference Tracker 1 (g1xcl)   ======================================================
       channelFired = 0;		//==== ERROR:: ERROR:: ERROR::  I have to forcefully put channelFired = 0 at two places. If not then it behaves strangly.
       count_ngeoch_occ = 0;
-      if (NumCluster_g1x == 1 &&  NumCluster_g1y ==1 && NumCluster_g2x == 1 && NumCluster_g2y==1 && NumCluster_g3x ==1 && NumCluster_g3y == 1)
+      //if (NumCluster_g1x == 1 &&  NumCluster_g1y ==1 && NumCluster_g2x == 1 && NumCluster_g2y==1 && NumCluster_g3x ==1 && NumCluster_g3y == 1)
+      if (NumCluster_g1x == 1 &&  NumCluster_g1y ==1 && NumCluster_g2x == 1 && NumCluster_g2y==1 && NumCluster_g3x ==1 && NumCluster_g3y == 1 && NumCluster_LC1 == 1 && NumCluster_LC2 == 1 && NumCluster_LC3 == 1)
       {
 //cout<<"final "<<jentry<<endl;
           if (verbose)
@@ -400,7 +402,8 @@ g1x = jentry ;
    //================================	Reference Tracker 1 (g1ycl)   ======================================================
       channelFired = 0;		//==== ERROR:: ERROR:: ERROR::  I have to forcefully put channelFired = 0 at two places. If not then it behaves strangly.
       count_ngeoch_occ = 0;
-      if (NumCluster_g1x == 1 &&  NumCluster_g1y ==1 && NumCluster_g2x == 1 && NumCluster_g2y==1 && NumCluster_g3x ==1 && NumCluster_g3y == 1)
+      //if (NumCluster_g1x == 1 &&  NumCluster_g1y ==1 && NumCluster_g2x == 1 && NumCluster_g2y==1 && NumCluster_g3x ==1 && NumCluster_g3y == 1)
+      if (NumCluster_g1x == 1 &&  NumCluster_g1y ==1 && NumCluster_g2x == 1 && NumCluster_g2y==1 && NumCluster_g3x ==1 && NumCluster_g3y == 1 && NumCluster_LC1 == 1 && NumCluster_LC2 == 1 && NumCluster_LC3 == 1)
       {
           if (verbose)
               cout<<"g1ycl\t";
@@ -444,7 +447,8 @@ g1x = jentry ;
    //================================	Reference Tracker 1 (g2xcl)   ======================================================
       channelFired = 0;		//==== ERROR:: ERROR:: ERROR::  I have to forcefully put channelFired = 0 at two places. If not then it behaves strangly.
       count_ngeoch_occ = 0;
-      if (NumCluster_g1x == 1 &&  NumCluster_g1y ==1 && NumCluster_g2x == 1 && NumCluster_g2y==1 && NumCluster_g3x ==1 && NumCluster_g3y == 1)
+      //if (NumCluster_g1x == 1 &&  NumCluster_g1y ==1 && NumCluster_g2x == 1 && NumCluster_g2y==1 && NumCluster_g3x ==1 && NumCluster_g3y == 1)
+      if (NumCluster_g1x == 1 &&  NumCluster_g1y ==1 && NumCluster_g2x == 1 && NumCluster_g2y==1 && NumCluster_g3x ==1 && NumCluster_g3y == 1 && NumCluster_LC1 == 1 && NumCluster_LC2 == 1 && NumCluster_LC3 == 1)
       {
          if (verbose)
               cout<<"g2xcl\t";
@@ -486,7 +490,8 @@ g1x = jentry ;
    //================================	Reference Tracker 1 (g2ycl)   ======================================================
       channelFired = 0;		//==== ERROR:: ERROR:: ERROR::  I have to forcefully put channelFired = 0 at two places. If not then it behaves strangly.
       count_ngeoch_occ = 0;
-      if (NumCluster_g1x == 1 &&  NumCluster_g1y ==1 && NumCluster_g2x == 1 && NumCluster_g2y==1 && NumCluster_g3x ==1 && NumCluster_g3y == 1)
+      //if (NumCluster_g1x == 1 &&  NumCluster_g1y ==1 && NumCluster_g2x == 1 && NumCluster_g2y==1 && NumCluster_g3x ==1 && NumCluster_g3y == 1)
+      if (NumCluster_g1x == 1 &&  NumCluster_g1y ==1 && NumCluster_g2x == 1 && NumCluster_g2y==1 && NumCluster_g3x ==1 && NumCluster_g3y == 1 && NumCluster_LC1 == 1 && NumCluster_LC2 == 1 && NumCluster_LC3 == 1)
       {
           if (verbose)
               cout<<"g2ycl\t";
@@ -528,7 +533,8 @@ g1x = jentry ;
    //================================	Reference Tracker 1 (g3xcl)   ======================================================
       channelFired = 0;		//==== ERROR:: ERROR:: ERROR::  I have to forcefully put channelFired = 0 at two places. If not then it behaves strangly.
       count_ngeoch_occ = 0;
-      if (NumCluster_g1x == 1 &&  NumCluster_g1y ==1 && NumCluster_g2x == 1 && NumCluster_g2y==1 && NumCluster_g3x ==1 && NumCluster_g3y == 1)
+      //if (NumCluster_g1x == 1 &&  NumCluster_g1y ==1 && NumCluster_g2x == 1 && NumCluster_g2y==1 && NumCluster_g3x ==1 && NumCluster_g3y == 1)
+      if (NumCluster_g1x == 1 &&  NumCluster_g1y ==1 && NumCluster_g2x == 1 && NumCluster_g2y==1 && NumCluster_g3x ==1 && NumCluster_g3y == 1 && NumCluster_LC1 == 1 && NumCluster_LC2 == 1 && NumCluster_LC3 == 1)
       {
           if (verbose)
               cout<<"g3xcl\t";
@@ -570,7 +576,8 @@ g1x = jentry ;
    //================================	Reference Tracker 1 (g3ycl)   ======================================================
       channelFired = 0;		//==== ERROR:: ERROR:: ERROR::  I have to forcefully put channelFired = 0 at two places. If not then it behaves strangly.
       count_ngeoch_occ = 0;
-      if (NumCluster_g1x == 1 &&  NumCluster_g1y ==1 && NumCluster_g2x == 1 && NumCluster_g2y==1 && NumCluster_g3x ==1 && NumCluster_g3y == 1)
+      //if (NumCluster_g1x == 1 &&  NumCluster_g1y ==1 && NumCluster_g2x == 1 && NumCluster_g2y==1 && NumCluster_g3x ==1 && NumCluster_g3y == 1)
+      if (NumCluster_g1x == 1 &&  NumCluster_g1y ==1 && NumCluster_g2x == 1 && NumCluster_g2y==1 && NumCluster_g3x ==1 && NumCluster_g3y == 1 && NumCluster_LC1 == 1 && NumCluster_LC2 == 1 && NumCluster_LC3 == 1)
       {
           if (verbose)
               cout<<"g3ycl\t";
@@ -612,7 +619,8 @@ g1x = jentry ;
    //================================	GE1/1  1 (sCMSNS2LC1)   ======================================================
       channelFired = 0;		//==== ERROR:: ERROR:: ERROR::  I have to forcefully put channelFired = 0 at two places. If not then it behaves strangly.
       count_ngeoch_occ = 0;
-      if (NumCluster_g1x == 1 &&  NumCluster_g1y ==1 && NumCluster_g2x == 1 && NumCluster_g2y==1 && NumCluster_g3x ==1 && NumCluster_g3y == 1)
+      //if (NumCluster_g1x == 1 &&  NumCluster_g1y ==1 && NumCluster_g2x == 1 && NumCluster_g2y==1 && NumCluster_g3x ==1 && NumCluster_g3y == 1)
+      if (NumCluster_g1x == 1 &&  NumCluster_g1y ==1 && NumCluster_g2x == 1 && NumCluster_g2y==1 && NumCluster_g3x ==1 && NumCluster_g3y == 1 && NumCluster_LC1 == 1 && NumCluster_LC2 == 1 && NumCluster_LC3 == 1)
       {
           if (verbose)
               cout<<"sCMSNS2LC1\t";
@@ -659,7 +667,8 @@ g1x = jentry ;
    //================================	GE1/1  1 (sCMSNS2LC2)   ======================================================
       channelFired = 0;		//==== ERROR:: ERROR:: ERROR::  I have to forcefully put channelFired = 0 at two places. If not then it behaves strangly.
       count_ngeoch_occ = 0;
-      if (NumCluster_g1x == 1 &&  NumCluster_g1y ==1 && NumCluster_g2x == 1 && NumCluster_g2y==1 && NumCluster_g3x ==1 && NumCluster_g3y == 1)
+      //if (NumCluster_g1x == 1 &&  NumCluster_g1y ==1 && NumCluster_g2x == 1 && NumCluster_g2y==1 && NumCluster_g3x ==1 && NumCluster_g3y == 1)
+      if (NumCluster_g1x == 1 &&  NumCluster_g1y ==1 && NumCluster_g2x == 1 && NumCluster_g2y==1 && NumCluster_g3x ==1 && NumCluster_g3y == 1 && NumCluster_LC1 == 1 && NumCluster_LC2 == 1 && NumCluster_LC3 == 1)
       {
           if (verbose)
               cout<<"sCMSNS2LC2\t";
@@ -703,7 +712,8 @@ g1x = jentry ;
    //================================	GE1/1  1 (sCMSNS2LC3)   ======================================================
       channelFired = 0;		//==== ERROR:: ERROR:: ERROR::  I have to forcefully put channelFired = 0 at two places. If not then it behaves strangly.
       count_ngeoch_occ = 0;
-      if (NumCluster_g1x == 1 &&  NumCluster_g1y ==1 && NumCluster_g2x == 1 && NumCluster_g2y==1 && NumCluster_g3x ==1 && NumCluster_g3y == 1)
+      //if (NumCluster_g1x == 1 &&  NumCluster_g1y ==1 && NumCluster_g2x == 1 && NumCluster_g2y==1 && NumCluster_g3x ==1 && NumCluster_g3y == 1)
+      if (NumCluster_g1x == 1 &&  NumCluster_g1y ==1 && NumCluster_g2x == 1 && NumCluster_g2y==1 && NumCluster_g3x ==1 && NumCluster_g3y == 1 && NumCluster_LC1 == 1 && NumCluster_LC2 == 1 && NumCluster_LC3 == 1)
       {
           if (verbose)
               cout<<"sCMSNS2LC3\t";
