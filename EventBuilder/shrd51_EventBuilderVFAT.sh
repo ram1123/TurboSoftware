@@ -46,6 +46,7 @@ for DATAFILE in $(ls $1/CRC-Run*.dat); do
 				#echo -e "\n" 
 				ROOTFILE="$(basename $DATAFILE)"
 				ROOTFILE=${ROOTFILE//.dat/.root}
-				root -b -l -q 'rd51_EventBuilderVFAT_Launcher.cpp("'$DATAFILE'","'$2'/'$(basename $1)'/'$ROOTFILE'",'$NUMEVENTS')'
+				root -b -l -q 'rd51_EventBuilderVFAT_Launcher.cpp("'$DATAFILE'","'$2'/'$ROOTFILE'",'$NUMEVENTS')'
+				#root -b -l -q 'rd51_EventBuilderVFAT_Launcher.cpp("'$DATAFILE'","'$2'/'$(basename $1)'/'$ROOTFILE'",'$NUMEVENTS')'
 done;
 
