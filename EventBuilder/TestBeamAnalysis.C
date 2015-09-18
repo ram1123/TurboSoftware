@@ -16,7 +16,9 @@
 #include "TestBeamAnalyzer.cc"
 
 int main (){
-    string fileInput = "FilesToAnalyze.txt";
+    string fileInput        = "FilesToAnalyze.txt";
+    string fileInput_TDC    = "FilesToAnalyze_TDC.txt";
+    
     string masterFileName;
     string latFile;
     
@@ -48,9 +50,21 @@ int main (){
         counter++;
     } while (!dataInput.eof());
     
-    myAnalyzer.setEffFiles(masterFileName,vec_latFiles);
-    myAnalyzer.analyzeEffRuns();
-    myAnalyzer.makeEffHistograms("EffPlots.root","RECREATE");
+    //Detection Efficiency
+    myAnalyzer.setFilesEff(masterFileName,vec_latFiles);
+    myAnalyzer.analyzeRunsEff();
+    myAnalyzer.makeDetLogEff();
+    myAnalyzer.makeHistogramsEff("EffPlots.root","RECREATE");
+    
+    //TDC
+    //myAnalyzer.setFilesTDC(fileInput_TDC);
+    //myAnalyzer.setTDCNoiseThreshold(9);
+    //myAnalyzer.setTDCAutoRangingFit(false);
+    //myAnalyzer.setTDCFitOption("R");
+    //myAnalyzer.setTDCRebinFactor(2);
+    //myAnalyzer.analyzeRunsTDC();
+    //myAnalyzer.makeDetLogTDC();
+    //myAnalyzer.makeHistogramsTDC("EffPlots_TDC.root","RECREATE");
     
     return 0;
 } //End main()
