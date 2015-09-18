@@ -34,7 +34,8 @@
 	#PathOfInputNtuple=/afs/cern.ch/work/t/tmaersch/public/H2Oct14_Ntuples_Pitch08
 	#PathOfInputNtuple=/afs/cern.ch/user/r/rasharma/work/public/GEMTestBeam/TurboSoftware/EventBuilder/OutPutData
 	#PathOfInputNtuple=/afs/cern.ch/user/r/rasharma/work/public/GEMTestBeam/Ntuples/H4NovDec14_Ntuples_Rotation_Pitch08
-	PathOfInputNtuple=../EventBuilder/OutPutData
+	#PathOfInputNtuple=../EventBuilder/OutPutData
+	PathOfInputNtuple=/afs/cern.ch/user/m/mgruchal/public/TurboSoftware/EventBuilder/OutPutData
 
 	getppt=1
 	mail=0
@@ -279,7 +280,7 @@ while getopts ":hrpgm" opt; do
 			fi;;
 		p )	echo -n "Enter path of Ntuples : " 
 			read PathOfInputNtuple
-			if [ ! -f $PathOfInputNtuple ]; then
+			if [ ! -d $PathOfInputNtuple ]; then
 				error_exit "Path ${PathOfInputNtuple} does not exits"
 			fi;;
 		m )	echo "The ppt file will be sent to the mail that you will provide."			
