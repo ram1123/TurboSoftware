@@ -108,8 +108,10 @@ int rd51_EventBuilderVFAT(
 {
 
 ofstream Offsetfile;
-Offsetfile.open ("OffsetFile.log", ios::app );
-Offsetfile<<"\n\nFile Name = "<<rawfilename<<"\n\n"<<endl;
+Offsetfile.open ("OffsetFile.log" );
+//Offsetfile.open ("OffsetFile.log", ios::app );
+//Offsetfile<<"\n\nFile Name = "<<rawfilename<<"\n\n"<<endl;
+Offsetfile<<"File Name = "<<rawfilename<<endl;
 
     LoaderSettings *LoaderSettings_rd51_EventBuilderVFAT = new LoaderSettings("Setting_EventBuilderVFAT.conf");
     if (LoaderSettings_rd51_EventBuilderVFAT->error) gApplication->Terminate(0);
