@@ -23,7 +23,15 @@ Float_t GetX(Int_t ReadoutType, Int_t channel)
 	else if (ReadoutType == 5) return GetX_TotemT2Pads(channel);
 	else if (ReadoutType == 6) return GetX_TotemT1LG(channel);
 	else if (ReadoutType == 8) return 0.8*GetX_Cms30x30(channel);
-        else if (ReadoutType == 9) return 0.8*GetX_Cmsbig(channel);
+        else if (ReadoutType == 9) return 0.8169*GetX_Cmsbig(channel);
+	/*
+	 * ReadoutType = 9 details for GE11:
+	 * if sector 5 then pitch = 0.816915 mm
+	 * if sector 8 then pitch = 0.674115 mm
+	 * if sector 1 then pitch = 1.0598 mm
+	 *
+	 * Ref: https://indico.cern.ch/event/284233/session/2/contribution/13/attachments/525033/724083/131122_GEM_Geometry_Highlights_v9.pdf
+	 */
 	else {cout <<  "ReadOutType: " << ReadoutType << "\tAttention Wrong Map Type: No Type Found or Wrong Request "<< endl; return 999;}
 };
 
