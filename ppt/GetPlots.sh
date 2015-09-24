@@ -30,7 +30,7 @@
 #	Constants
 #	-------------------------------------------------------------------
 
-	PathOfInputNtuple=/home/user/TurboSoftware_New/EventBuilder/OutPutData
+	PathOfInputNtuple=../EventBuilder/OutPutData
 
 	getppt=1
 	mail=0
