@@ -439,6 +439,7 @@ do
   if [ $RunCounter -le 1646 ]; then
     cp Setting_EventBuilderVFAT_BelowRun1647.conf Setting_EventBuilderVFAT.conf
     cp Setting_Analyzer_BelowRun1647.conf Setting_Analyzer.conf
+    git checkout ConfigFiles/OffsetFlip_EventBuilderVFAT_NOV2014_H4.conf
   fi
   if [ $RunCounter -gt 1646 ]; then
     cp Setting_EventBuilderVFAT_AboveRun1646.conf Setting_EventBuilderVFAT.conf
@@ -447,10 +448,12 @@ do
   if [ $RunCounter -gt 1864 ]; then
     cp Setting_EventBuilderVFAT_AboveRun1864.conf Setting_EventBuilderVFAT.conf
     cp Setting_Analyzer_AboveRun1864.conf Setting_Analyzer.conf
+    git checkout ConfigFiles/OffsetFlip_EventBuilderVFAT_NOV2014_H4_AboveRun1864.conf
   fi
   if [ $RunCounter -gt 1924 ]; then
     cp Setting_EventBuilderVFAT_AboveRun1924.conf Setting_EventBuilderVFAT.conf
     cp Setting_Analyzer_AboveRun1924.conf Setting_Analyzer.conf
+    git checkout ConfigFiles/OffsetFlip_EventBuilderVFAT_NOV2014_H4_AboveRun1924.conf
   fi
 #  if [ $RunCounter -le 1117 ]; then
 #    cp Setting_EventBuilderVFAT_Run1117AndBelow.conf Setting_EventBuilderVFAT.conf
@@ -482,6 +485,18 @@ do
 		fi
 		echo -e "\n\n\t\tEventBuilder started\n\n"
 		echo -e "\n\n./shrd51_EventBuilderVFAT.sh ${f} $PathOfOutPutData/$(basename $f) | tee ${PathOfOutPutData}/$(basename $f)/Run${temp}_EventBuilderVFAT.log\n\n"
+		./shrd51_EventBuilderVFAT.sh ${f}  $PathOfOutPutData/$(basename $f) | tee $PathOfOutPutData/$(basename $f)/Run${temp}_EventBuilderVFAT.log
+		#./ModifyConfig_BelowRun1646.sh
+		#./ModifyConfig_AboveRun1924.sh
+		./ModifyConfig_RunRange_1868-1906.sh
+		./shrd51_EventBuilderVFAT.sh ${f}  $PathOfOutPutData/$(basename $f) | tee $PathOfOutPutData/$(basename $f)/Run${temp}_EventBuilderVFAT.log
+		#./ModifyConfig_BelowRun1646.sh
+		#./ModifyConfig_AboveRun1924.sh
+		./ModifyConfig_RunRange_1868-1906.sh
+		./shrd51_EventBuilderVFAT.sh ${f}  $PathOfOutPutData/$(basename $f) | tee $PathOfOutPutData/$(basename $f)/Run${temp}_EventBuilderVFAT.log
+		#./ModifyConfig_BelowRun1646.sh
+		#./ModifyConfig_AboveRun1924.sh
+		./ModifyConfig_RunRange_1868-1906.sh
 		./shrd51_EventBuilderVFAT.sh ${f}  $PathOfOutPutData/$(basename $f) | tee $PathOfOutPutData/$(basename $f)/Run${temp}_EventBuilderVFAT.log
 	fi
 	if [ "$run" == 0 -o "$run" == 2 ]; then
@@ -517,6 +532,10 @@ do
     fi
 	echo -e "$(basename $f)\t\t $LC1+/-$LC1_Err \t $LC2+/-$LC2_Err \t $LC3+/-$LC3_Err" >> EfficiencyData_R${IRunNo}_R${FRunNo}.txt
 	RunCounter=$[$RunCounter+1]
+	mv OffsetFile.log OffsetFile_${temp}.log
+	mv Efficiency_LC1.log Efficiency_LC1_${temp}.log
+	mv Efficiency_LC2.log Efficiency_LC2_${temp}.log
+	mv Efficiency_LC3.log Efficiency_LC3_${temp}.log
   done
 done
 

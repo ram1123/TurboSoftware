@@ -440,6 +440,7 @@ do
   if [ $RunCounter -le 1646 ]; then
     cp Setting_EventBuilderVFAT_BelowRun1647.conf Setting_EventBuilderVFAT.conf
     cp Setting_Analyzer_BelowRun1647.conf Setting_Analyzer.conf
+    git checkout ConfigFiles/OffsetFlip_EventBuilderVFAT_NOV2014_H4.conf
   fi
   if [ $RunCounter -gt 1646 ]; then
     cp Setting_EventBuilderVFAT_AboveRun1646.conf Setting_EventBuilderVFAT.conf
@@ -484,12 +485,21 @@ do
 		echo -e "\n\n\t\tEventBuilder started\n\n"
 		echo -e "\n\n./shrd51_EventBuilderVFAT.sh ${f} $PathOfOutPutData/$(basename $f) | tee ${PathOfOutPutData}/$(basename $f)/Run${temp}_EventBuilderVFAT.log\n\n"
 		./shrd51_EventBuilderVFAT.sh ${f}  $PathOfOutPutData/$(basename $f) | tee $PathOfOutPutData/$(basename $f)/Run${temp}_EventBuilderVFAT.log
+		./ModifyConfig_BelowRun1646.sh
+		./shrd51_EventBuilderVFAT.sh ${f}  $PathOfOutPutData/$(basename $f) | tee $PathOfOutPutData/$(basename $f)/Run${temp}_EventBuilderVFAT.log
+		./ModifyConfig_BelowRun1646.sh
+		./shrd51_EventBuilderVFAT.sh ${f}  $PathOfOutPutData/$(basename $f) | tee $PathOfOutPutData/$(basename $f)/Run${temp}_EventBuilderVFAT.log
+		./ModifyConfig_BelowRun1646.sh
+		./shrd51_EventBuilderVFAT.sh ${f}  $PathOfOutPutData/$(basename $f) | tee $PathOfOutPutData/$(basename $f)/Run${temp}_EventBuilderVFAT.log
+		./ModifyConfig_BelowRun1646.sh
+		./shrd51_EventBuilderVFAT.sh ${f}  $PathOfOutPutData/$(basename $f) | tee $PathOfOutPutData/$(basename $f)/Run${temp}_EventBuilderVFAT.log
 	fi
 	if [ "$run" == 0 -o "$run" == 2 ]; then
 		echo -e "\n\n\t\t TrackFinder started\n\n"
 		echo -e "\n\n./shrd51_TrackFinder.sh ${PathOfOutPutData}/$(basename $f) | tee ${PathOfOutPutData}/$(basename $f)/Run${temp}_TrackFinder.log\n\n"
 		./shrd51_TrackFinder.sh $PathOfOutPutData/$(basename $f) | tee $PathOfOutPutData/$(basename $f)/Run${temp}_TrackFinder.log
 	fi
+	#for cut in 0 
 	for cut in 0 5 10 15 20 25 30 35 40 45 50 55 60 65 70 75 80 85 90 95
 	do
 		cut2=$((cut + 5))
@@ -500,7 +510,6 @@ do
 		awk 'NR==6{$(NF-9) = "'${cut}'"}1' OFS="\t" FS="\t"  tmp2.conf > tmp1.conf
 		awk 'NR==6{$(NF-8) = "'${cut2}'"}1' OFS="\t" FS="\t" tmp1.conf > tmp2.conf
 		cp tmp2.conf ConfigFiles/OffsetAndCoverage_Analyzer_N0V2014_H4.conf
-		cat ConfigFiles/OffsetAndCoverage_Analyzer_N0V2014_H4.conf
 		cat ConfigFiles/OffsetAndCoverage_Analyzer_N0V2014_H4.conf
 		#sleep 5
 		if [ "$run" == 0 -o "$run" == 3 ]; then

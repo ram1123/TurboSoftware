@@ -4,6 +4,14 @@
 
 rd51_Analyzer::rd51_Analyzer(TString rd51reco_filename, TString rd51tracker_filename, TString rd51analyzer_filename)
 {
+        ofstream Offsetfile_LC1; 
+        Offsetfile_LC1.open ("Efficiency_LC1.log", std::ios_base::app);
+        ofstream Offsetfile_LC2; 
+        Offsetfile_LC2.open ("Efficiency_LC2.log", std::ios_base::app);
+        ofstream Offsetfile_LC3; 
+        Offsetfile_LC3.open ("Efficiency_LC3.log", std::ios_base::app);
+//      Offsetfile<<"File Name = "<<rawfilename<<endl;
+
     // Loading Settings....
     LoadSettings();
     
@@ -121,6 +129,7 @@ rd51_Analyzer::rd51_Analyzer(TString rd51reco_filename, TString rd51tracker_file
 
         printf("%-.3f\t\t%-.3f\t\t%-.3f\t\t%-.3f\t\t%d\t\tsCMSNS2LC3\n",
                sCMSNS2LC3_Eff,sCMSNS2LC3_EffErr,sCMSNS2LC3_NoiseErr,sCMSNS2LC3_CombErr,sCMSNS2LC3_Sample);
+        Offsetfile_LC3<<"sCMSNS2LC3\t"<< DUT_MinX[2] << "-" << DUT_MaxX[2] << "\t"<< (DUT_MaxX[2]+DUT_MinX[2])/2.0 <<"\t"<<fixed<<std::setprecision(4)<< sCMSNS2LC3_Eff << "\t"<< sCMSNS2LC3_EffErr << "\t"<< sCMSNS2LC3_Sample << endl;
  
 
 
@@ -136,7 +145,7 @@ rd51_Analyzer::rd51_Analyzer(TString rd51reco_filename, TString rd51tracker_file
         double GE11_IV_CombErr	= TMath::Sqrt(TMath::Power(GE11_IV_EffErr,2) + TMath::Power(GE11_IV_NoiseErr,2));
         printf("%-.3f\t\t%-.3f\t\t%-.3f\t\t%-.3f\t\t%d\t\tGE11_IV\n",
                GE11_IV_Eff,GE11_IV_EffErr,GE11_IV_NoiseErr,GE11_IV_CombErr,GE11_IV_Sample);
-        
+        Offsetfile_LC2<<"GE11_IV\t"<< DUT_MinX[1] << "-" << DUT_MaxX[1] << "\t"<< (DUT_MaxX[1]+DUT_MinX[1])/2.0 <<"\t"<< fixed<<std::setprecision(4)<< GE11_IV_Eff << "\t"<< GE11_IV_EffErr << "\t"<< GE11_IV_Sample << endl;
 
         //double GE11_IV_GIF_CovLength	= TMath::Abs(DUT_MaxY[0]-DUT_MinY[0]); //Patr
         double GE11_IV_GIF_CovLength	= TMath::Abs(DUT_MaxX[0]-DUT_MinX[0]); //Patr
@@ -149,6 +158,7 @@ rd51_Analyzer::rd51_Analyzer(TString rd51reco_filename, TString rd51tracker_file
         double GE11_IV_GIF_CombErr	= TMath::Sqrt(TMath::Power(GE11_IV_GIF_EffErr,2) + TMath::Power(GE11_IV_GIF_NoiseErr,2));
         printf("%-.3f\t\t%-.3f\t\t%-.3f\t\t%-.3f\t\t%d\t\tGE11_IV_GIF\n",
                GE11_IV_GIF_Eff,GE11_IV_GIF_EffErr,GE11_IV_GIF_NoiseErr,GE11_IV_GIF_CombErr,GE11_IV_GIF_Sample);        
+        Offsetfile_LC1<<"GE11_IV_GIF\t"<< DUT_MinX[0] << "-" << DUT_MaxX[0] << "\t"<< (DUT_MaxX[0]+DUT_MinX[0])/2.0 <<"\t"<< fixed<<std::setprecision(4)<<GE11_IV_GIF_Eff << "\t"<< GE11_IV_GIF_EffErr << "\t"<< GE11_IV_GIF_Sample << endl;
 
         cout << "=======rd51tracker_nentries========= :"<< rd51tracker_tree->GetEntries()<< endl;
         cout << "********rd51reco_nentries********* :"<< rd51reco_tree->GetEntries()<< endl;
@@ -222,6 +232,9 @@ rd51_Analyzer::rd51_Analyzer(TString rd51reco_filename, TString rd51tracker_file
     rd51reco_file->Close();
     rd51tracker_file->Close();
     rd51analyzer_file->Close();
+    Offsetfile_LC1.close();
+    Offsetfile_LC2.close();
+    Offsetfile_LC3.close();
     //-----------------------------------------------------------------------------------------
     
     
