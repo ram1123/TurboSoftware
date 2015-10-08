@@ -2,6 +2,7 @@
 
 (
 echo start
+StartTime=$(date)
 
 #	-------------------------------------------------------------------
 #
@@ -747,8 +748,12 @@ fi
 echo "To Make Efficiency Curves Execute In Terminal:"
 echo "./analyzeEff.sh"
 mv *.txt TextFiles/
+EndTime=$(date)
 graceful_exit
-
+echo -e "\n\n===================\n\n"
+echo $StartTime
+echo $EndTime
+echo -e "\n\n===================\n\n"
 echo end
 ) | tee OutPut.log
 
