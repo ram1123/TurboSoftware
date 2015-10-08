@@ -153,7 +153,7 @@ function make_temp_files
 #		No arguments
 #	-----------------------------------------------------------------------
 
-	# Use user's local tmp directory if it exists
+	# Use users local tmp directory if it exists
 
 	if [ -d ~/tmp ]; then
 		TEMP_DIR=~/tmp
@@ -351,88 +351,88 @@ if [ "$1" = "--help" ]; then
 	graceful_exit
 fi
 
-while getopts ":hrlfemias" opt; do
-	case $opt in
-		r )	echo "Enter Run number between 33 and 1587."
-			echo -n "Initial Run Number (IRunNo) = " 
-			read IRunNo
-			if [ "$IRunNo" -lt 33 ]; then
-				error_exit "Minimum allowed Run Number is 33."
-			fi
-			echo -n "Final Run Number (FRunNo) = " 
-			read FRunNo
-			if [ "$FRunNo" == "" ]; then
-				FRunNo=$IRunNo
-			fi
-			if [ "$IRunNo" -gt "$FRunNo" ]; then 
-				error_exit "Initial Run Number should be Less then or equal to Final Run Number"
-			fi
-			InitialiteNum=0
-			NoIteration=1
-			MakePPt=0
-			if [ "$IRunNo" -gt 1586 ] || [ "$FRunNo" -gt 1586 ]; then
-				error_exit "Maximum allowed Run Number is 1586."
-			fi;;
-		a )	echo "No Iteration to be done"
-			NoIteration=0
-			InitialiteNum=10;;
-		s )	echo "Make PPT at each stage of iteration"
-			MakePPt=1;;			
-		l )	echo -n "Initial Latency (ILat) = "
-			read ILat
-			echo -n "Final Latency (FLat) = "
-			read FLat
-			if [ "$ILat" -gt "$FLat" ]; then 
-				error_exit "Initial Latency should be Less then or equal to Final Latency"
-			fi;;
-		f )	echo -n "Enter the Path of Data File : "
-			read PathOfInputData
-			if [ ! -f $PathOfInputData ]; then
-				error_exit "Path ${PathOfInputData} does not exits"
-			fi;;
-		e )	echo "To run full TURBO software Enter 0"
-			echo "To run Only EventBuilder Enter 1"
-			echo "To run Only TrackFinder Enter 2"
-			echo "To run Only Analyzer Enter 3  "
-			echo -n "For only text file enter 4 : "
-			read run	
-			if [ "$run" -ge "0" ] && [ "$run" -le "4" ]; then
-				echo "Valid number...."
-			else
-				error_exit "Please enter number between 0 and 4"
-			fi
-			if [ "$run" == 0 -o "$run" == 1 ]; then
-				if ask_yes_no "If Root File Exists in Output Directory. Want to Delete them??? [y/n] "; then
-					DeleteRootFile=1
-				fi
-			fi;;
-		m )	echo "The Efficiency txt file will be sent to your mail."			
-			echo -n "Please enter your Email-Id : "
-			read email
-			mail=1;;
-		i )	echo "Want only Efficiency text files from Different Path???"
-			echo "enter 0 for NO,"
-			echo -n "Enter 1  for YES : " 
-			read JustTextFile
-			if [ "$JustTextFile" == 0 -o "$JustTextFile" == 1 ]; then
-				echo "Fine."
-				if [ "$JustTextFile" == 1 ]; then
-					echo -n "Enter the path where the log file present : "
-					read PathOfOutPutData
-					if [ ! -f $PathOfOutPutData ]; then
-						error_exit "Path ${PathOfOutPutData} does not exits"
-					fi
-				fi
-			else 
-				error_exit "Enter  only 0 or 1"
-			fi;;
-		h )	helptext
-			graceful_exit ;;
-		* )	usage
-			clean_up
-			exit 1
-	esac
-done
+#while getopts ":hrlfemias" opt; do
+#	case $opt in
+#		r )	echo "Enter Run number between 33 and 1587."
+#			echo -n "Initial Run Number (IRunNo) = " 
+IRunNo=$1
+if [ "$IRunNo" -lt 33 ]; then
+	error_exit "Minimum allowed Run Number is 33."
+fi
+#			echo -n "Final Run Number (FRunNo) = " 
+FRunNo=$2
+if [ "$FRunNo" == "" ]; then
+	FRunNo=$IRunNo
+fi
+if [ "$IRunNo" -gt "$FRunNo" ]; then 
+	error_exit "Initial Run Number should be Less then or equal to Final Run Number"
+fi
+InitialiteNum=0
+NoIteration=1
+MakePPt=0
+if [ "$IRunNo" -gt 1586 ] || [ "$FRunNo" -gt 1586 ]; then
+	error_exit "Maximum allowed Run Number is 1586."
+fi
+#		a )	echo "No Iteration to be done"
+NoIteration=0
+InitialiteNum=10
+#		s )	echo "Make PPT at each stage of iteration"
+#			MakePPt=1;;			
+#		l )	echo -n "Initial Latency (ILat) = "
+#			read ILat
+#			echo -n "Final Latency (FLat) = "
+#			read FLat
+#			if [ "$ILat" -gt "$FLat" ]; then 
+#				error_exit "Initial Latency should be Less then or equal to Final Latency"
+#			fi;;
+#		f )	echo -n "Enter the Path of Data File : "
+#			read PathOfInputData
+#			if [ ! -f $PathOfInputData ]; then
+#				error_exit "Path ${PathOfInputData} does not exits"
+#			fi;;
+#		e )	echo "To run full TURBO software Enter 0"
+#			echo "To run Only EventBuilder Enter 1"
+#			echo "To run Only TrackFinder Enter 2"
+#			echo "To run Only Analyzer Enter 3  "
+#			echo -n "For only text file enter 4 : "
+run=3
+#			if [ "$run" -ge "0" ] && [ "$run" -le "4" ]; then
+#				echo "Valid number...."
+#			else
+#				error_exit "Please enter number between 0 and 4"
+#			fi
+#			if [ "$run" == 0 -o "$run" == 1 ]; then
+#				if ask_yes_no "If Root File Exists in Output Directory. Want to Delete them??? [y/n] "; then
+#					DeleteRootFile=1
+#				fi
+#			fi;;
+#		m )	echo "The Efficiency txt file will be sent to your mail."			
+#			echo -n "Please enter your Email-Id : "
+#			read email
+#			mail=1;;
+#		i )	echo "Want only Efficiency text files from Different Path???"
+#			echo "enter 0 for NO,"
+#			echo -n "Enter 1  for YES : " 
+#			read JustTextFile
+#			if [ "$JustTextFile" == 0 -o "$JustTextFile" == 1 ]; then
+#				echo "Fine."
+#				if [ "$JustTextFile" == 1 ]; then
+#					echo -n "Enter the path where the log file present : "
+#					read PathOfOutPutData
+#					if [ ! -f $PathOfOutPutData ]; then
+#						error_exit "Path ${PathOfOutPutData} does not exits"
+#					fi
+#				fi
+#			else 
+#				error_exit "Enter  only 0 or 1"
+#			fi;;
+#		h )	helptext
+#			graceful_exit ;;
+#		* )	usage
+#			clean_up
+#			exit 1
+#	esac
+#done
 
 
 ##### Main Logic #####
@@ -476,16 +476,16 @@ DeleteIfFileExists ../ppt/LogFiles/${RunCounter}/
   if [ $RunCounter -le 103 ]; then
     cp Setting_EventBuilderVFAT_Run0103AndBelow.conf Setting_EventBuilderVFAT.conf
     echo "Checking Out config file from GitHub...."
-    git checkout ConfigFiles/OffsetFlip_EventBuilderVFAT_Oct2014_H2_Run0103AndBelow.conf
+#    git checkout ConfigFiles/OffsetFlip_EventBuilderVFAT_Oct2014_H2_Run0103AndBelow.conf
   else
   if [ $RunCounter -le 1117 ]; then
     cp Setting_EventBuilderVFAT_Run1117AndBelow.conf Setting_EventBuilderVFAT.conf
     echo "Checking Out config file from GitHub...."
-    git checkout ConfigFiles/OffsetFlip_EventBuilderVFAT_Oct2014_H2.conf
+#    git checkout ConfigFiles/OffsetFlip_EventBuilderVFAT_Oct2014_H2.conf
   else  
     cp Setting_EventBuilderVFAT_Run1118AndUp.conf Setting_EventBuilderVFAT.conf						         
     echo "Checking Out config file from GitHub...."
-    git checkout ConfigFiles/OffsetFlip_EventBuilderVFAT_Oct2014_H2_Run1118AndUp.conf
+#    git checkout ConfigFiles/OffsetFlip_EventBuilderVFAT_Oct2014_H2_Run1118AndUp.conf
   fi 
   fi
   for f in $PathOfInputData/Run$file* 	# Stores path of File in variable f
@@ -530,23 +530,28 @@ DeleteIfFileExists ../ppt/LogFiles/${RunCounter}/
 		echo $PathOfOutPutData
 		echo "#################################"
 		./shrd51_EventBuilderVFAT.sh ${f} ${PathOfOutPutData}/$(basename $f) | tee $PathOfOutPutData/$(basename $f)/Run${temp}_EventBuilderVFAT.log
-		#./ModifyConfig_RunAbove1118.sh
-		#./shrd51_EventBuilderVFAT.sh ${f} ${PathOfOutPutData}/$(basename $f) | tee $PathOfOutPutData/$(basename $f)/Run${temp}_EventBuilderVFAT.log
-		#./ModifyConfig_RunAbove1118.sh
-		#./shrd51_EventBuilderVFAT.sh ${f} ${PathOfOutPutData}/$(basename $f) | tee $PathOfOutPutData/$(basename $f)/Run${temp}_EventBuilderVFAT.log
-		#./ModifyConfig_RunAbove1118.sh
-		#./shrd51_EventBuilderVFAT.sh ${f} ${PathOfOutPutData}/$(basename $f) | tee $PathOfOutPutData/$(basename $f)/Run${temp}_EventBuilderVFAT.log
 	fi
 	if [ "$run" == 0 -o "$run" == 2 ]; then
 		echo -e "\n\n\t\t TrackFinder started\n\n"
 		echo -e "\n\n./shrd51_TrackFinder.sh ${PathOfOutPutData}/$(basename $f) | tee ${PathOfOutPutData}/$(basename $f)/Run${temp}_TrackFinder.log\n\n"
 		./shrd51_TrackFinder.sh $PathOfOutPutData/$(basename $f) | tee $PathOfOutPutData/$(basename $f)/Run${temp}_TrackFinder.log
 	fi
-	if [ "$run" == 0 -o "$run" == 3 ]; then
-		echo -e "\n\n\t\tAnalyzer Started\n\n"
-		./shrd51_Analyzer.sh $PathOfOutPutData/$(basename $f) $temp | tee $PathOfOutPutData/$(basename $f)/Run${temp}_Analyzer.log
-		echo -e "\n\n\t\tAnalyzer Done\n\n"
-	fi
+	for cut in 0 5 10 15 20 25 30 35 40 45 50 55 60 65 70 75 80 85 90 95
+	do
+		cut2=$((cut + 10))
+		awk 'NR==4{$(NF-7) = "'${cut}'"}1' OFS="\t" FS="\t" ConfigFiles/OffsetAndCoverage_Analyzer_Oct2014_H2.conf  > tmp1.conf
+		awk 'NR==4{$(NF-6) = "'${cut2}'"}1' OFS="\t" FS="\t" tmp1.conf > tmp2.conf
+		awk 'NR==5{$(NF-7) = "'${cut}'"}1' OFS="\t" FS="\t"  tmp2.conf > tmp1.conf
+		awk 'NR==5{$(NF-6) = "'${cut2}'"}1' OFS="\t" FS="\t" tmp1.conf > tmp2.conf
+		awk 'NR==6{$(NF-7) = "'${cut}'"}1' OFS="\t" FS="\t"  tmp2.conf > tmp1.conf
+		awk 'NR==6{$(NF-6) = "'${cut2}'"}1' OFS="\t" FS="\t" tmp1.conf > tmp2.conf
+		cp tmp2.conf ConfigFiles/OffsetAndCoverage_Analyzer_Oct2014_H2.conf
+		if [ "$run" == 0 -o "$run" == 3 ]; then
+			echo -e "\n\n\t\tAnalyzer Started\n\n"
+			./shrd51_Analyzer.sh $PathOfOutPutData/$(basename $f) $temp | tee $PathOfOutPutData/$(basename $f)/Run${temp}_Analyzer.log
+			echo -e "\n\n\t\tAnalyzer Done\n\n"
+		fi
+	done
 	cd ../ppt
 	make_dir "LogFiles"
 	make_dir "LogFiles/${RunCounter}"

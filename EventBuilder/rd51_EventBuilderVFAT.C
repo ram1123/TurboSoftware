@@ -100,12 +100,19 @@
 // The VFAT DAQ creates binary files and the event builder creates a raw data TTree saved on a root file
 //
 
+
 int rd51_EventBuilderVFAT(
                           const char* rawfilename 	= "input.dat"		, 
                           const char* rootfilename	= "Events_built.root"	, 
                           const int readmaxevent 	= 100000000)	
 {
+
+    ofstream Offsetfile;
+    Offsetfile.open ("OffsetFile.log" );
+    Offsetfile<<"File Name = "<<rawfilename<<endl; 
     
+
+
     LoaderSettings *LoaderSettings_rd51_EventBuilderVFAT = new LoaderSettings("Setting_EventBuilderVFAT.conf");
     if (LoaderSettings_rd51_EventBuilderVFAT->error) gApplication->Terminate(0);
     
@@ -1237,6 +1244,8 @@ int rd51_EventBuilderVFAT(
     {
         BlueOut("\nDetector XOffset DATA ......................................................................\n"); 	
         BlueOut("Entries\t\tXMean\t\tXRMS\t\tDX\t\tDXRMS\t\tDetector\n"); 	
+        Offsetfile<<"\nDetector XOffset DATA ......................................................................\n"<<endl; 	
+        Offsetfile<<"Entries\t\tXMean\t\tXRMS\t\tDX\t\tDXRMS\t\tDetector\n"<<endl;
         
     }
     
@@ -1294,6 +1303,7 @@ int rd51_EventBuilderVFAT(
         {
             if (xentriesoff>0) printf("%d\t\t%-.3f\t\t%-.3f\t\t%-.3f\t\t%-.3f\t\t%s\n", 
                                       xentriesoff, xdet_xcoord_mean, xdet_xcoord_rms, xmeanoff, xrmsoff,(const char*)(*DET[i]).DetectorName);
+	    if (xentriesoff>0) Offsetfile<<fixed<<std::setprecision(4)<<xentriesoff<<"\t\t"<<xdet_xcoord_mean <<"\t\t"<< xdet_xcoord_rms <<"\t\t"<< xmeanoff <<"\t\t"<< xrmsoff <<"\t\t"<< (const char*)(*DET[i]).DetectorName<<endl;
         }
     }
     if (EBV_BeampProfiledataPrintOut==1 && EBV_Verbose==1)
@@ -1315,6 +1325,8 @@ int rd51_EventBuilderVFAT(
     {
         BlueOut("\nDetector YOffset DATA ......................................................................\n"); 	
         BlueOut("Entries\t\tYMean\t\tYRMS\t\tDY\t\tDYRMS\t\tDetector\n"); 	
+        Offsetfile<<"\nDetector YOffset DATA ......................................................................\n"<<endl;
+        Offsetfile<<"Entries\t\tYMean\t\tYRMS\t\tDY\t\tDYRMS\t\tDetector\n"<<endl;
         
     }
     
@@ -1375,6 +1387,7 @@ int rd51_EventBuilderVFAT(
         {
             if (yentriesoff>0) printf("%d\t\t%-.3f\t\t%-.3f\t\t%-.3f\t\t%-.3f\t\t%s\n", 
                                       yentriesoff, ydet_ycoord_mean, ydet_ycoord_rms, ymeanoff, yrmsoff,(const char*)(*DET[i]).DetectorName);
+	    if (yentriesoff>0) Offsetfile<<fixed<<std::setprecision(4)<<yentriesoff<<"\t\t"<<ydet_ycoord_mean <<"\t\t"<< ydet_ycoord_rms <<"\t\t"<< ymeanoff <<"\t\t"<< yrmsoff <<"\t\t"<< (const char*)(*DET[i]).DetectorName<<endl;
         }
     }
     if (EBV_BeampProfiledataPrintOut==1 && EBV_Verbose==1)
@@ -1558,8 +1571,8 @@ cout<<"#############################44"<<endl;
         YellowOut("2. From Shell:\n");
         cout << "root -l " << rootfilename <<"\n"<<endl;
     }
-    
-    
+   
+Offsetfile.close();    
     return 1;
     
 }

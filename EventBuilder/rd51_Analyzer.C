@@ -2,8 +2,19 @@
 
 #include "rd51_Analyzer.h"
 
+#include <iostream>
+#include <fstream>
+
 rd51_Analyzer::rd51_Analyzer(TString rd51reco_filename, TString rd51tracker_filename, TString rd51analyzer_filename)
 {
+	ofstream Offsetfile_LC1; 
+	Offsetfile_LC1.open ("Efficiency_LC1.log", std::ios_base::app);
+	ofstream Offsetfile_LC2; 
+	Offsetfile_LC2.open ("Efficiency_LC2.log", std::ios_base::app);
+	ofstream Offsetfile_LC3; 
+	Offsetfile_LC3.open ("Efficiency_LC3.log", std::ios_base::app);
+//	Offsetfile<<"File Name = "<<rawfilename<<endl;
+
     // Loading Settings....
     LoadSettings();
     
@@ -121,6 +132,7 @@ rd51_Analyzer::rd51_Analyzer(TString rd51reco_filename, TString rd51tracker_file
 
         printf("%-.3f\t\t%-.3f\t\t%-.3f\t\t%-.3f\t\t%d\t\tsCMSNS2LC3\n",
                sCMSNS2LC3_Eff,sCMSNS2LC3_EffErr,sCMSNS2LC3_NoiseErr,sCMSNS2LC3_CombErr,sCMSNS2LC3_Sample);
+	Offsetfile_LC3<<"sCMSNS2LC3\t"<< DUT_MinY[2] << "-" << DUT_MaxY[2] << "\t"<< (DUT_MaxY[2]-DUT_MinY[2])/2.0 <<"\t"<<fixed<<std::setprecision(4)<< sCMSNS2LC3_Eff << "\t"<< sCMSNS2LC3_EffErr << "\t"<< sCMSNS2LC3_Sample << endl;
  
 
 
@@ -136,6 +148,7 @@ rd51_Analyzer::rd51_Analyzer(TString rd51reco_filename, TString rd51tracker_file
         double sCMSNS2LC2_CombErr	= TMath::Sqrt(TMath::Power(sCMSNS2LC2_EffErr,2) + TMath::Power(sCMSNS2LC2_NoiseErr,2));
         printf("%-.3f\t\t%-.3f\t\t%-.3f\t\t%-.3f\t\t%d\t\tsCMSNS2LC2\n",
                sCMSNS2LC2_Eff,sCMSNS2LC2_EffErr,sCMSNS2LC2_NoiseErr,sCMSNS2LC2_CombErr,sCMSNS2LC2_Sample);
+	Offsetfile_LC2<<"sCMSNS2LC2\t"<< DUT_MinY[1] << "-" << DUT_MaxY[1] << "\t"<< (DUT_MaxY[1]-DUT_MinY[1])/2.0 <<"\t"<< fixed<<std::setprecision(4)<< sCMSNS2LC2_Eff << "\t"<< sCMSNS2LC2_EffErr << "\t"<< sCMSNS2LC2_Sample << endl;
         
 
         //double sCMSNS2LC1_CovLength	= TMath::Abs(DUT_MaxY[0]-DUT_MinY[0]); //Patr
@@ -149,6 +162,7 @@ rd51_Analyzer::rd51_Analyzer(TString rd51reco_filename, TString rd51tracker_file
         double sCMSNS2LC1_CombErr	= TMath::Sqrt(TMath::Power(sCMSNS2LC1_EffErr,2) + TMath::Power(sCMSNS2LC1_NoiseErr,2));
         printf("%-.3f\t\t%-.3f\t\t%-.3f\t\t%-.3f\t\t%d\t\tsCMSNS2LC1\n",
                sCMSNS2LC1_Eff,sCMSNS2LC1_EffErr,sCMSNS2LC1_NoiseErr,sCMSNS2LC1_CombErr,sCMSNS2LC1_Sample);        
+	Offsetfile_LC1<<"sCMSNS2LC1\t"<< DUT_MinY[0] << "-" << DUT_MaxY[0] << "\t"<< (DUT_MaxY[0]-DUT_MinY[0])/2.0 <<"\t"<< fixed<<std::setprecision(4)<<sCMSNS2LC1_Eff << "\t"<< sCMSNS2LC1_EffErr << "\t"<< sCMSNS2LC1_Sample << endl;
 
         cout << "=======rd51tracker_nentries========= :"<< rd51tracker_tree->GetEntries()<< endl;
         cout << "********rd51reco_nentries********* :"<< rd51reco_tree->GetEntries()<< endl;
@@ -222,6 +236,9 @@ rd51_Analyzer::rd51_Analyzer(TString rd51reco_filename, TString rd51tracker_file
     rd51reco_file->Close();
     rd51tracker_file->Close();
     rd51analyzer_file->Close();
+    Offsetfile_LC1.close();
+    Offsetfile_LC2.close();
+    Offsetfile_LC3.close();
     //-----------------------------------------------------------------------------------------
     
     

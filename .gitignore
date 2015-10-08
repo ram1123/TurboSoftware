@@ -1,0 +1,7 @@
+*.root
+*.log
+*.d
+*.so
+*.txt
+*.pdf
+*.cxx

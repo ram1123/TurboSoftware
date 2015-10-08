@@ -97,7 +97,7 @@ int BeamProfile(TString RootFile,TString RecoFile, Int_t name, Int_t Plot)
 	canvas_prof->cd(1);
 	}
 	canvas_prof_1->SetLogz();
-	TH2F *BeamProfile_Tracker_1 = new TH2F("BeamProfile_Tracker_1","", 32,0.,100.,32,0.,100.);
+	TH2F *BeamProfile_Tracker_1 = new TH2F("BeamProfile_Tracker_1","", 10,0.,100.,10,0.,100.);
 	//Profile_Tracker_1->SetStats(0);
 	BeamProfile_Tracker_1->GetZaxis()->SetRangeUser(0,450);
 	tmpTree->Draw("g1ycl.geoposY:g1xcl.geoposX>>BeamProfile_Tracker_1","g1ycl@.GetEntries()==1 && g1xcl@.GetEntries()==1 && trackx.q>0 && tracky.q>0","colz");
@@ -150,7 +150,7 @@ int BeamProfile(TString RootFile,TString RecoFile, Int_t name, Int_t Plot)
 	canvas_prof->cd(1);
 	canvas_prof_1->SetLogz();
 	}
-	TH2F *BeamProfile_Tracker_2 = new TH2F("BeamProfile_Tracker_2","", 32,0.,100.,32,0.,100.);
+	TH2F *BeamProfile_Tracker_2 = new TH2F("BeamProfile_Tracker_2","", 10,0.,100.,10,0.,100.);
 	BeamProfile_Tracker_2->GetZaxis()->SetRangeUser(0,450);
 	tmpTree->Draw("g2ycl.geoposY:g2xcl.geoposX>>BeamProfile_Tracker_2","g2ycl@.GetEntries()==1 && g2xcl@.GetEntries()==1 && trackx.q>0 && tracky.q>0","colz");
 	BeamProfile_Tracker_2->GetXaxis()->SetTitle("x position in mm");
@@ -215,7 +215,7 @@ int BeamProfile(TString RootFile,TString RecoFile, Int_t name, Int_t Plot)
 	canvas_prof->cd(1);
 	canvas_prof_1->SetLogz();
 	}
-	TH2F *BeamProfile_Tracker_3 = new TH2F("BeamProfile_Tracker_3","", 32,0.,100.,32,0.,100.);
+	TH2F *BeamProfile_Tracker_3 = new TH2F("BeamProfile_Tracker_3","", 10,0.,100.,10,0.,100.);
 	BeamProfile_Tracker_3->GetZaxis()->SetRangeUser(0,450);
 	tmpTree->Draw("g3ycl.geoposY:g3xcl.geoposX>>BeamProfile_Tracker_3","g3ycl@.GetEntries()==1 && g3xcl@.GetEntries()==1 && trackx.q>0 && tracky.q>0","colz");
 	BeamProfile_Tracker_3->GetXaxis()->SetTitle("x position in mm");
@@ -797,15 +797,15 @@ o_file3<<name<<"\t("<<BeamProfile_Tracker_1->GetXaxis()->GetBinCenter(binx)<<","
 //
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-const Int_t nbranch = 12;
+const Int_t nbranch = 15;
 char *bnames[nbranch]={	"g2xcl.geoposX:g1xcl.geoposX",	"g2ycl.geoposY:g1ycl.geoposY",  
 			"g3xcl.geoposX:g1xcl.geoposX",	"g3ycl.geoposY:g1ycl.geoposY",	
 			"sCMSNS2LC1.geoposY:g1ycl.geoposY",	"sCMSNS2LC2.geoposY:g1ycl.geoposY",
 			"sCMSNS2LC3.geoposY:g1ycl.geoposY",	
 
 			"g3ycl.geoposY:g2ycl.geoposY",	"g3xcl.geoposX:g2xcl.geoposX",
-			//"sCMSNS2LC1.geoposY:g1xcl.geoposX",	"sCMSNS2LC2.geoposY:g1xcl.geoposX",
-			//"sCMSNS2LC3.geoposY:g1xcl.geoposX",	
+			"sCMSNS2LC1.geoposY:g1xcl.geoposX",	"sCMSNS2LC2.geoposY:g1xcl.geoposX",
+			"sCMSNS2LC3.geoposY:g1xcl.geoposX",	
 
 			"sCMSNS2LC2.geoposY:sCMSNS2LC1.geoposY",	"sCMSNS2LC3.geoposY:sCMSNS2LC1.geoposY",
 			"sCMSNS2LC3.geoposY:sCMSNS2LC2.geoposY",
@@ -817,8 +817,8 @@ char *fnames[nbranch] = {"Trk1_X_vs_Trk2_X",	"Trk1_Y_vs_Trk2_Y",
 			"Trk1_Y_vs_GE11_V",		
 			
 			"Trk2_Y_vs_Trk3_Y",	"Trk2_X_vs_Trk3_X",
-			//"Trk1_X_vs_GE11_IV_GIF",	"Trk1_X_vs_GE11_IV",
-			//"Trk1_X_vs_GE11_V",
+			"Trk1_X_vs_GE11_IV_GIF",	"Trk1_X_vs_GE11_IV",
+			"Trk1_X_vs_GE11_V",
 
 			"GE11_IV_GIF_vs_GE11_IV",	"GE11_IV_GIF_vs_GE11_V",
 			"GE11_IV_vs_GE11_V"
@@ -830,8 +830,8 @@ char *xyAxisName[2*nbranch] =	{"Tracker1 X-Hit Position (mm)",	   "Tracker2 X-Hi
 				"Tracker1 Y-Hit Position (mm)",     "GE11_V Y-Hit Position (mm)",
 
 				"Tracker2 Y-Hit Position (mm)",     "Tracker3 Y-Hit Position (mm)",	"Tracker2 X-Hit Position (mm)",     "Tracker3 X-Hit Position (mm)",
-			//	"Tracker1 X-Hit Position (mm)",     "GE11_IV_GIF Y-Hit Position (mm)",	"Tracker1 X-Hit Position (mm)",     "GE11_IV Y-Hit Position (mm)",
-			//	"Tracker1 X-Hit Position (mm)",     "GE11_V Y-Hit Position (mm)",
+				"Tracker1 X-Hit Position (mm)",     "GE11_IV_GIF Y-Hit Position (mm)",	"Tracker1 X-Hit Position (mm)",     "GE11_IV Y-Hit Position (mm)",
+				"Tracker1 X-Hit Position (mm)",     "GE11_V Y-Hit Position (mm)",
 
 				"GE11_IV_GIF Y-Hit Position (mm)",     "GE11_IV Y-Hit Position (mm)",	"GE11_IV_GIF Y-Hit Position (mm)",     "GE11_V Y-Hit Position (mm)",
 				"GE11_IV Y-Hit Position (mm)",     "GE11_V Y-Hit Position (mm)"
@@ -842,8 +842,8 @@ const Float_t range[4*nbranch] ={0,100,0,100,		0,100,0,100,
 				0,100,0,100,		
 				
 				0,100,0,100,		0,100,0,100,		
-			//	0,100,0,100,		0,100,0,100,		
-			//	0,100,0,100,
+				0,100,0,100,		0,100,0,100,		
+				0,100,0,100,
 
 				0,100,0,100,            0,100,0,100,
 				0,100,0,100
@@ -895,10 +895,10 @@ for(Int_t i=0;i<nbranch;i++){
 	hist[i]->GetXaxis()->SetTitle(xyAxisName[l]);
 	hist[i]->GetYaxis()->SetTitle(xyAxisName[l+1]);
 	#if CanOldNew
-		cout<<"nope....................."<<endl;
+		//cout<<"nope....................."<<endl;
 		//Canvas[i]->Modified(); Canvas[i]->Update();
 		//TPaveStats *stats =(TPaveStats*)Canvas[i]->GetPrimitive("stats");
-		////stats->SetName(TString(fnames[i]));
+		//stats->SetName(TString(fnames[i]));
 		//stats->SetX1NDC(.65);
 		//stats->SetX2NDC(.9);
 		//stats->SetY1NDC(.975);
