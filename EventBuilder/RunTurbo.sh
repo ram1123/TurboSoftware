@@ -572,6 +572,8 @@ if [ "$mail" == 1 ]; then
 	echo "mail sent"
 fi	
 
+cp FilesToAnalyze_R${IRunNo}_R${FRunNo}.txt FilesToAnalyze.txt
+
 echo "To Make Efficiency Curves Execute In Terminal:"
 echo "./analyzeEff.sh"
 graceful_exit
