@@ -48,7 +48,7 @@
 	# Should be changed by user according to their path
 	#PathOfInputData=/afs/cern.ch/work/p/pbarria/public/TB_H2_OCT_2014/beamdata
 	#PathOfInputData=/afs/cern.ch/user/r/rasharma/work/public/GEMTestBeam/H4NovDec14_RawData/TURBO_data
-	PathOfInputData=/afs/cern.ch/user/a/aalgoedt/Downloads/b2b_turbo
+	PathOfInputData=/afs/cern.ch/user/a/aalgoedt/public/b2b_turbo
 	
 	JustTextFile=0
 	# Some Default values
