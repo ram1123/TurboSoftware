@@ -1,11 +1,11 @@
 TurboSoftware
 =============
 
-Test Beam Data Analysis Software
+Test Beam Data Analysis Software for Cosmic
 
 To clone this particular branch use :
 
-git clone -b TurboSoftware_H4 https://github.com/ram1123/TurboSoftware.git
+git clone https://github.com/Aaron-A/TurboSoftware.git
 
 To work on lxplus you need to use Root version 5.34.00. For that just source the below two lines.
 
