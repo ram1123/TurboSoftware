@@ -462,8 +462,9 @@ do
 #    cp Setting_EventBuilderVFAT_Run1118AndUp.conf Setting_EventBuilderVFAT.conf						         
 #  fi 
 #  fi
-  for f in $PathOfInputData/Run$file* 	# Stores path of File in variable f
+  for f in $PathOfInputData/Run$file*/ 	# Stores path of File in variable f
   do
+  	echo "==================================================================================================================================================================================================================================================================================================================================================================="
 	cat Setting_EventBuilderVFAT.conf
 	cat Setting_Analyzer.conf
 	echo "Data File : ${f}"
@@ -489,16 +490,16 @@ do
 		./shrd51_EventBuilderVFAT.sh ${f}  $PathOfOutPutData/$(basename $f) | tee $PathOfOutPutData/$(basename $f)/Run${temp}_EventBuilderVFAT.log
 		#./ModifyConfig_BelowRun1646.sh
 		#./ModifyConfig_AboveRun1924.sh
-		./ModifyConfig_RunRange_1868-1906.sh
-		./shrd51_EventBuilderVFAT.sh ${f}  $PathOfOutPutData/$(basename $f) | tee $PathOfOutPutData/$(basename $f)/Run${temp}_EventBuilderVFAT.log
+		#./ModifyConfig_RunRange_1868-1906.sh
+		#./shrd51_EventBuilderVFAT.sh ${f}  $PathOfOutPutData/$(basename $f) | tee $PathOfOutPutData/$(basename $f)/Run${temp}_EventBuilderVFAT.log
 		#./ModifyConfig_BelowRun1646.sh
 		#./ModifyConfig_AboveRun1924.sh
-		./ModifyConfig_RunRange_1868-1906.sh
-		./shrd51_EventBuilderVFAT.sh ${f}  $PathOfOutPutData/$(basename $f) | tee $PathOfOutPutData/$(basename $f)/Run${temp}_EventBuilderVFAT.log
+		#./ModifyConfig_RunRange_1868-1906.sh
+		#./shrd51_EventBuilderVFAT.sh ${f}  $PathOfOutPutData/$(basename $f) | tee $PathOfOutPutData/$(basename $f)/Run${temp}_EventBuilderVFAT.log
 		#./ModifyConfig_BelowRun1646.sh
 		#./ModifyConfig_AboveRun1924.sh
-		./ModifyConfig_RunRange_1868-1906.sh
-		./shrd51_EventBuilderVFAT.sh ${f}  $PathOfOutPutData/$(basename $f) | tee $PathOfOutPutData/$(basename $f)/Run${temp}_EventBuilderVFAT.log
+		#./ModifyConfig_RunRange_1868-1906.sh
+		#./shrd51_EventBuilderVFAT.sh ${f}  $PathOfOutPutData/$(basename $f) | tee $PathOfOutPutData/$(basename $f)/Run${temp}_EventBuilderVFAT.log
 	fi
 	if [ "$run" == 0 -o "$run" == 2 ]; then
 		echo -e "\n\n\t\t TrackFinder started\n\n"
