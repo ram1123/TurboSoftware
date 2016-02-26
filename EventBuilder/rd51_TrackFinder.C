@@ -127,7 +127,7 @@ void rd51_TrackFinder::Begin(TTree * /*tree*/)
 
   deltax1 = rd51_TrackFinder_LoaderOffset->xOffset[0];
   deltax2 = rd51_TrackFinder_LoaderOffset->xOffset[1];
-  deltax3 = rd51_TrackFinder_LoaderOffset->xOffset[2];
+//  deltax3 = rd51_TrackFinder_LoaderOffset->xOffset[2];
 //  deltax4 = rd51_TrackFinder_LoaderOffset->xOffset[3];
   
   if (rd51_TrackFinder_OffsetVerbose)
@@ -135,7 +135,7 @@ void rd51_TrackFinder::Begin(TTree * /*tree*/)
   cout 	<< "\nX Offset Loaded Before Tracking\n" 
   	<< "g1xcl: " << deltax1 <<"\n"
   	<< "g2xcl: " << deltax2 <<"\n"
-  	<< "g3xcl: " << deltax3 <<"\n"
+//  	<< "g3xcl: " << deltax3 <<"\n"
 //  	<< "g4xcl: " << deltax4 <<"\n"
   	<< endl;
   }
@@ -150,7 +150,7 @@ void rd51_TrackFinder::Begin(TTree * /*tree*/)
   cout 	<< "\nY Offset Loaded Before Tracking\n" 
   	<< "g1ycl: " << deltay1 <<"\n"
   	<< "g2ycl: " << deltay2 <<"\n"
-  	<< "g3ycl: " << deltay3 <<"\n"
+//  	<< "g3ycl: " << deltay3 <<"\n"
 //  	<< "g4ycl: " << deltay4 <<"\n"
   	<< endl;
   }
@@ -158,7 +158,7 @@ void rd51_TrackFinder::Begin(TTree * /*tree*/)
 
   deltaz1 = rd51_TrackFinder_LoaderOffset->zOffset[0];
   deltaz2 = rd51_TrackFinder_LoaderOffset->zOffset[1];
-  deltaz3 = rd51_TrackFinder_LoaderOffset->zOffset[2];
+//  deltaz3 = rd51_TrackFinder_LoaderOffset->zOffset[2];
 //  deltaz4 = rd51_TrackFinder_LoaderOffset->zOffset[3];
   
   if (rd51_TrackFinder_OffsetVerbose)
@@ -166,7 +166,7 @@ void rd51_TrackFinder::Begin(TTree * /*tree*/)
   cout 	<< "\nZ Offset Loaded Before Tracking\n" 
   	<< "g1zcl: " << deltaz1 <<"\n"
   	<< "g2zcl: " << deltaz2 <<"\n"
-  	<< "g3zcl: " << deltaz3 <<"\n"
+//  	<< "g3zcl: " << deltaz3 <<"\n"
 //  	<< "g4zcl: " << deltaz4 <<"\n"
   	<< endl;
   }
@@ -228,12 +228,12 @@ Bool_t rd51_TrackFinder::Process(Long64_t entry)
 //--------------------------------------------------------------
   g1xNCl = g1xcl_;
   g2xNCl = g2xcl_;
-  g3xNCl = g3xcl_;
+//  g3xNCl = g3xcl_;
 //  g4xNCl = g4xcl_;
 
   g1yNCl = g1ycl_;
   g2yNCl = g2ycl_;
-  g3yNCl = g3ycl_;
+//  g3yNCl = g3ycl_;
 //  g4yNCl = g4ycl_;
 
 //--------------------------------------------------------------
@@ -248,11 +248,11 @@ Bool_t rd51_TrackFinder::Process(Long64_t entry)
   for (int icluster=0; icluster<g2xNCl; icluster++)
     g2xhm += g2xcl_ngeoch[icluster];
 
-  g3xhm = 0;
+/*  g3xhm = 0;
   for (int icluster=0; icluster<g3xNCl; icluster++)
     g3xhm += g3xcl_ngeoch[icluster];
 
-/*  g4xhm = 0;
+  g4xhm = 0;
   for (int icluster=0; icluster<g4xNCl; icluster++)
     g4xhm += g4xcl_ngeoch[icluster];
 */
@@ -265,13 +265,14 @@ Bool_t rd51_TrackFinder::Process(Long64_t entry)
   for (int icluster=0; icluster<g2yNCl; icluster++)
     g2yhm += g2ycl_ngeoch[icluster];
 
-  g3yhm = 0;
+/*  g3yhm = 0;
   for (int icluster=0; icluster<g3yNCl; icluster++)
     g3yhm += g3ycl_ngeoch[icluster];
 
-//  g4yhm = 0;
-//  for (int icluster=0; icluster<g4yNCl; icluster++)
-//    g4yhm += g4ycl_ngeoch[icluster];
+  g4yhm = 0;
+  for (int icluster=0; icluster<g4yNCl; icluster++)
+    g4yhm += g4ycl_ngeoch[icluster];
+*/
 //--------------------------------------------------------------
 
 //-- Main ------------------------------------------------------
@@ -373,7 +374,7 @@ void rd51_TrackFinder::Terminate()
 
 int rd51_TrackFinder::FindTracksXProj(Int_t verbose)
 {
-  Int_t NumberOfTrackersX = 3;
+  Int_t NumberOfTrackersX = 2;
 
 // Cleaness Request: At least three detector with only one hit
   Int_t xNCl_Clean[NumberOfTrackersX];
@@ -381,13 +382,13 @@ int rd51_TrackFinder::FindTracksXProj(Int_t verbose)
 
   if ( g1xNCl == 1  &&  g1xhm<120 ) xNCl_Clean[0] = 1;
   if ( g2xNCl == 1  &&  g2xhm<120 ) xNCl_Clean[1] = 1;
-  if ( g3xNCl == 1  &&  g3xhm<120 ) xNCl_Clean[2] = 1;
+//  if ( g3xNCl == 1  &&  g3xhm<120 ) xNCl_Clean[2] = 1;
 //  if ( g4xNCl == 1  &&  g4xhm<120 ) xNCl_Clean[3] = 1;
 
   Int_t CleanEventX=0;
   for (Int_t i=0; i<NumberOfTrackersX; i++ ) {CleanEventX += xNCl_Clean[i];}
 
-  if (CleanEventX >=3)
+  if (CleanEventX >=2)
 	{
 
 	float xer[CleanEventX]; 
@@ -410,17 +411,17 @@ int rd51_TrackFinder::FindTracksXProj(Int_t verbose)
 	            x[ichambers] = g2xcl_geoposX[0] + deltax2;
 	          ichambers++;
 	          }
-	          if (xNCl_Clean[2]) {
+/*	          if (xNCl_Clean[2]) {
 	            z[ichambers] = deltaz3;
 	            x[ichambers] = g3xcl_geoposX[0] + deltax3;
 	          ichambers++;
 	          }
-//	          if (xNCl_Clean[3]) {
-//	            z[ichambers] = deltaz4;
-//	            x[ichambers] = g4xcl_geoposX[0] + deltax4;
-//	          ichambers++;
-//	          }
-	
+	          if (xNCl_Clean[3]) {
+	            z[ichambers] = deltaz4;
+	            x[ichambers] = g4xcl_geoposX[0] + deltax4;
+	          ichambers++;
+	          }
+*/	
 	   TF1 *PolFit = new TF1("PolFit","pol1",-1000,1000);
 	   PolFit->SetParameter(0,x[0]);
 	   PolFit->SetParameter(1,0);
@@ -473,7 +474,7 @@ int rd51_TrackFinder::FindTracksXProj(Int_t verbose)
 
 int rd51_TrackFinder::FindTracksYProj(Int_t verbose)
 {
-  Int_t NumberOfTrackersY = 3;
+  Int_t NumberOfTrackersY = 2;
 
 // Cleaness Request: At least three detector with only one hit
   Int_t yNCl_Clean[NumberOfTrackersY];
@@ -481,13 +482,13 @@ int rd51_TrackFinder::FindTracksYProj(Int_t verbose)
 
   if ( g1yNCl == 1  &&  g1yhm<120 ) yNCl_Clean[0] = 1;
   if ( g2yNCl == 1  &&  g2yhm<120 ) yNCl_Clean[1] = 1;
-  if ( g3yNCl == 1  &&  g3yhm<120 ) yNCl_Clean[2] = 1;
+//  if ( g3yNCl == 1  &&  g3yhm<120 ) yNCl_Clean[2] = 1;
 //  if ( g4yNCl == 1  &&  g4yhm<120 ) yNCl_Clean[3] = 1;
 
   Int_t CleanEventY=0;
   for (Int_t i=0; i<NumberOfTrackersY; i++ ) {CleanEventY += yNCl_Clean[i];}
 
-  if (CleanEventY >=3)
+  if (CleanEventY >=2)
 	{
 
 	float yer[CleanEventY]; 
@@ -511,17 +512,17 @@ int rd51_TrackFinder::FindTracksYProj(Int_t verbose)
 	            y[ichambers] = g2ycl_geoposY[0] + deltay2;
 	          ichambers++;
 	          }
-	          if (yNCl_Clean[2]) {
+/*	          if (yNCl_Clean[2]) {
 	            z[ichambers] = deltaz3;
 	            y[ichambers] = g3ycl_geoposY[0] + deltay3;
 	          ichambers++;
 	          }
-//	          if (yNCl_Clean[3]) {
-//	            z[ichambers] = deltaz4; // October 883;
-//	            y[ichambers] = g4ycl_geoposY[0] + deltay4;
-//	          ichambers++;
-//	          }
-	
+	          if (yNCl_Clean[3]) {
+	            z[ichambers] = deltaz4; // October 883;
+	            y[ichambers] = g4ycl_geoposY[0] + deltay4;
+	          ichambers++;
+	          }
+*/
 	   TF1 *PolFit = new TF1("PolFit","pol1",-1000,1000);
 	   PolFit->SetParameter(0,y[0]);
 	   PolFit->SetParameter(1,0);
