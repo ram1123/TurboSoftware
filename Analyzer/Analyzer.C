@@ -58,11 +58,11 @@ int BeamProfile(TString RootFile,TString RecoFile, Int_t name)
 
 	// B2B GEM
 	
-	TH2F *DetBeamProfile = new TH2F("DetBeamProfile","Beam profile on B2B GEM", 25,0.,100.,25,0.,100.);
-	DetBeamProfile->SetStats(0);
-	tmpTree->Draw("g3ycl.geoposY:g3xcl.geoposX>>DetBeamProfile","g3ycl@.GetEntries()==1 && g3xcl@.GetEntries()==1 && trackx.q>0 && tracky.q>0","colz");
-	DetBeamProfile->GetXaxis()->SetTitle("x position in mm");
-	DetBeamProfile->GetYaxis()->SetTitle("y position in mm");
+	TH2F *detBeamProfile = new TH2F("detBeamProfile","Beam profile on B2B GEM", 25,0.,100.,25,0.,100.);
+	detBeamProfile->SetStats(0);
+	tmpTree->Draw("g3ycl.geoposY:g3xcl.geoposX>>detBeamProfile","g3ycl@.GetEntries()==1 && g3xcl@.GetEntries()==1 && trackx.q>0 && tracky.q>0","colz");
+	detBeamProfile->GetXaxis()->SetTitle("x position in mm");
+	detBeamProfile->GetYaxis()->SetTitle("y position in mm");
 
 	canvas->SaveAs(Form("Profile_B2B_Run%d.png",name)); 
 
@@ -71,15 +71,17 @@ int BeamProfile(TString RootFile,TString RecoFile, Int_t name)
 	//	EFFICIENCY
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	Int_t t1 = t1BeamProfile->GetEntries();
-	Int_t t2 = t2BeamProfile->GetEntries();
-	Int_t det = DetBeamProfile->GetEntries();
+	// One expects that t1Entry == t2Entry
+	Int_t t1Entry = t1BeamProfile->GetEntries();
+	Int_t t2Entry = t2BeamProfile->GetEntries();
+	Int_t detEntry = detBeamProfile->GetEntries();
+	Double_t eff = detBeamProfile->GetEntries() / t1BeamProfile->GetEntries();
 
 	cout << endl;
-	cout << "Number of valid hits at Tracker 1: " << t1 << endl;
-	cout << "Number of valid hits at Tracker 2: " << t2 << endl;
-	cout << "Number of valid hits at B2B GEM  : " << det << endl;
+	cout << "Number of valid hits at Tracker 1: " << t1Entry << endl;
+	cout << "Number of valid hits at Tracker 2: " << t2Entry << endl;
+	cout << "Number of valid hits at B2B GEM  : " << detEntry << endl;
 	cout << endl;
-	cout << "Efficiency: " << det/t1 << endl;
+	cout << "Efficiency: " << eff << endl;
 	cout << endl;
 }
