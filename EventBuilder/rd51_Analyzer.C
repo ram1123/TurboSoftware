@@ -93,7 +93,7 @@ int rd51_Analyzer(TString RootFile,TString RecoFile, TString OutputFile)
 
 	if(t1Entry != t2Entry) {
 		cout << endl;
-		cout << "Valid hits of trackers to not match!" << endl;
+		cout << "Number of valid hits for both trackers does not match!" << endl;
 		cout << endl;
 	}
 	else {
