@@ -9,11 +9,13 @@
 #include "TH2F.h"
 
 //Settings:
+int BinSize = 4;
 bool SetLogscale = false;
 
 
 int rd51_Analyzer(TString RootFile,TString RecoFile, TString OutputFile)
 {
+	int nBins = 100/BinSize;
 	TGaxis::SetMaxDigits(3);
 
 	std::vector<TFile*> InputFiles;
@@ -29,20 +31,20 @@ int rd51_Analyzer(TString RootFile,TString RecoFile, TString OutputFile)
 	}
 
 	TFile Output(OutputFile,"recreate");
-	TCanvas *canvas = new TCanvas();
-
-
+	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	//	BEAM PROFILE PLOTS
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	// Prefix
+	TCanvas *canvas = new TCanvas();
+	
 	if(SetLogscale) {
 		canvas->SetLogz();
 	}
-
+	
 	// Tracker 1
-	TH2F *t1BeamProfile = new TH2F("t1BeamProfile","Beam profile on Tracker 1", 25,0.,100.,25,0.,100.);
+	TH2F *t1BeamProfile = new TH2F("t1BeamProfile","Beam profile on Tracker 1", nBins,0.,100.,nBins,0.,100.);
 	tmpTree->Draw("g1ycl.geoposY:g1xcl.geoposX>>t1BeamProfile","g1ycl@.GetEntries()==1 && g1xcl@.GetEntries()==1 && trackx.q>0 && tracky.q>0","colz");
 	t1BeamProfile->SetStats(0);
 	t1BeamProfile->GetXaxis()->SetTitle("x position in mm");
@@ -51,8 +53,7 @@ int rd51_Analyzer(TString RootFile,TString RecoFile, TString OutputFile)
 	canvas->Write("t1BeamProfile");
 
 	// Tracker 2
-
-	TH2F *t2BeamProfile = new TH2F("t2BeamProfile","Beam profile on Tracker 2", 25,0.,100.,25,0.,100.);
+	TH2F *t2BeamProfile = new TH2F("t2BeamProfile","Beam profile on Tracker 2", nBins,0.,100.,nBins,0.,100.);
 	tmpTree->Draw("g2ycl.geoposY:g2xcl.geoposX>>t2BeamProfile","g2ycl@.GetEntries()==1 && g2xcl@.GetEntries()==1 && trackx.q>0 && tracky.q>0","colz");
 	t2BeamProfile->SetStats(0);
 	t2BeamProfile->GetXaxis()->SetTitle("x position in mm");
@@ -61,8 +62,7 @@ int rd51_Analyzer(TString RootFile,TString RecoFile, TString OutputFile)
 	canvas->Write("t2BeamProfile");
 
 	// B2B GEM
-	
-	TH2F *b2bBeamProfile = new TH2F("b2bBeamProfile","Beam profile on B2B GEM", 25,0.,100.,25,0.,100.);
+	TH2F *b2bBeamProfile = new TH2F("b2bBeamProfile","Beam profile on B2B GEM", nBins,0.,100.,nBins,0.,100.);
 	tmpTree->Draw("g3ycl.geoposY:g3xcl.geoposX>>b2bBeamProfile","g3ycl@.GetEntries()==1 && g3xcl@.GetEntries()==1 && trackx.q>0 && tracky.q>0","colz");;
 	b2bBeamProfile->SetStats(0);
 	b2bBeamProfile->GetXaxis()->SetTitle("x position in mm");
@@ -71,8 +71,7 @@ int rd51_Analyzer(TString RootFile,TString RecoFile, TString OutputFile)
 	canvas->Write("b2bBeamProfile");
 
 	// FTM
-
-/*	TH2F *ftmBeamProfile = new TH2F("ftmBeamProfile","Beam profile on FTM", 25,0.,100.,25,0.,100.);
+/*	TH2F *ftmBeamProfile = new TH2F("ftmBeamProfile","Beam profile on FTM", nBins,0.,100.,nBins,0.,100.);
 	tmpTree->Draw("g4ycl.geoposY:g4xcl.geoposX>>ftmBeamProfile","g4ycl@.GetEntries()==1 && g4xcl@.GetEntries()==1 && trackx.q>0 && tracky.q>0","colz");
 	ftmBeamProfile->SetStats(0);
 	ftmBeamProfile->GetXaxis()->SetTitle("x position in mm");
@@ -110,4 +109,34 @@ int rd51_Analyzer(TString RootFile,TString RecoFile, TString OutputFile)
 		cout << "   > Efficiency FTM              : " << ftmEff << endl;	*/
 		cout << endl;
 	}
+
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	//	EFFICIENCY SCAN PLOTS
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	// Prefix
+	TCanvas *canvas2 = new TCanvas();
+
+	// B2B GEM
+	TH2F *b2bEffProfile = b2bBeamProfile;
+	b2bEffProfile->Divide(t1BeamProfile);
+	b2bEffProfile->SetTitle("Efficiency scan profile on B2B GEM");
+	b2bEffProfile->GetXaxis()->SetTitle("x position in mm");
+	b2bEffProfile->GetYaxis()->SetTitle("y position in mm");
+	b2bEffProfile->Draw("colz");
+
+	canvas2->Write("b2bEffProfile");
+
+	// FTM
+/*	TH2F *ftmEffProfile = ftmBeamProfile;
+	ftmEffProfile->Divide(t1BeamProfile);
+	ftmEffProfile->SetTitle("Efficiency Scan profile on FTM");
+	ftmEffProfile->GetXaxis()->SetTitle("x position in mm");
+	ftmEffProfile->GetYaxis()->SetTitle("y position in mm");
+	ftmEffProfile->Draw("colz");
+
+	canvas2->Write("ftmEffProfile");	*/
+
+	// Suffix
+	canvas2->Close();
 }
