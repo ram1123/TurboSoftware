@@ -46,8 +46,6 @@
 #	-------------------------------------------------------------------
 	
 	# Should be changed by user according to their path
-	#PathOfInputData=/afs/cern.ch/work/p/pbarria/public/TB_H2_OCT_2014/beamdata
-	#PathOfInputData=/afs/cern.ch/user/r/rasharma/work/public/GEMTestBeam/H4NovDec14_RawData/TURBO_data
 	PathOfInputData=/afs/cern.ch/user/a/aalgoedt/public/b2b_turbo
 	
 	JustTextFile=0
@@ -321,8 +319,7 @@ fi
 
 while getopts ":hrlfemi" opt; do
 	case $opt in
-		r )	#echo "This software is configured for the H4 test beam. So, please enter run number greater then 1586."
-			echo -n "Initial Run Number (IRunNo) = " 
+		r )	echo -n "Initial Run Number (IRunNo) = " 
 			read IRunNo
 			#if [ "$IRunNo" -le 1586 ]; then
 			#	error_exit "Please enter run number greater than 1586. This software is designed for H4 test beam. Please clone the appropriate software for H2 test beam form github."
@@ -332,12 +329,6 @@ while getopts ":hrlfemi" opt; do
                         if [ "$FRunNo" == "" ]; then
                                 FRunNo=$IRunNo
                         fi
-			#if [ "$IRunNo" -le 1646 ] && [ "$FRunNo" -gt 1646 ]; then
-			#	error_exit "Initial run number and final run number both should be either greater than 1646 or less then 1646. Because of Different configurations."
-			#fi
-			#if [ "$IRunNo" -le 1864 ] && [ "$FRunNo" -gt 1864 ]; then
-			#	error_exit "Initial run number and final run number both should be either greater than 1864 or less then 1865. Because of Different configurations."
-			#gitfi
 			if [ "$IRunNo" -gt "$FRunNo" ]; then 
 				error_exit "Initial Run Number should be Less then or equal to Final Run Number"
 			fi;;
@@ -436,32 +427,6 @@ do
   fi
   fi
 
-  # Copies the right configuration file for the present run
-  #if [ $RunCounter -le 1646 ]; then
-  #  cp Setting_EventBuilderVFAT_BelowRun1647.conf Setting_EventBuilderVFAT.conf
-  #  cp Setting_Analyzer_BelowRun1647.conf Setting_Analyzer.conf
-  #  git checkout ConfigFiles/OffsetFlip_EventBuilderVFAT_NOV2014_H4.conf
-  #fi
-  #if [ $RunCounter -gt 1646 ]; then
-  #  cp Setting_EventBuilderVFAT_AboveRun1646.conf Setting_EventBuilderVFAT.conf
-  #  cp Setting_Analyzer_AboveRun1646.conf Setting_Analyzer.conf
-  #fi
-  #if [ $RunCounter -gt 1864 ]; then
-  #  cp Setting_EventBuilderVFAT_AboveRun1864.conf Setting_EventBuilderVFAT.conf
-  #  cp Setting_Analyzer_AboveRun1864.conf Setting_Analyzer.conf
-  #  git checkout ConfigFiles/OffsetFlip_EventBuilderVFAT_NOV2014_H4_AboveRun1864.conf
-  #fi
-  #if [ $RunCounter -gt 1924 ]; then
-  #  cp Setting_EventBuilderVFAT_AboveRun1924.conf Setting_EventBuilderVFAT.conf
-  #  cp Setting_Analyzer_AboveRun1924.conf Setting_Analyzer.conf
-  #  git checkout ConfigFiles/OffsetFlip_EventBuilderVFAT_NOV2014_H4_AboveRun1924.conf
-  #fi
-#  if [ $RunCounter -le 1117 ]; then
-#    cp Setting_EventBuilderVFAT_Run1117AndBelow.conf Setting_EventBuilderVFAT.conf
-#  else  
-#    cp Setting_EventBuilderVFAT_Run1118AndUp.conf Setting_EventBuilderVFAT.conf						         
-#  fi 
-#  fi
   for f in $PathOfInputData/Run$file*/ 	# Stores path of File in variable f
   do
   	echo "==================================================================================================================================================================================================================================================================================================================================================================="
@@ -488,18 +453,6 @@ do
 		echo -e "\n\n\t\tEventBuilder started\n\n"
 		echo -e "\n\n./shrd51_EventBuilderVFAT.sh ${f} $PathOfOutPutData/$(basename $f) | tee ${PathOfOutPutData}/$(basename $f)/Run${temp}_EventBuilderVFAT.log\n\n"
 		./shrd51_EventBuilderVFAT.sh ${f}  $PathOfOutPutData/$(basename $f) | tee $PathOfOutPutData/$(basename $f)/Run${temp}_EventBuilderVFAT.log
-		#./ModifyConfig_BelowRun1646.sh
-		#./ModifyConfig_AboveRun1924.sh
-		#./ModifyConfig_RunRange_1868-1906.sh
-		#./shrd51_EventBuilderVFAT.sh ${f}  $PathOfOutPutData/$(basename $f) | tee $PathOfOutPutData/$(basename $f)/Run${temp}_EventBuilderVFAT.log
-		#./ModifyConfig_BelowRun1646.sh
-		#./ModifyConfig_AboveRun1924.sh
-		#./ModifyConfig_RunRange_1868-1906.sh
-		#./shrd51_EventBuilderVFAT.sh ${f}  $PathOfOutPutData/$(basename $f) | tee $PathOfOutPutData/$(basename $f)/Run${temp}_EventBuilderVFAT.log
-		#./ModifyConfig_BelowRun1646.sh
-		#./ModifyConfig_AboveRun1924.sh
-		#./ModifyConfig_RunRange_1868-1906.sh
-		#./shrd51_EventBuilderVFAT.sh ${f}  $PathOfOutPutData/$(basename $f) | tee $PathOfOutPutData/$(basename $f)/Run${temp}_EventBuilderVFAT.log
 	fi
 	if [ "$run" == 0 -o "$run" == 2 ]; then
 		echo -e "\n\n\t\t TrackFinder started\n\n"
@@ -534,48 +487,7 @@ do
     fi
 	echo -e "$(basename $f)\t\t $LC1+/-$LC1_Err \t $LC2+/-$LC2_Err \t $LC3+/-$LC3_Err" >> EfficiencyData_R${IRunNo}_R${FRunNo}.txt
 	RunCounter=$[$RunCounter+1]
-	mv OffsetFile.log OffsetFile_${temp}.log
-	mv Efficiency_LC1.log Efficiency_LC1_${temp}.log
-	mv Efficiency_LC2.log Efficiency_LC2_${temp}.log
-	mv Efficiency_LC3.log Efficiency_LC3_${temp}.log
   done
 done
 
-
-echo "file(s) of interest:" 
-
-rm FilesToAnalyze.txt
-echo "EfficiencyData_R${IRunNo}_R${FRunNo}.txt" >> FilesToAnalyze.txt
-
-
-while [ $ILat -le $FLat ]
-do
-  rm EfficiencyData_R${IRunNo}_R${FRunNo}_Lat${ILat}.txt
-  grep "Lat$ILat" EfficiencyData_R${IRunNo}_R${FRunNo}.txt >> EfficiencyData_R${IRunNo}_R${FRunNo}_Lat${ILat}.txt
-
-  outputFile=EfficiencyData_R${IRunNo}_R${FRunNo}_Lat${ILat}.txt
-  outputFile_short=EfficiencyData_R${IRunNo}_R${FRunNo}_Lat${ILat}.txt
-
-  if [ $(stat -c%s "$outputFile") -le 46 ]; then
-    rm $outputFile
-  else
-    echo "gedit $outputFile"
-    echo "EfficiencyData_R${IRunNo}_R${FRunNo}_Lat${ILat}.txt" >> FilesToAnalyze.txt
-  fi
-  
-  ILat=$[$ILat+1]
-done
-
-cp FilesToAnalyze.txt FilesToAnalyze_R${IRunNo}_R${FRunNo}.txt
-
-if [ "$mail" == 1 ]; then
-	echo "mailing the Efficiency files.... "
-	mail -a EfficiencyData_R${IRunNo}_R${FRunNo}.txt  -s "Efficiency Data from RunNumber ${IRunNo} to ${FRunNo}" $email < message.log
-	echo "mail sent"
-fi	
-
-cp FilesToAnalyze_R${IRunNo}_R${FRunNo}.txt FilesToAnalyze.txt
-
-echo "To Make Efficiency Curves Execute In Terminal:"
-echo "./analyzeEff.sh"
 graceful_exit
