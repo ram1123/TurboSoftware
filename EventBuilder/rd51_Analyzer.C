@@ -591,7 +591,7 @@ void rd51_Analyzer::LoadSettings()
 void rd51_Analyzer::LoadOffsetAndCoverage(int verbose)
 {
     // Loading Offset And Coverage....  
-    rd51analyzer_LoaderOffsetAndCoverage = new LoaderOffsetAndCoverage_Analyzer(rd51analyzer_OffsetFile, 3);//HARDCODED NUMBER OF DETECTOR
+    rd51analyzer_LoaderOffsetAndCoverage = new LoaderOffsetAndCoverage_Analyzer(rd51analyzer_OffsetFile, 2);//HARDCODED NUMBER OF DETECTOR
     if (rd51analyzer_LoaderOffsetAndCoverage->error) gApplication->Terminate(0);
     
     int rd51analyzer_NumberOfDetectors = rd51analyzer_LoaderOffsetAndCoverage->NumberOfDetectors;
