@@ -81,7 +81,6 @@ rd51_Analyzer::rd51_Analyzer(TString rd51reco_filename, TString rd51tracker_file
             // Processing..........................................................................
             Calc_g3ycl_Eff(rd51analyzer_Verbose && rd51analyzer_EffCalculatorVerbose);
             Calc_g3xcl_Eff(rd51analyzer_Verbose && rd51analyzer_EffCalculatorVerbose);
-            Calc_********************************_Eff(rd51analyzer_Verbose && rd51analyzer_EffCalculatorVerbose);
             // End of Processing...................................................................
             
             NumberOfProcessedEntries+=1;
