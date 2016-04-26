@@ -86,8 +86,8 @@ class rd51_Analyzer {
     bool ProcessTheEntry(int processedentry, int verbose);
     
     // Efficiency Calculator
-    int Calc_B2B_GEM_Eff(int verbose);
-    int Calc_FTM_Eff(int verbose);
+    int Calc_g3xcl_Eff(int verbose);
+    int Calc_g3ycl_Eff(int verbose);
     
     //Efficiency Radius Scan
     void InitializeEfficiencyRadiusScan(int verbose);
@@ -98,42 +98,42 @@ class rd51_Analyzer {
     
     Float_t                 *ERSRad;
     
-    Float_t  B2B_GEM_ERSEntries;
-    Float_t  FTM_ERSEntries;
+    Float_t  g3xcl_ERSEntries;
+    Float_t  g3ycl_ERSEntries;
     
-    Float_t  *B2B_GEM_ERSIneff;
-    Float_t  *FTM_ERSIneff;
+    Float_t  *g3xcl_ERSIneff;
+    Float_t  *g3ycl_ERSIneff;
     
-    Float_t  *B2B_GEM_ERSErr;
-    Float_t  *FTM_ERSErr;
+    Float_t  *g3xcl_ERSErr;
+    Float_t  *g3ycl_ERSErr;
     
-    TGraphErrors *B2B_GEM_ERSIneffGraph;
-    TGraphErrors *FTM_ERSIneffGraph;
+    TGraphErrors *g3xcl_ERSIneffGraph;
+    TGraphErrors *g3ycl_ERSIneffGraph;
 
     // Histograms
     void HistoDefine(int verbose);
     void HistoWrite(int verbose);
     void HistoDelete(int verbose);
       
-    TH1F *hB2B_GEM_Eff                ;
-    TH2F *hB2B_GEM_XY_Eff             ;
-    TH2F *hB2B_GEM_XY_Ineff           ;
-    TH2F *hB2B_GEM_XY_Noise           ;
-    TH1F *hB2B_GEM_CLS_Eff            ;
-    TH1F *hB2B_GEM_CLS_Noise          ;
-    TH1F *hB2B_GEM_Distance_Eff       ;
-    TH1F *hB2B_GEM_Distance_Noise     ;
-    TH1F *hB2B_GEM_Residual_X         ;
+    TH1F *hg3xcl_Eff                ;
+    TH2F *hg3xcl_XY_Eff             ;
+    TH2F *hg3xcl_XY_Ineff           ;
+    TH2F *hg3xcl_XY_Noise           ;
+    TH1F *hg3xcl_CLS_Eff            ;
+    TH1F *hg3xcl_CLS_Noise          ;
+    TH1F *hg3xcl_Distance_Eff       ;
+    TH1F *hg3xcl_Distance_Noise     ;
+    TH1F *hg3xcl_Residual_X         ;
     
-    TH1F *hFTM_Eff                ;
-    TH2F *hFTM_XY_Eff             ;
-    TH2F *hFTM_XY_Ineff           ;
-    TH2F *hFTM_XY_Noise           ;
-    TH1F *hFTM_CLS_Eff            ;
-    TH1F *hFTM_CLS_Noise          ;
-    TH1F *hFTM_Distance_Eff       ;
-    TH1F *hFTM_Distance_Noise     ;
-    TH1F *hFTM_Residual_X         ;
+    TH1F *hg3ycl_Eff                ;
+    TH2F *hg3ycl_XY_Eff             ;
+    TH2F *hg3ycl_XY_Ineff           ;
+    TH2F *hg3ycl_XY_Noise           ;
+    TH1F *hg3ycl_CLS_Eff            ;
+    TH1F *hg3ycl_CLS_Noise          ;
+    TH1F *hg3ycl_Distance_Eff       ;
+    TH1F *hg3ycl_Distance_Noise     ;
+    TH1F *hg3ycl_Residual_X         ;
 
     ClassDef(rd51_Analyzer,1);
 };

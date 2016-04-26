@@ -79,8 +79,8 @@ rd51_Analyzer::rd51_Analyzer(TString rd51reco_filename, TString rd51tracker_file
         {
             
             // Processing..........................................................................
-            Calc_FTM_Eff(rd51analyzer_Verbose && rd51analyzer_EffCalculatorVerbose);
-            Calc_B2B_GEM_Eff(rd51analyzer_Verbose && rd51analyzer_EffCalculatorVerbose);
+            Calc_g3ycl_Eff(rd51analyzer_Verbose && rd51analyzer_EffCalculatorVerbose);
+            Calc_g3xcl_Eff(rd51analyzer_Verbose && rd51analyzer_EffCalculatorVerbose);
             Calc_********************************_Eff(rd51analyzer_Verbose && rd51analyzer_EffCalculatorVerbose);
             // End of Processing...................................................................
             
@@ -114,52 +114,52 @@ rd51_Analyzer::rd51_Analyzer(TString rd51reco_filename, TString rd51tracker_file
         BlueOut("Efficiency\tEffErr\t\tNoiseErr\tCombinedErr\tSample\t\tDetectorName\n");
         
         
-        //double B2B_GEM_CovLength	= TMath::Abs(DUT_MaxY[1]-DUT_MinY[1]);  // Patr
-        double B2B_GEM_CovLength	= TMath::Abs(DUT_MaxX[1]-DUT_MinX[1]);  // Patr
-        double B2B_GEM_EffRadLength= 2*DUT_effRad[1];     // Patr
-        double B2B_GEM_Eff 	= (1-hB2B_GEM_Eff->GetBinContent(1)/hB2B_GEM_Eff->GetEntries());
-        int    B2B_GEM_Sample	= hB2B_GEM_Eff->GetEntries(); 
-        double B2B_GEM_NoiseErr	= 
-        (B2B_GEM_EffRadLength/B2B_GEM_CovLength)*hB2B_GEM_Distance_Noise->GetEntries()/hB2B_GEM_Eff->GetEntries(); 
-        double B2B_GEM_EffErr	= TMath::Sqrt(B2B_GEM_Eff*(1-B2B_GEM_Eff)/B2B_GEM_Sample);
+        //double g3xcl_CovLength	= TMath::Abs(DUT_MaxY[1]-DUT_MinY[1]);  // Patr
+        double g3xcl_CovLength	= TMath::Abs(DUT_MaxX[1]-DUT_MinX[1]);  // Patr
+        double g3xcl_EffRadLength= 2*DUT_effRad[1];     // Patr
+        double g3xcl_Eff 	= (1-hg3xcl_Eff->GetBinContent(1)/hg3xcl_Eff->GetEntries());
+        int    g3xcl_Sample	= hg3xcl_Eff->GetEntries(); 
+        double g3xcl_NoiseErr	= 
+        (g3xcl_EffRadLength/g3xcl_CovLength)*hg3xcl_Distance_Noise->GetEntries()/hg3xcl_Eff->GetEntries(); 
+        double g3xcl_EffErr	= TMath::Sqrt(g3xcl_Eff*(1-g3xcl_Eff)/g3xcl_Sample);
         
-        double B2B_GEM_CombErr	= TMath::Sqrt(TMath::Power(B2B_GEM_EffErr,2) + TMath::Power(B2B_GEM_NoiseErr,2));
-        printf("%-.3f\t\t%-.3f\t\t%-.3f\t\t%-.3f\t\t%d\t\tB2B_GEM\n",
-               B2B_GEM_Eff,B2B_GEM_EffErr,B2B_GEM_NoiseErr,B2B_GEM_CombErr,B2B_GEM_Sample);
-        Offsetfile_LC2<<"B2B_GEM\t"<< DUT_MinX[1] << "-" << DUT_MaxX[1] << "\t"<< (DUT_MaxX[1]+DUT_MinX[1])/2.0 <<"\t"<< fixed<<std::setprecision(4)<< B2B_GEM_Eff << "\t"<< B2B_GEM_EffErr << "\t"<< B2B_GEM_Sample << endl;
+        double g3xcl_CombErr	= TMath::Sqrt(TMath::Power(g3xcl_EffErr,2) + TMath::Power(g3xcl_NoiseErr,2));
+        printf("%-.3f\t\t%-.3f\t\t%-.3f\t\t%-.3f\t\t%d\t\tg3xcl\n",
+               g3xcl_Eff,g3xcl_EffErr,g3xcl_NoiseErr,g3xcl_CombErr,g3xcl_Sample);
+        Offsetfile_LC2<<"g3xcl\t"<< DUT_MinX[1] << "-" << DUT_MaxX[1] << "\t"<< (DUT_MaxX[1]+DUT_MinX[1])/2.0 <<"\t"<< fixed<<std::setprecision(4)<< g3xcl_Eff << "\t"<< g3xcl_EffErr << "\t"<< g3xcl_Sample << endl;
 
-        //double FTM_CovLength	= TMath::Abs(DUT_MaxY[0]-DUT_MinY[0]); //Patr
-        double FTM_CovLength	= TMath::Abs(DUT_MaxX[0]-DUT_MinX[0]); //Patr
-        double FTM_EffRadLength= 2*DUT_effRad[0];//Patr
-        double FTM_Eff 	= (1-hFTM_Eff->GetBinContent(1)/hFTM_Eff->GetEntries());
-        int    FTM_Sample	= hFTM_Eff->GetEntries();
-        double FTM_NoiseErr	= 
-        (FTM_EffRadLength/FTM_CovLength)*hFTM_Distance_Noise->GetEntries()/hFTM_Eff->GetEntries(); 
-        double FTM_EffErr	= TMath::Sqrt(FTM_Eff*(1-FTM_Eff)/FTM_Sample);
-        double FTM_CombErr	= TMath::Sqrt(TMath::Power(FTM_EffErr,2) + TMath::Power(FTM_NoiseErr,2));
-        printf("%-.3f\t\t%-.3f\t\t%-.3f\t\t%-.3f\t\t%d\t\tFTM\n",
-               FTM_Eff,FTM_EffErr,FTM_NoiseErr,FTM_CombErr,FTM_Sample);        
-        Offsetfile_LC1<<"FTM\t"<< DUT_MinX[0] << "-" << DUT_MaxX[0] << "\t"<< (DUT_MaxX[0]+DUT_MinX[0])/2.0 <<"\t"<< fixed<<std::setprecision(4)<<FTM_Eff << "\t"<< FTM_EffErr << "\t"<< FTM_Sample << endl;
+        //double g3ycl_CovLength	= TMath::Abs(DUT_MaxY[0]-DUT_MinY[0]); //Patr
+        double g3ycl_CovLength	= TMath::Abs(DUT_MaxX[0]-DUT_MinX[0]); //Patr
+        double g3ycl_EffRadLength= 2*DUT_effRad[0];//Patr
+        double g3ycl_Eff 	= (1-hg3ycl_Eff->GetBinContent(1)/hg3ycl_Eff->GetEntries());
+        int    g3ycl_Sample	= hg3ycl_Eff->GetEntries();
+        double g3ycl_NoiseErr	= 
+        (g3ycl_EffRadLength/g3ycl_CovLength)*hg3ycl_Distance_Noise->GetEntries()/hg3ycl_Eff->GetEntries(); 
+        double g3ycl_EffErr	= TMath::Sqrt(g3ycl_Eff*(1-g3ycl_Eff)/g3ycl_Sample);
+        double g3ycl_CombErr	= TMath::Sqrt(TMath::Power(g3ycl_EffErr,2) + TMath::Power(g3ycl_NoiseErr,2));
+        printf("%-.3f\t\t%-.3f\t\t%-.3f\t\t%-.3f\t\t%d\t\tg3ycl\n",
+               g3ycl_Eff,g3ycl_EffErr,g3ycl_NoiseErr,g3ycl_CombErr,g3ycl_Sample);        
+        Offsetfile_LC1<<"g3ycl\t"<< DUT_MinX[0] << "-" << DUT_MaxX[0] << "\t"<< (DUT_MaxX[0]+DUT_MinX[0])/2.0 <<"\t"<< fixed<<std::setprecision(4)<<g3ycl_Eff << "\t"<< g3ycl_EffErr << "\t"<< g3ycl_Sample << endl;
 
         cout << "=======rd51tracker_nentries========= :"<< rd51tracker_tree->GetEntries()<< endl;
         cout << "********rd51reco_nentries********* :"<< rd51reco_tree->GetEntries()<< endl;
         cout << "======ENTRIES PROCESSATE======= :"<< NumberOfProcessedEntries << endl;     
 
-        cout << "B2B_GEM_Sample =" <<  B2B_GEM_Sample << endl;
-        cout << "B2B_GEM_CovLength =" <<B2B_GEM_CovLength << endl;
-        cout << "B2B_GEM_EffRadLength =" << B2B_GEM_EffRadLength << endl;
-        cout << "B2B_GEM_Eff ="<< B2B_GEM_Eff<< endl;
-        cout << "B2B_GEM_EffErr =" << B2B_GEM_EffErr << endl;
-        cout << "B2B_GEM_NoiseErr =" << B2B_GEM_NoiseErr << endl;
-        cout << "B2B_GEM_CombErr =" << B2B_GEM_CombErr << endl;
+        cout << "g3xcl_Sample =" <<  g3xcl_Sample << endl;
+        cout << "g3xcl_CovLength =" <<g3xcl_CovLength << endl;
+        cout << "g3xcl_EffRadLength =" << g3xcl_EffRadLength << endl;
+        cout << "g3xcl_Eff ="<< g3xcl_Eff<< endl;
+        cout << "g3xcl_EffErr =" << g3xcl_EffErr << endl;
+        cout << "g3xcl_NoiseErr =" << g3xcl_NoiseErr << endl;
+        cout << "g3xcl_CombErr =" << g3xcl_CombErr << endl;
     
-        cout << "FTM_Sample =" <<  FTM_Sample << endl;
-        cout << "FTM_CovLength =" <<FTM_CovLength << endl;
-        cout << "FTM_EffRadLength =" << FTM_EffRadLength << endl;
-        cout << "FTM_Eff ="<< FTM_Eff<< endl;
-        cout << "FTM_EffErr =" << FTM_EffErr << endl;
-        cout << "FTM_NoiseErr =" << FTM_NoiseErr << endl;
-        cout << "FTM_CombErr =" << FTM_CombErr << endl;
+        cout << "g3ycl_Sample =" <<  g3ycl_Sample << endl;
+        cout << "g3ycl_CovLength =" <<g3ycl_CovLength << endl;
+        cout << "g3ycl_EffRadLength =" << g3ycl_EffRadLength << endl;
+        cout << "g3ycl_Eff ="<< g3ycl_Eff<< endl;
+        cout << "g3ycl_EffErr =" << g3ycl_EffErr << endl;
+        cout << "g3ycl_NoiseErr =" << g3ycl_NoiseErr << endl;
+        cout << "g3ycl_CombErr =" << g3ycl_CombErr << endl;
 
 
         BlueOut("...................................................................................................\n");
@@ -253,7 +253,7 @@ rd51_Analyzer::rd51_Analyzer(TString rd51reco_filename, TString rd51tracker_file
 //--- CMS30x30 and GE1/1 Efficiency Calculator
 //__________________________________________________________________________________________
 
-int rd51_Analyzer::Calc_FTM_Eff(int verbose)
+int rd51_Analyzer::Calc_g3ycl_Eff(int verbose)
 {
 //std::cout<<"###################################################################################11"<<std::endl;
     bool ERSFound = 0; //--- Control Variable for the Efficiency Radius Scan 
@@ -267,51 +267,51 @@ int rd51_Analyzer::Calc_FTM_Eff(int verbose)
     bool YCov= (ProjectedY   >= DUT_MinY[0]   && ProjectedY <= DUT_MaxY[0]); //Patr		
     bool InsideCoverage   = XCov && YCov;
     
-    if(verbose) cout << "Number of Clusters in FTM: " << rd51reco->FTM_ << endl;	
+    if(verbose) cout << "Number of Clusters in g3ycl: " << rd51reco->g3ycl_ << endl;	
     
   //  cout<<"For LC1 : ProjectedX = "<<ProjectedX<<"\tProjectedY = "<<ProjectedY<<"\tDUT_MinX = "<<DUT_MinX[0]<<"\tmaxX = "<<DUT_MaxX[0]<<"\tXCov = "<<XCov<<"\tYCov = "<<YCov<<endl;
     if ( !rd51analyzer_EnableCoverage || InsideCoverage )
     {
         if ( verbose && rd51analyzer_EnableCoverage) GreenOut("Inside the Coverage\n");
         //--- Updating the entries in the Efficiency Radius Scan
-        if (rd51analyzer_EfficiencyRadiusScan) FTM_ERSEntries += 1.;
+        if (rd51analyzer_EfficiencyRadiusScan) g3ycl_ERSEntries += 1.;
         //--- Loop on the DUT clusters
         int neff = 0;
-        for (int ihit = 0; ihit <rd51reco->FTM_ ; ihit++)
+        for (int ihit = 0; ihit <rd51reco->g3ycl_ ; ihit++)
         {
-	   Float_t distance = TMath::Abs( rd51reco->FTM_geoposX[ihit] +DUT_offsetX[0] - ProjectedX ); //Patr
+	   Float_t distance = TMath::Abs( rd51reco->g3ycl_geoposX[ihit] +DUT_offsetX[0] - ProjectedX ); //Patr
 	     if ( distance  < DUT_effRad[0] ) //Patr
             {
-                hFTM_XY_Eff->Fill(ProjectedX,ProjectedY);
-                hFTM_CLS_Eff->Fill(rd51reco->FTM_ngeoch[ihit]);
-                hFTM_Distance_Eff->Fill(distance);
-                hFTM_Residual_X->Fill(rd51reco->FTM_geoposX[ihit] + DUT_offsetX[0] - ProjectedX); //Patr
+                hg3ycl_XY_Eff->Fill(ProjectedX,ProjectedY);
+                hg3ycl_CLS_Eff->Fill(rd51reco->g3ycl_ngeoch[ihit]);
+                hg3ycl_Distance_Eff->Fill(distance);
+                hg3ycl_Residual_X->Fill(rd51reco->g3ycl_geoposX[ihit] + DUT_offsetX[0] - ProjectedX); //Patr
                 neff++;
             }
             else
             {
-                hFTM_XY_Noise->Fill(ProjectedX,ProjectedY);
-                hFTM_CLS_Noise->Fill(rd51reco->FTM_ngeoch[ihit]);
-                hFTM_Distance_Noise->Fill(distance);
+                hg3ycl_XY_Noise->Fill(ProjectedX,ProjectedY);
+                hg3ycl_CLS_Noise->Fill(rd51reco->g3ycl_ngeoch[ihit]);
+                hg3ycl_Distance_Noise->Fill(distance);
             }
             //--- Filling the Efficiency Radius Scan Arrays
 	      	if (rd51analyzer_EfficiencyRadiusScan && !ERSFound)
             {
                 for (int iers=0; iers<ERSSteps; iers++)
                 {
-                    if (distance < ERSRad[iers]) { FTM_ERSIneff[iers] += 1.; ERSFound=1;}
+                    if (distance < ERSRad[iers]) { g3ycl_ERSIneff[iers] += 1.; ERSFound=1;}
                 }
             }
         }
-        hFTM_Eff->Fill(neff);
-        if (neff==0) hFTM_XY_Ineff->Fill(ProjectedX,ProjectedY);
+        hg3ycl_Eff->Fill(neff);
+        if (neff==0) hg3ycl_XY_Ineff->Fill(ProjectedX,ProjectedY);
     }
     if (  verbose && rd51analyzer_EnableCoverage && !InsideCoverage ) RedOut("Outside of the Coverage\n");
     return 0;
 }
 
 
-int rd51_Analyzer::Calc_B2B_GEM_Eff(int verbose)
+int rd51_Analyzer::Calc_g3xcl_Eff(int verbose)
 {
     bool ERSFound = 0; //--- Control Variable for the Efficiency Radius Scan 
     
@@ -325,46 +325,46 @@ int rd51_Analyzer::Calc_B2B_GEM_Eff(int verbose)
      bool YCov= (ProjectedY   >= DUT_MinY[1]   && ProjectedY <= DUT_MaxY[1]);  //Patr		
     bool InsideCoverage   = XCov && YCov;
     
-    if(verbose) cout << "Number of Clusters in B2B_GEM: " << rd51reco->B2B_GEM_ << endl;	
+    if(verbose) cout << "Number of Clusters in g3xcl: " << rd51reco->g3xcl_ << endl;	
  //   cout<<"For LC2 : ProjectedX = "<<ProjectedX<<"\tProjectedY = "<<ProjectedY<<"\tDUT_MinX = "<<DUT_MinX[1]<<"\tmaxX = "<<DUT_MaxX[1]<<"\tXCov = "<<XCov<<"\tYCov = "<<YCov<<endl;
     
     if ( !rd51analyzer_EnableCoverage || InsideCoverage )
     {
         if ( verbose && rd51analyzer_EnableCoverage) GreenOut("Inside the Coverage\n");
         //--- Updating the entries in the Efficiency Radius Scan
-        if (rd51analyzer_EfficiencyRadiusScan) B2B_GEM_ERSEntries += 1.;
+        if (rd51analyzer_EfficiencyRadiusScan) g3xcl_ERSEntries += 1.;
         //--- Loop on the DUT clusters
         int neff = 0;
-        for (int ihit = 0; ihit <rd51reco->B2B_GEM_ ; ihit++)
+        for (int ihit = 0; ihit <rd51reco->g3xcl_ ; ihit++)
         {
-	   Float_t distance = TMath::Abs( rd51reco->B2B_GEM_geoposX[ihit] +DUT_offsetX[1] - ProjectedX ); //Patr
+	   Float_t distance = TMath::Abs( rd51reco->g3xcl_geoposX[ihit] +DUT_offsetX[1] - ProjectedX ); //Patr
 	  //if ( distance  < DUT_effRad[7] )
 	  if ( distance  < DUT_effRad[1] ) //Patr
             {
-                hB2B_GEM_XY_Eff->Fill(ProjectedX,ProjectedY);
-                hB2B_GEM_CLS_Eff->Fill(rd51reco->B2B_GEM_ngeoch[ihit]);
-                hB2B_GEM_Distance_Eff->Fill(distance);
-                hB2B_GEM_Residual_X->Fill(rd51reco->B2B_GEM_geoposX[ihit] + DUT_offsetX[1] - ProjectedX); //Patr
+                hg3xcl_XY_Eff->Fill(ProjectedX,ProjectedY);
+                hg3xcl_CLS_Eff->Fill(rd51reco->g3xcl_ngeoch[ihit]);
+                hg3xcl_Distance_Eff->Fill(distance);
+                hg3xcl_Residual_X->Fill(rd51reco->g3xcl_geoposX[ihit] + DUT_offsetX[1] - ProjectedX); //Patr
                 neff++;
             }
             else
             {
-                hB2B_GEM_XY_Noise->Fill(ProjectedX,ProjectedY);
-                hB2B_GEM_CLS_Noise->Fill(rd51reco->B2B_GEM_ngeoch[ihit]);
-                hB2B_GEM_Distance_Noise->Fill(distance);
+                hg3xcl_XY_Noise->Fill(ProjectedX,ProjectedY);
+                hg3xcl_CLS_Noise->Fill(rd51reco->g3xcl_ngeoch[ihit]);
+                hg3xcl_Distance_Noise->Fill(distance);
             }
             //--- Filling the Efficiency Radius Scan Arrays
 	    if (rd51analyzer_EfficiencyRadiusScan && !ERSFound) {
                 for (int iers=0; iers<ERSSteps; iers++)
                 {
-                    if (distance < ERSRad[iers]) { B2B_GEM_ERSIneff[iers] += 1.; ERSFound=1;}
+                    if (distance < ERSRad[iers]) { g3xcl_ERSIneff[iers] += 1.; ERSFound=1;}
                 }
             }
         }
-        hB2B_GEM_Eff->Fill(neff);
+        hg3xcl_Eff->Fill(neff);
        
        
-        if (neff==0) hB2B_GEM_XY_Ineff->Fill(ProjectedX,ProjectedY);
+        if (neff==0) hg3xcl_XY_Ineff->Fill(ProjectedX,ProjectedY);
     }
     if (  verbose && rd51analyzer_EnableCoverage && !InsideCoverage ) RedOut("Outside of the Coverage\n");
     return 0;
@@ -449,23 +449,23 @@ void rd51_Analyzer::InitializeEfficiencyRadiusScan(int verbose)
     
     ERSRad = new Float_t[ERSSteps];
   
-    B2B_GEM_ERSIneff = new Float_t[ERSSteps];
-    FTM_ERSIneff = new Float_t[ERSSteps];
+    g3xcl_ERSIneff = new Float_t[ERSSteps];
+    g3ycl_ERSIneff = new Float_t[ERSSteps];
 
-    B2B_GEM_ERSErr = new Float_t[ERSSteps];
-    FTM_ERSErr = new Float_t[ERSSteps];
+    g3xcl_ERSErr = new Float_t[ERSSteps];
+    g3ycl_ERSErr = new Float_t[ERSSteps];
 
-    B2B_GEM_ERSEntries = 0.;
-    FTM_ERSEntries = 0.;
+    g3xcl_ERSEntries = 0.;
+    g3ycl_ERSEntries = 0.;
 
     for (int i=0; i<ERSSteps; i++) {
         ERSRad[i] = rd51analyzer_EfficiencyRadiusMin+rd51analyzer_EfficiencyRadiusStep*i;
         
-        B2B_GEM_ERSIneff[i] = 0.;
-        FTM_ERSIneff[i] = 0.;
+        g3xcl_ERSIneff[i] = 0.;
+        g3ycl_ERSIneff[i] = 0.;
 
-        B2B_GEM_ERSErr[i] = 0.;
-        FTM_ERSErr[i] = 0.;
+        g3xcl_ERSErr[i] = 0.;
+        g3ycl_ERSErr[i] = 0.;
     }		
 }
 
@@ -476,25 +476,25 @@ void rd51_Analyzer::ProcessEfficiencyRadiusScan(int verbose)
     EfficiencyTree->Branch("ERSSteps",&ERSSteps,"ERSSteps/I");
     EfficiencyTree->Branch("ERSRad",ERSRad,"ERSRad[ERSSteps]/F");
 
-    EfficiencyTree->Branch("B2B_GEM_ERSEntries",&B2B_GEM_ERSEntries,"B2B_GEM_ERSEntries/I");
-    EfficiencyTree->Branch("FTM_ERSEntries",&FTM_ERSEntries,"FTM_ERSEntries/I");
+    EfficiencyTree->Branch("g3xcl_ERSEntries",&g3xcl_ERSEntries,"g3xcl_ERSEntries/I");
+    EfficiencyTree->Branch("g3ycl_ERSEntries",&g3ycl_ERSEntries,"g3ycl_ERSEntries/I");
     
-    EfficiencyTree->Branch("B2B_GEM_ERSIneff",B2B_GEM_ERSIneff,"B2B_GEM_ERSIneff[ERSSteps]/F");
-    EfficiencyTree->Branch("FTM_ERSIneff",FTM_ERSIneff,"FTM_ERSIneff[ERSSteps]/F");
+    EfficiencyTree->Branch("g3xcl_ERSIneff",g3xcl_ERSIneff,"g3xcl_ERSIneff[ERSSteps]/F");
+    EfficiencyTree->Branch("g3ycl_ERSIneff",g3ycl_ERSIneff,"g3ycl_ERSIneff[ERSSteps]/F");
 
-    EfficiencyTree->Branch("B2B_GEM_ERSErr",B2B_GEM_ERSErr,"B2B_GEM_ERSErr[ERSSteps]/F");
-    EfficiencyTree->Branch("FTM_ERSErr",FTM_ERSErr,"FTM_ERSErr[ERSSteps]/F");
+    EfficiencyTree->Branch("g3xcl_ERSErr",g3xcl_ERSErr,"g3xcl_ERSErr[ERSSteps]/F");
+    EfficiencyTree->Branch("g3ycl_ERSErr",g3ycl_ERSErr,"g3ycl_ERSErr[ERSSteps]/F");
     
     //--- Processing the data----------------------------------------------------------------------------------------------
     for (int i=0; i<ERSSteps; i++)
     {
         //--- Efficiency	
-        B2B_GEM_ERSIneff[i] =1- B2B_GEM_ERSIneff[i]  / B2B_GEM_ERSEntries;
-        FTM_ERSIneff[i] =1- FTM_ERSIneff[i]  / FTM_ERSEntries;
+        g3xcl_ERSIneff[i] =1- g3xcl_ERSIneff[i]  / g3xcl_ERSEntries;
+        g3ycl_ERSIneff[i] =1- g3ycl_ERSIneff[i]  / g3ycl_ERSEntries;
 
         //---  Binomial Error                                 
-        B2B_GEM_ERSErr[i] = TMath::Sqrt(B2B_GEM_ERSIneff[i]*(1-B2B_GEM_ERSIneff[i])/B2B_GEM_ERSEntries);
-        FTM_ERSErr[i] = TMath::Sqrt(FTM_ERSIneff[i]*(1-FTM_ERSIneff[i])/FTM_ERSEntries);
+        g3xcl_ERSErr[i] = TMath::Sqrt(g3xcl_ERSIneff[i]*(1-g3xcl_ERSIneff[i])/g3xcl_ERSEntries);
+        g3ycl_ERSErr[i] = TMath::Sqrt(g3ycl_ERSIneff[i]*(1-g3ycl_ERSIneff[i])/g3ycl_ERSEntries);
     }
     //---End of Processing the data--------------------------------------------------------------------------------------
     
@@ -504,40 +504,40 @@ void rd51_Analyzer::ProcessEfficiencyRadiusScan(int verbose)
     delete EfficiencyTree;
     
     //--- Initializing and writing the TGraphErrors	
-    B2B_GEM_ERSIneffGraph = new TGraphErrors(ERSSteps,ERSRad,      B2B_GEM_ERSIneff,(const Float_t*)0,      B2B_GEM_ERSErr);
-    FTM_ERSIneffGraph = new TGraphErrors(ERSSteps,ERSRad,      FTM_ERSIneff,(const Float_t*)0,      FTM_ERSErr);
+    g3xcl_ERSIneffGraph = new TGraphErrors(ERSSteps,ERSRad,      g3xcl_ERSIneff,(const Float_t*)0,      g3xcl_ERSErr);
+    g3ycl_ERSIneffGraph = new TGraphErrors(ERSSteps,ERSRad,      g3ycl_ERSIneff,(const Float_t*)0,      g3ycl_ERSErr);
 
-    B2B_GEM_ERSIneffGraph->SetTitle("B2B_GEM");
-    FTM_ERSIneffGraph->SetTitle("FTM");
+    g3xcl_ERSIneffGraph->SetTitle("g3xcl");
+    g3ycl_ERSIneffGraph->SetTitle("g3ycl");
 
-    B2B_GEM_ERSIneffGraph->SetName("B2B_GEM_ERSIneffGraph");
-    FTM_ERSIneffGraph->SetName("FTM_ERSIneffGraph");
+    g3xcl_ERSIneffGraph->SetName("g3xcl_ERSIneffGraph");
+    g3ycl_ERSIneffGraph->SetName("g3ycl_ERSIneffGraph");
 
-    B2B_GEM_ERSIneffGraph->GetYaxis()->SetTitle("Efficiency Radius[mm]");
-    FTM_ERSIneffGraph->GetYaxis()->SetTitle("Efficiency Radius[mm]");
+    g3xcl_ERSIneffGraph->GetYaxis()->SetTitle("Efficiency Radius[mm]");
+    g3ycl_ERSIneffGraph->GetYaxis()->SetTitle("Efficiency Radius[mm]");
 
-    B2B_GEM_ERSIneffGraph->GetXaxis()->SetTitle("Inefficiency");
-    FTM_ERSIneffGraph->GetXaxis()->SetTitle("Inefficiency");    
+    g3xcl_ERSIneffGraph->GetXaxis()->SetTitle("Inefficiency");
+    g3ycl_ERSIneffGraph->GetXaxis()->SetTitle("Inefficiency");    
 
-    B2B_GEM_ERSIneffGraph->GetXaxis()->SetRangeUser(0,1);
-    FTM_ERSIneffGraph->GetXaxis()->SetRangeUser(0,1);    
+    g3xcl_ERSIneffGraph->GetXaxis()->SetRangeUser(0,1);
+    g3ycl_ERSIneffGraph->GetXaxis()->SetRangeUser(0,1);    
 
-    B2B_GEM_ERSIneffGraph->Write();
-    FTM_ERSIneffGraph->Write();
+    g3xcl_ERSIneffGraph->Write();
+    g3ycl_ERSIneffGraph->Write();
 }
 
 void rd51_Analyzer::DeleteEfficiencyRadiusScan(int verbose)
 {
     delete 	             		ERSRad;
 
-    delete                B2B_GEM_ERSIneff;
-    delete                FTM_ERSIneff;
+    delete                g3xcl_ERSIneff;
+    delete                g3ycl_ERSIneff;
 
-    delete                B2B_GEM_ERSErr;
-    delete                FTM_ERSErr;
+    delete                g3xcl_ERSErr;
+    delete                g3ycl_ERSErr;
 
-    delete                B2B_GEM_ERSIneffGraph;
-    delete                FTM_ERSIneffGraph;
+    delete                g3xcl_ERSIneffGraph;
+    delete                g3ycl_ERSIneffGraph;
 }
 //-------------------------------------------------------------------------------------
 //--- End Of Efficiency Radius Scan Initilaization                                       
@@ -646,25 +646,25 @@ void rd51_Analyzer::HistoWrite(int verbose)
     // Writing Histograms....
     if (verbose) GreenOut("Writing Histograms....\n");	    
 
-    hB2B_GEM_Eff		->Write();		
-    hB2B_GEM_XY_Eff		->Write();	
-    hB2B_GEM_XY_Ineff	->Write();	
-    hB2B_GEM_XY_Noise	->Write();	
-    hB2B_GEM_CLS_Eff		->Write();	
-    hB2B_GEM_CLS_Noise	->Write();	
-    hB2B_GEM_Distance_Eff	->Write();	
-    hB2B_GEM_Distance_Noise	->Write();	
-    hB2B_GEM_Residual_X	->Write();		
+    hg3xcl_Eff		->Write();		
+    hg3xcl_XY_Eff		->Write();	
+    hg3xcl_XY_Ineff	->Write();	
+    hg3xcl_XY_Noise	->Write();	
+    hg3xcl_CLS_Eff		->Write();	
+    hg3xcl_CLS_Noise	->Write();	
+    hg3xcl_Distance_Eff	->Write();	
+    hg3xcl_Distance_Noise	->Write();	
+    hg3xcl_Residual_X	->Write();		
     
-    hFTM_Eff		->Write();		
-    hFTM_XY_Eff		->Write();	
-    hFTM_XY_Ineff	->Write();	
-    hFTM_XY_Noise	->Write();	
-    hFTM_CLS_Eff		->Write();	
-    hFTM_CLS_Noise	->Write();	
-    hFTM_Distance_Eff	->Write();	
-    hFTM_Distance_Noise	->Write();	
-    hFTM_Residual_X	->Write();		
+    hg3ycl_Eff		->Write();		
+    hg3ycl_XY_Eff		->Write();	
+    hg3ycl_XY_Ineff	->Write();	
+    hg3ycl_XY_Noise	->Write();	
+    hg3ycl_CLS_Eff		->Write();	
+    hg3ycl_CLS_Noise	->Write();	
+    hg3ycl_Distance_Eff	->Write();	
+    hg3ycl_Distance_Noise	->Write();	
+    hg3ycl_Residual_X	->Write();		
 
 }
 
@@ -675,25 +675,25 @@ void rd51_Analyzer::HistoDelete(int verbose)
     if (verbose) GreenOut("Deleting Histograms....\n");
     
     
-    delete hB2B_GEM_Eff		;
-    delete hB2B_GEM_XY_Eff		;
-    delete hB2B_GEM_XY_Ineff		;
-    delete hB2B_GEM_XY_Noise		;
-    delete hB2B_GEM_CLS_Eff		;
-    delete hB2B_GEM_CLS_Noise	;
-    delete hB2B_GEM_Distance_Eff	;
-    delete hB2B_GEM_Distance_Noise	;
-    delete hB2B_GEM_Residual_X	;
+    delete hg3xcl_Eff		;
+    delete hg3xcl_XY_Eff		;
+    delete hg3xcl_XY_Ineff		;
+    delete hg3xcl_XY_Noise		;
+    delete hg3xcl_CLS_Eff		;
+    delete hg3xcl_CLS_Noise	;
+    delete hg3xcl_Distance_Eff	;
+    delete hg3xcl_Distance_Noise	;
+    delete hg3xcl_Residual_X	;
     
-    delete hFTM_Eff		;
-    delete hFTM_XY_Eff		;
-    delete hFTM_XY_Ineff		;
-    delete hFTM_XY_Noise		;
-    delete hFTM_CLS_Eff		;
-    delete hFTM_CLS_Noise	;
-    delete hFTM_Distance_Eff	;
-    delete hFTM_Distance_Noise	;
-    delete hFTM_Residual_X	;
+    delete hg3ycl_Eff		;
+    delete hg3ycl_XY_Eff		;
+    delete hg3ycl_XY_Ineff		;
+    delete hg3ycl_XY_Noise		;
+    delete hg3ycl_CLS_Eff		;
+    delete hg3ycl_CLS_Noise	;
+    delete hg3ycl_Distance_Eff	;
+    delete hg3ycl_Distance_Noise	;
+    delete hg3ycl_Residual_X	;
 
 }
 
@@ -704,45 +704,45 @@ void rd51_Analyzer::HistoDefine(int verbose)
     
 
     //--- CMS 30x30 and GE1/1---
-    hB2B_GEM_Eff		= new TH1F("hB2B_GEM_Eff"		,"",  20, -0.5	, 19.5			); // commented by PATR
-    hB2B_GEM_XY_Eff		= new TH2F("hB2B_GEM_XY_Eff"		,"", 400,-200.	,200.	,400,-200.,200.	);
-    hB2B_GEM_XY_Ineff	= new TH2F("hB2B_GEM_XY_Ineff"	,"", 400,-200.	,200.	,400,-200.,200.	);
-    hB2B_GEM_XY_Noise	= new TH2F("hB2B_GEM_XY_Noise"	,"", 400,-200.	,200.	,400,-200.,200.	);
-    hB2B_GEM_CLS_Eff		= new TH1F("hB2B_GEM_CLS_Eff"	,"", 100,-0.5	,99.5			);
-    hB2B_GEM_CLS_Noise	= new TH1F("hB2B_GEM_CLS_Noise"	,"", 100,-0.5	,99.5			);
-    hB2B_GEM_Distance_Eff	= new TH1F("hB2B_GEM_Distance_Eff"	,"",1000, 0.	,100.			);
-    hB2B_GEM_Distance_Noise	= new TH1F("hB2B_GEM_Distance_Noise"	,"",1000, 0.	,100.			);
-    hB2B_GEM_Residual_X 	= new TH1F("hB2B_GEM_Residual_X"	,"",110,-4.	,4.			);
+    hg3xcl_Eff		= new TH1F("hg3xcl_Eff"		,"",  20, -0.5	, 19.5			); // commented by PATR
+    hg3xcl_XY_Eff		= new TH2F("hg3xcl_XY_Eff"		,"", 400,-200.	,200.	,400,-200.,200.	);
+    hg3xcl_XY_Ineff	= new TH2F("hg3xcl_XY_Ineff"	,"", 400,-200.	,200.	,400,-200.,200.	);
+    hg3xcl_XY_Noise	= new TH2F("hg3xcl_XY_Noise"	,"", 400,-200.	,200.	,400,-200.,200.	);
+    hg3xcl_CLS_Eff		= new TH1F("hg3xcl_CLS_Eff"	,"", 100,-0.5	,99.5			);
+    hg3xcl_CLS_Noise	= new TH1F("hg3xcl_CLS_Noise"	,"", 100,-0.5	,99.5			);
+    hg3xcl_Distance_Eff	= new TH1F("hg3xcl_Distance_Eff"	,"",1000, 0.	,100.			);
+    hg3xcl_Distance_Noise	= new TH1F("hg3xcl_Distance_Noise"	,"",1000, 0.	,100.			);
+    hg3xcl_Residual_X 	= new TH1F("hg3xcl_Residual_X"	,"",110,-4.	,4.			);
     
-    hB2B_GEM_Eff		->SetTitle("CMS 30x30: Efficiency"					  	);	   
-    hB2B_GEM_XY_Eff		->SetTitle("CMS 30x30: Tracker Hits with DUT Active"			  	);         
-    hB2B_GEM_XY_Ineff	->SetTitle("CMS 30x30:: Tracker Hits with DUT Inactive/Not Aligned"	  	);         
-    hB2B_GEM_XY_Noise	->SetTitle("CMS 30x30:: Tracker Hits with DUT Not Aligned"		  	);         
-    hB2B_GEM_CLS_Eff		->SetTitle("CMS 30x30:: Cluster Size for hits aligned with tracks"	  	);         
-    hB2B_GEM_CLS_Noise	->SetTitle("CMS 30x30:: Cluster Size for hits not aligned with tracks" 		);         
-    hB2B_GEM_Distance_Eff	->SetTitle("CMS 30x30:: Hit-Track Distance for ALIGNED hits"		  	);         
-    hB2B_GEM_Distance_Noise	->SetTitle("CMS 30x30:: Hit-Track Distance for NOT ALIGNED hits"	  	);         
-    hB2B_GEM_Residual_X	->SetTitle("CMS 30x30:: X Residuals"					  	);         
+    hg3xcl_Eff		->SetTitle("CMS 30x30: Efficiency"					  	);	   
+    hg3xcl_XY_Eff		->SetTitle("CMS 30x30: Tracker Hits with DUT Active"			  	);         
+    hg3xcl_XY_Ineff	->SetTitle("CMS 30x30:: Tracker Hits with DUT Inactive/Not Aligned"	  	);         
+    hg3xcl_XY_Noise	->SetTitle("CMS 30x30:: Tracker Hits with DUT Not Aligned"		  	);         
+    hg3xcl_CLS_Eff		->SetTitle("CMS 30x30:: Cluster Size for hits aligned with tracks"	  	);         
+    hg3xcl_CLS_Noise	->SetTitle("CMS 30x30:: Cluster Size for hits not aligned with tracks" 		);         
+    hg3xcl_Distance_Eff	->SetTitle("CMS 30x30:: Hit-Track Distance for ALIGNED hits"		  	);         
+    hg3xcl_Distance_Noise	->SetTitle("CMS 30x30:: Hit-Track Distance for NOT ALIGNED hits"	  	);         
+    hg3xcl_Residual_X	->SetTitle("CMS 30x30:: X Residuals"					  	);         
 
-    hFTM_Eff		= new TH1F("hFTM_Eff"		,"",  20, -0.5	, 19.5			);
-    hFTM_XY_Eff		= new TH2F("hFTM_XY_Eff"		,"", 400,-200.	,200.	,400,-200.,200.	);
-    hFTM_XY_Ineff	= new TH2F("hFTM_XY_Ineff"	,"", 400,-200.	,200.	,400,-200.,200.	);
-    hFTM_XY_Noise	= new TH2F("hFTM_XY_Noise"	,"", 400,-200.	,200.	,400,-200.,200.	);
-    hFTM_CLS_Eff		= new TH1F("hFTM_CLS_Eff"	,"", 100,-0.5	,99.5			);
-    hFTM_CLS_Noise	= new TH1F("hFTM_CLS_Noise"	,"", 100,-0.5	,99.5			);
-    hFTM_Distance_Eff	= new TH1F("hFTM_Distance_Eff"	,"",1000, 0.	,100.			);
-    hFTM_Distance_Noise	= new TH1F("hFTM_Distance_Noise"	,"",1000, 0.	,100.			);
-    hFTM_Residual_X 	= new TH1F("hFTM_Residual_X"	,"",1000,-100.	,100.			);
+    hg3ycl_Eff		= new TH1F("hg3ycl_Eff"		,"",  20, -0.5	, 19.5			);
+    hg3ycl_XY_Eff		= new TH2F("hg3ycl_XY_Eff"		,"", 400,-200.	,200.	,400,-200.,200.	);
+    hg3ycl_XY_Ineff	= new TH2F("hg3ycl_XY_Ineff"	,"", 400,-200.	,200.	,400,-200.,200.	);
+    hg3ycl_XY_Noise	= new TH2F("hg3ycl_XY_Noise"	,"", 400,-200.	,200.	,400,-200.,200.	);
+    hg3ycl_CLS_Eff		= new TH1F("hg3ycl_CLS_Eff"	,"", 100,-0.5	,99.5			);
+    hg3ycl_CLS_Noise	= new TH1F("hg3ycl_CLS_Noise"	,"", 100,-0.5	,99.5			);
+    hg3ycl_Distance_Eff	= new TH1F("hg3ycl_Distance_Eff"	,"",1000, 0.	,100.			);
+    hg3ycl_Distance_Noise	= new TH1F("hg3ycl_Distance_Noise"	,"",1000, 0.	,100.			);
+    hg3ycl_Residual_X 	= new TH1F("hg3ycl_Residual_X"	,"",1000,-100.	,100.			);
     
-    hFTM_Eff		->SetTitle("CMS 30x30: Efficiency"					  	);	   
-    hFTM_XY_Eff		->SetTitle("CMS 30x30: Tracker Hits with DUT Active"			  	);         
-    hFTM_XY_Ineff	->SetTitle("CMS 30x30:: Tracker Hits with DUT Inactive/Not Aligned"	  	);         
-    hFTM_XY_Noise	->SetTitle("CMS 30x30:: Tracker Hits with DUT Not Aligned"		  	);         
-    hFTM_CLS_Eff		->SetTitle("CMS 30x30:: Cluster Size for hits aligned with tracks"	  	);         
-    hFTM_CLS_Noise	->SetTitle("CMS 30x30:: Cluster Size for hits not aligned with tracks" 		);         
-    hFTM_Distance_Eff	->SetTitle("CMS 30x30:: Hit-Track Distance for ALIGNED hits"		  	);         
-    hFTM_Distance_Noise	->SetTitle("CMS 30x30:: Hit-Track Distance for NOT ALIGNED hits"	  	);         
-    hFTM_Residual_X	->SetTitle("CMS 30x30:: X Residuals"					  	);         
+    hg3ycl_Eff		->SetTitle("CMS 30x30: Efficiency"					  	);	   
+    hg3ycl_XY_Eff		->SetTitle("CMS 30x30: Tracker Hits with DUT Active"			  	);         
+    hg3ycl_XY_Ineff	->SetTitle("CMS 30x30:: Tracker Hits with DUT Inactive/Not Aligned"	  	);         
+    hg3ycl_XY_Noise	->SetTitle("CMS 30x30:: Tracker Hits with DUT Not Aligned"		  	);         
+    hg3ycl_CLS_Eff		->SetTitle("CMS 30x30:: Cluster Size for hits aligned with tracks"	  	);         
+    hg3ycl_CLS_Noise	->SetTitle("CMS 30x30:: Cluster Size for hits not aligned with tracks" 		);         
+    hg3ycl_Distance_Eff	->SetTitle("CMS 30x30:: Hit-Track Distance for ALIGNED hits"		  	);         
+    hg3ycl_Distance_Noise	->SetTitle("CMS 30x30:: Hit-Track Distance for NOT ALIGNED hits"	  	);         
+    hg3ycl_Residual_X	->SetTitle("CMS 30x30:: X Residuals"					  	);         
 
 } 
 //-------------------------------------------------------------------------------------
