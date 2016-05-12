@@ -1198,16 +1198,16 @@ Offsetfile<<"File Name = "<<rawfilename<<endl;
     {
         if((*VFAT[i]).DetectorName == "g3")
         {
-            //TH2F *hg3BeamProfile = new TH2F("hg3BeamProfile","Beam profile on Tracker 3", 1000,-200.,200.,1000,-200.,200.);
+            //TH2F *hg3BeamProfile = new TH2F("hg3BeamProfile","Beam profile on B2B GEM", 1000,-200.,200.,1000,-200.,200.);
             //tree_geo->Draw("g3ycl.geoposY:g3xcl.geoposX>>hg3BeamProfile","g3ycl@.GetEntries()==1 && g3xcl@.GetEntries()==1","Lego2");
-            TH2F *hg3BeamProfile = new TH2F("hg3BeamProfile","Beam profile on Tracker 3", 100,0.,100.,100,0.,100.);
+            TH2F *hg3BeamProfile = new TH2F("hg3BeamProfile","Beam profile on B2B GEM", 100,0.,100.,100,0.,100.);
             tree_geo->Draw("g3ycl.geoposY:g3xcl.geoposX>>hg3BeamProfile","g3ycl@.GetEntries()==1 && g3xcl@.GetEntries()==1","colz");
             hg3BeamProfile->Write();
             
-            TH1F *hg3xoffsetwithg1 = new TH1F("hg3xoffsetwithg1","X Offset of Tracker 3 respect with Tracker 1", 500,-100.,100.);
+            TH1F *hg3xoffsetwithg1 = new TH1F("hg3xoffsetwithg1","X Offset of B2B GEM respect with Tracker 1", 500,-100.,100.);
             tree_geo->Draw("g3xcl.geoposX-g1xcl.geoposX>>hg3xoffsetwithg1","g3xcl@.GetEntries()==1 && g1xcl@.GetEntries()==1","Lego2");
             //hg3xoffsetwithg1->Write();
-            TH1F *hg3yoffsetwithg1 = new TH1F("hg3yoffsetwithg1","Y Offset of Tracker 3 respect with Tracker 1", 500,-100.,100.);
+            TH1F *hg3yoffsetwithg1 = new TH1F("hg3yoffsetwithg1","Y Offset of B2B GEM respect with Tracker 1", 500,-100.,100.);
             tree_geo->Draw("g3ycl.geoposY-g1ycl.geoposY>>hg3yoffsetwithg1","g3ycl@.GetEntries()==1 && g1ycl@.GetEntries()==1","Lego2");
             //hg3yoffsetwithg1->Write();
             if (EBV_BeampProfiledataPrintOut==1 && EBV_Verbose==0)
