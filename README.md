@@ -22,5 +22,5 @@ To Use this:
 	->Then it will ask final run number then just press ENTER.
 	$cd ../ppt
 	$./GetPlot.sh -r
-	->When you run this command then you will get a pdf file named **ppt_R\*_R\*.tex**
+	->When you run this command then you will get a pdf file named **ppt_R*_R*.tex**
 	->This file contains all the basic plots that you need to see quickly, without alignment.

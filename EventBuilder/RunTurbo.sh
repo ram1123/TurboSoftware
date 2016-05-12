@@ -357,7 +357,7 @@ while getopts ":hrlfemi" opt; do
 		e )	echo "To run full TURBO software Enter 0"
 			echo "To run Only EventBuilder Enter 1"
 			echo "To run Only TrackFinder Enter 2"
-			echo "To run Only Analyzer Enter 3  "
+			echo "To run Only Analyzer Enter 3  # Presently this option is disabled"
 			echo -n "For only text file enter 4 : "
 			read run	
 			if [ "$run" -ge "0" ] && [ "$run" -le "4" ]; then
@@ -508,17 +508,18 @@ do
 		./shrd51_TrackFinder.sh $PathOfOutPutData/$(basename $f) | tee $PathOfOutPutData/$(basename $f)/Run${temp}_TrackFinder.log
 	fi
 	if [ "$run" == 0 -o "$run" == 3 ]; then
-		echo -e "\n\n\t\tAnalyzer Started\n\n"
-		./shrd51_Analyzer.sh $PathOfOutPutData/$(basename $f) $temp | tee $PathOfOutPutData/$(basename $f)/Run${temp}_Analyzer.log
-		echo -e "\n\n\t\tAnalyzer Done\n\n"
+		#echo -e "\n\n\t\tAnalyzer Started\n\n"
+		#./shrd51_Analyzer.sh $PathOfOutPutData/$(basename $f) $temp | tee $PathOfOutPutData/$(basename $f)/Run${temp}_Analyzer.log
+		#echo -e "\n\n\t\tAnalyzer Done\n\n"
+		echo -e "\n\n"
 	fi
 
-	LC1=$(sed -n '/Loading the trees.../{n;n;n;n;n;p;}'	$PathOfOutPutData/$(basename $f)/Run${temp}_Analyzer.log | awk '{print $1}')
-	LC2=$(sed -n '/Loading the trees.../{n;n;n;n;p;  }' $PathOfOutPutData/$(basename $f)/Run${temp}_Analyzer.log | awk '{print $1}')
-	LC3=$(sed -n '/Loading the trees.../{n;n;n;p;    }' $PathOfOutPutData/$(basename $f)/Run${temp}_Analyzer.log | awk '{print substr($1,5)}')  
-	LC1_Err=$(sed -n '/Loading the trees.../{n;n;n;n;n;p;}' $PathOfOutPutData/$(basename $f)/Run${temp}_Analyzer.log | awk '{print $2}')
-	LC2_Err=$(sed -n '/Loading the trees.../{n;n;n;n;p;  }' $PathOfOutPutData/$(basename $f)/Run${temp}_Analyzer.log | awk '{print $2}')
-	LC3_Err=$(sed -n '/Loading the trees.../{n;n;n;p;    }' $PathOfOutPutData/$(basename $f)/Run${temp}_Analyzer.log | awk '{print $2}')  
+	#LC1=$(sed -n '/Loading the trees.../{n;n;n;n;n;p;}'	$PathOfOutPutData/$(basename $f)/Run${temp}_Analyzer.log | awk '{print $1}')
+	#LC2=$(sed -n '/Loading the trees.../{n;n;n;n;p;  }' $PathOfOutPutData/$(basename $f)/Run${temp}_Analyzer.log | awk '{print $1}')
+	#LC3=$(sed -n '/Loading the trees.../{n;n;n;p;    }' $PathOfOutPutData/$(basename $f)/Run${temp}_Analyzer.log | awk '{print substr($1,5)}')  
+	#LC1_Err=$(sed -n '/Loading the trees.../{n;n;n;n;n;p;}' $PathOfOutPutData/$(basename $f)/Run${temp}_Analyzer.log | awk '{print $2}')
+	#LC2_Err=$(sed -n '/Loading the trees.../{n;n;n;n;p;  }' $PathOfOutPutData/$(basename $f)/Run${temp}_Analyzer.log | awk '{print $2}')
+	#LC3_Err=$(sed -n '/Loading the trees.../{n;n;n;p;    }' $PathOfOutPutData/$(basename $f)/Run${temp}_Analyzer.log | awk '{print $2}')  
 
     fi
  
@@ -533,50 +534,50 @@ do
 	LC2_Err=$(sed -n '/Loading the trees.../{n;n;n;n;p;  }' $PathOfOutPutData/$(basename $f)/Run${temp}_Analyzer.log | awk '{print $2}')
 	LC3_Err=$(sed -n '/Loading the trees.../{n;n;n;p;    }' $PathOfOutPutData/$(basename $f)/Run${temp}_Analyzer.log | awk '{print $2}')  
     fi
-	echo -e "$(basename $f)\t\t $LC1+/-$LC1_Err \t $LC2+/-$LC2_Err \t $LC3+/-$LC3_Err" >> EfficiencyData_R${IRunNo}_R${FRunNo}.txt
+	#echo -e "$(basename $f)\t\t $LC1+/-$LC1_Err \t $LC2+/-$LC2_Err \t $LC3+/-$LC3_Err" >> EfficiencyData_R${IRunNo}_R${FRunNo}.txt
 	RunCounter=$[$RunCounter+1]
 	mv OffsetFile.log OffsetFile_${temp}.log
-	mv Efficiency_LC1.log Efficiency_LC1_${temp}.log
-	mv Efficiency_LC2.log Efficiency_LC2_${temp}.log
-	mv Efficiency_LC3.log Efficiency_LC3_${temp}.log
+	#mv Efficiency_LC1.log Efficiency_LC1_${temp}.log
+	#mv Efficiency_LC2.log Efficiency_LC2_${temp}.log
+	#mv Efficiency_LC3.log Efficiency_LC3_${temp}.log
   done
 done
 
 
-echo "file(s) of interest:" 
-
-rm FilesToAnalyze.txt
-echo "EfficiencyData_R${IRunNo}_R${FRunNo}.txt" >> FilesToAnalyze.txt
-
-
-while [ $ILat -le $FLat ]
-do
-  rm EfficiencyData_R${IRunNo}_R${FRunNo}_Lat${ILat}.txt
-  grep "Lat$ILat" EfficiencyData_R${IRunNo}_R${FRunNo}.txt >> EfficiencyData_R${IRunNo}_R${FRunNo}_Lat${ILat}.txt
-
-  outputFile=EfficiencyData_R${IRunNo}_R${FRunNo}_Lat${ILat}.txt
-  outputFile_short=EfficiencyData_R${IRunNo}_R${FRunNo}_Lat${ILat}.txt
-
-  if [ $(stat -c%s "$outputFile") -le 46 ]; then
-    rm $outputFile
-  else
-    echo "gedit $outputFile"
-    echo "EfficiencyData_R${IRunNo}_R${FRunNo}_Lat${ILat}.txt" >> FilesToAnalyze.txt
-  fi
-  
-  ILat=$[$ILat+1]
-done
-
-cp FilesToAnalyze.txt FilesToAnalyze_R${IRunNo}_R${FRunNo}.txt
-
-if [ "$mail" == 1 ]; then
-	echo "mailing the Efficiency files.... "
-	mail -a EfficiencyData_R${IRunNo}_R${FRunNo}.txt  -s "Efficiency Data from RunNumber ${IRunNo} to ${FRunNo}" $email < message.log
-	echo "mail sent"
-fi	
-
-cp FilesToAnalyze_R${IRunNo}_R${FRunNo}.txt FilesToAnalyze.txt
-
-echo "To Make Efficiency Curves Execute In Terminal:"
-echo "./analyzeEff.sh"
+#echo "file(s) of interest:" 
+#
+#rm FilesToAnalyze.txt
+#echo "EfficiencyData_R${IRunNo}_R${FRunNo}.txt" >> FilesToAnalyze.txt
+#
+#
+#while [ $ILat -le $FLat ]
+#do
+#  rm EfficiencyData_R${IRunNo}_R${FRunNo}_Lat${ILat}.txt
+#  grep "Lat$ILat" EfficiencyData_R${IRunNo}_R${FRunNo}.txt >> EfficiencyData_R${IRunNo}_R${FRunNo}_Lat${ILat}.txt
+#
+#  outputFile=EfficiencyData_R${IRunNo}_R${FRunNo}_Lat${ILat}.txt
+#  outputFile_short=EfficiencyData_R${IRunNo}_R${FRunNo}_Lat${ILat}.txt
+#
+#  if [ $(stat -c%s "$outputFile") -le 46 ]; then
+#    rm $outputFile
+#  else
+#    echo "gedit $outputFile"
+#    echo "EfficiencyData_R${IRunNo}_R${FRunNo}_Lat${ILat}.txt" >> FilesToAnalyze.txt
+#  fi
+#  
+#  ILat=$[$ILat+1]
+#done
+#
+#cp FilesToAnalyze.txt FilesToAnalyze_R${IRunNo}_R${FRunNo}.txt
+#
+#if [ "$mail" == 1 ]; then
+#	echo "mailing the Efficiency files.... "
+#	mail -a EfficiencyData_R${IRunNo}_R${FRunNo}.txt  -s "Efficiency Data from RunNumber ${IRunNo} to ${FRunNo}" $email < message.log
+#	echo "mail sent"
+#fi	
+#
+#cp FilesToAnalyze_R${IRunNo}_R${FRunNo}.txt FilesToAnalyze.txt
+#
+#echo "To Make Efficiency Curves Execute In Terminal:"
+#echo "./analyzeEff.sh"
 graceful_exit
