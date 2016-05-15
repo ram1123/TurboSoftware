@@ -49,8 +49,8 @@
 	#PathOfInputData=/afs/cern.ch/work/p/pbarria/public/TB_H2_OCT_2014/beamdata
 	#PathOfInputData=/afs/cern.ch/user/r/rasharma/work/public/GEMTestBeam/H4NovDec14_RawData/TURBO_data
 	#PathOfInputData=/afs/cern.ch/user/a/aalgoedt/public/b2b_turbo
-	PathOfInputData=/afs/cern.ch/user/r/rasharma/work/public/GEM_TB_May2016/May2016_TB_Data/
-	
+	#PathOfInputData=/afs/cern.ch/user/r/rasharma/work/public/GEM_TB_May2016/May2016_TB_Data/
+	PathOfInputData=/afs/cern.ch/work/s/ssalva/public/backtoback_tbdata/new_runss/
 	JustTextFile=0
 	# Some Default values
 	IRunNo=1120
