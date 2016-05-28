@@ -438,15 +438,15 @@ do
   fi
 
   # Copies the right configuration file for the present run
-  #if [ $RunCounter -le 1646 ]; then
-  #  cp Setting_EventBuilderVFAT_BelowRun1647.conf Setting_EventBuilderVFAT.conf
-  #  cp Setting_Analyzer_BelowRun1647.conf Setting_Analyzer.conf
-  #  git checkout ConfigFiles/OffsetFlip_EventBuilderVFAT_NOV2014_H4.conf
-  #fi
-  #if [ $RunCounter -gt 1646 ]; then
-  #  cp Setting_EventBuilderVFAT_AboveRun1646.conf Setting_EventBuilderVFAT.conf
-  #  cp Setting_Analyzer_AboveRun1646.conf Setting_Analyzer.conf
-  #fi
+  if [ $RunCounter -le 124 ]; then
+    cp Setting_EventBuilderVFAT_BelowRun124.conf Setting_EventBuilderVFAT.conf
+    #cp Setting_Analyzer_BelowRun1647.conf Setting_Analyzer.conf
+    #git checkout ConfigFiles/OffsetFlip_EventBuilderVFAT_NOV2014_H4.conf
+  fi
+  if [ $RunCounter -gt 123 ]; then
+    cp Setting_EventBuilderVFAT_AboveRun123.conf Setting_EventBuilderVFAT.conf
+    #cp Setting_Analyzer_AboveRun1646.conf Setting_Analyzer.conf
+  fi
   #if [ $RunCounter -gt 1864 ]; then
   #  cp Setting_EventBuilderVFAT_AboveRun1864.conf Setting_EventBuilderVFAT.conf
   #  cp Setting_Analyzer_AboveRun1864.conf Setting_Analyzer.conf

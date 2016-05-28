@@ -177,7 +177,7 @@ int BeamProfile(TString RootFile,TString RecoFile, Int_t name)
 	delete gDirectory->FindObject("hg1BeamProfile");
 	delete gDirectory->FindObject("hg2BeamProfile");
 	delete gDirectory->FindObject("hg3BeamProfile");
-
+/* 
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	//
 	//		Hit Position  
@@ -361,6 +361,7 @@ for(Int_t i=0;i<nbranch;i++){
 }
 
 o_file.close();
+*/
 	
 	}
 	}
