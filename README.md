@@ -24,3 +24,9 @@ To Use this:
 	$./GetPlot.sh -r
 	->When you run this command then you will get a pdf file named **ppt_R*_R*.tex**
 	->This file contains all the basic plots that you need to see quickly, without alignment.
+
+To update Git repo:
+
+	$git reset --hard
+	$git fetch origin
+	$git merge origin/May2016TestBeam May2016TestBeam
