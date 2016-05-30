@@ -450,6 +450,9 @@ do
   if [ $RunCounter -gt 238 ]; then
     cp Setting_EventBuilderVFAT_AboveRun238.conf Setting_EventBuilderVFAT.conf
   fi
+  if [ $RunCounter -gt 292 ]; then
+    cp Setting_EventBuilderVFAT_AboveRun292.conf Setting_EventBuilderVFAT.conf
+  fi
   #if [ $RunCounter -gt 1864 ]; then
   #  cp Setting_EventBuilderVFAT_AboveRun1864.conf Setting_EventBuilderVFAT.conf
   #  cp Setting_Analyzer_AboveRun1864.conf Setting_Analyzer.conf
