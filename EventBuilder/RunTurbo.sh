@@ -46,13 +46,12 @@
 #	-------------------------------------------------------------------
 	
 	# Should be changed by user according to their path
-	#PathOfInputData=/afs/cern.ch/work/p/pbarria/public/TB_H2_OCT_2014/beamdata
-	PathOfInputData=/afs/cern.ch/user/r/rasharma/work/public/GEMTestBeam/H4NovDec14_RawData/TURBO_data
-	
+	PathOfInputData=/afs/cern.ch/user/r/rasharma/work/public/GEMTestBeam/H4NovDec14_RawData/TURBO_data/
+
 	JustTextFile=0
 	# Some Default values
-	IRunNo=1120
-	FRunNo=1120
+	IRunNo=1587
+	FRunNo=1587
 	ILat=10
 	FLat=30
 	run=0
@@ -196,7 +195,7 @@ function DeleteIfFileExists
 	if [ "$1" = "" ]; then 
 		error_exit "DeleteIfFileExists: missing argument 1"
 	else
-		rm $1
+		rm -f $1
 		echo "File ${1} deleted."
 	fi
 
@@ -323,6 +322,9 @@ while getopts ":hrlfemi" opt; do
 		r )	echo "This software is configured for the H4 test beam. So, please enter run number greater then 1586."
 			echo -n "Initial Run Number (IRunNo) = " 
 			read IRunNo
+                        if [ "$IRunNo" == "" ]; then
+                                IRunNo=1587
+                        fi
 			if [ "$IRunNo" -le 1586 ]; then
 				error_exit "Please enter run number greater than 1586. This software is designed for H4 test beam. Please clone the appropriate software for H2 test beam form github."
 			fi
@@ -439,7 +441,7 @@ do
   if [ $RunCounter -le 1646 ]; then
     cp Setting_EventBuilderVFAT_BelowRun1647.conf Setting_EventBuilderVFAT.conf
     cp Setting_Analyzer_BelowRun1647.conf Setting_Analyzer.conf
-    git checkout ConfigFiles/OffsetFlip_EventBuilderVFAT_NOV2014_H4.conf
+    #git checkout ConfigFiles/OffsetFlip_EventBuilderVFAT_NOV2014_H4.conf
   fi
   if [ $RunCounter -gt 1646 ]; then
     cp Setting_EventBuilderVFAT_AboveRun1646.conf Setting_EventBuilderVFAT.conf
@@ -448,24 +450,22 @@ do
   if [ $RunCounter -gt 1864 ]; then
     cp Setting_EventBuilderVFAT_AboveRun1864.conf Setting_EventBuilderVFAT.conf
     cp Setting_Analyzer_AboveRun1864.conf Setting_Analyzer.conf
-    git checkout ConfigFiles/OffsetFlip_EventBuilderVFAT_NOV2014_H4_AboveRun1864.conf
+    #git checkout ConfigFiles/OffsetFlip_EventBuilderVFAT_NOV2014_H4_AboveRun1864.conf
   fi
   if [ $RunCounter -gt 1924 ]; then
     cp Setting_EventBuilderVFAT_AboveRun1924.conf Setting_EventBuilderVFAT.conf
     cp Setting_Analyzer_AboveRun1924.conf Setting_Analyzer.conf
-    git checkout ConfigFiles/OffsetFlip_EventBuilderVFAT_NOV2014_H4_AboveRun1924.conf
+    #git checkout ConfigFiles/OffsetFlip_EventBuilderVFAT_NOV2014_H4_AboveRun1924.conf
   fi
-#  if [ $RunCounter -le 1117 ]; then
-#    cp Setting_EventBuilderVFAT_Run1117AndBelow.conf Setting_EventBuilderVFAT.conf
-#  else  
-#    cp Setting_EventBuilderVFAT_Run1118AndUp.conf Setting_EventBuilderVFAT.conf						         
-#  fi 
-#  fi
+
   for f in $PathOfInputData/Run$file* 	# Stores path of File in variable f
   do
 	cat Setting_EventBuilderVFAT.conf
 	cat Setting_Analyzer.conf
+	CheckOutPutDir
 	echo "Data File : ${f}"
+	echo -e "OutPutPath : ${PathOfOutPutData}"
+	echo "Base file name : $(basename $f)"
 	temp=$(echo $f | sed 's/.*Run//' | sed 's/.//5g')	# This greps the number of run from the path.
 								# Here sed command removes everything till *Run. and then
 								# next sed command removes everything from 5th letter 
@@ -475,29 +475,37 @@ do
 		echo -e "\n\n\t\t temp = ${temp} \n\n"
 		error_exit "Not able of extract Run number. ${temp} is not a number."
 	fi	
-    if [ "$JustTextFile" == 0 ]; then
-	CheckOutPutDir
+    	if [ "$JustTextFile" == 0 ]; then
+		CheckOutPutDir
 	if [ "$run" == 0 -o "$run" == 1 ]; then
 		if [ "$DeleteRootFile" == 1 ]; then
 			echo -e "\n\n\tls  ${PathOfOutPutData}/$(basename $f)/*.root\n\n"
 			rm $PathOfOutPutData/$(basename $f)/*.root
 			echo -e "\n\n\t\tROOT FILE IS REMOVED\n\n\n"
 		fi
+		if [ -d ${PathOfOutPutData}/$(basename $f) ]; then
+		        echo "Directory ${PathOfOutPutData}/$(basename $f) Exists......."
+		else
+			mkdir ${PathOfOutPutData}/$(basename $f)
+		        echo "Directory ${PathOfOutPutData}/$(basename $f) Created................."
+		fi
+		ls $PathOfOutPutData/$(basename $f)
 		echo -e "\n\n\t\tEventBuilder started\n\n"
 		echo -e "\n\n./shrd51_EventBuilderVFAT.sh ${f} $PathOfOutPutData/$(basename $f) | tee ${PathOfOutPutData}/$(basename $f)/Run${temp}_EventBuilderVFAT.log\n\n"
-		./shrd51_EventBuilderVFAT.sh ${f}  $PathOfOutPutData/$(basename $f) | tee $PathOfOutPutData/$(basename $f)/Run${temp}_EventBuilderVFAT.log
+		echo "./shrd51_EventBuilderVFAT.sh ${f}  $PathOfOutPutData/$(basename $f) 2>&1 | tee -i $PathOfOutPutData/$(basename $f)/Run${temp}_EventBuilderVFAT.log"
+		./shrd51_EventBuilderVFAT.sh ${f}  $PathOfOutPutData/$(basename $f) 2>&1 | tee -i $PathOfOutPutData/$(basename $f)/Run${temp}_EventBuilderVFAT.log
 		#./ModifyConfig_BelowRun1646.sh
 		#./ModifyConfig_AboveRun1924.sh
-		./ModifyConfig_RunRange_1868-1906.sh
-		./shrd51_EventBuilderVFAT.sh ${f}  $PathOfOutPutData/$(basename $f) | tee $PathOfOutPutData/$(basename $f)/Run${temp}_EventBuilderVFAT.log
+		#./ModifyConfig_RunRange_1868-1906.sh
+		#./shrd51_EventBuilderVFAT.sh ${f}  $PathOfOutPutData/$(basename $f) | tee $PathOfOutPutData/$(basename $f)/Run${temp}_EventBuilderVFAT.log
 		#./ModifyConfig_BelowRun1646.sh
 		#./ModifyConfig_AboveRun1924.sh
-		./ModifyConfig_RunRange_1868-1906.sh
-		./shrd51_EventBuilderVFAT.sh ${f}  $PathOfOutPutData/$(basename $f) | tee $PathOfOutPutData/$(basename $f)/Run${temp}_EventBuilderVFAT.log
+		#./ModifyConfig_RunRange_1868-1906.sh
+		#./shrd51_EventBuilderVFAT.sh ${f}  $PathOfOutPutData/$(basename $f) | tee $PathOfOutPutData/$(basename $f)/Run${temp}_EventBuilderVFAT.log
 		#./ModifyConfig_BelowRun1646.sh
 		#./ModifyConfig_AboveRun1924.sh
-		./ModifyConfig_RunRange_1868-1906.sh
-		./shrd51_EventBuilderVFAT.sh ${f}  $PathOfOutPutData/$(basename $f) | tee $PathOfOutPutData/$(basename $f)/Run${temp}_EventBuilderVFAT.log
+		#./ModifyConfig_RunRange_1868-1906.sh
+		#./shrd51_EventBuilderVFAT.sh ${f}  $PathOfOutPutData/$(basename $f) | tee $PathOfOutPutData/$(basename $f)/Run${temp}_EventBuilderVFAT.log
 	fi
 	if [ "$run" == 0 -o "$run" == 2 ]; then
 		echo -e "\n\n\t\t TrackFinder started\n\n"
@@ -510,15 +518,22 @@ do
 		echo -e "\n\n\t\tAnalyzer Done\n\n"
 	fi
 
-	LC1=$(sed -n '/Loading the trees.../{n;n;n;n;n;p;}'	$PathOfOutPutData/$(basename $f)/Run${temp}_Analyzer.log | awk '{print $1}')
-	LC2=$(sed -n '/Loading the trees.../{n;n;n;n;p;  }' $PathOfOutPutData/$(basename $f)/Run${temp}_Analyzer.log | awk '{print $1}')
-	LC3=$(sed -n '/Loading the trees.../{n;n;n;p;    }' $PathOfOutPutData/$(basename $f)/Run${temp}_Analyzer.log | awk '{print substr($1,5)}')  
-	LC1_Err=$(sed -n '/Loading the trees.../{n;n;n;n;n;p;}' $PathOfOutPutData/$(basename $f)/Run${temp}_Analyzer.log | awk '{print $2}')
-	LC2_Err=$(sed -n '/Loading the trees.../{n;n;n;n;p;  }' $PathOfOutPutData/$(basename $f)/Run${temp}_Analyzer.log | awk '{print $2}')
-	LC3_Err=$(sed -n '/Loading the trees.../{n;n;n;p;    }' $PathOfOutPutData/$(basename $f)/Run${temp}_Analyzer.log | awk '{print $2}')  
-
+	if [ ! -f $PathOfOutPutData/$(basename $f)/Run${temp}_Analyzer.log ]; then
+		echo -e "Analyzer file does not exits."
+	else
+		LC1=$(sed -n '/Loading the trees.../{n;n;n;n;n;p;}'	$PathOfOutPutData/$(basename $f)/Run${temp}_Analyzer.log | awk '{print $1}')
+		LC2=$(sed -n '/Loading the trees.../{n;n;n;n;p;  }' $PathOfOutPutData/$(basename $f)/Run${temp}_Analyzer.log | awk '{print $1}')
+		LC3=$(sed -n '/Loading the trees.../{n;n;n;p;    }' $PathOfOutPutData/$(basename $f)/Run${temp}_Analyzer.log | awk '{print substr($1,5)}')  
+		LC1_Err=$(sed -n '/Loading the trees.../{n;n;n;n;n;p;}' $PathOfOutPutData/$(basename $f)/Run${temp}_Analyzer.log | awk '{print $2}')
+		LC2_Err=$(sed -n '/Loading the trees.../{n;n;n;n;p;  }' $PathOfOutPutData/$(basename $f)/Run${temp}_Analyzer.log | awk '{print $2}')
+		LC3_Err=$(sed -n '/Loading the trees.../{n;n;n;p;    }' $PathOfOutPutData/$(basename $f)/Run${temp}_Analyzer.log | awk '{print $2}')  
+		echo -e "$(basename $f)\t\t $LC1+/-$LC1_Err \t $LC2+/-$LC2_Err \t $LC3+/-$LC3_Err" >> EfficiencyData_R${IRunNo}_R${FRunNo}.txt
+		mv OffsetFile.log OffsetFile_${temp}.log
+		mv Efficiency_LC1.log Efficiency_LC1_${temp}.log
+		mv Efficiency_LC2.log Efficiency_LC2_${temp}.log
+		mv Efficiency_LC3.log Efficiency_LC3_${temp}.log
+	fi
     fi
- 
     if [ "$JustTextFile" == 1 ]; then
     	if [ ! -f $PathOfOutPutData/$(basename $f)/Run${temp}_Analyzer.log ]; then
 		error_exit "File $PathOfOutPutData/$(basename $f)/Run${temp}_Analyzer.log does not exits"	
@@ -529,33 +544,33 @@ do
 	LC1_Err=$(sed -n '/Loading the trees.../{n;n;n;n;n;p;}' $PathOfOutPutData/$(basename $f)/Run${temp}_Analyzer.log | awk '{print $2}')
 	LC2_Err=$(sed -n '/Loading the trees.../{n;n;n;n;p;  }' $PathOfOutPutData/$(basename $f)/Run${temp}_Analyzer.log | awk '{print $2}')
 	LC3_Err=$(sed -n '/Loading the trees.../{n;n;n;p;    }' $PathOfOutPutData/$(basename $f)/Run${temp}_Analyzer.log | awk '{print $2}')  
-    fi
 	echo -e "$(basename $f)\t\t $LC1+/-$LC1_Err \t $LC2+/-$LC2_Err \t $LC3+/-$LC3_Err" >> EfficiencyData_R${IRunNo}_R${FRunNo}.txt
-	RunCounter=$[$RunCounter+1]
 	mv OffsetFile.log OffsetFile_${temp}.log
 	mv Efficiency_LC1.log Efficiency_LC1_${temp}.log
 	mv Efficiency_LC2.log Efficiency_LC2_${temp}.log
 	mv Efficiency_LC3.log Efficiency_LC3_${temp}.log
+    fi
+    RunCounter=$[$RunCounter+1]
   done
 done
 
 
 echo "file(s) of interest:" 
 
-rm FilesToAnalyze.txt
+rm -f FilesToAnalyze.txt
 echo "EfficiencyData_R${IRunNo}_R${FRunNo}.txt" >> FilesToAnalyze.txt
 
 
 while [ $ILat -le $FLat ]
 do
-  rm EfficiencyData_R${IRunNo}_R${FRunNo}_Lat${ILat}.txt
+  rm -f EfficiencyData_R${IRunNo}_R${FRunNo}_Lat${ILat}.txt
   grep "Lat$ILat" EfficiencyData_R${IRunNo}_R${FRunNo}.txt >> EfficiencyData_R${IRunNo}_R${FRunNo}_Lat${ILat}.txt
 
   outputFile=EfficiencyData_R${IRunNo}_R${FRunNo}_Lat${ILat}.txt
   outputFile_short=EfficiencyData_R${IRunNo}_R${FRunNo}_Lat${ILat}.txt
 
   if [ $(stat -c%s "$outputFile") -le 46 ]; then
-    rm $outputFile
+    rm  -f $outputFile
   else
     echo "gedit $outputFile"
     echo "EfficiencyData_R${IRunNo}_R${FRunNo}_Lat${ILat}.txt" >> FilesToAnalyze.txt

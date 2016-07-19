@@ -28,16 +28,18 @@ else
 	mkdir $2
 	echo "Directory $2 Created................."
 fi
-if [ -d "$2/$(basename $1)" ]; then
-	echo $2/$(basename $1)
-	echo "Directory OutPutData Exists....... Remove it..."
-	rm -r $2/$(basename $1)
-	mkdir $2/$(basename $1)
-	echo "Directory OutPutData Created................."
-else
-	mkdir $2/$(basename $1)
-	echo "Directory OutPutData Created................."
-fi
+#echo "Ram==== $2"
+#echo "Ram==== $(basename $1)"
+#if [ -d "$2/$(basename $1)" ]; then
+#	echo $2/$(basename $1)
+#	echo "Directory OutPutData Exists....... Remove it..."
+#	rm -r $2/$(basename $1)
+#	mkdir $2/$(basename $1)
+#	echo "Directory OutPutData Created................."
+#else
+#	mkdir $2/$(basename $1)
+#	echo "Directory OutPutData Created................."
+#fi
 
 
 for DATAFILE in $(ls $1/CRC-Run*.dat); do
