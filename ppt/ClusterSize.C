@@ -29,7 +29,7 @@
 #include "TH1F.h"
 #include "TH2F.h"
 
-int ClusterSize(TString RootFile, TString OutPutFileName)
+void ClusterSize(TString RootFile, TString OutPutFileName, TString HistName)
 {
 
 	std::vector<TFile*> InputFiles;
@@ -43,7 +43,22 @@ int ClusterSize(TString RootFile, TString OutPutFileName)
 	ofstream o_file;
 	o_file.open("Cluster_Size.txt", std::ios_base::app);
 	//o_file.open(TString(OutPutFileName)+"_Cluster_Size.txt", std::ios_base::app);
-  
+
+	//TCut IfHitTrkGE11 = "GE11_IV@.GetEntries()==1 && g1xcl@.GetEntries()==1 && g2xcl@.GetEntries()==1 && g3xcl@.GetEntries()==1 && g1ycl@.GetEntries()==1 && g2ycl@.GetEntries()==1 && g3ycl@.GetEntries()==1";
+	TCut IfHitTrkGE11 = "GE11_IV_GIF@.GetEntries()==1 && g1xcl@.GetEntries()==1 && g2xcl@.GetEntries()==1 && g3xcl@.GetEntries()==1 && g1ycl@.GetEntries()==1 && g2ycl@.GetEntries()==1 && g3ycl@.GetEntries()==1";
+
+	TCut PosCut2080_g1x = "g1xcl.geoposX > 41.0 &&  g1xcl.geoposX <51.";
+	TCut PosCut2080_g1y = "g1ycl.geoposY > 41.0 &&  g1ycl.geoposY <51.";
+	TCut PosCut2080_g2x = "g2xcl.geoposX > 41.0 &&  g2xcl.geoposX <51.";
+	TCut PosCut2080_g2y = "g2ycl.geoposY > 41.0 &&  g2ycl.geoposY <51.";
+	TCut PosCut2080_g3x = "g3xcl.geoposX > 41.0 &&  g3xcl.geoposX <51.";
+	TCut PosCut2080_g3y = "g3ycl.geoposY > 41.0 &&  g3ycl.geoposY <51.";
+	
+	TCut PosCut2080_g1 = PosCut2080_g1x && PosCut2080_g1y;
+	TCut PosCut2080_g2 = PosCut2080_g2x && PosCut2080_g2y;
+	TCut PosCut2080_g3 = PosCut2080_g3x && PosCut2080_g3y;
+
+	TCut PosCut2080 = PosCut2080_g1 && PosCut2080_g2 && PosCut2080_g3 ;
 
 	for(unsigned int j = 0; j < InputFiles.size(); ++j ) {
 	TTree * tmpTree = (TTree*)InputFiles.at(j)->Get("rd51tbgeo");
@@ -56,32 +71,36 @@ int ClusterSize(TString RootFile, TString OutPutFileName)
 	canvas_prof->Divide(1,1);
 	canvas_prof->cd(1);
 	////////////////////////////////////////////////////////////////////////////////////////////////////
-	//
 	//		Cluster Size PLOTS
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	TH1F *hClusterSize = new TH1F("hClusterSize","Cluster size for GE1/1", 10,0.,10.);
-		hClusterSize->SetStats(1);
-		tmpTree->Draw("g1ycl.ngeoch>>hClusterSize","g1ycl@.GetEntries()==1 && g1xcl@.GetEntries()==1");
-		hClusterSize->GetXaxis()->SetTitle("Cluster Size");
-		hClusterSize->GetYaxis()->SetTitle("#Entries");
-		//TF1 *f1 = new TF1("f1","[0]*TMath::Power(([1]),(x))*(TMath::Exp(-([1])))/TMath::Gamma((x)+1)", 0, 10); // "xmin" = 0, "xmax" = 10
-		TF1 *f1 = new TF1("f1","[0]*TMath::Power(([1]/[2]),(x/[2]))*(TMath::Exp(-([1]/[2])))/TMath::Gamma((x/[2])+1)", 0, 10); 
-		f1->SetParameters(hClusterSize->GetMaximum(), hClusterSize->GetMean(), 1); 
-		hClusterSize->Fit("f1"); // Use option "R" = fit between "xmin" and "xmax" of the "f1"
+	HistName=HistName+" #mu A";
+	TH1F *hClusterSize = new TH1F("hClusterSize",HistName, 100,0.,10.);
 
-		//hClusterSize->Fit("landau");
-		cout<<"\n\n========================="<<endl;
-		cout<<OutPutFileName<<"\t"<<(f1->GetParameter(1))/(f1->GetParameter(2))<<"\t"<<sqrt((f1->GetParameter(1))/(f1->GetParameter(2)))<<endl;
-		//o_file<<OutPutFileName<<"\t"<<(f1->GetParameter(1))/(f1->GetParameter(2))<<"\t"<<sqrt((f1->GetParameter(1))/(f1->GetParameter(2)))<<endl;
-		//o_file<<OutPutFileName<<"\t"<<f1->GetParameter(1)<<"\t"<<sqrt(f1->GetParameter(1))<<endl;
-		o_file<<OutPutFileName<<"\t"<<f1->GetParameter(1)<<"\t"<<f1->GetParError(1)<<endl;
-		canvas_prof->SaveAs(TString(OutPutFileName)+"_ClusterSize.pdf");	
-		canvas_prof->SaveAs(TString(OutPutFileName)+"_ClusterSize.png");	
-		canvas_prof->SaveAs(TString(OutPutFileName)+"_ClusterSize.C");	
-		canvas_prof->SaveAs(TString(OutPutFileName)+"_ClusterSize.root");	
-
+	hClusterSize->SetStats(1);
+	hClusterSize->GetXaxis()->SetTitle("Cluster Size");
+	hClusterSize->GetYaxis()->SetTitle("#Entries");
+	//tmpTree->Draw("g1xcl.ngeoch>>hClusterSize","GE11_IV@.GetEntries()==1");
+	//tmpTree->Draw("GE11_IV.ngeoch>>hClusterSize",IfHitTrkGE11 && PosCut2080);
+	tmpTree->Draw("GE11_IV_GIF.ngeoch>>hClusterSize",IfHitTrkGE11 && PosCut2080);
 	
+	TF1 *f1 = new TF1("f1","[0]*TMath::Power(([1]/[2]),(x/[2]))*(TMath::Exp(-([1]/[2])))/TMath::Gamma((x/[2])+1)", 1, 10); 
+	f1->SetParameters(hClusterSize->GetMaximum(), hClusterSize->GetMean(), hClusterSize->GetStdDev()); 
+	f1->SetParLimits(0,200,480);
+	f1->SetParLimits(1,1.55,1.99); 
+//	f1->SetParLimits(2,.24,.29); 
+//	hClusterSize->Fit("f1","R"); // Use option "R" = fit between "xmin" and "xmax" of the "f1"
+
+	TF1 *f2 = new TF1("
+	
+	o_file<<OutPutFileName<<"\t"<<f1->GetParameter(1)<<"\t"<<f1->GetParError(1)<<endl;
+	cout<<OutPutFileName<<"\t"<<f1->GetParameter(1)<<"\t"<<f1->GetParError(1)<<endl;
+	//o_file<<OutPutFileName<<"\t"<<hClusterSize->GetMean()<<"\t"<<hClusterSize->GetStdDev()<<endl;
+
+	canvas_prof->Update();
+	canvas_prof->SaveAs("Test_ClusterSize.pdf");	
+	canvas_prof->SaveAs(TString(OutPutFileName)+"_ClusterSize.pdf");	
+	canvas_prof->SaveAs(TString(OutPutFileName)+"_ClusterSize.png");	
 	}	// End of for loop
 	o_file.close();
 }	// End of main loop
