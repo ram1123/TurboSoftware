@@ -1,14 +1,21 @@
 #####Table Of Content
+
   * [How To Get Software](#how-to-get-software)
   * [How To Use](#how-to-use)
     * [Things to change in configuration file](#things-to-change-in-configuration-file)
     * [ReadOutType](#readouttype)
   * [Cluster Size Study](#cluster-size-study)
+  * [Alignment of Detector](#alignment-of-detector)
+    * [From the Turbosoftware](#from-the-turbosoftware)
+    * [Using Aiwu-FNAL software](#using-aiwu-fnal-software)
+    * [Space-Resolution Studies](#space-resolution-studies)
+    * [Efficiency Study](#efficiency-study)
   * [Some Terminology used to save information in the tree](#some-terminology-used-to-save-information-in-the-tree)
   * [Definiton of Different Terms Used in Configuration File](#definiton-of-different-terms-used-in-configuration-file)
 
 
 ---
+
 # How To Get Software
 
 Test Beam Data Analysis Software
@@ -109,6 +116,17 @@ Things to change in configuration file:
 	
 3. OffsetFlip _EventBuilderVFAT_*.conf
 	* Propagate the detectors information here as per pervious configuration file.	
+	
+4. OffsetTracker_*.conf	
+	* Here we just need to add information about the trackers. Name of tracker and the z-position of tracker.
+	
+5. OffsetAndCoverage_Analyzer_*.conf
+	* This configuration is for the analyzer part.
+	* This mainly calculates efficiency of the detector under consideration.
+	* But, presently the* major drawback is that the code is hardcoded for the particular geometry*.
+	* In this configuration file the mandatory things are z-position (zOff), name of detector (DetectorName), area to scan (xMin, xMax, yMin and yMax) and radius (effRad).
+	* Here, xMin, xMax, yMin, and yMax are corresponding to the area of detector under consideration
+	* **effRad**: The difference of extraplotted track (from fitting of track information) and the actual hit should be less than then number assigned to *effRad*
 
 ## ReadOutType
 Availabe readout types are 
@@ -136,6 +154,17 @@ For this study there are three codes named
 2. *ClusterSize.C* : This is the main macro that extract cluster size information makes histogram for the same and fits it. So, along with plots it also gives you the text file where you can find the summary of clustersize for each run.
 
 3. *Cluster_Size_vs_HV.C* : This codes just plots the cluster size vs HV.
+
+# Alignment of Detector
+
+## From the Turbosoftware 
+
+## Using Aiwu-FNAL software
+
+## Space-Resolution Studies
+
+## Efficiency Study
+
 
 # Some Terminology used to save information in the tree
 

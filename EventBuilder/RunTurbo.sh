@@ -46,7 +46,7 @@
 #	-------------------------------------------------------------------
 	
 	# Should be changed by user according to their path
-	PathOfInputData=/afs/cern.ch/user/r/rasharma/work/public/GEMTestBeam/H4NovDec14_RawData/TURBO_data/
+	PathOfInputData=/home/ramkrishna/PhD_New_Dir_16July2016/GEM/GEM_TB/Raw_TestBeam_DATA/GEMTestBeam/H4NovDec14_RawData/TURBO_data/
 
 	JustTextFile=0
 	# Some Default values
@@ -240,20 +240,22 @@ function helptext
 	-r              This option ask you to enter the two numbers: 	
 			${tab}1. First  : Initial Run Number
 			${tab}2. Second : Final Run Number
+			${tab}==> You can skip second run number if you want to run over only one run.
 
 	-l		This option ask you to enter the two numbers:
 			${tab}1. First : Initial Latency 
 			${tab}2. Second : Final Latency
+			${tab}==> By default it scan over latency 10 to 30.
 
 	-f		This option ask you to enter the Input Data directory path.
-			${tab} We can also set the default path at line number 47 in 
+			${tab} We can also set the default path at line number 49 in 
 			${tab} this script.
 
 	-e		This option will ask you which process you want to run.
 			${tab} Want to run full Turbo or only one out of 3 steps.
 			${tab} or want to get only Efficiency text file.
-			${tab}Also, this will ask, whether you want to delete the 
-			${tab}existing root files or not.
+			${tab} Also, this will ask, whether you want to delete the 
+			${tab} existing root files or not.
 
 	-m		This option will mail yout the Efficiency txt file on the 
 			${tab} email provided by you.
@@ -365,6 +367,22 @@ while getopts ":hrlfemi" opt; do
 			else
 				error_exit "Please enter number between 0 and 4"
 			fi
+			if [ "$run" == 2 ]; then
+				echo -e "Warning!!! Did you have output root files from first step? If not, please first run step 1"
+				if ask_yes_no "Did you have output root files from first step? [y/n]? "; then
+					echo "Now software assumes that you have output root file from first step."
+				else
+					error_exit "Please run EventBuilder first"
+				fi
+			fi
+			if [ "$run" == 3 ]; then
+				echo -e "Warning!!! Did you have output root files from first two steps? If not, please first run step 1 and 2 first."
+				if ask_yes_no "Did you have output root files from first two steps? [y/n]? "; then
+					echo "Now software assumes that you have output root file from first two steps."
+				else
+					error_exit "Please run EventBuilder and trackfinder first"
+				fi
+			fi
 			if [ "$run" == 0 -o "$run" == 1 ]; then
 				if ask_yes_no "If Root File Exists in Output Directory. Want to Delete them??? [y/n] "; then
 					DeleteRootFile=1
@@ -441,21 +459,22 @@ do
   if [ $RunCounter -le 1646 ]; then
     cp Setting_EventBuilderVFAT_BelowRun1647.conf Setting_EventBuilderVFAT.conf
     cp Setting_Analyzer_BelowRun1647.conf Setting_Analyzer.conf
-    #git checkout ConfigFiles/OffsetFlip_EventBuilderVFAT_NOV2014_H4.conf
+    git checkout ConfigFiles/OffsetFlip_EventBuilderVFAT_NOV2014_H4.conf
   fi
   if [ $RunCounter -gt 1646 ]; then
     cp Setting_EventBuilderVFAT_AboveRun1646.conf Setting_EventBuilderVFAT.conf
     cp Setting_Analyzer_AboveRun1646.conf Setting_Analyzer.conf
+    git checkout OffsetFlip_EventBuilderVFAT_NOV2014_H4_AboveRun1646.conf
   fi
   if [ $RunCounter -gt 1864 ]; then
     cp Setting_EventBuilderVFAT_AboveRun1864.conf Setting_EventBuilderVFAT.conf
     cp Setting_Analyzer_AboveRun1864.conf Setting_Analyzer.conf
-    #git checkout ConfigFiles/OffsetFlip_EventBuilderVFAT_NOV2014_H4_AboveRun1864.conf
+    git checkout ConfigFiles/OffsetFlip_EventBuilderVFAT_NOV2014_H4_AboveRun1864.conf
   fi
   if [ $RunCounter -gt 1924 ]; then
     cp Setting_EventBuilderVFAT_AboveRun1924.conf Setting_EventBuilderVFAT.conf
     cp Setting_Analyzer_AboveRun1924.conf Setting_Analyzer.conf
-    #git checkout ConfigFiles/OffsetFlip_EventBuilderVFAT_NOV2014_H4_AboveRun1924.conf
+    git checkout ConfigFiles/OffsetFlip_EventBuilderVFAT_NOV2014_H4_AboveRun1924.conf
   fi
 
   for f in $PathOfInputData/Run$file* 	# Stores path of File in variable f
